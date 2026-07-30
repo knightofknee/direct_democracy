@@ -127,12 +127,18 @@ scripts/seed.ts     emulator seed data
 firestore.rules     security rules (see the header note about MVP tally writes)
 ```
 
+## Trust model
+
+Clients can only write documents that represent their own voice: their display
+name, their ballot, their comment, their question, their judgment. Every
+aggregate number — vote tallies, board scores, comment counts, AMA judgment
+totals, question statuses, official answer scores — is computed exclusively by
+Cloud Functions triggers (`functions/src/index.ts`) using the Admin SDK. There
+is no client write path to any total, so a hostile client can cast exactly one
+ballot and nothing more.
+
 ## Known MVP tradeoffs
 
-- **Client-side tallies.** Vote totals are aggregated in client transactions and
-  the rules allow signed-in users to update tally fields. Fine for a demo;
-  before real-world launch move aggregation into Cloud Functions triggers and
-  revoke those grants (called out in `firestore.rules`).
 - **Ward assignment in dev is self-attested.** Real ward assignment must come
   from the verified address via Persona.
 - **Officials are provisioned manually** (seed script / Admin SDK). An admin

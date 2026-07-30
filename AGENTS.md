@@ -16,10 +16,13 @@ Conventions:
   while the config placeholder starts with `demo-`. Run `npm run emulators`,
   `npm run seed`, then `npx expo start`.
 - Every vote is tallied three ways (all / verified / registered) via the
-  `DualTally` type; tally math lives in `src/lib/tally.ts` and is applied in
-  Firestore transactions in `src/services/`. Keep new vote surfaces on this path.
+  `DualTally` type. Clients write ONLY their own ballot/comment/judgment docs
+  (`src/services/`); all aggregation happens in Cloud Functions Firestore
+  triggers (`functions/src/index.ts` + `functions/src/tally.ts`). Never add a
+  client write path to a tally, counter, score, or status — extend the
+  triggers instead, and keep `firestore.rules` deny-by-default on those fields.
 - Vote docs snapshot the voter's `verified`/`registeredVoter` at cast time;
-  changed votes must remove the old ballot under its stored slices first.
+  triggers remove the old ballot under its stored slices before adding the new.
 - Roles: `citizen` vs `official` on `users/{uid}`; `verified` and `wardId` are
   written only by the Admin SDK / Cloud Functions (Persona webhook), never by
   clients — security rules enforce this.

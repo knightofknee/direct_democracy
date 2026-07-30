@@ -2,17 +2,15 @@ import {
   addDoc,
   collection,
   doc,
-  runTransaction,
   serverTimestamp,
+  setDoc,
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
-import { applyVote, emptyTally, removeBallot, weightedScore } from '@/lib/tally';
+import { emptyTally } from '@/lib/tally';
 import {
-  PRIORITY_WEIGHTS,
-  type Concern,
+  CONCERN_PRIORITIES,
   type ConcernPriority,
-  type DualTally,
   type Scope,
   type UserProfile,
 } from '@/lib/types';
@@ -43,74 +41,36 @@ export async function createConcern(
 }
 
 /**
- * Cast (or change) a priority vote on a concern. Dual tallies and both rank
- * scores are updated in one transaction so the big board never drifts.
+ * Cast (or change) a priority vote. The client writes only its own ballot
+ * document — the tallies and board scores are aggregated server-side by the
+ * onConcernVoteWrite Cloud Function, so no client can touch the totals.
  */
 export async function voteConcernPriority(
   profile: UserProfile,
   concernId: string,
   priority: ConcernPriority
 ): Promise<void> {
-  const concernRef = doc(db, 'concerns', concernId);
-  const voteRef = doc(db, 'concerns', concernId, 'votes', profile.uid);
-
-  await runTransaction(db, async (tx) => {
-    const [concernSnap, voteSnap] = await Promise.all([tx.get(concernRef), tx.get(voteRef)]);
-    if (!concernSnap.exists()) throw new Error('Concern not found.');
-
-    const previous = voteSnap.exists() ? (voteSnap.data().value as ConcernPriority) : null;
-    // Slices are decided by the snapshot stored on the previous ballot, so a
-    // voter who verified after voting doesn't corrupt the decrement.
-    const prevSlices = voteSnap.exists()
-      ? { verified: !!voteSnap.data().verified, registeredVoter: !!voteSnap.data().registeredVoter }
-      : { verified: profile.verified, registeredVoter: profile.registeredVoter };
-
-    let tallies = concernSnap.data().tallies as DualTally;
-    // Remove the old ballot entirely (under its stored slices), then re-add
-    // the new one under the voter's current slices.
-    if (previous !== null) {
-      tallies = removeBallot(tallies, previous, prevSlices);
-    }
-    tallies = applyVote(tallies, null, priority, {
-      verified: profile.verified,
-      registeredVoter: profile.registeredVoter,
-    });
-
-    tx.set(voteRef, {
-      uid: profile.uid,
-      value: priority,
-      verified: profile.verified,
-      registeredVoter: profile.registeredVoter,
-      createdAt: serverTimestamp(),
-    });
-    tx.update(concernRef, {
-      tallies,
-      score: weightedScore(tallies.all, PRIORITY_WEIGHTS),
-      scoreVerified: weightedScore(tallies.verified, PRIORITY_WEIGHTS),
-    });
+  if (!CONCERN_PRIORITIES.includes(priority)) throw new Error('Invalid priority.');
+  await setDoc(doc(db, 'concerns', concernId, 'votes', profile.uid), {
+    uid: profile.uid,
+    value: priority,
+    verified: profile.verified,
+    registeredVoter: profile.registeredVoter,
+    createdAt: serverTimestamp(),
   });
 }
 
+/** Comment counts are likewise maintained by the onCommentCreated trigger. */
 export async function addComment(
   profile: UserProfile,
   concernId: string,
   body: string
 ): Promise<void> {
-  const concernRef = doc(db, 'concerns', concernId);
-  const commentRef = doc(collection(db, 'concerns', concernId, 'comments'));
-
-  await runTransaction(db, async (tx) => {
-    const concernSnap = await tx.get(concernRef);
-    if (!concernSnap.exists()) throw new Error('Concern not found.');
-    tx.set(commentRef, {
-      authorUid: profile.uid,
-      authorName: profile.displayName,
-      authorVerified: profile.verified,
-      body: body.trim(),
-      createdAt: serverTimestamp(),
-    });
-    tx.update(concernRef, {
-      commentCount: ((concernSnap.data() as Concern).commentCount ?? 0) + 1,
-    });
+  await addDoc(collection(db, 'concerns', concernId, 'comments'), {
+    authorUid: profile.uid,
+    authorName: profile.displayName,
+    authorVerified: profile.verified,
+    body: body.trim(),
+    createdAt: serverTimestamp(),
   });
 }

@@ -33,12 +33,14 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.personaWebhook = exports.createVerificationSession = exports.devVerify = void 0;
+exports.personaWebhook = exports.createVerificationSession = exports.devVerify = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = void 0;
 const crypto = __importStar(require("crypto"));
 const app_1 = require("firebase-admin/app");
 const firestore_1 = require("firebase-admin/firestore");
+const firestore_2 = require("firebase-functions/v2/firestore");
 const https_1 = require("firebase-functions/v2/https");
 const https_2 = require("firebase-functions/v2/https");
+const tally_1 = require("./tally");
 (0, app_1.initializeApp)();
 const db = (0, firestore_1.getFirestore)();
 const WARD_MIN = 1;
@@ -50,6 +52,112 @@ async function applyVerification(uid, result) {
         registeredVoter: result.registeredVoter,
     });
 }
+function slicesOf(ballot) {
+    return { verified: !!ballot.verified, registeredVoter: !!ballot.registeredVoter };
+}
+exports.onConcernVoteWrite = (0, firestore_2.onDocumentWritten)('concerns/{concernId}/votes/{voterUid}', async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const concernRef = db.doc(`concerns/${event.params.concernId}`);
+    await db.runTransaction(async (tx) => {
+        const snap = await tx.get(concernRef);
+        if (!snap.exists)
+            return;
+        let tallies = snap.data().tallies;
+        if (before)
+            tallies = (0, tally_1.removeBallot)(tallies, before.value, slicesOf(before));
+        if (after)
+            tallies = (0, tally_1.addBallot)(tallies, after.value, slicesOf(after));
+        tx.update(concernRef, {
+            tallies,
+            score: (0, tally_1.weightedScore)(tallies.all, tally_1.PRIORITY_WEIGHTS),
+            scoreVerified: (0, tally_1.weightedScore)(tallies.verified, tally_1.PRIORITY_WEIGHTS),
+        });
+    });
+});
+exports.onPollVoteWrite = (0, firestore_2.onDocumentWritten)('polls/{pollId}/votes/{voterUid}', async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const pollRef = db.doc(`polls/${event.params.pollId}`);
+    await db.runTransaction(async (tx) => {
+        const snap = await tx.get(pollRef);
+        if (!snap.exists)
+            return;
+        let tallies = snap.data().tallies;
+        if (before)
+            tallies = (0, tally_1.removeBallot)(tallies, before.value, slicesOf(before));
+        if (after)
+            tallies = (0, tally_1.addBallot)(tallies, after.value, slicesOf(after));
+        tx.update(pollRef, { tallies });
+    });
+});
+exports.onCommentCreated = (0, firestore_2.onDocumentCreated)('concerns/{concernId}/comments/{commentId}', async (event) => {
+    await db
+        .doc(`concerns/${event.params.concernId}`)
+        .update({ commentCount: firestore_1.FieldValue.increment(1) });
+});
+exports.onQuestionCreated = (0, firestore_2.onDocumentCreated)('officials/{officialUid}/questions/{questionId}', async (event) => {
+    await db
+        .doc(`officials/${event.params.officialUid}`)
+        .update({ questionsAsked: firestore_1.FieldValue.increment(1) });
+});
+/** The official posting their response moves questionsResponded. */
+exports.onQuestionResponded = (0, firestore_2.onDocumentWritten)('officials/{officialUid}/questions/{questionId}', async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    if (!after || before?.response || !after.response)
+        return;
+    await db
+        .doc(`officials/${event.params.officialUid}`)
+        .update({ questionsResponded: firestore_1.FieldValue.increment(1) });
+});
+/**
+ * Community judgment ("did this answer it?") aggregation: recompute the
+ * question's yes/no counts and status, and keep the official's
+ * answered/dodged counters in step with status flips.
+ */
+exports.onJudgmentWrite = (0, firestore_2.onDocumentWritten)('officials/{officialUid}/questions/{questionId}/judgments/{judgeUid}', async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const questionRef = db.doc(`officials/${event.params.officialUid}/questions/${event.params.questionId}`);
+    const officialRef = db.doc(`officials/${event.params.officialUid}`);
+    await db.runTransaction(async (tx) => {
+        const snap = await tx.get(questionRef);
+        if (!snap.exists)
+            return;
+        const q = snap.data();
+        let yes = q.answeredYes ?? 0;
+        let no = q.answeredNo ?? 0;
+        if (before)
+            before.answered ? (yes -= 1) : (no -= 1);
+        if (after)
+            after.answered ? (yes += 1) : (no += 1);
+        yes = Math.max(0, yes);
+        no = Math.max(0, no);
+        const prevStatus = q.status;
+        const nextStatus = !q.response
+            ? prevStatus
+            : yes + no >= tally_1.ANSWER_JUDGMENT_QUORUM
+                ? yes > no
+                    ? 'answered'
+                    : 'dodged'
+                : 'underReview';
+        tx.update(questionRef, { answeredYes: yes, answeredNo: no, status: nextStatus });
+        if (prevStatus !== nextStatus) {
+            const delta = {};
+            if (prevStatus === 'answered')
+                delta.questionsAnswered = firestore_1.FieldValue.increment(-1);
+            if (prevStatus === 'dodged')
+                delta.questionsDodged = firestore_1.FieldValue.increment(-1);
+            if (nextStatus === 'answered')
+                delta.questionsAnswered = firestore_1.FieldValue.increment(1);
+            if (nextStatus === 'dodged')
+                delta.questionsDodged = firestore_1.FieldValue.increment(1);
+            if (Object.keys(delta).length)
+                tx.update(officialRef, delta);
+        }
+    });
+});
 /**
  * DEV ONLY — simulates a passing Persona inquiry when running against the
  * Emulator Suite. Never deployed behavior: throws outside the emulator.

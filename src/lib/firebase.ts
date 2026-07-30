@@ -13,24 +13,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
 /**
- * Paste your Firebase web app config here once the project exists
- * (Firebase console → Project settings → Your apps → Web app).
- * With the placeholder left in place, the app expects the Emulator Suite:
- *   npm run emulators   (in one terminal)
- *   npm run seed        (once, to load Chicago seed data)
- *   npx expo start      (in another)
+ * Firebase config. This app uses the Firebase **web (JS) SDK** — the same
+ * config a web app would use — on iOS, Android, and web alike. The
+ * GoogleService-Info.plist in the repo root is NOT read by this SDK; it's
+ * only there for a future move to the native react-native-firebase SDK.
+ *
+ * This is the live config for direct-democracy-e338a (Firebase web API keys
+ * are identifiers, not secrets — access control lives in firestore.rules).
+ *
+ * For local development against fake Chicago data, force the Emulator Suite:
+ *   npm run emulators                              (in one terminal)
+ *   npm run seed                                   (once, to load seed data)
+ *   EXPO_PUBLIC_USE_EMULATORS=1 npx expo start     (in another)
  */
 const firebaseConfig = {
-  apiKey: 'demo-api-key',
-  authDomain: 'demo-direct-democracy.firebaseapp.com',
-  projectId: 'demo-direct-democracy',
-  storageBucket: 'demo-direct-democracy.appspot.com',
-  messagingSenderId: '000000000000',
-  appId: '1:000000000000:web:demo',
+  apiKey: 'AIzaSyAfW0lqln0MMWw8DNHOElO5lB7ASRfqMBA',
+  authDomain: 'direct-democracy-e338a.firebaseapp.com',
+  projectId: 'direct-democracy-e338a',
+  storageBucket: 'direct-democracy-e338a.firebasestorage.app',
+  messagingSenderId: '376113063983',
+  appId: '1:376113063983:web:7b39ca781447e0444d7eda',
 };
 
-/** True until a real config is pasted above — drives emulator connection. */
-export const usingEmulators = firebaseConfig.projectId.startsWith('demo-');
+/**
+ * Emulators are used while the demo placeholder is in place, or when
+ * explicitly forced (handy for local dev after going live):
+ *   EXPO_PUBLIC_USE_EMULATORS=1 npx expo start
+ */
+export const usingEmulators =
+  process.env.EXPO_PUBLIC_USE_EMULATORS === '1' || firebaseConfig.projectId.startsWith('demo-');
 
 const app = getApps()[0] ?? initializeApp(firebaseConfig);
 

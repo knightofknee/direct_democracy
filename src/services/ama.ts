@@ -1,18 +1,14 @@
 import {
+  addDoc,
   collection,
   doc,
-  increment,
-  runTransaction,
   serverTimestamp,
+  setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
-import {
-  ANSWER_JUDGMENT_QUORUM,
-  type AmaQuestion,
-  type QuestionStatus,
-  type UserProfile,
-} from '@/lib/types';
+import type { AmaQuestion, QuestionStatus, UserProfile } from '@/lib/types';
 
 /**
  * AMAs are ongoing, per-official. Anyone signed in can ask. The official
@@ -20,6 +16,10 @@ import {
  * actually answered the question. There is no upvoting or downvoting a
  * politician's response — only "did this answer it?" — and dodging (or
  * ignoring) questions drags the official's score down.
+ *
+ * Clients only write their own documents here. All counters (questionsAsked,
+ * questionsResponded, answered/dodged, judgment totals, status flips) are
+ * aggregated by Cloud Functions triggers.
  */
 
 export async function askQuestion(
@@ -27,26 +27,18 @@ export async function askQuestion(
   officialUid: string,
   body: string
 ): Promise<void> {
-  const officialRef = doc(db, 'officials', officialUid);
-  const questionRef = doc(collection(db, 'officials', officialUid, 'questions'));
-
-  await runTransaction(db, async (tx) => {
-    const officialSnap = await tx.get(officialRef);
-    if (!officialSnap.exists()) throw new Error('Official not found.');
-    tx.set(questionRef, {
-      officialUid,
-      authorUid: profile.uid,
-      authorName: profile.displayName,
-      authorVerified: profile.verified,
-      body: body.trim(),
-      status: 'awaitingResponse' satisfies QuestionStatus,
-      response: null,
-      respondedAt: null,
-      answeredYes: 0,
-      answeredNo: 0,
-      createdAt: serverTimestamp(),
-    });
-    tx.update(officialRef, { questionsAsked: increment(1) });
+  await addDoc(collection(db, 'officials', officialUid, 'questions'), {
+    officialUid,
+    authorUid: profile.uid,
+    authorName: profile.displayName,
+    authorVerified: profile.verified,
+    body: body.trim(),
+    status: 'awaitingResponse' satisfies QuestionStatus,
+    response: null,
+    respondedAt: null,
+    answeredYes: 0,
+    answeredNo: 0,
+    createdAt: serverTimestamp(),
   });
 }
 
@@ -59,26 +51,18 @@ export async function respondToQuestion(
   if (profile.uid !== question.officialUid) {
     throw new Error('Only the official can respond to their AMA questions.');
   }
-  const officialRef = doc(db, 'officials', question.officialUid);
-  const questionRef = doc(db, 'officials', question.officialUid, 'questions', question.id);
-
-  await runTransaction(db, async (tx) => {
-    const qSnap = await tx.get(questionRef);
-    if (!qSnap.exists()) throw new Error('Question not found.');
-    if (qSnap.data().response) throw new Error('This question already has a response.');
-    tx.update(questionRef, {
-      response: response.trim(),
-      respondedAt: serverTimestamp(),
-      status: 'underReview' satisfies QuestionStatus,
-    });
-    tx.update(officialRef, { questionsResponded: increment(1) });
+  if (question.response) throw new Error('This question already has a response.');
+  await updateDoc(doc(db, 'officials', question.officialUid, 'questions', question.id), {
+    response: response.trim(),
+    respondedAt: serverTimestamp(),
+    status: 'underReview' satisfies QuestionStatus,
   });
 }
 
 /**
  * Community judgment on a response: did it answer the question? One judgment
- * per user, changeable. Once a quorum is reached, the question's status (and
- * the official's answered/dodged counters) follow the majority.
+ * per user, changeable. The onJudgmentWrite trigger recomputes the counts,
+ * flips the question's status at quorum, and moves the official's counters.
  */
 export async function judgeResponse(
   profile: UserProfile,
@@ -88,44 +72,11 @@ export async function judgeResponse(
   if (profile.uid === question.officialUid) {
     throw new Error('Officials cannot judge their own responses.');
   }
-  const officialRef = doc(db, 'officials', question.officialUid);
-  const questionRef = doc(db, 'officials', question.officialUid, 'questions', question.id);
-  const judgmentRef = doc(
-    db, 'officials', question.officialUid, 'questions', question.id, 'judgments', profile.uid
+  if (!question.response) throw new Error('No response to judge yet.');
+  await setDoc(
+    doc(db, 'officials', question.officialUid, 'questions', question.id, 'judgments', profile.uid),
+    { answered, createdAt: serverTimestamp() }
   );
-
-  await runTransaction(db, async (tx) => {
-    const [qSnap, jSnap] = await Promise.all([tx.get(questionRef), tx.get(judgmentRef)]);
-    if (!qSnap.exists()) throw new Error('Question not found.');
-    const q = qSnap.data() as AmaQuestion;
-    if (!q.response) throw new Error('No response to judge yet.');
-
-    let yes = q.answeredYes;
-    let no = q.answeredNo;
-    const prev = jSnap.exists() ? (jSnap.data().answered as boolean) : null;
-    if (prev === answered) return; // unchanged
-    if (prev === true) yes -= 1;
-    if (prev === false) no -= 1;
-    if (answered) yes += 1;
-    else no += 1;
-
-    const prevStatus = q.status;
-    const nextStatus: QuestionStatus =
-      yes + no >= ANSWER_JUDGMENT_QUORUM ? (yes > no ? 'answered' : 'dodged') : 'underReview';
-
-    tx.set(judgmentRef, { answered, createdAt: serverTimestamp() });
-    tx.update(questionRef, { answeredYes: yes, answeredNo: no, status: nextStatus });
-
-    // Keep the official's community-judged counters in sync with status flips.
-    if (prevStatus !== nextStatus) {
-      const delta: Record<string, ReturnType<typeof increment>> = {};
-      if (prevStatus === 'answered') delta.questionsAnswered = increment(-1);
-      if (prevStatus === 'dodged') delta.questionsDodged = increment(-1);
-      if (nextStatus === 'answered') delta.questionsAnswered = increment(1);
-      if (nextStatus === 'dodged') delta.questionsDodged = increment(1);
-      if (Object.keys(delta).length) tx.update(officialRef, delta);
-    }
-  });
 }
 
 export interface OfficialScore {

@@ -8,9 +8,12 @@
     "scheme": "directdemocracy",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "com.briancarlisle.directdemocracy",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.briancarlisle.directdemocracy",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

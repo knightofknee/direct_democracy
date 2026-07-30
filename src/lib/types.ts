@@ -63,14 +63,7 @@ export type Scope = 'city' | 'ward';
  */
 export const CONCERN_PRIORITIES = ['critical', 'high', 'medium', 'low'] as const;
 export type ConcernPriority = (typeof CONCERN_PRIORITIES)[number];
-
-/** Weights used to rank the big board from priority votes. */
-export const PRIORITY_WEIGHTS: Record<ConcernPriority, number> = {
-  critical: 3,
-  high: 2,
-  medium: 1,
-  low: 0,
-};
+// Priority → board-score weights live server-side in functions/src/tally.ts.
 
 export interface Concern {
   id: string;

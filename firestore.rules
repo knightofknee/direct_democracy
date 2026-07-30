@@ -2,11 +2,12 @@ rules_version = '2';
 
 // direct democracy security rules.
 //
-// Known MVP tradeoff: vote tallies are aggregated in client-side transactions,
-// so signed-in users are allowed to update tally fields on concerns/polls and
-// counter fields on officials. A hostile client could write inflated tallies.
-// Before real-world launch, move tally aggregation into Cloud Functions
-// triggers on the vote/judgment subcollections and delete those grants.
+// Trust model: clients may only create/update documents that represent their
+// own voice — their profile's display name, their ballot, their comment,
+// their question, their judgment. Every aggregate number (tallies, board
+// scores, comment counts, AMA counters, question statuses) is written
+// exclusively by Cloud Functions triggers via the Admin SDK, which bypasses
+// these rules. No client update path can touch a total.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -42,7 +43,7 @@ service cloud.firestore {
 
       // Users may edit their display name — nothing else. verified / wardId /
       // registeredVoter / role are written only by the Admin SDK (Persona
-      // webhook and admin tooling), which bypasses these rules.
+      // webhook and admin tooling).
       allow update: if signedIn()
         && request.auth.uid == uid
         && onlyChanges(['displayName'])
@@ -55,13 +56,18 @@ service cloud.firestore {
     match /concerns/{concernId} {
       allow read: if true;
 
+      // New concerns start with zeroed aggregates.
       allow create: if signedIn()
         && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorVerified == me().verified
         && request.resource.data.title is string
         && request.resource.data.title.size() >= 8
         && request.resource.data.title.size() <= 140
         && request.resource.data.body.size() <= 4000
         && request.resource.data.commentCount == 0
+        && request.resource.data.score == 0
+        && request.resource.data.scoreVerified == 0
+        && request.resource.data.tallies.totalAll == 0
         && (
           request.resource.data.scope == 'city'
           || (
@@ -71,9 +77,8 @@ service cloud.firestore {
           )
         );
 
-      // Tally maintenance from vote/comment transactions (see header note).
-      allow update: if signedIn()
-        && onlyChanges(['tallies', 'score', 'scoreVerified', 'commentCount']);
+      // No client updates: tallies, scores, and commentCount move only via
+      // the onConcernVoteWrite / onCommentCreated triggers.
 
       match /votes/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
@@ -83,7 +88,8 @@ service cloud.firestore {
           && request.auth.uid == voterUid
           && request.resource.data.uid == request.auth.uid
           && request.resource.data.verified == me().verified
-          && request.resource.data.registeredVoter == me().registeredVoter;
+          && request.resource.data.registeredVoter == me().registeredVoter
+          && request.resource.data.value in ['critical', 'high', 'medium', 'low'];
       }
 
       match /comments/{commentId} {
@@ -104,17 +110,16 @@ service cloud.firestore {
       allow create: if isOfficial()
         && request.resource.data.authorUid == request.auth.uid
         && request.resource.data.open == true
+        && request.resource.data.tallies.totalAll == 0
         && (
           request.resource.data.scope == 'city'
           || (request.resource.data.scope == 'ward' && request.resource.data.wardId == me().wardId)
         );
 
-      // Voters update tallies; the author may also close the poll.
+      // The author may close their poll; tallies are trigger-only.
       allow update: if signedIn()
-        && (
-          onlyChanges(['tallies'])
-          || (request.auth.uid == resource.data.authorUid && onlyChanges(['open', 'tallies']))
-        );
+        && request.auth.uid == resource.data.authorUid
+        && onlyChanges(['open']);
 
       match /votes/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
@@ -138,21 +143,17 @@ service cloud.firestore {
     match /officials/{officialUid} {
       allow read: if true;
 
-      // Officials edit their own bio; AMA counters move with the
-      // ask/respond/judge transactions (see header note).
+      // Officials edit their own public card; AMA counters are trigger-only.
       allow update: if signedIn()
-        && (
-          (request.auth.uid == officialUid && onlyChanges(['bio', 'name', 'title']))
-          || onlyChanges([
-            'questionsAsked', 'questionsResponded', 'questionsAnswered', 'questionsDodged'
-          ])
-        );
+        && request.auth.uid == officialUid
+        && onlyChanges(['bio', 'name', 'title']);
 
       match /questions/{questionId} {
         allow read: if true;
 
         allow create: if signedIn()
           && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorVerified == me().verified
           && request.resource.data.officialUid == officialUid
           && request.resource.data.status == 'awaitingResponse'
           && request.resource.data.response == null
@@ -162,21 +163,15 @@ service cloud.firestore {
           && request.resource.data.body.size() >= 10
           && request.resource.data.body.size() <= 2000;
 
-        // Two legal updates: the official posting their one response, or the
-        // community's answered/dodged counts moving with judgments.
+        // The only client update: the official posting their one response.
+        // Judgment counts and status flips are written by onJudgmentWrite.
         allow update: if signedIn()
-          && (
-            (
-              request.auth.uid == officialUid
-              && resource.data.response == null
-              && onlyChanges(['response', 'respondedAt', 'status'])
-              && request.resource.data.status == 'underReview'
-            )
-            || (
-              request.auth.uid != officialUid
-              && onlyChanges(['answeredYes', 'answeredNo', 'status'])
-            )
-          );
+          && request.auth.uid == officialUid
+          && resource.data.response == null
+          && onlyChanges(['response', 'respondedAt', 'status'])
+          && request.resource.data.response is string
+          && request.resource.data.response.size() >= 1
+          && request.resource.data.status == 'underReview';
 
         match /judgments/{judgeUid} {
           allow read: if signedIn() && request.auth.uid == judgeUid;
