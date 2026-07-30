@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
@@ -8,6 +8,7 @@ import { Button, EmptyState, Field } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import type { PollType, Scope } from '@/lib/types';
 import { createPoll } from '@/services/polls';
@@ -42,7 +43,7 @@ export default function NewPollScreen() {
 
   const submit = async () => {
     if (question.trim().length < 10) {
-      Alert.alert('Almost there', 'Write a question of at least 10 characters.');
+      notify('Almost there', 'Write a question of at least 10 characters.');
       return;
     }
     const options = optionsText
@@ -51,7 +52,7 @@ export default function NewPollScreen() {
       .filter(Boolean)
       .map((label, i) => ({ key: `opt${i}`, label }));
     if (needsOptions && options.length < 2) {
-      Alert.alert('Almost there', 'List at least two options, one per line.');
+      notify('Almost there', 'List at least two options, one per line.');
       return;
     }
     setSaving(true);
@@ -67,7 +68,7 @@ export default function NewPollScreen() {
       if (router.canGoBack()) router.back();
       else router.replace('/ward');
     } catch (e) {
-      Alert.alert('Could not create poll', e instanceof Error ? e.message : 'Something went wrong.');
+      notify('Could not create poll', e instanceof Error ? e.message : 'Something went wrong.');
       setSaving(false);
     }
   };

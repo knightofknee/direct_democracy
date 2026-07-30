@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { LensToggle } from '@/components/lens-toggle';
 import { Screen } from '@/components/screen';
@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
+import { notify } from '@/lib/notify';
 import { timeAgo } from '@/lib/format';
 import {
   CONCERN_PRIORITIES,
@@ -76,7 +77,7 @@ export default function ConcernScreen() {
     try {
       await voteConcernPriority(profile, concern.id, priority);
     } catch (e) {
-      Alert.alert('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
+      notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setSavingVote(false);
     }
@@ -94,7 +95,7 @@ export default function ConcernScreen() {
       await addComment(profile, concern.id, body);
       setCommentText('');
     } catch (e) {
-      Alert.alert('Comment failed', e instanceof Error ? e.message : 'Something went wrong.');
+      notify('Comment failed', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setSavingComment(false);
     }

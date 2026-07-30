@@ -57,6 +57,19 @@ function slicesOf(ballot: BallotDoc): VoterSlices {
   return { verified: !!ballot.verified, registeredVoter: !!ballot.registeredVoter };
 }
 
+/** Bump a personal participation counter (celebration milestones read these). */
+async function bumpStat(uid: string, stat: 'concerns' | 'comments' | 'votes' | 'judgments') {
+  await db
+    .doc(`users/${uid}`)
+    .update({ [`stats.${stat}`]: FieldValue.increment(1) })
+    .catch(() => {}); // user doc may be gone (account deletion) — never fail the trigger
+}
+
+export const onConcernCreated = onDocumentCreated('concerns/{concernId}', async (event) => {
+  const authorUid = event.data?.data()?.authorUid;
+  if (authorUid) await bumpStat(authorUid, 'concerns');
+});
+
 export const onConcernVoteWrite = onDocumentWritten(
   'concerns/{concernId}/votes/{voterUid}',
   async (event) => {
@@ -76,6 +89,9 @@ export const onConcernVoteWrite = onDocumentWritten(
         scoreVerified: weightedScore(tallies.verified, PRIORITY_WEIGHTS),
       });
     });
+
+    // A brand-new ballot (not a changed one) counts toward vote milestones.
+    if (!before && after) await bumpStat(event.params.voterUid, 'votes');
   }
 );
 
@@ -94,6 +110,8 @@ export const onPollVoteWrite = onDocumentWritten(
       if (after) tallies = addBallot(tallies, after.value, slicesOf(after));
       tx.update(pollRef, { tallies });
     });
+
+    if (!before && after) await bumpStat(event.params.voterUid, 'votes');
   }
 );
 
@@ -103,6 +121,59 @@ export const onCommentCreated = onDocumentCreated(
     await db
       .doc(`concerns/${event.params.concernId}`)
       .update({ commentCount: FieldValue.increment(1) });
+    const authorUid = event.data?.data()?.authorUid;
+    if (authorUid) await bumpStat(authorUid, 'comments');
+  }
+);
+
+/**
+ * Approval ballots — the "how well liked" axis of an official's grade.
+ * Aggregates the standard three-lens tally plus a constituents-only count
+ * (ballots from verified residents of the official's own ward; for citywide
+ * offices every verified resident is a constituent).
+ */
+export const onApprovalWrite = onDocumentWritten(
+  'officials/{officialUid}/approvals/{voterUid}',
+  async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const officialRef = db.doc(`officials/${event.params.officialUid}`);
+
+    await db.runTransaction(async (tx) => {
+      const snap = await tx.get(officialRef);
+      if (!snap.exists) return;
+      const official = snap.data()!;
+      let tallies = (official.approvalTallies as DualTally) ?? {
+        all: {},
+        verified: {},
+        registered: {},
+        totalAll: 0,
+        totalVerified: 0,
+        totalRegistered: 0,
+      };
+      const constituents = { ...(official.approvalConstituents ?? { approve: 0, disapprove: 0 }) };
+
+      const isConstituent = (ballot: FirebaseFirestore.DocumentData) =>
+        !!ballot.verified && (official.wardId == null || ballot.wardId === official.wardId);
+      const constKey = (v: string) => (v === 'approve' ? 'approve' : 'disapprove') as
+        | 'approve'
+        | 'disapprove';
+
+      if (before) {
+        tallies = removeBallot(tallies, before.value as VoteValue, slicesOf(before as BallotDoc));
+        if (isConstituent(before)) {
+          constituents[constKey(before.value)] = Math.max(0, constituents[constKey(before.value)] - 1);
+        }
+      }
+      if (after) {
+        tallies = addBallot(tallies, after.value as VoteValue, slicesOf(after as BallotDoc));
+        if (isConstituent(after)) {
+          constituents[constKey(after.value)] += 1;
+        }
+      }
+
+      tx.update(officialRef, { approvalTallies: tallies, approvalConstituents: constituents });
+    });
   }
 );
 
@@ -175,6 +246,8 @@ export const onJudgmentWrite = onDocumentWritten(
         if (Object.keys(delta).length) tx.update(officialRef, delta);
       }
     });
+
+    if (!before && after) await bumpStat(event.params.judgeUid, 'judgments');
   }
 );
 

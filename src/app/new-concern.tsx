@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
@@ -8,6 +8,7 @@ import { Button, Field } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import type { Scope } from '@/lib/types';
 import { createConcern } from '@/services/concerns';
@@ -29,11 +30,11 @@ export default function NewConcernScreen() {
       return;
     }
     if (title.trim().length < 8) {
-      Alert.alert('Almost there', 'Give your concern a title of at least 8 characters.');
+      notify('Almost there', 'Give your concern a title of at least 8 characters.');
       return;
     }
     if (body.trim().length < 20) {
-      Alert.alert('Almost there', 'Describe the concern in at least 20 characters.');
+      notify('Almost there', 'Describe the concern in at least 20 characters.');
       return;
     }
     setSaving(true);
@@ -41,7 +42,7 @@ export default function NewConcernScreen() {
       const id = await createConcern(profile, { title, body, scope });
       router.replace(`/concern/${id}`);
     } catch (e) {
-      Alert.alert('Could not post', e instanceof Error ? e.message : 'Something went wrong.');
+      notify('Could not post', e instanceof Error ? e.message : 'Something went wrong.');
       setSaving(false);
     }
   };

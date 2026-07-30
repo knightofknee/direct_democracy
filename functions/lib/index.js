@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.personaWebhook = exports.createVerificationSession = exports.devVerify = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = void 0;
+exports.personaWebhook = exports.createVerificationSession = exports.devVerify = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onApprovalWrite = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onConcernCreated = void 0;
 const crypto = __importStar(require("crypto"));
 const app_1 = require("firebase-admin/app");
 const firestore_1 = require("firebase-admin/firestore");
@@ -55,6 +55,18 @@ async function applyVerification(uid, result) {
 function slicesOf(ballot) {
     return { verified: !!ballot.verified, registeredVoter: !!ballot.registeredVoter };
 }
+/** Bump a personal participation counter (celebration milestones read these). */
+async function bumpStat(uid, stat) {
+    await db
+        .doc(`users/${uid}`)
+        .update({ [`stats.${stat}`]: firestore_1.FieldValue.increment(1) })
+        .catch(() => { }); // user doc may be gone (account deletion) — never fail the trigger
+}
+exports.onConcernCreated = (0, firestore_2.onDocumentCreated)('concerns/{concernId}', async (event) => {
+    const authorUid = event.data?.data()?.authorUid;
+    if (authorUid)
+        await bumpStat(authorUid, 'concerns');
+});
 exports.onConcernVoteWrite = (0, firestore_2.onDocumentWritten)('concerns/{concernId}/votes/{voterUid}', async (event) => {
     const before = event.data?.before.exists ? event.data.before.data() : null;
     const after = event.data?.after.exists ? event.data.after.data() : null;
@@ -74,6 +86,9 @@ exports.onConcernVoteWrite = (0, firestore_2.onDocumentWritten)('concerns/{conce
             scoreVerified: (0, tally_1.weightedScore)(tallies.verified, tally_1.PRIORITY_WEIGHTS),
         });
     });
+    // A brand-new ballot (not a changed one) counts toward vote milestones.
+    if (!before && after)
+        await bumpStat(event.params.voterUid, 'votes');
 });
 exports.onPollVoteWrite = (0, firestore_2.onDocumentWritten)('polls/{pollId}/votes/{voterUid}', async (event) => {
     const before = event.data?.before.exists ? event.data.before.data() : null;
@@ -90,11 +105,57 @@ exports.onPollVoteWrite = (0, firestore_2.onDocumentWritten)('polls/{pollId}/vot
             tallies = (0, tally_1.addBallot)(tallies, after.value, slicesOf(after));
         tx.update(pollRef, { tallies });
     });
+    if (!before && after)
+        await bumpStat(event.params.voterUid, 'votes');
 });
 exports.onCommentCreated = (0, firestore_2.onDocumentCreated)('concerns/{concernId}/comments/{commentId}', async (event) => {
     await db
         .doc(`concerns/${event.params.concernId}`)
         .update({ commentCount: firestore_1.FieldValue.increment(1) });
+    const authorUid = event.data?.data()?.authorUid;
+    if (authorUid)
+        await bumpStat(authorUid, 'comments');
+});
+/**
+ * Approval ballots — the "how well liked" axis of an official's grade.
+ * Aggregates the standard three-lens tally plus a constituents-only count
+ * (ballots from verified residents of the official's own ward; for citywide
+ * offices every verified resident is a constituent).
+ */
+exports.onApprovalWrite = (0, firestore_2.onDocumentWritten)('officials/{officialUid}/approvals/{voterUid}', async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const officialRef = db.doc(`officials/${event.params.officialUid}`);
+    await db.runTransaction(async (tx) => {
+        const snap = await tx.get(officialRef);
+        if (!snap.exists)
+            return;
+        const official = snap.data();
+        let tallies = official.approvalTallies ?? {
+            all: {},
+            verified: {},
+            registered: {},
+            totalAll: 0,
+            totalVerified: 0,
+            totalRegistered: 0,
+        };
+        const constituents = { ...(official.approvalConstituents ?? { approve: 0, disapprove: 0 }) };
+        const isConstituent = (ballot) => !!ballot.verified && (official.wardId == null || ballot.wardId === official.wardId);
+        const constKey = (v) => (v === 'approve' ? 'approve' : 'disapprove');
+        if (before) {
+            tallies = (0, tally_1.removeBallot)(tallies, before.value, slicesOf(before));
+            if (isConstituent(before)) {
+                constituents[constKey(before.value)] = Math.max(0, constituents[constKey(before.value)] - 1);
+            }
+        }
+        if (after) {
+            tallies = (0, tally_1.addBallot)(tallies, after.value, slicesOf(after));
+            if (isConstituent(after)) {
+                constituents[constKey(after.value)] += 1;
+            }
+        }
+        tx.update(officialRef, { approvalTallies: tallies, approvalConstituents: constituents });
+    });
 });
 exports.onQuestionCreated = (0, firestore_2.onDocumentCreated)('officials/{officialUid}/questions/{questionId}', async (event) => {
     await db
@@ -157,6 +218,8 @@ exports.onJudgmentWrite = (0, firestore_2.onDocumentWritten)('officials/{officia
                 tx.update(officialRef, delta);
         }
     });
+    if (!before && after)
+        await bumpStat(event.params.judgeUid, 'judgments');
 });
 /**
  * DEV ONLY — simulates a passing Persona inquiry when running against the

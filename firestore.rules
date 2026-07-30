@@ -33,13 +33,20 @@ service cloud.firestore {
       // content at write time.
       allow read: if signedIn() && request.auth.uid == uid;
 
-      // Self-registration: always starts unverified, citizen, no ward.
+      // Self-registration: always starts unverified, citizen, no ward, zero stats.
       allow create: if signedIn()
         && request.auth.uid == uid
         && request.resource.data.role == 'citizen'
         && request.resource.data.verified == false
         && request.resource.data.registeredVoter == false
-        && request.resource.data.wardId == null;
+        && request.resource.data.wardId == null
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() >= 3
+        && request.resource.data.displayName.size() <= 30
+        && request.resource.data.stats.concerns == 0
+        && request.resource.data.stats.comments == 0
+        && request.resource.data.stats.votes == 0
+        && request.resource.data.stats.judgments == 0;
 
       // Users may edit their display name — nothing else. verified / wardId /
       // registeredVoter / role are written only by the Admin SDK (Persona
@@ -56,9 +63,11 @@ service cloud.firestore {
     match /concerns/{concernId} {
       allow read: if true;
 
-      // New concerns start with zeroed aggregates.
+      // New concerns start with zeroed aggregates. authorName must match the
+      // author's actual display name — no speaking as someone else.
       allow create: if signedIn()
         && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorName == me().displayName
         && request.resource.data.authorVerified == me().verified
         && request.resource.data.title is string
         && request.resource.data.title.size() >= 8
@@ -96,6 +105,7 @@ service cloud.firestore {
         allow read: if true;
         allow create: if signedIn()
           && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorName == me().displayName
           && request.resource.data.authorVerified == me().verified
           && request.resource.data.body is string
           && request.resource.data.body.size() >= 1
@@ -109,8 +119,14 @@ service cloud.firestore {
 
       allow create: if isOfficial()
         && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorName == me().displayName
         && request.resource.data.open == true
         && request.resource.data.tallies.totalAll == 0
+        && request.resource.data.question is string
+        && request.resource.data.question.size() >= 10
+        && request.resource.data.question.size() <= 280
+        && request.resource.data.options.size() >= 2
+        && request.resource.data.options.size() <= 12
         && (
           request.resource.data.scope == 'city'
           || (request.resource.data.scope == 'ward' && request.resource.data.wardId == me().wardId)
@@ -143,16 +159,46 @@ service cloud.firestore {
     match /officials/{officialUid} {
       allow read: if true;
 
-      // Officials edit their own public card; AMA counters are trigger-only.
+      // Officials edit their own bio and portrait link. The portrait is an
+      // externally hosted https URL — we never take custody of the image.
+      // Name/title are provisioned by admins; all counters are trigger-only.
       allow update: if signedIn()
         && request.auth.uid == officialUid
-        && onlyChanges(['bio', 'name', 'title']);
+        && onlyChanges(['bio', 'photoUrl'])
+        && (
+          !('photoUrl' in request.resource.data)
+          || request.resource.data.photoUrl == null
+          || (
+            request.resource.data.photoUrl is string
+            && request.resource.data.photoUrl.matches('https://.*')
+            && request.resource.data.photoUrl.size() <= 500
+          )
+        )
+        && (
+          !('bio' in request.resource.data)
+          || (request.resource.data.bio is string && request.resource.data.bio.size() <= 1000)
+        );
+
+      // Approval ballots — one standing approve/disapprove per person,
+      // changeable or retractable any time. Aggregated by onApprovalWrite.
+      match /approvals/{voterUid} {
+        allow read: if signedIn() && request.auth.uid == voterUid;
+        allow create, update: if signedIn()
+          && request.auth.uid == voterUid
+          && request.auth.uid != officialUid
+          && request.resource.data.value in ['approve', 'disapprove']
+          && request.resource.data.verified == me().verified
+          && request.resource.data.registeredVoter == me().registeredVoter
+          && request.resource.data.wardId == me().wardId;
+        allow delete: if signedIn() && request.auth.uid == voterUid;
+      }
 
       match /questions/{questionId} {
         allow read: if true;
 
         allow create: if signedIn()
           && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorName == me().displayName
           && request.resource.data.authorVerified == me().verified
           && request.resource.data.officialUid == officialUid
           && request.resource.data.status == 'awaitingResponse'
@@ -175,10 +221,12 @@ service cloud.firestore {
 
         match /judgments/{judgeUid} {
           allow read: if signedIn() && request.auth.uid == judgeUid;
+          // Judgments only make sense once there's a response to judge.
           allow create, update: if signedIn()
             && request.auth.uid == judgeUid
             && request.auth.uid != officialUid
-            && request.resource.data.answered is bool;
+            && request.resource.data.answered is bool
+            && get(/databases/$(database)/documents/officials/$(officialUid)/questions/$(questionId)).data.response != null;
         }
       }
     }

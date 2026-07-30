@@ -26,5 +26,18 @@ Conventions:
 - Roles: `citizen` vs `official` on `users/{uid}`; `verified` and `wardId` are
   written only by the Admin SDK / Cloud Functions (Persona webhook), never by
   clients — security rules enforce this.
+- Officials are graded on two axes in `src/services/officials.ts`: constituent
+  approval (5-ballot minimum) and the community-judged answer score, averaged
+  into an overall letter. Approval ballots live at
+  `officials/{uid}/approvals/{voterUid}` and aggregate in `onApprovalWrite`.
+- Official portraits are external https links (`photoUrl`) — never store or
+  proxy the image.
+- Personal stats on `users/{uid}.stats` are trigger-written and drive the
+  milestone celebrations in `src/components/celebration.tsx` +
+  `src/lib/milestones.ts`.
+- Use `notify()` from `src/lib/notify.ts` for user-facing errors — RN's
+  Alert is a silent no-op on web.
 - Seed data must never depict real Chicago officials — fictional names only.
+- Security posture and accepted limitations are documented in `docs/AUDIT.md`;
+  update it when the trust model changes.
 - Typecheck with `npm run typecheck` before finishing.

@@ -1,12 +1,13 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Field } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { notify } from '@/lib/notify';
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function SignInScreen() {
       if (router.canGoBack()) router.back();
       else router.replace('/');
     } catch (e) {
-      Alert.alert(
+      notify(
         mode === 'signIn' ? 'Sign in failed' : 'Sign up failed',
         e instanceof Error ? friendlyAuthError(e.message) : 'Something went wrong.'
       );

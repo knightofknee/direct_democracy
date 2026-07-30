@@ -62,6 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           verified: false,
           wardId: null,
           registeredVoter: false,
+          stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
           createdAt: serverTimestamp(),
         };
         await setDoc(doc(db, 'users', cred.user.uid), newProfile);

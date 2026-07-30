@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
@@ -10,7 +10,9 @@ import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
+import { nextMilestones } from '@/lib/milestones';
 import { randomDisplayName } from '@/lib/names';
+import { notify } from '@/lib/notify';
 import { updateDisplayName } from '@/services/users';
 
 export default function ProfileScreen() {
@@ -47,7 +49,7 @@ export default function ProfileScreen() {
       await updateDisplayName(profile.uid, name);
       setEditingName(null);
     } catch (e) {
-      Alert.alert('Could not update name', e instanceof Error ? e.message : 'Something went wrong.');
+      notify('Could not update name', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setSavingName(false);
     }
@@ -106,6 +108,41 @@ export default function ProfileScreen() {
         </ThemedText>
       </Card>
 
+      <SectionHeader title="Civic record" subtitle="Counted as you participate — milestones celebrate along the way" />
+      <Card>
+        <View style={styles.statsGrid}>
+          <StatTile label="Concerns" value={profile.stats?.concerns ?? 0} icon="megaphone" />
+          <StatTile label="Comments" value={profile.stats?.comments ?? 0} icon="chatbubble" />
+          <StatTile label="Votes" value={profile.stats?.votes ?? 0} icon="checkbox" />
+          <StatTile label="Judgments" value={profile.stats?.judgments ?? 0} icon="scale" />
+        </View>
+        {nextMilestones(profile.stats ?? { concerns: 0, comments: 0, votes: 0, judgments: 0 })
+          .slice(0, 2)
+          .map((m) => (
+            <View key={m.label} style={{ gap: 3 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+                  {m.label} — next milestone
+                </ThemedText>
+                <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+                  {m.current} / {m.target}
+                </ThemedText>
+              </View>
+              <View style={[styles.progressTrack, { backgroundColor: theme.backgroundSelected }]}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    {
+                      backgroundColor: theme.primary,
+                      width: `${Math.min(100, Math.round((m.current / m.target) * 100))}%`,
+                    },
+                  ]}
+                />
+              </View>
+            </View>
+          ))}
+      </Card>
+
       <SectionHeader title="Identity verification" />
       <Card>
         {profile.verified ? (
@@ -133,6 +170,29 @@ export default function ProfileScreen() {
   );
 }
 
+function StatTile({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: number;
+  icon: keyof typeof Ionicons.glyphMap;
+}) {
+  const theme = useTheme();
+  return (
+    <View style={[styles.statTile, { backgroundColor: theme.background, borderColor: theme.border }]}>
+      <Ionicons name={icon} size={14} color={theme.primary} />
+      <ThemedText type="smallBold" style={{ fontSize: 18, lineHeight: 24 }}>
+        {value.toLocaleString()}
+      </ThemedText>
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 11, lineHeight: 14 }}>
+        {label}
+      </ThemedText>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   nameRow: {
     flexDirection: 'row',
@@ -142,5 +202,26 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row',
     gap: Spacing.two,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    gap: Spacing.two,
+  },
+  statTile: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 2,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingVertical: Spacing.two,
+  },
+  progressTrack: {
+    height: 6,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 3,
   },
 });

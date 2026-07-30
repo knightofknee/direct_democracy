@@ -29,6 +29,13 @@ choice, approval (pick all you support), or a 5-point scale.
 or "dodged" — there's no upvoting of responses. Ignored and dodged questions
 drag the official's public answer score down.
 
+**Officials get a two-axis report card.** Approval (a standing
+approve/disapprove any user can flip at any time, graded on verified
+constituents only, 5-ballot minimum) and the answer score above, averaged into
+an overall A–F. Portraits are links to externally hosted images — the platform
+never stores the photo. Participation earns celebrations: first concern, tenth
+post, hundredth vote.
+
 **Identity verification is third-party.** Persona checks the government ID and
 address; direct democracy only ever stores `verified: yes/no`, the ward, and
 registered-voter status. Documents never touch our servers. Display names are

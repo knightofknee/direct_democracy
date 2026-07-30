@@ -1,6 +1,7 @@
 import { doc } from 'firebase/firestore';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { LensToggle } from '@/components/lens-toggle';
 import { TallyResults } from '@/components/tally-results';
@@ -12,6 +13,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
+import { notify } from '@/lib/notify';
 import type { Poll, TallyLens, VoteDoc } from '@/lib/types';
 import { votePoll } from '@/services/polls';
 
@@ -24,6 +26,7 @@ const TYPE_LABELS: Record<Poll['type'], string> = {
 
 export function PollCard({ poll }: { poll: Poll }) {
   const theme = useTheme();
+  const router = useRouter();
   const { profile } = useAuth();
   const [lens, setLens] = useState<TallyLens>('all');
   const [pending, setPending] = useState<string[]>([]);
@@ -46,7 +49,7 @@ export function PollCard({ poll }: { poll: Poll }) {
       await votePoll(profile, poll, value);
       setPending([]);
     } catch (e) {
-      Alert.alert('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
+      notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setSaving(false);
     }
@@ -130,9 +133,7 @@ export function PollCard({ poll }: { poll: Poll }) {
         </ThemedText>
       )}
       {!profile && (
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          Sign in to vote.
-        </ThemedText>
+        <Button title="Sign in to vote" variant="secondary" onPress={() => router.push('/sign-in')} />
       )}
     </Card>
   );

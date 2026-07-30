@@ -32,7 +32,12 @@ export function Card({
   ];
   if (onPress) {
     return (
-      <Pressable onPress={onPress} style={({ pressed }) => [...base, pressed && { opacity: 0.85 }]}>
+      <Pressable
+        onPress={onPress}
+        style={({ pressed }) => [
+          ...base,
+          pressed && { opacity: 0.9, transform: [{ scale: 0.985 }] },
+        ]}>
         {children}
       </Pressable>
     );
@@ -73,7 +78,11 @@ export function Button({
       disabled={disabled || loading}
       style={({ pressed }) => [
         styles.button,
-        { backgroundColor: background, opacity: disabled ? 0.5 : pressed ? 0.85 : 1 },
+        {
+          backgroundColor: background,
+          opacity: disabled ? 0.5 : pressed ? 0.88 : 1,
+          transform: [{ scale: pressed && !disabled ? 0.98 : 1 }],
+        },
         style,
       ]}>
       {loading ? (

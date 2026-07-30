@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { Pressable, StyleSheet, Switch, View } from 'react-native';
 
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
@@ -9,6 +9,7 @@ import { Button, Card } from '@/components/ui';
 import { WARDS, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import { usingEmulators } from '@/lib/firebase';
 import { startVerification } from '@/services/users';
@@ -47,21 +48,21 @@ export default function VerifyScreen() {
 
   const begin = async () => {
     if (usingEmulators && wardId == null) {
-      Alert.alert('Pick a ward', 'Choose the ward you live in to simulate verification.');
+      notify('Pick a ward', 'Choose the ward you live in to simulate verification.');
       return;
     }
     setBusy(true);
     try {
       const { mode } = await startVerification({ wardId: wardId ?? 1, registeredVoter });
       if (mode === 'dev') {
-        Alert.alert('Verified (dev)', 'Simulated a passing Persona inquiry against the emulator.');
+        notify('Verified (dev)', 'Simulated a passing Persona inquiry against the emulator.');
         if (router.canGoBack()) router.back();
         else router.replace('/ward');
       }
       // In the real Persona flow the webhook flips the profile; the app reacts
       // to the live profile listener, so there's nothing to do here.
     } catch (e) {
-      Alert.alert('Verification failed', e instanceof Error ? e.message : 'Something went wrong.');
+      notify('Verification failed', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setBusy(false);
     }

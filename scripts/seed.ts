@@ -16,7 +16,9 @@ import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 
-const app = initializeApp({ projectId: 'demo-direct-democracy' });
+// Must match the projectId the app runs under (see .firebaserc) — the
+// emulator namespaces data per project.
+const app = initializeApp({ projectId: 'direct-democracy-e338a' });
 const auth = getAuth(app);
 const db = getFirestore(app);
 
@@ -56,7 +58,7 @@ async function ensureUser(email: string, displayName: string): Promise<string> {
 }
 
 async function main() {
-  console.log('Seeding demo-direct-democracy…');
+  console.log('Seeding the emulator (direct-democracy-e338a)…');
 
   // ── Officials (fictional) ──────────────────────────────────────────────
   const officials = [
@@ -93,6 +95,7 @@ async function main() {
       verified: true,
       wardId: o.wardId,
       registeredVoter: true,
+      stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
       createdAt: FieldValue.serverTimestamp(),
     });
     await db.doc(`officials/${uid}`).set({
@@ -101,10 +104,17 @@ async function main() {
       title: o.title,
       wardId: o.wardId,
       bio: o.bio,
+      photoUrl: null,
       questionsAsked: 0,
       questionsResponded: 0,
       questionsAnswered: 0,
       questionsDodged: 0,
+      approvalTallies: tally(
+        { approve: 96, disapprove: 41 },
+        { approve: 52, disapprove: 21 },
+        { approve: 47, disapprove: 19 }
+      ),
+      approvalConstituents: { approve: 38, disapprove: 15 },
     });
   }
   console.log('  ✓ 3 officials');
@@ -117,6 +127,7 @@ async function main() {
     verified: true,
     wardId: 1,
     registeredVoter: true,
+    stats: { concerns: 6, comments: 4, votes: 9, judgments: 3 },
     createdAt: FieldValue.serverTimestamp(),
   });
 
@@ -127,6 +138,7 @@ async function main() {
     verified: false,
     wardId: null,
     registeredVoter: false,
+    stats: { concerns: 0, comments: 2, votes: 4, judgments: 2 },
     createdAt: FieldValue.serverTimestamp(),
   });
   console.log('  ✓ 2 demo citizens');

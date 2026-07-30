@@ -9,6 +9,14 @@ import type { Timestamp } from 'firebase/firestore';
  */
 export type Role = 'citizen' | 'official';
 
+/** Personal participation counters, written only by Cloud Functions triggers. */
+export interface UserStats {
+  concerns: number;
+  comments: number;
+  votes: number;
+  judgments: number;
+}
+
 export interface UserProfile {
   uid: string;
   displayName: string;
@@ -18,6 +26,8 @@ export interface UserProfile {
   wardId: number | null;
   /** Registered-voter flag, second filter on the big board. Set during verification. */
   registeredVoter: boolean;
+  /** Optional for accounts created before stats existed. */
+  stats?: UserStats;
   createdAt: Timestamp;
 }
 
@@ -27,14 +37,26 @@ export interface Official {
   title: string; // e.g. "Alderman, 1st Ward" or "Mayor"
   wardId: number | null; // null for citywide offices
   bio: string;
-  /** AMA responsiveness counters, maintained transactionally as the community votes. */
+  /**
+   * Externally hosted portrait (https URL) — we render it but never host or
+   * store the image itself. Null shows an initials avatar.
+   */
+  photoUrl?: string | null;
+  /** AMA responsiveness counters, maintained by Cloud Functions triggers. */
   questionsAsked: number;
   questionsResponded: number;
   /** Questions the community confirmed as genuinely answered. */
   questionsAnswered: number;
   /** Questions where the community judged the response a dodge. */
   questionsDodged: number;
+  /** Approval ballots (approve/disapprove), aggregated by trigger. */
+  approvalTallies?: DualTally;
+  /** Approval among the official's own constituents (ward residents). */
+  approvalConstituents?: { approve: number; disapprove: number };
 }
+
+/** One person's standing approval of an official — changeable any time. */
+export type ApprovalValue = 'approve' | 'disapprove';
 
 /**
  * Every vote is tallied twice: once over all users and once over verified users

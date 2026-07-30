@@ -5,9 +5,11 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ConcernCard } from '@/components/concern-card';
+import { FlagAccent } from '@/components/flag-accent';
 import { LensToggle } from '@/components/lens-toggle';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
+import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
 import { CITY } from '@/constants/chicago';
@@ -61,6 +63,7 @@ export default function BigBoardScreen() {
         <ThemedText type="small" themeColor="textSecondary">
           {CITY.name}’s top concerns, ranked by the people. Vote priority, not just up or down.
         </ThemedText>
+        <FlagAccent />
       </View>
 
       <LensToggle value={lens} onChange={setLens} />
@@ -71,14 +74,16 @@ export default function BigBoardScreen() {
         <Button title="Sign in to raise a concern" variant="secondary" onPress={() => router.push('/sign-in')} />
       )}
 
-      {concerns.length === 0 && !loading ? (
+      {loading ? (
+        <SkeletonCards />
+      ) : concerns.length === 0 ? (
         <EmptyState
           icon="megaphone-outline"
           message="No citywide concerns yet. Be the first to raise one."
         />
       ) : (
         concerns.map((concern, i) => (
-          <ConcernCard key={concern.id} concern={concern} rank={i + 1} lens={lens} />
+          <ConcernCard key={concern.id} concern={concern} rank={i + 1} lens={lens} index={i} />
         ))
       )}
 
