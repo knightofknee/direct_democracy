@@ -1,0 +1,191 @@
+rules_version = '2';
+
+// direct democracy security rules.
+//
+// Known MVP tradeoff: vote tallies are aggregated in client-side transactions,
+// so signed-in users are allowed to update tally fields on concerns/polls and
+// counter fields on officials. A hostile client could write inflated tallies.
+// Before real-world launch, move tally aggregation into Cloud Functions
+// triggers on the vote/judgment subcollections and delete those grants.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function me() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isOfficial() {
+      return signedIn() && me().role == 'official';
+    }
+
+    function onlyChanges(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
+    // ── Users ────────────────────────────────────────────────────────────
+    match /users/{uid} {
+      // Profiles are private; public-facing fields are denormalized onto
+      // content at write time.
+      allow read: if signedIn() && request.auth.uid == uid;
+
+      // Self-registration: always starts unverified, citizen, no ward.
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role == 'citizen'
+        && request.resource.data.verified == false
+        && request.resource.data.registeredVoter == false
+        && request.resource.data.wardId == null;
+
+      // Users may edit their display name — nothing else. verified / wardId /
+      // registeredVoter / role are written only by the Admin SDK (Persona
+      // webhook and admin tooling), which bypasses these rules.
+      allow update: if signedIn()
+        && request.auth.uid == uid
+        && onlyChanges(['displayName'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() >= 3
+        && request.resource.data.displayName.size() <= 30;
+    }
+
+    // ── Concerns (the big board) ─────────────────────────────────────────
+    match /concerns/{concernId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 8
+        && request.resource.data.title.size() <= 140
+        && request.resource.data.body.size() <= 4000
+        && request.resource.data.commentCount == 0
+        && (
+          request.resource.data.scope == 'city'
+          || (
+            request.resource.data.scope == 'ward'
+            && (me().verified == true || me().role == 'official')
+            && request.resource.data.wardId == me().wardId
+          )
+        );
+
+      // Tally maintenance from vote/comment transactions (see header note).
+      allow update: if signedIn()
+        && onlyChanges(['tallies', 'score', 'scoreVerified', 'commentCount']);
+
+      match /votes/{voterUid} {
+        allow read: if signedIn() && request.auth.uid == voterUid;
+        // One ballot per person; the verified/registered snapshot must match
+        // the voter's actual profile.
+        allow create, update: if signedIn()
+          && request.auth.uid == voterUid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.verified == me().verified
+          && request.resource.data.registeredVoter == me().registeredVoter;
+      }
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if signedIn()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.authorVerified == me().verified
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 1
+          && request.resource.data.body.size() <= 2000;
+      }
+    }
+
+    // ── Polls (questions from elected officials) ─────────────────────────
+    match /polls/{pollId} {
+      allow read: if true;
+
+      allow create: if isOfficial()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.open == true
+        && (
+          request.resource.data.scope == 'city'
+          || (request.resource.data.scope == 'ward' && request.resource.data.wardId == me().wardId)
+        );
+
+      // Voters update tallies; the author may also close the poll.
+      allow update: if signedIn()
+        && (
+          onlyChanges(['tallies'])
+          || (request.auth.uid == resource.data.authorUid && onlyChanges(['open', 'tallies']))
+        );
+
+      match /votes/{voterUid} {
+        allow read: if signedIn() && request.auth.uid == voterUid;
+        allow create, update: if signedIn()
+          && request.auth.uid == voterUid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.verified == me().verified
+          && request.resource.data.registeredVoter == me().registeredVoter
+          && get(/databases/$(database)/documents/polls/$(pollId)).data.open == true
+          && (
+            get(/databases/$(database)/documents/polls/$(pollId)).data.scope == 'city'
+            || (
+              me().verified == true
+              && me().wardId == get(/databases/$(database)/documents/polls/$(pollId)).data.wardId
+            )
+          );
+      }
+    }
+
+    // ── Officials & AMAs ─────────────────────────────────────────────────
+    match /officials/{officialUid} {
+      allow read: if true;
+
+      // Officials edit their own bio; AMA counters move with the
+      // ask/respond/judge transactions (see header note).
+      allow update: if signedIn()
+        && (
+          (request.auth.uid == officialUid && onlyChanges(['bio', 'name', 'title']))
+          || onlyChanges([
+            'questionsAsked', 'questionsResponded', 'questionsAnswered', 'questionsDodged'
+          ])
+        );
+
+      match /questions/{questionId} {
+        allow read: if true;
+
+        allow create: if signedIn()
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.officialUid == officialUid
+          && request.resource.data.status == 'awaitingResponse'
+          && request.resource.data.response == null
+          && request.resource.data.answeredYes == 0
+          && request.resource.data.answeredNo == 0
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 10
+          && request.resource.data.body.size() <= 2000;
+
+        // Two legal updates: the official posting their one response, or the
+        // community's answered/dodged counts moving with judgments.
+        allow update: if signedIn()
+          && (
+            (
+              request.auth.uid == officialUid
+              && resource.data.response == null
+              && onlyChanges(['response', 'respondedAt', 'status'])
+              && request.resource.data.status == 'underReview'
+            )
+            || (
+              request.auth.uid != officialUid
+              && onlyChanges(['answeredYes', 'answeredNo', 'status'])
+            )
+          );
+
+        match /judgments/{judgeUid} {
+          allow read: if signedIn() && request.auth.uid == judgeUid;
+          allow create, update: if signedIn()
+            && request.auth.uid == judgeUid
+            && request.auth.uid != officialUid
+            && request.resource.data.answered is bool;
+        }
+      }
+    }
+  }
+}
