@@ -11,6 +11,17 @@ export async function updateDisplayName(uid: string, name: string): Promise<void
 }
 
 /**
+ * Permanently delete the account: auth user, profile, block list, and the
+ * user's standing approvals of officials. Runs server-side so the removal is
+ * complete even if the client disconnects mid-way. Pseudonymous posts and
+ * cast ballots remain (see the deleteAccount function's doc comment).
+ */
+export async function deleteAccount(): Promise<void> {
+  const call = httpsCallable(functions, 'deleteAccount');
+  await call({});
+}
+
+/**
  * Identity verification, Persona-shaped.
  *
  * Production flow (documented in README):
@@ -18,15 +29,14 @@ export async function updateDisplayName(uid: string, name: string): Promise<void
  *  2. User completes Persona's hosted flow (government ID + address). The ID
  *     data never touches our servers or database.
  *  3. Persona webhooks our `personaWebhook` function, which stores only:
- *     verified=true, wardId (derived from the verified address), and the
- *     registered-voter flag. Nothing else is retained.
+ *     verified=true and wardId (derived from the verified address). Nothing
+ *     else is retained.
  *
  * Against the emulator there is no Persona, so `devVerify` (a callable that
  * only exists in emulator/dev builds) simulates a passing inquiry.
  */
 export async function startVerification(input: {
   wardId: number;
-  registeredVoter: boolean;
 }): Promise<{ mode: 'dev' | 'persona' }> {
   if (usingEmulators) {
     const devVerify = httpsCallable(functions, 'devVerify');

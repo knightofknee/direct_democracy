@@ -8,14 +8,14 @@ import { computeScore, type OfficialScore } from '@/services/ama';
 /**
  * The grading system. Two axes, equally weighted:
  *
- *  1. APPROVAL — how well liked. A standing approve/disapprove ballot any
+ *  1. APPROVAL - how well liked. A standing approve/disapprove ballot any
  *     user can set or change at any time, tallied through the usual three
  *     lenses plus a constituents-only slice (verified residents of the
  *     official's own ward; for citywide offices, any verified resident).
- *     The graded number is constituent approval — being liked by people you
+ *     The graded number is constituent approval - being liked by people you
  *     don't represent doesn't move your grade.
  *
- *  2. ANSWER SCORE — how well they actually answer their constituency.
+ *  2. ANSWER SCORE - how well they actually answer their constituency.
  *     Community-judged AMA performance (see computeScore in services/ama.ts):
  *     answered questions earn credit, dodged and ignored ones cost it.
  *
@@ -67,7 +67,7 @@ export interface OfficialGrade {
 }
 
 export function letterFor(score: number | null): string {
-  if (score == null) return '—';
+  if (score == null) return '-';
   if (score >= 90) return 'A';
   if (score >= 80) return 'B';
   if (score >= 70) return 'C';
@@ -81,7 +81,7 @@ export function computeGrade(official: Official): OfficialGrade {
 
   const axes: number[] = [];
   if (approval.constituentPct != null) axes.push(approval.constituentPct);
-  // One ignored question shouldn't tank a grade — the axis needs a sample.
+  // One ignored question shouldn't tank a grade - the axis needs a sample.
   const answersGraded = answers.score != null && answers.asked >= ANSWERS_MIN_QUESTIONS;
   if (answersGraded && answers.score != null) axes.push(answers.score);
   const overall = axes.length
@@ -101,7 +101,6 @@ export async function setApproval(
   await setDoc(doc(db, 'officials', officialUid, 'approvals', profile.uid), {
     value,
     verified: profile.verified,
-    registeredVoter: profile.registeredVoter,
     wardId: profile.wardId,
     createdAt: serverTimestamp(),
   });
@@ -114,7 +113,7 @@ export async function clearApproval(profile: UserProfile, officialUid: string): 
 
 /**
  * Officials update their own public card. The portrait is a link to an image
- * hosted elsewhere (https only) — direct democracy never stores the file.
+ * hosted elsewhere (https only) - direct democracy never stores the file.
  */
 export async function updateOfficialCard(
   profile: UserProfile,

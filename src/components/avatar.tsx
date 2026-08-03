@@ -7,7 +7,7 @@ import { useTheme } from '@/hooks/use-theme';
 
 /**
  * Official portrait. Renders an externally hosted photo when one is linked
- * (we never store the image), falling back to an initials tile — including
+ * (we never store the image), falling back to an initials tile - including
  * when the remote image fails to load.
  */
 export function OfficialAvatar({

@@ -34,7 +34,7 @@ export function ConcernCard({
   concern: Concern;
   rank?: number;
   lens: TallyLens;
-  /** Position in the list — staggers the entrance animation. */
+  /** Position in the list - staggers the entrance animation. */
   index?: number;
 }) {
   const theme = useTheme();
@@ -49,10 +49,7 @@ export function ConcernCard({
   const myPriority = (myVote?.value as ConcernPriority | undefined) ?? null;
 
   const score = lens === 'verified' ? concern.scoreVerified : concern.score;
-  const voters =
-    lens === 'verified' ? concern.tallies.totalVerified
-    : lens === 'registered' ? concern.tallies.totalRegistered
-    : concern.tallies.totalAll;
+  const voters = lens === 'verified' ? concern.tallies.totalVerified : concern.tallies.totalAll;
 
   const quickVote = async (priority: ConcernPriority) => {
     if (!profile) {

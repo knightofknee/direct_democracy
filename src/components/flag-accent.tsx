@@ -26,7 +26,7 @@ export function FlagAccent() {
 const styles = StyleSheet.create({
   wrap: {
     gap: 3,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     minWidth: 96,
   },
   stripe: {

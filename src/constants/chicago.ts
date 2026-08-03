@@ -18,7 +18,7 @@ export interface Ward {
 }
 
 /**
- * Neighborhood labels are approximate — ward boundaries slice through
+ * Neighborhood labels are approximate - ward boundaries slice through
  * neighborhoods and shift with remaps. Good enough for display; never used
  * for eligibility (ward assignment comes from verified address).
  */

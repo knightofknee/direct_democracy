@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 
 /**
  * Live Firestore hooks. `deps` must change whenever the query/ref does (they
- * are primitive values — uids, ids, field names), and are folded into a key
+ * are primitive values - uids, ids, field names), and are folded into a key
  * that both re-runs the subscription effect and marks stale results while a
  * new subscription warms up. Return null from the factory to disable
- * (e.g. while signed out) — that renders as an instant empty result.
+ * (e.g. while signed out) - that renders as an instant empty result.
  */
 
 export function useLiveQuery<T>(makeQuery: () => Query | null, deps: unknown[]): {

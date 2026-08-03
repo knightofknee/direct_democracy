@@ -2,9 +2,16 @@
  * Seeds the Firebase Emulator Suite with demo Chicago data:
  * fictional officials, demo citizens, concerns, polls, and AMA threads.
  *
- * All names are fictional — no real Chicago officials are represented.
+ * All names are fictional - no real Chicago officials are represented.
  * Aggregate tallies are synthetic (they don't correspond to per-user vote
  * docs) so the boards look alive; real votes layer on top correctly.
+ *
+ * The Cloud Functions triggers run against the emulator while seeding, so
+ * counters that triggers derive from real docs (commentCount, questionsAsked,
+ * questionsResponded, user stats) are seeded as zero and counted by the
+ * triggers - pre-setting them would double-count. Only counters whose source
+ * docs aren't seeded (questionsAnswered/questionsDodged, which come from
+ * judgment-driven status flips) are set manually.
  *
  * Run with the emulators up:  npm run seed
  */
@@ -16,7 +23,7 @@ import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 
-// Must match the projectId the app runs under (see .firebaserc) — the
+// Must match the projectId the app runs under (see .firebaserc) - the
 // emulator namespaces data per project.
 const app = initializeApp({ projectId: 'direct-democracy-e338a' });
 const auth = getAuth(app);
@@ -27,19 +34,13 @@ const PASSWORD = 'password123';
 interface SeedTally {
   all: Record<string, number>;
   verified: Record<string, number>;
-  registered: Record<string, number>;
   totalAll: number;
   totalVerified: number;
-  totalRegistered: number;
 }
 
-function tally(
-  all: Record<string, number>,
-  verified: Record<string, number>,
-  registered: Record<string, number>
-): SeedTally {
+function tally(all: Record<string, number>, verified: Record<string, number>): SeedTally {
   const sum = (o: Record<string, number>) => Object.values(o).reduce((a, b) => a + b, 0);
-  return { all, verified, registered, totalAll: sum(all), totalVerified: sum(verified), totalRegistered: sum(registered) };
+  return { all, verified, totalAll: sum(all), totalVerified: sum(verified) };
 }
 
 const PRIORITY_WEIGHTS: Record<string, number> = { critical: 3, high: 2, medium: 1, low: 0 };
@@ -49,9 +50,15 @@ const score = (counts: Record<string, number>) =>
 async function ensureUser(email: string, displayName: string): Promise<string> {
   try {
     const existing = await auth.getUserByEmail(email);
+    if (!existing.emailVerified) {
+      await auth.updateUser(existing.uid, { emailVerified: true });
+    }
     return existing.uid;
   } catch {
-    const created = await auth.createUser({ email, password: PASSWORD });
+    // emailVerified matters for the operator account: isAdmin() in
+    // firestore.rules requires a verified address, and there's no inbox to
+    // click a link in against the emulator.
+    const created = await auth.createUser({ email, password: PASSWORD, emailVerified: true });
     void displayName;
     return created.uid;
   }
@@ -81,7 +88,7 @@ async function main() {
       name: 'Dorothy Kowalski',
       title: 'Mayor of Chicago',
       wardId: null,
-      bio: 'Fictional demo mayor. Ask me anything — the city is listening.',
+      bio: 'Fictional demo mayor. Ask me anything - the city is listening.',
     },
   ];
 
@@ -94,7 +101,6 @@ async function main() {
       role: 'official',
       verified: true,
       wardId: o.wardId,
-      registeredVoter: true,
       stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
       createdAt: FieldValue.serverTimestamp(),
     });
@@ -111,8 +117,7 @@ async function main() {
       questionsDodged: 0,
       approvalTallies: tally(
         { approve: 96, disapprove: 41 },
-        { approve: 52, disapprove: 21 },
-        { approve: 47, disapprove: 19 }
+        { approve: 52, disapprove: 21 }
       ),
       approvalConstituents: { approve: 38, disapprove: 15 },
     });
@@ -126,8 +131,19 @@ async function main() {
     role: 'citizen',
     verified: true,
     wardId: 1,
-    registeredVoter: true,
-    stats: { concerns: 6, comments: 4, votes: 9, judgments: 3 },
+    stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
+    createdAt: FieldValue.serverTimestamp(),
+  });
+
+  // The platform operator (admin power comes from the email in
+  // firestore.rules isAdmin(), not from a role).
+  const adminUid = await ensureUser('bricarlis@gmail.com', 'Vigilant Owl');
+  await db.doc(`users/${adminUid}`).set({
+    displayName: 'Vigilant Owl',
+    role: 'citizen',
+    verified: false,
+    wardId: null,
+    stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
     createdAt: FieldValue.serverTimestamp(),
   });
 
@@ -137,8 +153,7 @@ async function main() {
     role: 'citizen',
     verified: false,
     wardId: null,
-    registeredVoter: false,
-    stats: { concerns: 0, comments: 2, votes: 4, judgments: 2 },
+    stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
     createdAt: FieldValue.serverTimestamp(),
   });
   console.log('  ✓ 2 demo citizens');
@@ -150,8 +165,7 @@ async function main() {
       body: 'Every spring the same craters open up on arterial streets and take months to patch. Other cold-weather cities patch within two weeks. Why can’t we?',
       t: tally(
         { critical: 82, high: 64, medium: 21, low: 6 },
-        { critical: 41, high: 30, medium: 9, low: 2 },
-        { critical: 36, high: 27, medium: 8, low: 2 }
+        { critical: 41, high: 30, medium: 9, low: 2 }
       ),
     },
     {
@@ -159,8 +173,7 @@ async function main() {
       body: 'Off-peak waits regularly hit 20+ minutes. Reliable frequency is the difference between a city you can live in without a car and one you can’t.',
       t: tally(
         { critical: 58, high: 71, medium: 30, low: 8 },
-        { critical: 27, high: 35, medium: 12, low: 3 },
-        { critical: 24, high: 31, medium: 11, low: 3 }
+        { critical: 27, high: 35, medium: 12, low: 3 }
       ),
     },
     {
@@ -168,8 +181,7 @@ async function main() {
       body: 'Sunday hours were cut years ago and never came back. Libraries are the last truly public indoor spaces in the city.',
       t: tally(
         { critical: 25, high: 48, medium: 39, low: 12 },
-        { critical: 11, high: 22, medium: 17, low: 5 },
-        { critical: 10, high: 20, medium: 15, low: 4 }
+        { critical: 11, high: 22, medium: 17, low: 5 }
       ),
     },
     {
@@ -177,12 +189,12 @@ async function main() {
       body: '311 reports for dark blocks sit for weeks. Lighting is the cheapest public-safety investment there is.',
       t: tally(
         { critical: 44, high: 39, medium: 18, low: 5 },
-        { critical: 19, high: 17, medium: 8, low: 2 },
-        { critical: 17, high: 15, medium: 7, low: 2 }
+        { critical: 19, high: 17, medium: 8, low: 2 }
       ),
     },
   ];
 
+  let firstCommentPath: string | null = null;
   for (const c of cityConcerns) {
     const ref = db.collection('concerns').doc();
     await ref.set({
@@ -196,18 +208,32 @@ async function main() {
       tallies: c.t,
       score: score(c.t.all),
       scoreVerified: score(c.t.verified),
-      commentCount: 1,
+      commentCount: 0, // onCommentCreated counts the seeded comment below
       createdAt: FieldValue.serverTimestamp(),
     });
-    await ref.collection('comments').add({
+    const commentRef = await ref.collection('comments').add({
       authorUid: unverifiedUid,
       authorName: 'Breezy Tugboat',
       authorVerified: false,
-      body: 'Seconding this — it affects my block every single week.',
+      body: 'Seconding this - it affects my block every single week.',
       createdAt: FieldValue.serverTimestamp(),
     });
+    firstCommentPath ??= commentRef.path;
   }
   console.log(`  ✓ ${cityConcerns.length} citywide concerns`);
+
+  // One open report so the admin queue has something to demo.
+  await db.collection('reports').add({
+    reporterUid: verifiedUid,
+    contentPath: firstCommentPath,
+    contentType: 'comment',
+    reason: 'spam',
+    excerpt: 'Seconding this - it affects my block every single week.',
+    authorUid: unverifiedUid,
+    status: 'open',
+    createdAt: FieldValue.serverTimestamp(),
+  });
+  console.log('  ✓ 1 open report (demo)');
 
   // ── Ward 1 concerns ────────────────────────────────────────────────────
   const wardConcerns = [
@@ -216,8 +242,7 @@ async function main() {
       body: 'The painted lane disappears exactly where traffic is worst. A curb-protected lane through the ward would connect the whole Northwest Side.',
       t: tally(
         { critical: 31, high: 24, medium: 9, low: 4 },
-        { critical: 31, high: 24, medium: 9, low: 4 },
-        { critical: 27, high: 21, medium: 8, low: 3 }
+        { critical: 31, high: 24, medium: 9, low: 4 }
       ),
     },
     {
@@ -225,8 +250,7 @@ async function main() {
       body: 'Service ends too early for restaurant and hospital workers coming home late.',
       t: tally(
         { critical: 14, high: 22, medium: 11, low: 2 },
-        { critical: 14, high: 22, medium: 11, low: 2 },
-        { critical: 12, high: 19, medium: 10, low: 2 }
+        { critical: 14, high: 22, medium: 11, low: 2 }
       ),
     },
   ];
@@ -265,10 +289,9 @@ async function main() {
     authorName: 'Rosa Whitfield',
     open: true,
     tallies: tally(
-      { yes: 63, no: 29 },
-      { yes: 63, no: 29 },
-      { yes: 55, no: 26 }
-    ),
+        { yes: 63, no: 29 },
+        { yes: 63, no: 29 }
+      ),
     createdAt: FieldValue.serverTimestamp(),
   });
 
@@ -288,10 +311,9 @@ async function main() {
     authorName: 'Rosa Whitfield',
     open: true,
     tallies: tally(
-      { opt0: 48, opt1: 33, opt2: 51, opt3: 40 },
-      { opt0: 48, opt1: 33, opt2: 51, opt3: 40 },
-      { opt0: 43, opt1: 29, opt2: 46, opt3: 35 }
-    ),
+        { opt0: 48, opt1: 33, opt2: 51, opt3: 40 },
+        { opt0: 48, opt1: 33, opt2: 51, opt3: 40 }
+      ),
     createdAt: FieldValue.serverTimestamp(),
   });
 
@@ -313,10 +335,9 @@ async function main() {
     authorName: 'Dorothy Kowalski',
     open: true,
     tallies: tally(
-      { stronglyOppose: 9, oppose: 17, neutral: 33, support: 84, stronglySupport: 96 },
-      { stronglyOppose: 4, oppose: 8, neutral: 15, support: 40, stronglySupport: 45 },
-      { stronglyOppose: 4, oppose: 7, neutral: 13, support: 36, stronglySupport: 41 }
-    ),
+        { stronglyOppose: 9, oppose: 17, neutral: 33, support: 84, stronglySupport: 96 },
+        { stronglyOppose: 4, oppose: 8, neutral: 15, support: 40, stronglySupport: 45 }
+      ),
     createdAt: FieldValue.serverTimestamp(),
   });
   console.log('  ✓ 3 polls');
@@ -332,10 +353,12 @@ async function main() {
     body: 'What happened to the promised timeline for the Western Ave repaving? It was supposed to start in April.',
     status: 'answered',
     response:
-      'Fair question — the April start slipped because the water main under Western needed emergency work first (you can’t pave over a main you’re about to dig up). Repaving is now scheduled to begin the week of Aug 18, and I’ll post the contractor’s schedule here when it’s final.',
+      'Fair question - the April start slipped because the water main under Western needed emergency work first (you can’t pave over a main you’re about to dig up). Repaving is now scheduled to begin the week of Aug 18, and I’ll post the contractor’s schedule here when it’s final.',
     respondedAt: FieldValue.serverTimestamp(),
     answeredYes: 11,
     answeredNo: 2,
+    answeredYesVerified: 6,
+    answeredNoVerified: 1,
     createdAt: FieldValue.serverTimestamp(),
   });
 
@@ -351,6 +374,8 @@ async function main() {
     respondedAt: FieldValue.serverTimestamp(),
     answeredYes: 3,
     answeredNo: 14,
+    answeredYesVerified: 1,
+    answeredNoVerified: 8,
     createdAt: FieldValue.serverTimestamp(),
   });
 
@@ -362,10 +387,12 @@ async function main() {
     body: 'Will you commit to publishing the ward’s menu-money spending as an itemized public list each quarter?',
     status: 'underReview',
     response:
-      'Yes. Starting next quarter the full itemized list goes up on the ward site and I’ll link it here. Holding myself to it — check back in October.',
+      'Yes. Starting next quarter the full itemized list goes up on the ward site and I’ll link it here. Holding myself to it - check back in October.',
     respondedAt: FieldValue.serverTimestamp(),
     answeredYes: 3,
     answeredNo: 0,
+    answeredYesVerified: 2,
+    answeredNoVerified: 0,
     createdAt: FieldValue.serverTimestamp(),
   });
 
@@ -380,12 +407,14 @@ async function main() {
     respondedAt: null,
     answeredYes: 0,
     answeredNo: 0,
+    answeredYesVerified: 0,
+    answeredNoVerified: 0,
     createdAt: FieldValue.serverTimestamp(),
   });
 
+  // questionsAsked/questionsResponded are counted by the triggers as the
+  // docs above land; only the judgment-derived counters need seeding.
   await db.doc(`officials/${alder1}`).update({
-    questionsAsked: 4,
-    questionsResponded: 3,
     questionsAnswered: 1,
     questionsDodged: 1,
   });
@@ -402,17 +431,19 @@ async function main() {
     respondedAt: null,
     answeredYes: 0,
     answeredNo: 0,
+    answeredYesVerified: 0,
+    answeredNoVerified: 0,
     createdAt: FieldValue.serverTimestamp(),
   });
-  await db.doc(`officials/${mayor}`).update({ questionsAsked: 1 });
   console.log('  ✓ AMA threads');
 
   console.log('\nDone. Demo accounts (password: password123):');
-  console.log('  verified@demo.local      — verified citizen, 1st Ward, registered voter');
-  console.log('  unverified@demo.local    — unverified citizen');
-  console.log('  alder.ward1@demo.local   — Alderman, 1st Ward (official)');
-  console.log('  alder.ward43@demo.local  — Alderman, 43rd Ward (official)');
-  console.log('  mayor@demo.local         — Mayor (official)');
+  console.log('  verified@demo.local      - verified citizen, 1st Ward');
+  console.log('  unverified@demo.local    - unverified citizen');
+  console.log('  bricarlis@gmail.com      - platform operator (admin report queue)');
+  console.log('  alder.ward1@demo.local   - Alderman, 1st Ward (official)');
+  console.log('  alder.ward43@demo.local  - Alderman, 43rd Ward (official)');
+  console.log('  mayor@demo.local         - Mayor (official)');
 }
 
 main().then(

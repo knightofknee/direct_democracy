@@ -8,12 +8,11 @@ import type { TallyLens } from '@/lib/types';
 const LENSES: { key: TallyLens; label: string }[] = [
   { key: 'all', label: 'All users' },
   { key: 'verified', label: 'Verified' },
-  { key: 'registered', label: 'Registered voters' },
 ];
 
 /**
  * The second axis of every result: whose votes are you looking at?
- * Everyone / identity-verified users / registered voters.
+ * Everyone, or identity-verified users only.
  */
 export function LensToggle({
   value,

@@ -15,6 +15,7 @@ import { Button, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui'
 import { CITY } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
@@ -26,9 +27,9 @@ export default function BigBoardScreen() {
   const { profile } = useAuth();
   const [lens, setLens] = useState<TallyLens>('all');
 
-  // Rank by the verified-only score when looking through the verified or
-  // registered lens; by the everyone score otherwise.
-  const rankField = lens === 'all' ? 'score' : 'scoreVerified';
+  // Each lens ranks by its own score, so the order you see is the order
+  // that lens's voters produced.
+  const rankField = lens === 'verified' ? 'scoreVerified' : 'score';
   const { data: concerns, loading } = useLiveQuery<Concern>(
     () =>
       query(
@@ -39,6 +40,9 @@ export default function BigBoardScreen() {
       ),
     [rankField]
   );
+
+  const { isBlocked } = useBlocks();
+  const visibleConcerns = concerns.filter((c) => !isBlocked(c.authorUid));
 
   const { data: cityPolls } = useLiveQuery<Poll>(
     () =>
@@ -53,14 +57,14 @@ export default function BigBoardScreen() {
 
   return (
     <Screen tab>
-      <View style={styles.header}>
+      <View style={[styles.header, { alignItems: 'center' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
           <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
             big board
           </ThemedText>
         </View>
-        <ThemedText type="small" themeColor="textSecondary">
+        <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
           {CITY.name}’s top concerns, ranked by the people. Vote priority, not just up or down.
         </ThemedText>
         <FlagAccent />
@@ -76,13 +80,13 @@ export default function BigBoardScreen() {
 
       {loading ? (
         <SkeletonCards />
-      ) : concerns.length === 0 ? (
+      ) : visibleConcerns.length === 0 ? (
         <EmptyState
           icon="megaphone-outline"
           message="No citywide concerns yet. Be the first to raise one."
         />
       ) : (
-        concerns.map((concern, i) => (
+        visibleConcerns.map((concern, i) => (
           <ConcernCard key={concern.id} concern={concern} rank={i + 1} lens={lens} index={i} />
         ))
       )}
@@ -102,8 +106,8 @@ export default function BigBoardScreen() {
       <View style={styles.footer}>
         <Ionicons name="information-circle-outline" size={14} color={theme.textSecondary} />
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, flex: 1 }}>
-          Every result can be viewed three ways: all users, identity-verified users, and registered
-          voters. Verification is handled by a third party — we never see your documents.
+          Every result shows the general vote and the verified vote. Verification is handled by a
+          third party; we never see your documents.
         </ThemedText>
       </View>
     </Screen>

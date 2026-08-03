@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "376113063983",
+    "project_id": "direct-democracy-e338a",
+    "storage_bucket": "direct-democracy-e338a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376113063983:android:7e2a347f82ba06764d7eda",
+        "android_client_info": {
+          "package_name": "com.briancarlisle.directdemocracy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "376113063983-vh0o9pmoee05tv5rngs0lqlm2usae1mr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.briancarlisle.directdemocracy",
+            "certificate_hash": "245a01a09de4aa3f83afbfdfcfc5b0357971e865"
+          }
+        },
+        {
+          "client_id": "376113063983-gq4p2op1mk3kh64hjv1heh35pirok0t6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4c70Qx-WpeNSSusFT6t_38JrnHrl0ipA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376113063983-gq4p2op1mk3kh64hjv1heh35pirok0t6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "376113063983-9ovq1qmfl0u6vdk425et88sl1jfht62l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.briancarlisle.directdemocracy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

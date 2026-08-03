@@ -9,16 +9,20 @@ import { Button, Card, Chip, Field, SectionHeader, VerifiedBadge } from '@/compo
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useBlocks } from '@/hooks/use-blocks';
 import { useTheme } from '@/hooks/use-theme';
+import { isAdminUser } from '@/lib/admin';
 import { nextMilestones } from '@/lib/milestones';
 import { randomDisplayName } from '@/lib/names';
 import { notify } from '@/lib/notify';
+import { unblockUser } from '@/services/moderation';
 import { updateDisplayName } from '@/services/users';
 
 export default function ProfileScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { user, profile, loading, signOut } = useAuth();
+  const { blocks } = useBlocks();
   const [editingName, setEditingName] = useState<string | null>(null);
   const [savingName, setSavingName] = useState(false);
 
@@ -27,7 +31,7 @@ export default function ProfileScreen() {
   if (!user || !profile) {
     return (
       <Screen tab>
-        <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+        <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34, textAlign: 'center' }}>
           profile
         </ThemedText>
         <Card>
@@ -57,7 +61,7 @@ export default function ProfileScreen() {
 
   return (
     <Screen tab>
-      <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+      <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34, textAlign: 'center' }}>
         profile
       </ThemedText>
 
@@ -75,7 +79,6 @@ export default function ProfileScreen() {
               )}
               {profile.role === 'official' && <Chip label="Elected official" tone="primary" icon="ribbon" />}
               {profile.wardId != null && <Chip label={wardLabel(profile.wardId)} />}
-              {profile.registeredVoter && <Chip label="Registered voter" tone="success" />}
             </View>
           </View>
         </View>
@@ -103,12 +106,12 @@ export default function ProfileScreen() {
           </View>
         )}
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          Display names are whatever you want them to be — your real identity is never shown, even
+          Display names are whatever you want them to be - your real identity is never shown, even
           when verified.
         </ThemedText>
       </Card>
 
-      <SectionHeader title="Civic record" subtitle="Counted as you participate — milestones celebrate along the way" />
+      <SectionHeader title="Civic record" subtitle="Counted as you participate - milestones celebrate along the way" />
       <Card>
         <View style={styles.statsGrid}>
           <StatTile label="Concerns" value={profile.stats?.concerns ?? 0} icon="megaphone" />
@@ -122,7 +125,7 @@ export default function ProfileScreen() {
             <View key={m.label} style={{ gap: 3 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                  {m.label} — next milestone
+                  {m.label} - next milestone
                 </ThemedText>
                 <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
                   {m.current} / {m.target}
@@ -143,28 +146,65 @@ export default function ProfileScreen() {
           ))}
       </Card>
 
+      <Button title="My activity" variant="secondary" onPress={() => router.push('/my-activity')} />
+      {isAdminUser(user) && (
+        <Button title="Review reports (admin)" variant="secondary" onPress={() => router.push('/admin')} />
+      )}
+
       <SectionHeader title="Identity verification" />
       <Card>
         {profile.verified ? (
           <>
             <ThemedText type="small">
-              You’re verified as a resident of the {wardLabel(profile.wardId ?? undefined)}. Your
-              votes count in the verified and{' '}
-              {profile.registeredVoter ? 'registered-voter' : 'all-user'} tallies.
+              You’re verified as a{' '}
+              {profile.wardId != null ? `resident of the ${wardLabel(profile.wardId)}` : 'Chicago resident'}
+              . Your votes count in the verified tallies.
             </ThemedText>
           </>
         ) : (
           <>
             <ThemedText type="small">
               Verify once to unlock your ward tab and make your votes count in the verified tallies.
-              A third-party service (Persona) checks your ID — we only ever receive a yes/no, your
-              ward, and whether you’re a registered voter. No documents, no address, nothing else.
+              A third-party service (Persona) checks your ID. We only ever receive a yes/no and
+              your ward. No documents, no address, nothing else.
             </ThemedText>
             <Button title="Verify my identity" onPress={() => router.push('/verify')} />
           </>
         )}
       </Card>
 
+      {blocks.length > 0 && (
+        <>
+          <SectionHeader
+            title="Blocked users"
+            subtitle="Their content is hidden for you - unblock any time"
+          />
+          <Card>
+            {blocks.map((b) => (
+              <View
+                key={b.id}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+                <ThemedText type="small" style={{ flex: 1 }}>
+                  {b.displayName}
+                </ThemedText>
+                <Button
+                  title="Unblock"
+                  variant="ghost"
+                  onPress={() =>
+                    profile &&
+                    unblockUser(profile, b.id).catch((e) => notify(
+                      'Could not unblock',
+                      e instanceof Error ? e.message : 'Something went wrong.'
+                    ))
+                  }
+                />
+              </View>
+            ))}
+          </Card>
+        </>
+      )}
+
+      <Button title="Settings" variant="ghost" onPress={() => router.push('/settings')} />
       <Button title="Sign out" variant="ghost" onPress={() => void signOut()} />
     </Screen>
   );

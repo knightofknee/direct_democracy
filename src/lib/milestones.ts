@@ -36,7 +36,7 @@ const TRACKS: MilestoneTrack[] = [
     stat: 'posts', // concerns + comments combined
     thresholds: [10, 100],
     title: (n) => `${n} posts!`,
-    message: () => 'Concerns, comments — you show up for the conversation.',
+    message: () => 'Concerns, comments - you show up for the conversation.',
   },
   {
     stat: 'votes',
@@ -81,7 +81,7 @@ const storageKey = (uid: string) => `dd:celebrated:${uid}`;
  * Diff current stats against what this device has already celebrated.
  * Returns the single best new milestone (highest threshold wins so a burst
  * doesn't queue five popups), after marking everything reached as seen.
- * First call for an account initializes silently — existing users don't get
+ * First call for an account initializes silently - existing users don't get
  * a replay of their whole history.
  */
 export async function takeNewMilestone(
@@ -116,7 +116,7 @@ export async function takeNewMilestone(
   };
 }
 
-/** Progress toward the next milestone on each track — shown on the profile. */
+/** Progress toward the next milestone on each track - shown on the profile. */
 export function nextMilestones(stats: UserStats): {
   label: string;
   current: number;

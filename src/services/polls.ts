@@ -63,7 +63,7 @@ export async function createPoll(
 
 /**
  * Cast (or change) a poll vote. Ward-scoped polls are verified-residents-only
- * (also enforced by rules). The client writes only its own ballot — the
+ * (also enforced by rules). The client writes only its own ballot - the
  * onPollVoteWrite Cloud Function aggregates the tallies.
  */
 export async function votePoll(
@@ -86,7 +86,6 @@ export async function votePoll(
     uid: profile.uid,
     value,
     verified: profile.verified,
-    registeredVoter: profile.registeredVoter,
     createdAt: serverTimestamp(),
   });
 }

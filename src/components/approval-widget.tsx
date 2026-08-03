@@ -79,7 +79,7 @@ export function ApprovalWidget({ official }: { official: Official }) {
           pctValue={rating.constituentPct}
           detail={
             rating.constituentPct == null
-              ? `${rating.constituentBallots} ballot${rating.constituentBallots === 1 ? '' : 's'} — needs 5 to grade`
+              ? `${rating.constituentBallots} ballot${rating.constituentBallots === 1 ? '' : 's'} - needs 5 to grade`
               : `${rating.constituentBallots} verified ward ballots`
           }
           emphasized
@@ -156,7 +156,7 @@ function RatingLine({
           type={emphasized ? 'smallBold' : 'small'}
           style={{ fontSize: 13 }}
           themeColor={pctValue == null ? 'textSecondary' : undefined}>
-          {pctValue == null ? '—' : `${pctValue}% approve`}
+          {pctValue == null ? '-' : `${pctValue}% approve`}
         </ThemedText>
       </View>
       <View style={[styles.track, { backgroundColor: theme.backgroundSelected }]}>

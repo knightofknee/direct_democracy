@@ -3,7 +3,7 @@ rules_version = '2';
 // direct democracy security rules.
 //
 // Trust model: clients may only create/update documents that represent their
-// own voice — their profile's display name, their ballot, their comment,
+// own voice - their profile's display name, their ballot, their comment,
 // their question, their judgment. Every aggregate number (tallies, board
 // scores, comment counts, AMA counters, question statuses) is written
 // exclusively by Cloud Functions triggers via the Admin SDK, which bypasses
@@ -23,8 +23,32 @@ service cloud.firestore {
       return signedIn() && me().role == 'official';
     }
 
+    // Platform operator - may review reports and remove reported content.
+    // Tied to the operator's sign-in email for now; move to custom claims
+    // when there's more than one admin.
+    //
+    // email_verified is REQUIRED: Firebase lets anyone self-register an
+    // email/password account under any address without proving they own it,
+    // so matching the address alone would hand the report queue and takedown
+    // powers to whoever registers it first.
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email == 'bricarlis@gmail.com';
+    }
+
     function onlyChanges(keys) {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
+    // A tally that hasn't counted anyone yet. Every field is pinned - a
+    // client that could seed nonzero counts or maps would fabricate support
+    // that the verified lens displays as real.
+    function emptyTally(t) {
+      return t.totalAll == 0
+        && t.totalVerified == 0
+        && t.all.size() == 0
+        && t.verified.size() == 0;
     }
 
     // ── Users ────────────────────────────────────────────────────────────
@@ -33,30 +57,83 @@ service cloud.firestore {
       // content at write time.
       allow read: if signedIn() && request.auth.uid == uid;
 
-      // Self-registration: always starts unverified, citizen, no ward, zero stats.
+      // Self-registration: always starts unverified, citizen, no ward, zero
+      // stats. The key sets are pinned so a client can't smuggle extra fields
+      // (e.g. a spoofed personaAccountId, which deleteAccount would later use
+      // to release someone else's identity-dedup claim).
       allow create: if signedIn()
         && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['displayName', 'role', 'verified', 'wardId', 'stats', 'createdAt'])
         && request.resource.data.role == 'citizen'
         && request.resource.data.verified == false
-        && request.resource.data.registeredVoter == false
         && request.resource.data.wardId == null
+        && request.resource.data.createdAt == request.time
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() >= 3
         && request.resource.data.displayName.size() <= 30
+        && request.resource.data.stats.keys().hasOnly(['concerns', 'comments', 'votes', 'judgments'])
         && request.resource.data.stats.concerns == 0
         && request.resource.data.stats.comments == 0
         && request.resource.data.stats.votes == 0
         && request.resource.data.stats.judgments == 0;
 
-      // Users may edit their display name — nothing else. verified / wardId /
-      // registeredVoter / role are written only by the Admin SDK (Persona
-      // webhook and admin tooling).
+      // Users may edit their display name - nothing else. verified / wardId /
+      // role are written only by the Admin SDK (Persona
+      // webhook and admin tooling). Account deletion goes through the
+      // deleteAccount callable (Admin SDK), not a client delete.
       allow update: if signedIn()
         && request.auth.uid == uid
         && onlyChanges(['displayName'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() >= 3
         && request.resource.data.displayName.size() <= 30;
+
+      // Personal block list - hides the blocked user's content on this
+      // account's devices. The displayName snapshot powers the management
+      // list on the profile.
+      match /blocks/{blockedUid} {
+        allow read, delete: if signedIn() && request.auth.uid == uid;
+        allow create: if signedIn()
+          && request.auth.uid == uid
+          && request.auth.uid != blockedUid
+          && request.resource.data.displayName is string
+          && request.resource.data.displayName.size() <= 30;
+      }
+    }
+
+    // ── Reports (content moderation) ─────────────────────────────────────
+    // Write-only from regular clients; only the admin reads the queue and
+    // moves a report through its lifecycle. Who reported what stays private.
+    match /reports/{reportId} {
+      // contentPath must have the shape its contentType claims - otherwise a
+      // report could show one document's excerpt while pointing the admin's
+      // takedown delete at a different (innocent) document.
+      // Anchored so a 'concern' report can't point at a comment path buried
+      // inside it, whatever matches() does with unanchored patterns.
+      function pathMatchesType(path, type) {
+        return (type == 'concern' && path.matches('^concerns/[^/]+$'))
+          || (type == 'comment' && path.matches('^concerns/[^/]+/comments/[^/]+$'))
+          || (type in ['question', 'response'] && path.matches('^officials/[^/]+/questions/[^/]+$'));
+      }
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'reporterUid', 'contentPath', 'contentType', 'reason', 'excerpt',
+          'authorUid', 'status', 'createdAt'
+        ])
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.contentPath is string
+        && request.resource.data.contentPath.size() <= 300
+        && request.resource.data.contentType in ['concern', 'comment', 'question', 'response']
+        && pathMatchesType(request.resource.data.contentPath, request.resource.data.contentType)
+        && request.resource.data.reason in ['spam', 'harassment', 'misleading', 'other']
+        && request.resource.data.excerpt is string
+        && request.resource.data.excerpt.size() <= 500
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.status == 'open';
+      allow read: if isAdmin();
+      allow update: if isAdmin()
+        && onlyChanges(['status'])
+        && request.resource.data.status in ['open', 'resolved', 'dismissed'];
     }
 
     // ── Concerns (the big board) ─────────────────────────────────────────
@@ -64,52 +141,85 @@ service cloud.firestore {
       allow read: if true;
 
       // New concerns start with zeroed aggregates. authorName must match the
-      // author's actual display name — no speaking as someone else.
+      // author's actual display name - no speaking as someone else.
       allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'title', 'body', 'scope', 'wardId', 'authorUid', 'authorName',
+          'authorVerified', 'tallies', 'score', 'scoreVerified',
+          'commentCount', 'createdAt'
+        ])
         && request.resource.data.authorUid == request.auth.uid
         && request.resource.data.authorName == me().displayName
         && request.resource.data.authorVerified == me().verified
         && request.resource.data.title is string
         && request.resource.data.title.size() >= 8
         && request.resource.data.title.size() <= 140
+        && request.resource.data.body is string
         && request.resource.data.body.size() <= 4000
+        && request.resource.data.createdAt == request.time
         && request.resource.data.commentCount == 0
         && request.resource.data.score == 0
         && request.resource.data.scoreVerified == 0
-        && request.resource.data.tallies.totalAll == 0
+        && emptyTally(request.resource.data.tallies)
         && (
-          request.resource.data.scope == 'city'
+          (request.resource.data.scope == 'city' && request.resource.data.wardId == null)
           || (
             request.resource.data.scope == 'ward'
             && (me().verified == true || me().role == 'official')
+            && request.resource.data.wardId != null
             && request.resource.data.wardId == me().wardId
           )
         );
 
-      // No client updates: tallies, scores, and commentCount move only via
-      // the onConcernVoteWrite / onCommentCreated triggers.
+      // The author may fix a concern only before anyone engages with it -
+      // editing what people already voted on would change the meaning of
+      // their votes. Tallies, scores, and commentCount stay trigger-only.
+      allow update: if signedIn()
+        && request.auth.uid == resource.data.authorUid
+        && onlyChanges(['title', 'body'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 8
+        && request.resource.data.title.size() <= 140
+        && request.resource.data.body.size() <= 4000
+        && resource.data.tallies.totalAll == 0
+        && resource.data.commentCount == 0;
+
+      // The author may withdraw their concern (and the admin may take down
+      // reported ones); onConcernDeleted cleans up the subcollections.
+      allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
 
       match /votes/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
-        // One ballot per person; the verified/registered snapshot must match
-        // the voter's actual profile.
+        // One ballot per person; the verified/ward snapshot must match the
+        // voter's actual profile. The ward snapshot lets the trigger scope a
+        // ward concern's verified slice to ward residents.
         allow create, update: if signedIn()
           && request.auth.uid == voterUid
+          && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'wardId', 'createdAt'])
           && request.resource.data.uid == request.auth.uid
           && request.resource.data.verified == me().verified
-          && request.resource.data.registeredVoter == me().registeredVoter
+          && request.resource.data.wardId == me().wardId
           && request.resource.data.value in ['critical', 'high', 'medium', 'low'];
+        // Retract entirely - the trigger removes the ballot from the tallies.
+        allow delete: if signedIn() && request.auth.uid == voterUid;
       }
 
       match /comments/{commentId} {
         allow read: if true;
         allow create: if signedIn()
+          && request.resource.data.keys().hasOnly([
+            'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt'
+          ])
           && request.resource.data.authorUid == request.auth.uid
           && request.resource.data.authorName == me().displayName
           && request.resource.data.authorVerified == me().verified
           && request.resource.data.body is string
           && request.resource.data.body.size() >= 1
-          && request.resource.data.body.size() <= 2000;
+          && request.resource.data.body.size() <= 2000
+          && request.resource.data.createdAt == request.time;
+        // Authors may remove their own comments (admin: takedowns);
+        // onCommentDeleted keeps the count honest.
+        allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
       }
     }
 
@@ -118,32 +228,60 @@ service cloud.firestore {
       allow read: if true;
 
       allow create: if isOfficial()
+        && request.resource.data.keys().hasOnly([
+          'question', 'detail', 'type', 'options', 'scope', 'wardId',
+          'authorUid', 'authorName', 'open', 'tallies', 'createdAt'
+        ])
         && request.resource.data.authorUid == request.auth.uid
         && request.resource.data.authorName == me().displayName
         && request.resource.data.open == true
-        && request.resource.data.tallies.totalAll == 0
+        && emptyTally(request.resource.data.tallies)
         && request.resource.data.question is string
         && request.resource.data.question.size() >= 10
         && request.resource.data.question.size() <= 280
+        && request.resource.data.detail is string
+        && request.resource.data.detail.size() <= 4000
+        && request.resource.data.type in ['yesNo', 'multipleChoice', 'approval', 'scale5']
+        // `options` must be an actual list: a bare string would pass a size()
+        // check and then crash every feed that maps over it.
+        && request.resource.data.options is list
         && request.resource.data.options.size() >= 2
         && request.resource.data.options.size() <= 12
+        && request.resource.data.createdAt == request.time
         && (
-          request.resource.data.scope == 'city'
-          || (request.resource.data.scope == 'ward' && request.resource.data.wardId == me().wardId)
+          (request.resource.data.scope == 'city' && request.resource.data.wardId == null)
+          || (
+            request.resource.data.scope == 'ward'
+            && request.resource.data.wardId != null
+            && request.resource.data.wardId == me().wardId
+          )
         );
 
       // The author may close their poll; tallies are trigger-only.
       allow update: if signedIn()
         && request.auth.uid == resource.data.authorUid
-        && onlyChanges(['open']);
+        && onlyChanges(['open'])
+        && request.resource.data.open is bool;
 
       match /votes/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
+        // The ballot's value must be one option key (or, for approval polls,
+        // a short list of keys - the trigger dedupes and drops unknown keys,
+        // so a stuffed or bogus ballot can never move a count by more than
+        // one per option).
         allow create, update: if signedIn()
           && request.auth.uid == voterUid
+          && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'createdAt'])
           && request.resource.data.uid == request.auth.uid
           && request.resource.data.verified == me().verified
-          && request.resource.data.registeredVoter == me().registeredVoter
+          && (
+            request.resource.data.value is string
+            || (
+              request.resource.data.value is list
+              && request.resource.data.value.size() >= 1
+              && request.resource.data.value.size() <= 12
+            )
+          )
           && get(/databases/$(database)/documents/polls/$(pollId)).data.open == true
           && (
             get(/databases/$(database)/documents/polls/$(pollId)).data.scope == 'city'
@@ -152,6 +290,12 @@ service cloud.firestore {
               && me().wardId == get(/databases/$(database)/documents/polls/$(pollId)).data.wardId
             )
           );
+        // Retract entirely (the trigger removes the ballot from the tallies)
+        // - but only while voting is open. A closed poll's result is a public
+        // record; post-close retractions would quietly rewrite it.
+        allow delete: if signedIn()
+          && request.auth.uid == voterUid
+          && get(/databases/$(database)/documents/polls/$(pollId)).data.open == true;
       }
     }
 
@@ -160,7 +304,7 @@ service cloud.firestore {
       allow read: if true;
 
       // Officials edit their own bio and portrait link. The portrait is an
-      // externally hosted https URL — we never take custody of the image.
+      // externally hosted https URL - we never take custody of the image.
       // Name/title are provisioned by admins; all counters are trigger-only.
       allow update: if signedIn()
         && request.auth.uid == officialUid
@@ -179,16 +323,16 @@ service cloud.firestore {
           || (request.resource.data.bio is string && request.resource.data.bio.size() <= 1000)
         );
 
-      // Approval ballots — one standing approve/disapprove per person,
+      // Approval ballots - one standing approve/disapprove per person,
       // changeable or retractable any time. Aggregated by onApprovalWrite.
       match /approvals/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
         allow create, update: if signedIn()
           && request.auth.uid == voterUid
           && request.auth.uid != officialUid
+          && request.resource.data.keys().hasOnly(['value', 'verified', 'wardId', 'createdAt'])
           && request.resource.data.value in ['approve', 'disapprove']
           && request.resource.data.verified == me().verified
-          && request.resource.data.registeredVoter == me().registeredVoter
           && request.resource.data.wardId == me().wardId;
         allow delete: if signedIn() && request.auth.uid == voterUid;
       }
@@ -197,6 +341,11 @@ service cloud.firestore {
         allow read: if true;
 
         allow create: if signedIn()
+          && request.resource.data.keys().hasOnly([
+            'officialUid', 'authorUid', 'authorName', 'authorVerified', 'body',
+            'status', 'response', 'respondedAt', 'answeredYes', 'answeredNo',
+            'answeredYesVerified', 'answeredNoVerified', 'createdAt'
+          ])
           && request.resource.data.authorUid == request.auth.uid
           && request.resource.data.authorName == me().displayName
           && request.resource.data.authorVerified == me().verified
@@ -205,9 +354,23 @@ service cloud.firestore {
           && request.resource.data.response == null
           && request.resource.data.answeredYes == 0
           && request.resource.data.answeredNo == 0
+          && request.resource.data.answeredYesVerified == 0
+          && request.resource.data.answeredNoVerified == 0
           && request.resource.data.body is string
           && request.resource.data.body.size() >= 10
-          && request.resource.data.body.size() <= 2000;
+          && request.resource.data.body.size() <= 2000
+          && request.resource.data.createdAt == request.time;
+
+        // The asker may withdraw a question only while it's unanswered -
+        // once there's a response it is part of the official's public
+        // record and stays (deleting a dodge would launder the score). The
+        // admin may take down abusive threads at any stage; the
+        // onQuestionDeleted trigger rebalances every counter.
+        allow delete: if (
+            signedIn()
+            && request.auth.uid == resource.data.authorUid
+            && resource.data.status == 'awaitingResponse'
+          ) || isAdmin();
 
         // The only client update: the official posting their one response.
         // Judgment counts and status flips are written by onJudgmentWrite.
@@ -217,18 +380,33 @@ service cloud.firestore {
           && onlyChanges(['response', 'respondedAt', 'status'])
           && request.resource.data.response is string
           && request.resource.data.response.size() >= 1
+          && request.resource.data.response.size() <= 5000
+          && request.resource.data.respondedAt == request.time
           && request.resource.data.status == 'underReview';
 
         match /judgments/{judgeUid} {
           allow read: if signedIn() && request.auth.uid == judgeUid;
-          // Judgments only make sense once there's a response to judge.
+          // Judgments only make sense once there's a response to judge. The
+          // verified snapshot must match the judge's profile - it drives the
+          // verified slice of the yes/no counts.
           allow create, update: if signedIn()
             && request.auth.uid == judgeUid
             && request.auth.uid != officialUid
+            && request.resource.data.keys().hasOnly(['answered', 'verified', 'createdAt'])
             && request.resource.data.answered is bool
+            && request.resource.data.verified == me().verified
             && get(/databases/$(database)/documents/officials/$(officialUid)/questions/$(questionId)).data.response != null;
+          allow delete: if signedIn() && request.auth.uid == judgeUid;
         }
       }
+    }
+
+    // ── Collection-group reads ───────────────────────────────────────────
+    // AMA questions are public (matching the per-official rule above); the
+    // group scope lets "my activity" query one user's questions across all
+    // officials.
+    match /{path=**}/questions/{questionId} {
+      allow read: if true;
     }
   }
 }

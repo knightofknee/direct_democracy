@@ -2,18 +2,11 @@ import type { DualTally, TallyLens } from '@/lib/types';
 
 /**
  * Read-side tally helpers. All tally *writes* happen server-side in
- * functions/src/tally.ts — clients only ever write their own ballot docs.
+ * functions/src/tally.ts - clients only ever write their own ballot docs.
  */
 
 export function emptyTally(): DualTally {
-  return {
-    all: {},
-    verified: {},
-    registered: {},
-    totalAll: 0,
-    totalVerified: 0,
-    totalRegistered: 0,
-  };
+  return { all: {}, verified: {}, totalAll: 0, totalVerified: 0 };
 }
 
 export function tallyFor(tally: DualTally, lens: TallyLens): { counts: Record<string, number>; total: number } {
@@ -22,7 +15,5 @@ export function tallyFor(tally: DualTally, lens: TallyLens): { counts: Record<st
       return { counts: tally.all, total: tally.totalAll };
     case 'verified':
       return { counts: tally.verified, total: tally.totalVerified };
-    case 'registered':
-      return { counts: tally.registered, total: tally.totalRegistered };
   }
 }

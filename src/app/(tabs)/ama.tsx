@@ -36,14 +36,14 @@ export default function AmaScreen() {
 
   return (
     <Screen tab>
-      <View style={{ gap: Spacing.one }}>
+      <View style={{ gap: Spacing.one, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
           <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
             ama
           </ThemedText>
         </View>
-        <ThemedText type="small" themeColor="textSecondary">
+        <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
           Ongoing ask-me-anythings with Chicago’s elected officials, each graded two ways: approval
           from their constituents, and whether they actually answer questions.
         </ThemedText>
@@ -74,13 +74,13 @@ export default function AmaScreen() {
                         icon="thumbs-up"
                         label={
                           grade.approval.constituentPct == null
-                            ? 'Approval —'
+                            ? 'Approval -'
                             : `${grade.approval.constituentPct}% approval`
                         }
                       />
                       <AxisPill
                         icon="chatbox-ellipses"
-                        label={grade.answersGraded ? `Answers ${grade.answers.grade}` : 'Answers —'}
+                        label={grade.answersGraded ? `Answers ${grade.answers.grade}` : 'Answers -'}
                       />
                     </View>
                   </View>

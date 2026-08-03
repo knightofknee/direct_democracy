@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { collection, orderBy, query, where } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { ConcernCard } from '@/components/concern-card';
@@ -14,9 +14,10 @@ import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
-import { wardById, wardLabel } from '@/constants/chicago';
+import { WARDS, wardById, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
@@ -25,56 +26,105 @@ import { computeGrade } from '@/services/officials';
 
 export default function WardScreen() {
   const { profile, loading } = useAuth();
-  const hasWardAccess =
-    !!profile && profile.wardId != null && (profile.verified || profile.role === 'official');
+  // Anyone can browse any ward; residents just land on their own by default.
+  const [selected, setSelected] = useState<number | 'picker' | null>(null);
+  const homeWard = profile?.wardId ?? null;
+  const view = selected ?? homeWard ?? 'picker';
 
   if (loading) return <Screen tab>{null}</Screen>;
-  if (!hasWardAccess) return <WardGate signedIn={!!profile} />;
-  return <WardHome wardId={profile!.wardId!} />;
+  if (view === 'picker') return <WardPicker onPick={setSelected} />;
+  return (
+    <WardHome
+      wardId={view}
+      isHomeWard={homeWard != null && view === homeWard}
+      onBrowseOthers={() => setSelected('picker')}
+    />
+  );
 }
 
-/** The pitch shown to signed-out and unverified users. */
-function WardGate({ signedIn }: { signedIn: boolean }) {
+/** Every ward, open to every visitor - verification only decides where you can VOTE. */
+function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
   const router = useRouter();
   const theme = useTheme();
+  const { profile } = useAuth();
+  const canGoHome = profile?.wardId != null;
+
   return (
     <Screen tab>
-      <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
-        my ward
-      </ThemedText>
+      <View style={{ gap: Spacing.one, alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+          <ChicagoStar size={18} />
+          <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+            wards
+          </ThemedText>
+        </View>
+        <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
+          Every ward’s board and ballot is public. Pick one to browse.
+        </ThemedText>
+        <FlagAccent />
+      </View>
+
+      {canGoHome && (
+        <Button title={`Back to my ward (${wardLabel(profile!.wardId)})`} onPress={() => onPick(profile!.wardId!)} />
+      )}
+
       <Card>
-        <View style={{ alignItems: 'center', gap: Spacing.three, paddingVertical: Spacing.three }}>
-          <Ionicons name="shield-checkmark" size={40} color={theme.primary} />
-          <ThemedText type="smallBold" style={{ fontSize: 18, lineHeight: 24, textAlign: 'center' }}>
-            Your ward, verified
-          </ThemedText>
-          <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-            The ward tab is where your neighborhood speaks with a verified voice: a leaderboard of
-            your ward’s concerns, and votes on questions your alderman puts directly to residents.
-          </ThemedText>
-          <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-            Verification is one-time and handled by a third party — direct democracy never sees your
-            documents, only a yes/no and your ward.
-          </ThemedText>
-          {signedIn ? (
+        <View style={[styles.wardGrid, { justifyContent: 'center' }]}>
+          {WARDS.map((w) => (
+            <Pressable
+              key={w.id}
+              onPress={() => onPick(w.id)}
+              style={[styles.wardCell, { borderColor: theme.border, backgroundColor: theme.background }]}>
+              <ThemedText type="small" style={{ fontSize: 12 }}>
+                {w.id}
+              </ThemedText>
+            </Pressable>
+          ))}
+        </View>
+      </Card>
+
+      {!profile?.verified && (
+        <Card>
+          <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'flex-start' }}>
+            <Ionicons name="shield-checkmark" size={22} color={theme.primary} />
+            <View style={{ flex: 1, gap: Spacing.one }}>
+              <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+                Verify your residency
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+                Verify so your votes count in your ward’s verified tallies and you can vote on your
+                alderman’s ballot questions. We never see your documents, only a yes/no and your
+                ward.
+              </ThemedText>
+            </View>
+          </View>
+          {profile ? (
             <Button title="Verify my identity" onPress={() => router.push('/verify')} />
           ) : (
             <Button title="Sign in to get started" onPress={() => router.push('/sign-in')} />
           )}
-        </View>
-      </Card>
+        </Card>
+      )}
     </Screen>
   );
 }
 
-function WardHome({ wardId }: { wardId: number }) {
+function WardHome({
+  wardId,
+  isHomeWard,
+  onBrowseOthers,
+}: {
+  wardId: number;
+  isHomeWard: boolean;
+  onBrowseOthers: () => void;
+}) {
   const router = useRouter();
   const theme = useTheme();
   const { profile } = useAuth();
   const [lens, setLens] = useState<TallyLens>('verified');
   const ward = wardById(wardId);
 
-  const rankField = lens === 'all' ? 'score' : 'scoreVerified';
+  const rankField = lens === 'verified' ? 'scoreVerified' : 'score';
   const { data: concerns, loading } = useLiveQuery<Concern>(
     () =>
       query(
@@ -107,10 +157,12 @@ function WardHome({ wardId }: { wardId: number }) {
   const isWardOfficial = profile?.role === 'official' && profile.wardId === wardId;
   const openPolls = polls.filter((p) => p.open);
   const closedPolls = polls.filter((p) => !p.open);
+  const { isBlocked } = useBlocks();
+  const visibleConcerns = concerns.filter((c) => !isBlocked(c.authorUid));
 
   return (
     <Screen tab>
-      <View style={{ gap: Spacing.one }}>
+      <View style={{ gap: Spacing.one, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
           <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
@@ -118,11 +170,17 @@ function WardHome({ wardId }: { wardId: number }) {
           </ThemedText>
         </View>
         {ward && (
-          <ThemedText type="small" themeColor="textSecondary">
+          <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
             {ward.areas}
           </ThemedText>
         )}
         <FlagAccent />
+        <Pressable onPress={onBrowseOthers} hitSlop={8} style={styles.browseButton}>
+          <Ionicons name="map-outline" size={14} color={theme.primary} />
+          <ThemedText type="small" style={{ fontSize: 12, color: theme.primary, fontWeight: '600' }}>
+            All wards
+          </ThemedText>
+        </Pressable>
       </View>
 
       {alderman && (
@@ -150,22 +208,30 @@ function WardHome({ wardId }: { wardId: number }) {
 
       {openPolls.length > 0 && (
         <>
-          <SectionHeader title="On the ballot" subtitle="Open votes from your alderman — verified residents only" />
+          <SectionHeader title="On the ballot" subtitle="Open votes from your alderman - verified residents only" />
           {openPolls.map((poll) => (
             <PollCard key={poll.id} poll={poll} />
           ))}
         </>
       )}
 
-      <SectionHeader title="Ward leaderboard" subtitle="Top concerns as voted by people in the ward" />
+      <SectionHeader
+        title="Ward leaderboard"
+        subtitle="Anyone can weigh in. Verified counts are residents of this ward only."
+      />
       <LensToggle value={lens} onChange={setLens} />
-      <Button title="Raise a ward concern" variant="secondary" onPress={() => router.push('/new-concern')} />
+      {isHomeWard && (profile?.verified || profile?.role === 'official') && (
+        <Button title="Raise a ward concern" variant="secondary" onPress={() => router.push('/new-concern')} />
+      )}
       {loading ? (
         <SkeletonCards />
-      ) : concerns.length === 0 ? (
-        <EmptyState icon="megaphone-outline" message="No ward concerns yet. Raise the first one." />
+      ) : visibleConcerns.length === 0 ? (
+        <EmptyState
+          icon="megaphone-outline"
+          message={isHomeWard ? 'No ward concerns yet. Raise the first one.' : 'No concerns in this ward yet.'}
+        />
       ) : (
-        concerns.map((concern, i) => (
+        visibleConcerns.map((concern, i) => (
           <ConcernCard key={concern.id} concern={concern} rank={i + 1} lens={lens} index={i} />
         ))
       )}
@@ -187,5 +253,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
+  },
+  browseButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  wardGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  wardCell: {
+    width: 44,
+    height: 36,
+    borderRadius: 8,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

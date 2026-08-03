@@ -30,14 +30,28 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
+# Env files.
+#
+# `.env` holds PUBLIC client config only (EXPO_PUBLIC_* identifiers such as the
+# Google OAuth web client id). It is committed on purpose: EAS builds from the
+# git archive, so an untracked .env means those values are simply missing from
+# the build. Never put a secret there - it would be committed with it. Secrets
+# belong in EAS secrets (build time) or `firebase functions:secrets:set`
+# (server side), and the local-only overrides below are never committed.
+.env.local
+.env.*.local
+.env*.secret
 
 # typescript
 *.tsbuildinfo
 
 example
 
-# generated native folders
+# Firebase emulator logs
+firestore-debug.log
+firebase-debug.log
+ui-debug.log
+
+# Generated native projects (Expo prebuild / run:ios - app.json is the source of truth)
 /ios
 /android

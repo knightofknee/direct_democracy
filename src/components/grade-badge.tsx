@@ -11,7 +11,7 @@ export function gradeColor(score: number | null, theme: ReturnType<typeof useThe
   return theme.danger;
 }
 
-/** Circular letter grade — the official's overall mark. */
+/** Circular letter grade - the official's overall mark. */
 export function GradeBadge({
   letter,
   score,

@@ -10,17 +10,41 @@
     "ios": {
       "bundleIdentifier": "com.briancarlisle.directdemocracy",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "icon": "./assets/expo.icon"
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "associatedDomains": [
+        "applinks:direct-democracy-e338a.firebaseapp.com"
+      ]
     },
     "android": {
       "package": "com.briancarlisle.directdemocracy",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "direct-democracy-e338a.firebaseapp.com",
+              "pathPrefix": "/__/auth"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",
@@ -31,15 +55,31 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#FFFFFF",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 140
         }
-      ]
+      ],
+      "expo-apple-authentication",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.376113063983-9ovq1qmfl0u6vdk425et88sl1jfht62l"
+        }
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/app-check",
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "2a00de88-83a4-4c71-9c57-f0de4ce1a45d"
+      }
     }
   }
 }

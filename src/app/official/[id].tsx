@@ -7,6 +7,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { ApprovalWidget } from '@/components/approval-widget';
 import { OfficialAvatar } from '@/components/avatar';
+import { ContentActions } from '@/components/content-actions';
 import { GradeBadge, gradeColor } from '@/components/grade-badge';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
@@ -14,13 +15,14 @@ import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip, EmptyState, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { timeAgo } from '@/lib/format';
 import { notify, notifyError } from '@/lib/notify';
 import { ANSWER_JUDGMENT_QUORUM, type AmaQuestion, type Official } from '@/lib/types';
-import { askQuestion, judgeResponse, respondToQuestion } from '@/services/ama';
+import { askQuestion, deleteQuestion, judgeResponse, respondToQuestion } from '@/services/ama';
 import { computeGrade, letterFor, updateOfficialCard } from '@/services/officials';
 
 export default function OfficialAmaScreen() {
@@ -39,6 +41,7 @@ export default function OfficialAmaScreen() {
       id ? query(collection(db, 'officials', id, 'questions'), orderBy('createdAt', 'desc')) : null,
     [id]
   );
+  const { isBlocked } = useBlocks();
 
   if (!official) {
     return (
@@ -81,7 +84,13 @@ export default function OfficialAmaScreen() {
       <GradeCard official={official} grade={grade} />
 
       {isThisOfficial ? (
-        <EditCard official={official} />
+        <>
+          <EditCard official={official} />
+          <Button
+            title={official.wardId != null ? 'Put a question to your ward or the city' : 'Put a question to the city'}
+            onPress={() => router.push('/new-poll')}
+          />
+        </>
       ) : (
         <Card>
           <ThemedText type="smallBold" style={{ fontSize: 13 }}>
@@ -107,11 +116,13 @@ export default function OfficialAmaScreen() {
       {questions.length === 0 ? (
         <EmptyState icon="help-circle-outline" message="No questions yet. Ask the first one." />
       ) : (
-        questions.map((q, i) => (
-          <Animated.View key={q.id} entering={FadeInDown.duration(260).delay(Math.min(i, 8) * 40)}>
-            <QuestionCard question={q} isThisOfficial={isThisOfficial} />
-          </Animated.View>
-        ))
+        questions
+          .filter((q) => !isBlocked(q.authorUid))
+          .map((q, i) => (
+            <Animated.View key={q.id} entering={FadeInDown.duration(260).delay(Math.min(i, 8) * 40)}>
+              <QuestionCard question={q} isThisOfficial={isThisOfficial} officialName={official.name} />
+            </Animated.View>
+          ))
       )}
     </Screen>
   );
@@ -154,7 +165,7 @@ function GradeCard({
           subtitle="how well liked"
           value={
             grade.approval.constituentPct == null
-              ? '—'
+              ? '-'
               : `${grade.approval.constituentPct}%`
           }
           letter={letterFor(grade.approval.constituentPct)}
@@ -164,15 +175,15 @@ function GradeCard({
         <AxisSummary
           title="Answers"
           subtitle="straight answers given"
-          value={!grade.answersGraded || grade.answers.score == null ? '—' : `${grade.answers.score}`}
-          letter={grade.answersGraded ? grade.answers.grade : '—'}
+          value={!grade.answersGraded || grade.answers.score == null ? '-' : `${grade.answers.score}`}
+          letter={grade.answersGraded ? grade.answers.grade : '-'}
           score={grade.answersGraded ? grade.answers.score : null}
         />
       </View>
 
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
         {grade.answers.answered} answered · {grade.answers.dodged} dodged · {grade.answers.ignored}{' '}
-        ignored, as judged by the community — never by the official. The overall grade averages
+        ignored, as judged by the community - never by the official. The overall grade averages
         constituent approval with the answer score.
       </ThemedText>
     </Card>
@@ -254,7 +265,7 @@ function EditCard({ official }: { official: Official }) {
         keyboardType="url"
       />
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        Link a photo hosted on your own site or campaign page — direct democracy displays it but
+        Link a photo hosted on your own site or campaign page - direct democracy displays it but
         never stores the image.
       </ThemedText>
       <View style={{ flexDirection: 'row', gap: Spacing.two }}>
@@ -268,15 +279,31 @@ function EditCard({ official }: { official: Official }) {
 function QuestionCard({
   question,
   isThisOfficial,
+  officialName,
 }: {
   question: AmaQuestion;
   isThisOfficial: boolean;
+  officialName: string;
 }) {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
   const [responseText, setResponseText] = useState('');
   const [busy, setBusy] = useState(false);
+  const [confirmWithdraw, setConfirmWithdraw] = useState(false);
+  const isAsker = profile?.uid === question.authorUid;
+
+  const withdraw = async () => {
+    if (!profile) return;
+    setBusy(true);
+    try {
+      await deleteQuestion(profile, question);
+    } catch (e) {
+      notifyError('Could not withdraw', e);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const { data: myJudgment } = useLiveDoc<{ answered: boolean }>(
     () =>
@@ -321,7 +348,7 @@ function QuestionCard({
     }
   };
 
-  const totalJudgments = question.answeredYes + question.answeredNo;
+  const verifiedJudgments = (question.answeredYesVerified ?? 0) + (question.answeredNoVerified ?? 0);
 
   return (
     <Card>
@@ -331,10 +358,32 @@ function QuestionCard({
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
           {question.authorName} · {timeAgo(question.createdAt)}
         </ThemedText>
+        <View style={{ flex: 1 }} />
+        <ContentActions
+          contentPath={`officials/${question.officialUid}/questions/${question.id}`}
+          contentType="question"
+          excerpt={question.body}
+          authorUid={question.authorUid}
+          authorName={question.authorName}
+        />
       </View>
       <ThemedText type="small" style={{ fontSize: 15, lineHeight: 21 }}>
         {question.body}
       </ThemedText>
+      {isAsker &&
+        question.status === 'awaitingResponse' &&
+        (confirmWithdraw ? (
+          <View style={styles.judgeRow}>
+            <Button title="Yes, withdraw" variant="danger" onPress={withdraw} disabled={busy} />
+            <Button title="Keep it" variant="ghost" onPress={() => setConfirmWithdraw(false)} />
+          </View>
+        ) : (
+          <Button
+            title="Withdraw my question"
+            variant="ghost"
+            onPress={() => setConfirmWithdraw(true)}
+          />
+        ))}
 
       {question.response ? (
         <View style={[styles.response, { backgroundColor: theme.background, borderColor: theme.border }]}>
@@ -343,6 +392,14 @@ function QuestionCard({
             <ThemedText type="smallBold" style={{ fontSize: 12, color: theme.primary }}>
               Official response · {timeAgo(question.respondedAt)}
             </ThemedText>
+            <View style={{ flex: 1 }} />
+            <ContentActions
+              contentPath={`officials/${question.officialUid}/questions/${question.id}`}
+              contentType="response"
+              excerpt={question.response}
+              authorUid={question.officialUid}
+              authorName={officialName}
+            />
           </View>
           <ThemedText type="small">{question.response}</ThemedText>
         </View>
@@ -370,9 +427,10 @@ function QuestionCard({
             />
           </View>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {question.answeredYes} say answered · {question.answeredNo} say dodged
-            {totalJudgments < ANSWER_JUDGMENT_QUORUM
-              ? ` · ${ANSWER_JUDGMENT_QUORUM - totalJudgments} more needed to decide`
+            {question.answeredYes} say answered ({question.answeredYesVerified ?? 0} verified) ·{' '}
+            {question.answeredNo} say dodged ({question.answeredNoVerified ?? 0} verified)
+            {verifiedJudgments < ANSWER_JUDGMENT_QUORUM
+              ? ` · ${ANSWER_JUDGMENT_QUORUM - verifiedJudgments} more verified judgments to decide`
               : ''}
           </ThemedText>
         </View>

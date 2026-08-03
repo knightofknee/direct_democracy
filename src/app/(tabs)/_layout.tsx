@@ -23,7 +23,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="ward"
         options={{
-          title: 'my ward',
+          title: 'wards',
           tabBarIcon: ({ color, size }) => <Ionicons name="location" size={size} color={color} />,
         }}
       />

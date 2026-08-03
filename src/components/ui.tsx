@@ -52,6 +52,7 @@ export function Button({
   disabled,
   loading,
   style,
+  icon,
 }: {
   title: string;
   onPress: () => void;
@@ -59,6 +60,7 @@ export function Button({
   disabled?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
+  icon?: React.ReactNode;
 }) {
   const theme = useTheme();
   const background =
@@ -88,9 +90,12 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={color} />
       ) : (
-        <ThemedText type="smallBold" style={{ color }}>
-          {title}
-        </ThemedText>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}>
+          {icon}
+          <ThemedText type="smallBold" style={{ color }}>
+            {title}
+          </ThemedText>
+        </View>
       )}
     </Pressable>
   );

@@ -1,7 +1,7 @@
 /**
  * direct democracy theme.
  * Palette is drawn from the Chicago flag: sky blue stripes (#41B6E6),
- * six-pointed star red (#C8102E), on white — with a navy-leaning dark mode.
+ * six-pointed star red (#C8102E), on white - with a navy-leaning dark mode.
  */
 
 import '@/global.css';

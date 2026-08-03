@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Switch, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
@@ -19,7 +19,6 @@ export default function VerifyScreen() {
   const router = useRouter();
   const { profile } = useAuth();
   const [wardId, setWardId] = useState<number | null>(profile?.wardId ?? null);
-  const [registeredVoter, setRegisteredVoter] = useState(false);
   const [busy, setBusy] = useState(false);
 
   if (!profile) {
@@ -38,7 +37,7 @@ export default function VerifyScreen() {
             <Ionicons name="shield-checkmark" size={40} color={theme.verified} />
             <ThemedText type="smallBold">You’re verified</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              Resident of the {wardLabel(profile.wardId)}.
+              {profile.wardId != null ? `Resident of the ${wardLabel(profile.wardId)}.` : 'Verified Chicago resident.'}
             </ThemedText>
           </View>
         </Card>
@@ -53,7 +52,7 @@ export default function VerifyScreen() {
     }
     setBusy(true);
     try {
-      const { mode } = await startVerification({ wardId: wardId ?? 1, registeredVoter });
+      const { mode } = await startVerification({ wardId: wardId ?? 1 });
       if (mode === 'dev') {
         notify('Verified (dev)', 'Simulated a passing Persona inquiry against the emulator.');
         if (router.canGoBack()) router.back();
@@ -73,8 +72,8 @@ export default function VerifyScreen() {
       <Card>
         <ThemedText type="smallBold">How verification works</ThemedText>
         <Step n={1} text="You verify your identity and Chicago address with Persona, a third-party identity service." />
-        <Step n={2} text="Persona tells us only: verified yes/no, your ward, and registered-voter status." />
-        <Step n={3} text="Your documents and personal details never touch direct democracy’s servers — and your display name stays anonymous." />
+        <Step n={2} text="Persona tells us only: verified yes/no, and your ward." />
+        <Step n={3} text="Your documents and personal details never touch direct democracy’s servers - and your display name stays anonymous." />
       </Card>
 
       {usingEmulators && (
@@ -84,7 +83,7 @@ export default function VerifyScreen() {
               Dev mode (emulator)
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              No Persona in the emulator — pick a ward and simulate a passing verification.
+              No Persona in the emulator - pick a ward and simulate a passing verification.
             </ThemedText>
             <View style={styles.wardGrid}>
               {WARDS.map((w) => {
@@ -114,10 +113,6 @@ export default function VerifyScreen() {
                 {wardLabel(wardId)} · {WARDS.find((w) => w.id === wardId)?.areas}
               </ThemedText>
             )}
-            <View style={styles.switchRow}>
-              <ThemedText type="small">I’m a registered voter</ThemedText>
-              <Switch value={registeredVoter} onValueChange={setRegisteredVoter} />
-            </View>
           </Card>
         </>
       )}
@@ -173,10 +168,5 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
 });

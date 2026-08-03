@@ -1,8 +1,8 @@
 /**
- * Default display names: a random adjective + noun pair, no numbers —
+ * Default display names: a random adjective + noun pair, no numbers -
  * "Steadfast Heron", "Amiable Tugboat". Users can change theirs any time.
  * Pairs aren't guaranteed unique (91 × 96 combos); display names are labels,
- * not identities — the uid is the identity.
+ * not identities - the uid is the identity.
  */
 
 const ADJECTIVES = [

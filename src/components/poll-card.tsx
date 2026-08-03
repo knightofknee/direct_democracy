@@ -15,7 +15,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { notify } from '@/lib/notify';
 import type { Poll, TallyLens, VoteDoc } from '@/lib/types';
-import { votePoll } from '@/services/polls';
+import { closePoll, votePoll } from '@/services/polls';
 
 const TYPE_LABELS: Record<Poll['type'], string> = {
   yesNo: 'Yes / No',
@@ -29,7 +29,7 @@ export function PollCard({ poll }: { poll: Poll }) {
   const router = useRouter();
   const { profile } = useAuth();
   const [lens, setLens] = useState<TallyLens>('all');
-  const [pending, setPending] = useState<string[]>([]);
+  const [draft, setDraft] = useState<{ from: string; keys: string[] } | null>(null);
   const [saving, setSaving] = useState(false);
 
   const { data: myVote } = useLiveDoc<VoteDoc & { id: string }>(
@@ -39,6 +39,13 @@ export function PollCard({ poll }: { poll: Poll }) {
 
   const myKeys = myVote ? (Array.isArray(myVote.value) ? myVote.value : [myVote.value]) : [];
   const hasVoted = myKeys.length > 0;
+  const myKeysJson = JSON.stringify(myKeys);
+
+  // Approval polls collect selections before casting. The draft remembers the
+  // ballot it started from, so it falls back to the recorded ballot whenever
+  // that changes - "change your vote" starts from what you actually voted for
+  // rather than a blank slate, with no effect needed to keep them in step.
+  const pending = draft?.from === myKeysJson ? draft.keys : myKeys;
   const wardLocked = poll.scope === 'ward' && (!profile?.verified || profile.wardId !== poll.wardId);
   const canVote = !!profile && poll.open && !wardLocked;
 
@@ -47,7 +54,7 @@ export function PollCard({ poll }: { poll: Poll }) {
     setSaving(true);
     try {
       await votePoll(profile, poll, value);
-      setPending([]);
+      setDraft(null); // fall back to the ballot now on record
     } catch (e) {
       notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
@@ -56,7 +63,10 @@ export function PollCard({ poll }: { poll: Poll }) {
   };
 
   const toggleApproval = (key: string) => {
-    setPending((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+    setDraft({
+      from: myKeysJson,
+      keys: pending.includes(key) ? pending.filter((k) => k !== key) : [...pending, key],
+    });
   };
 
   return (
@@ -83,7 +93,7 @@ export function PollCard({ poll }: { poll: Poll }) {
           <TallyResults tally={poll.tallies} options={poll.options} lens={lens} highlightKeys={myKeys} />
           {hasVoted && poll.open && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              You voted — tap an option below to change it.
+              You voted - tap an option below to change it.
             </ThemedText>
           )}
         </View>
@@ -124,6 +134,24 @@ export function PollCard({ poll }: { poll: Poll }) {
           )}
         </View>
       ) : null}
+
+      {profile?.uid === poll.authorUid && poll.open && (
+        <Button
+          title="Close voting"
+          variant="secondary"
+          loading={saving}
+          onPress={async () => {
+            setSaving(true);
+            try {
+              await closePoll(profile, poll);
+            } catch (e) {
+              notify('Could not close poll', e instanceof Error ? e.message : 'Something went wrong.');
+            } finally {
+              setSaving(false);
+            }
+          }}
+        />
+      )}
 
       {wardLocked && (
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>

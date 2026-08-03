@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   serverTimestamp,
   setDoc,
@@ -14,7 +15,7 @@ import type { AmaQuestion, QuestionStatus, UserProfile } from '@/lib/types';
  * AMAs are ongoing, per-official. Anyone signed in can ask. The official
  * posts one response per question; the community then judges whether it
  * actually answered the question. There is no upvoting or downvoting a
- * politician's response — only "did this answer it?" — and dodging (or
+ * politician's response - only "did this answer it?" - and dodging (or
  * ignoring) questions drags the official's score down.
  *
  * Clients only write their own documents here. All counters (questionsAsked,
@@ -38,8 +39,22 @@ export async function askQuestion(
     respondedAt: null,
     answeredYes: 0,
     answeredNo: 0,
+    answeredYesVerified: 0,
+    answeredNoVerified: 0,
     createdAt: serverTimestamp(),
   });
+}
+
+/**
+ * The asker may withdraw a question only while it's unanswered - an answered
+ * (or dodged) question is part of the official's public record.
+ */
+export async function deleteQuestion(profile: UserProfile, question: AmaQuestion): Promise<void> {
+  if (profile.uid !== question.authorUid) throw new Error('Only the asker can withdraw a question.');
+  if (question.status !== 'awaitingResponse') {
+    throw new Error('Questions with a response are part of the public record.');
+  }
+  await deleteDoc(doc(db, 'officials', question.officialUid, 'questions', question.id));
 }
 
 /** The official (only) posts a response; the question moves to community review. */
@@ -75,7 +90,7 @@ export async function judgeResponse(
   if (!question.response) throw new Error('No response to judge yet.');
   await setDoc(
     doc(db, 'officials', question.officialUid, 'questions', question.id, 'judgments', profile.uid),
-    { answered, createdAt: serverTimestamp() }
+    { answered, verified: profile.verified, createdAt: serverTimestamp() }
   );
 }
 
@@ -107,7 +122,7 @@ export function computeScore(o: {
   const ignored = Math.max(0, asked - responded);
   const underReview = Math.max(0, responded - answered - dodged);
 
-  if (asked === 0) return { score: null, grade: '—', responded, answered, dodged, ignored, asked };
+  if (asked === 0) return { score: null, grade: '-', responded, answered, dodged, ignored, asked };
 
   const score = Math.round(((answered + underReview * 0.5) / asked) * 100);
   const grade =

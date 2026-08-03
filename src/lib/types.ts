@@ -3,9 +3,9 @@ import type { Timestamp } from 'firebase/firestore';
 /**
  * Three groups of people use the app:
  *  - unverified users  (role 'citizen', verified: false)
- *  - verified users    (role 'citizen', verified: true) — proved identity via a
+ *  - verified users    (role 'citizen', verified: true) - proved identity via a
  *    third-party provider (Persona); we only ever store the boolean + ward.
- *  - elected officials (role 'official') — approved admins who run polls and AMAs.
+ *  - elected officials (role 'official') - approved admins who run polls and AMAs.
  */
 export type Role = 'citizen' | 'official';
 
@@ -24,8 +24,6 @@ export interface UserProfile {
   verified: boolean;
   /** 1–50 for Chicago wards; null until verified (ward comes from verified address). */
   wardId: number | null;
-  /** Registered-voter flag, second filter on the big board. Set during verification. */
-  registeredVoter: boolean;
   /** Optional for accounts created before stats existed. */
   stats?: UserStats;
   createdAt: Timestamp;
@@ -38,7 +36,7 @@ export interface Official {
   wardId: number | null; // null for citywide offices
   bio: string;
   /**
-   * Externally hosted portrait (https URL) — we render it but never host or
+   * Externally hosted portrait (https URL) - we render it but never host or
    * store the image itself. Null shows an initials avatar.
    */
   photoUrl?: string | null;
@@ -55,32 +53,30 @@ export interface Official {
   approvalConstituents?: { approve: number; disapprove: number };
 }
 
-/** One person's standing approval of an official — changeable any time. */
+/** One person's standing approval of an official - changeable any time. */
 export type ApprovalValue = 'approve' | 'disapprove';
 
 /**
- * Every vote is tallied twice: once over all users and once over verified users
- * only, so any result can be viewed through either lens. `registered` is a
- * third slice for the big board's registered-voter filter.
+ * Every vote is tallied two ways: all users, and verified users. On
+ * ward-scoped items the verified slice counts only verified residents of
+ * that ward; "verified" always means "verified for this item's area"
+ * (citywide items count every verified Chicagoan).
  */
 export interface DualTally {
   /** counts per option key over all users */
   all: Record<string, number>;
-  /** counts per option key over verified users only */
+  /** counts per option key over verified users (area-scoped on ward items) */
   verified: Record<string, number>;
-  /** counts per option key over registered voters only */
-  registered: Record<string, number>;
   totalAll: number;
   totalVerified: number;
-  totalRegistered: number;
 }
 
-export type TallyLens = 'all' | 'verified' | 'registered';
+export type TallyLens = 'all' | 'verified';
 
 export type Scope = 'city' | 'ward';
 
 /**
- * Concerns are voted on by priority — how much does this matter — rather than
+ * Concerns are voted on by priority - how much does this matter - rather than
  * up/down. Option keys for a concern's DualTally.
  */
 export const CONCERN_PRIORITIES = ['critical', 'high', 'medium', 'low'] as const;
@@ -97,9 +93,9 @@ export interface Concern {
   authorName: string;
   authorVerified: boolean;
   tallies: DualTally;
-  /** Weighted priority score over all users — big board rank. */
+  /** Weighted priority score over all users - big board rank. */
   score: number;
-  /** Weighted priority score over verified users only. */
+  /** Weighted priority score over verified users (ward residents for ward concerns). */
   scoreVerified: number;
   commentCount: number;
   createdAt: Timestamp;
@@ -114,7 +110,7 @@ export interface Comment {
   createdAt: Timestamp;
 }
 
-/** Poll formats officials can choose from — deliberately not just up/down. */
+/** Poll formats officials can choose from - deliberately not just up/down. */
 export type PollType = 'yesNo' | 'multipleChoice' | 'approval' | 'scale5';
 
 export const SCALE5_OPTIONS = [
@@ -152,12 +148,13 @@ export interface VoteDoc {
   value: VoteValue;
   /** Voter's status snapshotted at vote time; drives the dual tallies. */
   verified: boolean;
-  registeredVoter: boolean;
+  /** Voter's ward at cast time - scopes ward-item slices to residents. */
+  wardId: number | null;
   createdAt: Timestamp;
 }
 
 /**
- * AMA question lifecycle. The community — not the politician — decides whether
+ * AMA question lifecycle. The community - not the politician - decides whether
  * a response actually answered the question. There is no up/down voting on the
  * official's response, only "did this answer it?".
  */
@@ -176,8 +173,15 @@ export interface AmaQuestion {
   /** Community judgment: did the response answer the question? */
   answeredYes: number;
   answeredNo: number;
+  /** Same counts over verified users only - the verified lens on judgments. */
+  answeredYesVerified?: number;
+  answeredNoVerified?: number;
   createdAt: Timestamp;
 }
 
-/** Minimum community judgments before a question flips to answered/dodged. */
+/**
+ * Minimum VERIFIED judgments before a question flips to answered/dodged.
+ * Unverified judgments are shown but don't decide - sockpuppets can't brand
+ * an official a dodger or launder a real dodge.
+ */
 export const ANSWER_JUDGMENT_QUORUM = 5;

@@ -1,9 +1,11 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
@@ -42,7 +44,7 @@ export async function createConcern(
 
 /**
  * Cast (or change) a priority vote. The client writes only its own ballot
- * document — the tallies and board scores are aggregated server-side by the
+ * document - the tallies and board scores are aggregated server-side by the
  * onConcernVoteWrite Cloud Function, so no client can touch the totals.
  */
 export async function voteConcernPriority(
@@ -55,9 +57,44 @@ export async function voteConcernPriority(
     uid: profile.uid,
     value: priority,
     verified: profile.verified,
-    registeredVoter: profile.registeredVoter,
+    wardId: profile.wardId,
     createdAt: serverTimestamp(),
   });
+}
+
+/**
+ * Authors may fix a concern only before anyone votes or comments - after
+ * that, edits would change what people already voted on (rules enforce it).
+ */
+export async function updateConcern(
+  profile: UserProfile,
+  concern: { id: string; authorUid: string },
+  input: { title: string; body: string }
+): Promise<void> {
+  if (profile.uid !== concern.authorUid) throw new Error('Only the author can edit a concern.');
+  await updateDoc(doc(db, 'concerns', concern.id), {
+    title: input.title.trim(),
+    body: input.body.trim(),
+  });
+}
+
+/** Withdraw a concern entirely; the onConcernDeleted trigger cleans up. */
+export async function deleteConcern(
+  profile: UserProfile,
+  concern: { id: string; authorUid: string }
+): Promise<void> {
+  if (profile.uid !== concern.authorUid) throw new Error('Only the author can delete a concern.');
+  await deleteDoc(doc(db, 'concerns', concern.id));
+}
+
+/** Remove one of your own comments; onCommentDeleted keeps the count honest. */
+export async function deleteComment(
+  profile: UserProfile,
+  concernId: string,
+  comment: { id: string; authorUid: string }
+): Promise<void> {
+  if (profile.uid !== comment.authorUid) throw new Error('Only the author can delete a comment.');
+  await deleteDoc(doc(db, 'concerns', concernId, 'comments', comment.id));
 }
 
 /** Comment counts are likewise maintained by the onCommentCreated trigger. */

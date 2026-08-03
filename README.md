@@ -2,7 +2,7 @@
 
 An open-source civic app for Chicago: a citywide **big board** of the people's top
 concerns, ward-level voting on questions from your alderman, and ongoing **AMAs**
-where the community — not the politician — decides whether a question was actually
+where the community - not the politician - decides whether a question was actually
 answered.
 
 Built with React Native (Expo) for iOS and Android, backed by Firebase.
@@ -13,42 +13,53 @@ Built with React Native (Expo) for iOS and Android, backed by Firebase.
 
 | Group | What they can do |
 | --- | --- |
-| Unverified users | Vote and comment on all citywide concerns and citywide polls |
-| Verified users | Everything above, plus the **my ward** tab: the ward leaderboard and votes on their alderman's polls |
-| Elected officials | Approved admins — post polls to their ward or the whole city, and answer their AMA |
+| Unverified users | Vote and comment on all citywide concerns and citywide polls, and **browse every ward's** board and ballots |
+| Verified users | Everything above, plus a home ward: their votes count in its verified tallies and they vote on their alderman's polls (the ward tab defaults to home; the city big board is everyone's default view) |
+| Elected officials | Approved admins - post polls to their ward or the whole city, and answer their AMA |
 
-**Every result is shown through three lenses:** all users, identity-verified users,
-and registered voters. You always see the general vote % and the verified-only %
-side by side.
+**Every result is shown two ways:** all users, and identity-verified users. You
+always see the general vote % and the verified-only % side by side. On
+ward-scoped items, "verified" means verified residents of that ward; on
+citywide items it means any verified Chicagoan. The verified lens is always
+scoped to the area the vote is about.
 
 **Voting isn't just up/down.** Concerns are voted by *priority* (critical → low),
 which ranks the big board. Officials choose their poll format: yes/no, multiple
 choice, approval (pick all you support), or a 5-point scale.
 
 **AMAs are scored for honesty.** Users mark an official's response as "answered"
-or "dodged" — there's no upvoting of responses. Ignored and dodged questions
+or "dodged" - there's no upvoting of responses. Ignored and dodged questions
 drag the official's public answer score down.
 
 **Officials get a two-axis report card.** Approval (a standing
 approve/disapprove any user can flip at any time, graded on verified
 constituents only, 5-ballot minimum) and the answer score above, averaged into
-an overall A–F. Portraits are links to externally hosted images — the platform
+an overall A–F. Portraits are links to externally hosted images - the platform
 never stores the photo. Participation earns celebrations: first concern, tenth
 post, hundredth vote.
 
 **Identity verification is third-party.** Persona checks the government ID and
-address; direct democracy only ever stores `verified: yes/no`, the ward, and
-registered-voter status. Documents never touch our servers. Display names are
-random adjective + noun pairs ("Steadfast Heron") and can be changed any time —
+address; direct democracy only ever stores `verified: yes/no` and the ward.
+Documents never touch our servers. Display names are
+random adjective + noun pairs ("Steadfast Heron") and can be changed any time -
 verification never exposes your real name.
+
+**You stay in control.** Report any content, block any user (hides their
+content for you), see everything you've posted under **my activity**, withdraw
+your own concerns and unanswered questions, retract any ballot while its vote
+is still open, and delete
+your account entirely from the profile tab. The in-app **Privacy & data**
+screen spells out exactly what is and isn't stored (host a copy at a public
+URL for the app-store listing).
 
 Chicago-only for launch (50 wards, aldermen, the flag's colors), but the data
 model keeps `city` as a concept so other cities can come later.
 
-## Running it locally (no Firebase project needed)
+## Running it locally (against the Emulator Suite)
 
-The app ships pointed at the [Firebase Emulator Suite](https://firebase.google.com/docs/emulator-suite),
-so you can run everything today with fake data.
+`src/lib/firebase.ts` holds the live project config, so local development must
+explicitly opt into the [Firebase Emulator Suite](https://firebase.google.com/docs/emulator-suite)
+with `EXPO_PUBLIC_USE_EMULATORS=1` - without it, the app talks to production.
 
 Prereqs: Node 20+, Java 17+ (for the Firestore emulator), and the Firebase CLI
 (`npm i -g firebase-tools`).
@@ -69,26 +80,27 @@ npm run seed
 ```
 
 ```bash
-npx expo start
+EXPO_PUBLIC_USE_EMULATORS=1 npx expo start
 ```
 
 The seed creates demo accounts (all with password `password123`):
 
 | Email | Who |
 | --- | --- |
-| `verified@demo.local` | Verified citizen, 1st Ward, registered voter |
+| `verified@demo.local` | Verified citizen, 1st Ward |
 | `unverified@demo.local` | Unverified citizen |
 | `alder.ward1@demo.local` | Alderman, 1st Ward (official) |
+| `alder.ward43@demo.local` | Alderman, 43rd Ward (official) |
 | `mayor@demo.local` | Mayor (official) |
 
-All seeded officials are **fictional** — no real Chicago officials are depicted.
+All seeded officials are **fictional** - no real Chicago officials are depicted.
 
 ## Connecting a real Firebase project
 
 1. Create the project at <https://console.firebase.google.com> and enable
    **Authentication → Email/Password** and **Firestore**.
 2. Add a *Web* app in Project settings and paste its config into
-   [`src/lib/firebase.ts`](src/lib/firebase.ts) (replacing the `demo-` placeholder —
+   [`src/lib/firebase.ts`](src/lib/firebase.ts) (replacing the `demo-` placeholder -
    that placeholder is what routes the app to the emulators).
 3. Point the CLI at it and deploy rules, indexes, and functions:
 
@@ -100,12 +112,55 @@ firebase use --add
 firebase deploy --only firestore:rules,firestore:indexes,functions
 ```
 
+4. Enable the TTL policy that sweeps the triggers' exactly-once markers. The
+   tally triggers claim each event id in `processedEvents/{eventId}` so a
+   redelivered event can't double-count; without this policy those markers
+   accumulate forever. Run it once per project:
+
+```bash
+gcloud firestore fields ttls update expiresAt --collection-group=processedEvents --enable-ttl
+```
+
+## Operating the platform
+
+**Moderation.** Users report content in-app; reports land in a write-only
+`reports` collection. The operator - identified by sign-in email in
+`firestore.rules` (`isAdmin()`) and [`src/lib/admin.ts`](src/lib/admin.ts) -
+gets a **Review reports** queue on their profile: view the content in context,
+take it down (deletion triggers rebalance every count and report card), or
+dismiss the report. Move to custom claims when there's more than one admin.
+
+**Sign-in.** Email/password, passwordless email links, and Google/Apple SSO.
+Email links complete on web out of the box (enable "Email link" on the
+Email/Password provider); completing them inside the native apps additionally
+needs a Firebase Hosting link domain (`EXPO_PUBLIC_AUTH_LINK_DOMAIN`) plus
+iOS Associated Domains / Android App Links. Web SSO works once the
+providers are enabled in Firebase console → Authentication. Native builds
+additionally need: `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` (from the Firebase
+project's OAuth clients) for Google, and an Apple Developer "Sign in with
+Apple" capability for Apple (the `expo-apple-authentication` plugin and
+entitlement are already configured). Every sign-in method funnels through the
+same self-registration rules - SSO accounts get a random display name like
+everyone else.
+
+**App Check (before public launch).** Set `EXPO_PUBLIC_RECAPTCHA_V3_SITE_KEY`
+(Firebase console → App Check → reCAPTCHA v3) to attest web clients. Native
+attestation (Play Integrity / DeviceCheck) needs
+`@react-native-firebase/app-check` in the dev build - wire that BEFORE
+flipping enforcement on Firestore/Functions in the console, or native clients
+will be locked out. With enforcement on, scripted access with the public
+config dies at the door, which is the foundation for rate limiting.
+
 ## Persona (identity verification)
 
 Production verification uses [Persona](https://withpersona.com) hosted inquiries:
 
-1. Create an inquiry template that collects a government ID + address, with two
-   custom output fields: `ward_id` (1–50) and `registered_voter` (boolean).
+1. Create an inquiry template that collects a government ID + address, with one
+   custom output field: `ward_id` (1–50).
+   **Enable account deduplication on the template** - the webhook maps each
+   Persona account id to one uid (`personaAccounts/{accountId}`) and refuses
+   to verify the same human onto a second account (the claim is released if
+   the account is deleted).
 2. Set function secrets: `PERSONA_TEMPLATE_ID`, `PERSONA_ENVIRONMENT_ID`, and
    `PERSONA_WEBHOOK_SECRET` (e.g. `firebase functions:secrets:set PERSONA_TEMPLATE_ID`).
 3. In Persona, point an `inquiry.completed` webhook at the deployed
@@ -138,8 +193,8 @@ firestore.rules     security rules (see the header note about MVP tally writes)
 
 Clients can only write documents that represent their own voice: their display
 name, their ballot, their comment, their question, their judgment. Every
-aggregate number — vote tallies, board scores, comment counts, AMA judgment
-totals, question statuses, official answer scores — is computed exclusively by
+aggregate number - vote tallies, board scores, comment counts, AMA judgment
+totals, question statuses, official answer scores - is computed exclusively by
 Cloud Functions triggers (`functions/src/index.ts`) using the Admin SDK. There
 is no client write path to any total, so a hostile client can cast exactly one
 ballot and nothing more.
@@ -153,4 +208,4 @@ ballot and nothing more.
 
 ## License
 
-Open source — see [LICENSE](LICENSE).
+Open source - see [LICENSE](LICENSE).

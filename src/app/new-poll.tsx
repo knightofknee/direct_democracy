@@ -27,7 +27,8 @@ export default function NewPollScreen() {
   const [question, setQuestion] = useState('');
   const [detail, setDetail] = useState('');
   const [type, setType] = useState<PollType>('yesNo');
-  const [scope, setScope] = useState<Scope>('ward');
+  // Citywide officials (the mayor) have no ward - their only audience is the city.
+  const [scope, setScope] = useState<Scope>(profile?.wardId != null ? 'ward' : 'city');
   const [optionsText, setOptionsText] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -62,7 +63,8 @@ export default function NewPollScreen() {
         detail,
         type,
         options,
-        scope,
+        // A ward poll without a ward would be invisible to every feed.
+        scope: profile.wardId == null ? 'city' : scope,
         wardId: profile.wardId,
       });
       if (router.canGoBack()) router.back();

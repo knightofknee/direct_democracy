@@ -11,7 +11,7 @@ import type { DualTally, TallyLens } from '@/lib/types';
 /**
  * Result bars for one tally through the selected lens, with the other key
  * lens shown inline so the "all users vs verified" comparison is always
- * one glance away — that contrast is the product.
+ * one glance away - that contrast is the product.
  */
 export function TallyResults({
   tally,
@@ -22,7 +22,7 @@ export function TallyResults({
   tally: DualTally;
   options: { key: string; label: string }[];
   lens: TallyLens;
-  /** Option keys the current user picked — rendered with the primary color. */
+  /** Option keys the current user picked - rendered with the primary color. */
   highlightKeys?: string[];
 }) {
   const theme = useTheme();
@@ -66,7 +66,6 @@ export function TallyResults({
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
         {plural(total, 'vote')}
         {lens === 'all' ? ` · ${plural(tally.totalVerified, 'verified vote')}` : ''}
-        {lens === 'registered' ? ' from registered voters' : ''}
       </ThemedText>
     </View>
   );

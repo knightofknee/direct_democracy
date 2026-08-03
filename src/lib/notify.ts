@@ -2,7 +2,7 @@ import { Alert, Platform } from 'react-native';
 
 /**
  * Cross-platform alert. React Native's Alert is a silent no-op on web, which
- * swallows real errors — this routes to window.alert there instead.
+ * swallows real errors - this routes to window.alert there instead.
  */
 export function notify(title: string, message?: string): void {
   if (Platform.OS === 'web') {

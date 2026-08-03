@@ -86,7 +86,7 @@ export function CelebrationProvider({ children }: { children: React.ReactNode })
     });
   }, [uid, createdMs, celebrate]);
 
-  // Milestone watcher — stats are written by Cloud Functions, so they arrive
+  // Milestone watcher - stats are written by Cloud Functions, so they arrive
   // through the live profile listener a beat after the action.
   useEffect(() => {
     if (!uid || !stats) return;
