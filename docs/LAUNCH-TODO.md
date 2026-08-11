@@ -155,47 +155,42 @@ they are what keeps your own devices working the moment you press Enforce.
    from the repo after 2026-08-03). Older builds can't attest and get locked
    out - irrelevant pre-launch, remember it post-launch.
 
-## 6. Persona (identity verification - powers the "verified" system)
+## 6. Didit (identity verification - powers the "verified" system)
 
-What it is: Persona (withpersona.com) is a commercial identity-verification
-service (the thing that scans a driver's license and matches a selfie -
-same category as what banks/coinbase use). The app is built around it: users
-tap "Verify", do Persona's hosted flow, and Persona webhooks the verdict
-(verified yes/no + ward) back to our Cloud Function.
-We never see documents. Until this is set up, nobody can become "verified"
-in production - everything else still works.
+Switched from Persona to Didit 2026-08-03 (same job, ~4x cheaper past the
+free tier). Both give 500 free verifications/month; after that Didit is
+~$0.33/check vs Persona's ~$1.50. Code is fully wired: session creation,
+webhook with signature + replay checks, one-document-one-account dedup
+(identityClaims), claim release on account deletion.
 
-Pricing (researched 2026-08): Persona's Starter plan includes **500 free
-government-ID verifications per month**, then it's paid (roughly
-$1.50/verification, or a $250/mo Essential plan). So: $0 until the app
-verifies more than 500 people in a month. If costs bite later, Didit
-(didit.me) also gives 500 free full-KYC checks/month then ~$0.30-0.35/check,
-and Stripe Identity is $1.50 flat - switching providers means rewriting the
-webhook + verify flow (a Claude task, not huge). No provider maps wards;
-ward always comes from the verified address on our side either way.
+What it is: Didit (didit.me) is a commercial identity-verification service
+(scan a driver's license, optional selfie match). Users tap "Verify", do
+Didit's hosted flow, and Didit webhooks the verdict back to our Cloud
+Function. We never see documents. Until this is set up, nobody can become
+"verified" in production; everything else still works.
 
-1. Create an account at withpersona.com (Starter plan).
-2. Dashboard → **Inquiry templates** → create one: Government ID +
-   (optionally) selfie + address collection.
-3. On the template, add one **custom field** the webhook reads:
-   `ward_id` (number 1-50). Deriving ward from address needs a lookup step
-   against the Chicago ward-boundary dataset (data.cityofchicago.org);
-   Persona supports enrichment/webhook steps. If it's not feasible
-   in-template, leave `ward_id` unset and users verify as "Chicago resident,
-   no ward" (app already handles that).
-4. Template settings → enable **account deduplication** (one human = one
-   Persona account) - our webhook enforces one-account-per-identity using
-   the Persona account id it sends.
-5. Grab the template ID (`itmpl_…`) and environment ID (`env_…`) →
+1. Create an account at didit.me (Business Console).
+2. Console -> create an ID-verification **workflow** (government ID;
+   add selfie/face match if wanted). Copy its **workflow ID**.
+3. Console -> Settings -> **API keys** -> copy the API key.
+4. Console -> **Webhooks** -> set the URL to
+   `https://us-central1-direct-democracy-e338a.cloudfunctions.net/diditWebhook` and copy the **webhook secret**.
+5. Set the three secrets from YOUR terminal (each command prompts for the
+   value; paste it there, not into chat, so it never lands in any log):
    ```
-   firebase functions:secrets:set PERSONA_TEMPLATE_ID
-   firebase functions:secrets:set PERSONA_ENVIRONMENT_ID
-   firebase functions:secrets:set PERSONA_WEBHOOK_SECRET
+   npx firebase-tools functions:secrets:set DIDIT_API_KEY
+   npx firebase-tools functions:secrets:set DIDIT_WORKFLOW_ID
+   npx firebase-tools functions:secrets:set DIDIT_WEBHOOK_SECRET
    ```
-6. Dashboard → Webhooks → create one for event **inquiry.completed**,
-   pointed at the deployed webhook URL:
-   `https://personawebhook-fol5cw3qya-uc.a.run.app`
-   Copy its signing secret into PERSONA_WEBHOOK_SECRET above.
+   Then tell Claude - the functions now BIND these secrets (2026-08-03), so
+   the next deploy fails unless all three exist first. Claude redeploys and
+   the Verify button goes live.
+6. Verify pricing at signup (didit.me/pricing): 500 free/month, then per
+   check. If users ever pay a verification fee in-app, Apple requires IAP.
+
+Ward assignment from the verified address (Chicago ward-boundary lookup) is
+future work; until then production verification grants city-level verified
+status with no home ward.
 
 ## 7. Deploy the backend - DONE 2026-08-03
 
@@ -211,10 +206,11 @@ Re-run after any rules/functions change. (Functions on first deploy may ask
 to enable APIs / upgrade to Blaze plan - required for Cloud Functions.)
 
 STATUS: deployed 2026-08-03 (rules + indexes + all 15 functions updated).
-Note the deploy reported "2 indexes defined in your project that are not
-present in firestore.indexes.json" - they were left alone, not deleted. If
-they are leftovers from an earlier schema, remove them in the console;
-deploying with `--force` would delete them, which is why it wasn't used.
+The deploy flagged 2 project indexes missing from `firestore.indexes.json`;
+both were dead `concerns.scoreRegistered` indexes left over from the removed
+registered-voter lens, and both were deleted. Production and
+`firestore.indexes.json` are now in sync at 9 indexes each - verify any time
+with `gcloud firestore indexes composite list --project=direct-democracy-e338a`.
 Persona webhook URL: `https://personawebhook-fol5cw3qya-uc.a.run.app`.
 
 ### 7a. Before that deploy: confirm the operator email is VERIFIED

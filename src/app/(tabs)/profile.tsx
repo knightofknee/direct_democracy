@@ -165,7 +165,7 @@ export default function ProfileScreen() {
           <>
             <ThemedText type="small">
               Verify once to unlock your ward tab and make your votes count in the verified tallies.
-              A third-party service (Persona) checks your ID. We only ever receive a yes/no and
+              A third-party service (Didit) checks your ID. We only ever receive a yes/no and
               your ward. No documents, no address, nothing else.
             </ThemedText>
             <Button title="Verify my identity" onPress={() => router.push('/verify')} />

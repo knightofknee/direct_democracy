@@ -4,7 +4,7 @@ import type { Timestamp } from 'firebase/firestore';
  * Three groups of people use the app:
  *  - unverified users  (role 'citizen', verified: false)
  *  - verified users    (role 'citizen', verified: true) - proved identity via a
- *    third-party provider (Persona); we only ever store the boolean + ward.
+ *    third-party provider (Didit); we only ever store the boolean + ward.
  *  - elected officials (role 'official') - approved admins who run polls and AMAs.
  */
 export type Role = 'citizen' | 'official';

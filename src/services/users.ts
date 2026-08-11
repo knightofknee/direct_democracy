@@ -22,22 +22,22 @@ export async function deleteAccount(): Promise<void> {
 }
 
 /**
- * Identity verification, Persona-shaped.
+ * Identity verification, Didit-shaped.
  *
  * Production flow (documented in README):
- *  1. App asks our `createVerificationSession` function for a Persona inquiry.
- *  2. User completes Persona's hosted flow (government ID + address). The ID
+ *  1. App asks our `createVerificationSession` function for a Didit inquiry.
+ *  2. User completes Didit's hosted flow (government ID + address). The ID
  *     data never touches our servers or database.
- *  3. Persona webhooks our `personaWebhook` function, which stores only:
+ *  3. Didit webhooks our `diditWebhook` function, which stores only:
  *     verified=true and wardId (derived from the verified address). Nothing
  *     else is retained.
  *
- * Against the emulator there is no Persona, so `devVerify` (a callable that
+ * Against the emulator there is no Didit, so `devVerify` (a callable that
  * only exists in emulator/dev builds) simulates a passing inquiry.
  */
 export async function startVerification(input: {
   wardId: number;
-}): Promise<{ mode: 'dev' | 'persona' }> {
+}): Promise<{ mode: 'dev' | 'didit' }> {
   if (usingEmulators) {
     const devVerify = httpsCallable(functions, 'devVerify');
     await devVerify(input);
@@ -48,9 +48,9 @@ export async function startVerification(input: {
     { inquiryUrl: string }
   >(functions, 'createVerificationSession');
   const { data } = await createSession({});
-  // The hosted Persona inquiry is opened in the browser; the webhook finishes
+  // The hosted Didit inquiry is opened in the browser; the webhook finishes
   // the job and the profile listener picks up verified=true when it lands.
   const { openBrowserAsync } = await import('expo-web-browser');
   await openBrowserAsync(data.inquiryUrl);
-  return { mode: 'persona' };
+  return { mode: 'didit' };
 }

@@ -5,6 +5,22 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-08-11: monthly verification cost cap
+
+Didit bills per module that runs in a session, whether the verdict is Approved
+or Declined; past the 500/month free tier that bills the operator directly,
+which made `createVerificationSession` a denial-of-wallet surface. It now
+reserves a slot in `verificationUsage/{YYYY-MM}` (Chicago time) in a
+transaction before calling Didit and hard-stops at 700 reservations/month with
+a `resource-exhausted` error. Because a session whose link is never opened
+bills nothing, the webhook settles each session exactly once (idempotent via
+`verificationSessions/{sessionId}`): Expired returns its slot, while Approved,
+Declined, and Abandoned keep theirs (Abandoned can still bill for the modules
+that ran before the user quit). Failed Didit calls release their slot
+immediately. No security rule matches either collection, so clients can
+neither read nor reset the counters. The per-month docs are kept forever so a
+future paid tier can bill users starting at check 501.
+
 ## Audit - 2026-08-03 (two-phase: full workflow pass, then adversarial pass)
 
 Phase 1 walked every user journey end to end (signed-out, unverified citizen,
@@ -93,10 +109,15 @@ Everything above is deployed, not just committed:
   bricarlis@gmail.com is `emailVerified: true` via `google.com`, so the
   tightened `isAdmin()` did not lock the operator out.
 
-The deploy reported two indexes existing in the project that aren't in
-`firestore.indexes.json`. They were left in place - `--force` would have
-deleted them, and deleting an index that a live query depends on breaks that
-query. Worth reconciling in the console when convenient.
+The deploy also surfaced two composite indexes that existed in the project but
+not in `firestore.indexes.json`, both on `concerns.scoreRegistered`
+(`scope + scoreRegistered + createdAt`, and the ward-scoped variant). They
+were orphans from the registered-voter lens that was removed from the data
+model: `scoreRegistered`, `registeredVoter`, and `totalRegistered` appear
+nowhere in `src/`, `functions/src/`, `scripts/`, or the rules, so no query
+could use them and no trigger could maintain them. Both were deleted, and
+production now matches `firestore.indexes.json` exactly - nine indexes on
+each side, no drift in either direction.
 
 ### Durability work (same pass)
 

@@ -54,11 +54,11 @@ export default function VerifyScreen() {
     try {
       const { mode } = await startVerification({ wardId: wardId ?? 1 });
       if (mode === 'dev') {
-        notify('Verified (dev)', 'Simulated a passing Persona inquiry against the emulator.');
+        notify('Verified (dev)', 'Simulated a passing Didit inquiry against the emulator.');
         if (router.canGoBack()) router.back();
         else router.replace('/ward');
       }
-      // In the real Persona flow the webhook flips the profile; the app reacts
+      // In the real Didit flow the webhook flips the profile; the app reacts
       // to the live profile listener, so there's nothing to do here.
     } catch (e) {
       notify('Verification failed', e instanceof Error ? e.message : 'Something went wrong.');
@@ -71,9 +71,9 @@ export default function VerifyScreen() {
     <Screen>
       <Card>
         <ThemedText type="smallBold">How verification works</ThemedText>
-        <Step n={1} text="You verify your identity and Chicago address with Persona, a third-party identity service." />
-        <Step n={2} text="Persona tells us only: verified yes/no, and your ward." />
-        <Step n={3} text="Your documents and personal details never touch direct democracy’s servers - and your display name stays anonymous." />
+        <Step n={1} text="You verify your ID and Chicago address with Didit, a third-party identity service. Your documents go to them, never to us." />
+        <Step n={2} text="All we ever save: a verified yes/no, the ward you live in, and a unique identifier that stops one person from verifying twice." />
+        <Step n={3} text="No name, no address, no document. Your display name stays anonymous, even once verified." />
       </Card>
 
       {usingEmulators && (
@@ -83,7 +83,7 @@ export default function VerifyScreen() {
               Dev mode (emulator)
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              No Persona in the emulator - pick a ward and simulate a passing verification.
+              No Didit in the emulator - pick a ward and simulate a passing verification.
             </ThemedText>
             <View style={styles.wardGrid}>
               {WARDS.map((w) => {
@@ -118,7 +118,7 @@ export default function VerifyScreen() {
       )}
 
       <Button
-        title={usingEmulators ? 'Simulate verification' : 'Start verification with Persona'}
+        title={usingEmulators ? 'Simulate verification' : 'Start verification with Didit'}
         onPress={begin}
         loading={busy}
       />

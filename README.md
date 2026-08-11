@@ -38,7 +38,7 @@ an overall A–F. Portraits are links to externally hosted images - the platform
 never stores the photo. Participation earns celebrations: first concern, tenth
 post, hundredth vote.
 
-**Identity verification is third-party.** Persona checks the government ID and
+**Identity verification is third-party.** Didit checks the government ID and
 address; direct democracy only ever stores `verified: yes/no` and the ward.
 Documents never touch our servers. Display names are
 random adjective + noun pairs ("Steadfast Heron") and can be changed any time -
@@ -151,29 +151,27 @@ flipping enforcement on Firestore/Functions in the console, or native clients
 will be locked out. With enforcement on, scripted access with the public
 config dies at the door, which is the foundation for rate limiting.
 
-## Persona (identity verification)
+## Didit (identity verification)
 
-Production verification uses [Persona](https://withpersona.com) hosted inquiries:
+Production verification uses [Didit](https://didit.me) hosted sessions
+(500 free verifications/month, then ~$0.33/check):
 
-1. Create an inquiry template that collects a government ID + address, with one
-   custom output field: `ward_id` (1–50).
-   **Enable account deduplication on the template** - the webhook maps each
-   Persona account id to one uid (`personaAccounts/{accountId}`) and refuses
-   to verify the same human onto a second account (the claim is released if
-   the account is deleted).
-2. Set function secrets: `PERSONA_TEMPLATE_ID`, `PERSONA_ENVIRONMENT_ID`, and
-   `PERSONA_WEBHOOK_SECRET` (e.g. `firebase functions:secrets:set PERSONA_TEMPLATE_ID`).
-3. In Persona, point an `inquiry.completed` webhook at the deployed
-   `personaWebhook` function URL.
+1. Create a Didit account and an ID-verification **workflow** (government ID,
+   optionally selfie + proof of address).
+2. Set function secrets: `DIDIT_API_KEY`, `DIDIT_WORKFLOW_ID`, and
+   `DIDIT_WEBHOOK_SECRET` (e.g. `firebase functions:secrets:set DIDIT_API_KEY`).
+3. In the Didit dashboard, point the webhook at the deployed `diditWebhook`
+   function URL and copy its secret into `DIDIT_WEBHOOK_SECRET`.
 
-The app calls `createVerificationSession` to open the hosted flow; the webhook is
-the only thing in production that can set `verified: true`. Against the emulators,
-the **Verify** screen instead offers a dev-only simulated verification
-(`devVerify`, which refuses to run outside the emulator).
+The app calls `createVerificationSession` to open the hosted flow; the
+webhook is the only thing in production that can set `verified: true`, and it
+refuses a document that already verified a different account
+(`identityClaims/{hash}`, released on account deletion). Against the
+emulators, the **Verify** screen instead offers a dev-only simulated
+verification (`devVerify`, which refuses to run outside the emulator).
 
-The address → ward mapping inside Persona is a TODO: wire a lookup against the
-[Chicago ward boundaries dataset](https://data.cityofchicago.org) as an inquiry
-step, or leave `ward_id` unset to grant city-level verification without a ward.
+Ward assignment from the verified address (Chicago ward-boundaries lookup) is
+future work; until then production verification grants city-level verified.
 
 ## Repository layout
 
@@ -184,7 +182,7 @@ src/components/     shared UI (cards, lens toggle, tally bars, poll voting)
 src/lib/            firebase init, domain types, tally arithmetic, name generator
 src/services/       Firestore write paths (concerns, polls, AMA, users)
 src/constants/      theme (Chicago flag palette) and the 50-ward dataset
-functions/          Cloud Functions: Persona webhook + dev verification
+functions/          Cloud Functions: Didit webhook + dev verification
 scripts/seed.ts     emulator seed data
 firestore.rules     security rules (see the header note about MVP tally writes)
 ```
@@ -202,7 +200,7 @@ ballot and nothing more.
 ## Known MVP tradeoffs
 
 - **Ward assignment in dev is self-attested.** Real ward assignment must come
-  from the verified address via Persona.
+  from the verified address via Didit.
 - **Officials are provisioned manually** (seed script / Admin SDK). An admin
   approval flow is future work.
 

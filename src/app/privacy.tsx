@@ -25,13 +25,13 @@ export default function PrivacyScreen() {
         <Bullet text="Your email and password hash (for signing in) - never shown to anyone." />
         <Bullet text="A display name you choose. It's a pseudonym; your real name is never shown, even after verification." />
         <Bullet text="Your ballots, comments, questions, and judgments - the content you post." />
-        <Bullet text="If you verify: a yes/no verified flag and your ward. Nothing else." />
+        <Bullet text="If you verify: a yes/no verified flag, your ward, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account." />
         <Bullet text="Participation counters (votes cast, concerns raised) that power your milestones." />
       </Section>
 
       <Section title="What we never see">
-        <Bullet text="Your identity documents. Verification is performed by Persona, a third-party service; documents go to them, and we receive only the verdict." />
-        <Bullet text="Your address. Persona derives your ward from it and tells us just the ward number." />
+        <Bullet text="Your identity documents. Verification is performed by Didit, a third-party service; documents go to them, and we receive only the verdict." />
+        <Bullet text="Your address. Didit derives your ward from it and tells us just the ward number." />
       </Section>
 
       <Section title="Who can see what">

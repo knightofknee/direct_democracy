@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.personaWebhook = exports.createVerificationSession = exports.devVerify = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onConcernDeleted = exports.onCommentDeleted = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onConcernCreated = void 0;
+exports.diditWebhook = exports.createVerificationSession = exports.devVerify = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onConcernDeleted = exports.onCommentDeleted = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onConcernCreated = void 0;
 const crypto = __importStar(require("crypto"));
 const app_1 = require("firebase-admin/app");
 const auth_1 = require("firebase-admin/auth");
@@ -41,6 +41,7 @@ const firestore_1 = require("firebase-admin/firestore");
 const firestore_2 = require("firebase-functions/v2/firestore");
 const https_1 = require("firebase-functions/v2/https");
 const https_2 = require("firebase-functions/v2/https");
+const params_1 = require("firebase-functions/params");
 const tally_1 = require("./tally");
 (0, app_1.initializeApp)();
 const db = (0, firestore_1.getFirestore)();
@@ -52,6 +53,59 @@ const WARD_MAX = 50;
  * Skipped in the emulator, where no attestation exists.
  */
 const APP_CHECK = { enforceAppCheck: !process.env.FUNCTIONS_EMULATOR };
+// Didit secrets must be BOUND to the functions that use them - v2 functions
+// only receive declared secrets. Set via `firebase functions:secrets:set`.
+const DIDIT_API_KEY = (0, params_1.defineSecret)('DIDIT_API_KEY');
+const DIDIT_WORKFLOW_ID = (0, params_1.defineSecret)('DIDIT_WORKFLOW_ID');
+const DIDIT_WEBHOOK_SECRET = (0, params_1.defineSecret)('DIDIT_WEBHOOK_SECRET');
+// Cost guardrail: Didit bills per module that runs in a session (Approved and
+// Declined both bill; a session whose link is never opened bills nothing), and
+// the first 500 checks each calendar month are free. Until users are charged
+// for verification, cap monthly spend by reserving a slot per session start
+// and giving the slot back if the session expires unopened. Usage lives in
+// `verificationUsage/{YYYY-MM}` with per-session reservations in
+// `verificationSessions/{sessionId}` - no security rule matches either path,
+// so only the Admin SDK can touch them. The ledger keeps the free-tier line
+// so a future paid tier can start charging at check 501 instead of capping.
+const VERIFICATION_FREE_TIER = 500;
+const VERIFICATION_MONTHLY_CAP = 700;
+/** Current month key in Chicago time, e.g. "2026-08". */
+function verificationMonthKey() {
+    return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }).slice(0, 7);
+}
+/**
+ * Settle a session's reserved slot in the monthly ledger, exactly once per
+ * session (webhook deliveries can repeat). Expired sessions were never
+ * opened, so nothing billed and the slot is returned; Approved, Declined,
+ * and Abandoned sessions all ran billable modules and keep their slot.
+ */
+async function settleVerificationSlot(sessionId, status) {
+    const sessionRef = db.doc(`verificationSessions/${sessionId}`);
+    await db
+        .runTransaction(async (tx) => {
+        const snap = await tx.get(sessionRef);
+        if (!snap.exists || snap.data().settled)
+            return;
+        const monthRef = db.doc(`verificationUsage/${snap.data().monthKey}`);
+        tx.update(sessionRef, { settled: true, finalStatus: status });
+        const counters = { updatedAt: firestore_1.FieldValue.serverTimestamp() };
+        if (status === 'Expired') {
+            counters.sessions = firestore_1.FieldValue.increment(-1);
+            counters.expired = firestore_1.FieldValue.increment(1);
+        }
+        else if (status === 'Approved') {
+            counters.approved = firestore_1.FieldValue.increment(1);
+        }
+        else if (status === 'Declined') {
+            counters.declined = firestore_1.FieldValue.increment(1);
+        }
+        else {
+            counters.abandoned = firestore_1.FieldValue.increment(1);
+        }
+        tx.set(monthRef, counters, { merge: true });
+    })
+        .catch((err) => console.error(`Failed to settle verification slot ${sessionId}:`, err));
+}
 async function applyVerification(uid, result) {
     await db.doc(`users/${uid}`).update({
         verified: result.verified,
@@ -463,16 +517,16 @@ exports.deleteAccount = (0, https_1.onCall)(APP_CHECK, async (request) => {
     }
     // Free the verified-identity claim so the person can verify again if they
     // ever return with a new account.
-    const personaAccountId = profile.exists ? profile.data().personaAccountId : null;
-    if (personaAccountId) {
-        await db.doc(`personaAccounts/${personaAccountId}`).delete().catch(() => { });
+    const identityClaimId = profile.exists ? profile.data().identityClaimId : null;
+    if (identityClaimId) {
+        await db.doc(`identityClaims/${identityClaimId}`).delete().catch(() => { });
     }
     await db.recursiveDelete(db.doc(`users/${uid}`));
     await (0, auth_1.getAuth)().deleteUser(uid);
     return { ok: true };
 });
 /**
- * DEV ONLY - simulates a passing Persona inquiry when running against the
+ * DEV ONLY - simulates a passing identity verification when running against the
  * Emulator Suite. Never deployed behavior: throws outside the emulator.
  */
 exports.devVerify = (0, https_1.onCall)(async (request) => {
@@ -490,97 +544,149 @@ exports.devVerify = (0, https_1.onCall)(async (request) => {
     return { ok: true };
 });
 /**
- * Returns a hosted Persona inquiry URL for the signed-in user. The user's uid
- * rides along as reference-id so the webhook can match the result back.
- *
- * Required environment configuration (set as function secrets/params):
- *   PERSONA_TEMPLATE_ID    - inquiry template (govt ID + address collection)
- *   PERSONA_ENVIRONMENT_ID - Persona environment
+ * Returns a hosted Didit verification session URL for the signed-in user.
+ * The uid rides along as vendor_data so the webhook can match the result
+ * back. Required function secrets:
+ *   DIDIT_API_KEY      - dashboard -> Settings -> API keys
+ *   DIDIT_WORKFLOW_ID  - the ID-verification workflow to run
  */
-exports.createVerificationSession = (0, https_1.onCall)(APP_CHECK, async (request) => {
+exports.createVerificationSession = (0, https_1.onCall)({ ...APP_CHECK, secrets: [DIDIT_API_KEY, DIDIT_WORKFLOW_ID] }, async (request) => {
     if (!request.auth) {
         throw new https_1.HttpsError('unauthenticated', 'Sign in first.');
     }
-    const templateId = process.env.PERSONA_TEMPLATE_ID;
-    const environmentId = process.env.PERSONA_ENVIRONMENT_ID;
-    if (!templateId || !environmentId) {
-        throw new https_1.HttpsError('failed-precondition', 'Persona is not configured yet.');
+    const apiKey = DIDIT_API_KEY.value();
+    const workflowId = DIDIT_WORKFLOW_ID.value();
+    if (!apiKey || !workflowId) {
+        throw new https_1.HttpsError('failed-precondition', 'Identity verification is not configured yet.');
     }
-    const url = `https://withpersona.com/verify` +
-        `?inquiry-template-id=${encodeURIComponent(templateId)}` +
-        `&environment-id=${encodeURIComponent(environmentId)}` +
-        `&reference-id=${encodeURIComponent(request.auth.uid)}`;
+    // Reserve a slot under the monthly cap before spending money with Didit.
+    const monthKey = verificationMonthKey();
+    const monthRef = db.doc(`verificationUsage/${monthKey}`);
+    const sessionNumber = await db.runTransaction(async (tx) => {
+        const snap = await tx.get(monthRef);
+        const sessions = snap.data()?.sessions ?? 0;
+        if (sessions >= VERIFICATION_MONTHLY_CAP)
+            return null;
+        tx.set(monthRef, { sessions: sessions + 1, updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+        return sessions + 1;
+    });
+    if (sessionNumber === null) {
+        throw new https_1.HttpsError('resource-exhausted', 'Verification is at capacity for this month. Please try again after the 1st.');
+    }
+    if (sessionNumber > VERIFICATION_FREE_TIER) {
+        console.warn(`Verification session ${sessionNumber}/${VERIFICATION_MONTHLY_CAP} this month is past the ${VERIFICATION_FREE_TIER}-session free tier and bills us.`);
+    }
+    let url;
+    try {
+        const resp = await fetch('https://verification.didit.me/v2/session/', {
+            method: 'POST',
+            headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ workflow_id: workflowId, vendor_data: request.auth.uid }),
+        });
+        if (!resp.ok) {
+            console.error('Didit session creation failed:', resp.status, await resp.text());
+            throw new https_1.HttpsError('internal', 'Could not start verification. Try again shortly.');
+        }
+        const session = (await resp.json());
+        url = session.url ?? session.session_url;
+        if (!url) {
+            console.error('Didit session response had no url field:', JSON.stringify(session).slice(0, 300));
+            throw new https_1.HttpsError('internal', 'Could not start verification. Try again shortly.');
+        }
+        // Record the reservation so the webhook can settle this session's slot
+        // (return it if the link expires unopened, keep it if modules billed).
+        if (session.session_id) {
+            await db.doc(`verificationSessions/${session.session_id}`).set({
+                uid: request.auth.uid,
+                monthKey,
+                settled: false,
+                createdAt: firestore_1.FieldValue.serverTimestamp(),
+            });
+        }
+        else {
+            console.warn('Didit session response had no session_id - slot cannot be released on expiry.');
+        }
+    }
+    catch (err) {
+        // No session was actually started, so give the slot back.
+        await monthRef
+            .set({ sessions: firestore_1.FieldValue.increment(-1), updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true })
+            .catch(() => { });
+        if (err instanceof https_1.HttpsError)
+            throw err;
+        console.error('Didit session creation threw:', err);
+        throw new https_1.HttpsError('internal', 'Could not start verification. Try again shortly.');
+    }
     return { inquiryUrl: url };
 });
 /**
- * Persona webhook - the only writer of `verified` in production.
+ * Didit webhook - the only writer of `verified` in production.
  *
- * Configure in Persona: event `inquiry.completed`, pointed at this function's
- * URL, with a shared secret stored as PERSONA_WEBHOOK_SECRET.
+ * Configure in Didit: dashboard -> Webhooks, pointed at this function's URL;
+ * store the shown secret as DIDIT_WEBHOOK_SECRET. Signature scheme per
+ * https://docs.didit.me/integration/webhooks: HMAC-SHA256 over the raw body
+ * in X-Signature, with X-Timestamp freshness (300s).
  *
- * Ward derivation: the inquiry template should attach the resident's ward as
- * a custom field (`ward_id`), e.g. via an address-to-ward lookup step. Until
- * that lookup exists, inquiries without a ward are recorded as verified with
- * no ward (city-level verified, no ward tab).
+ * One verified human, one verified account: the document identity (issuing
+ * state + document number + birth date) is hashed and claimed in
+ * `identityClaims/{hash}` (no security rule matches that path, so clients
+ * can never touch it). A document that already verified a different uid is
+ * refused. deleteAccount releases the claim.
+ *
+ * Ward derivation from the verified address is future work; until then
+ * production verification grants city-level verified (no ward).
  */
-exports.personaWebhook = (0, https_2.onRequest)(async (req, res) => {
-    const secret = process.env.PERSONA_WEBHOOK_SECRET;
+exports.diditWebhook = (0, https_2.onRequest)({ secrets: [DIDIT_WEBHOOK_SECRET] }, async (req, res) => {
+    const secret = DIDIT_WEBHOOK_SECRET.value();
     if (!secret) {
         res.status(500).send('Webhook secret not configured.');
         return;
     }
-    // Persona signs webhooks: Persona-Signature: t=<ts>,v1=<hmac>
-    const signature = req.header('Persona-Signature') ?? '';
-    const parts = Object.fromEntries(signature.split(',').map((kv) => kv.trim().split('=')));
-    const t = parts['t'];
-    const v1 = parts['v1'];
-    if (!t || !v1) {
+    const signature = req.header('X-Signature') ?? '';
+    const timestamp = req.header('X-Timestamp') ?? '';
+    if (!signature || !timestamp) {
         res.status(400).send('Missing signature.');
         return;
     }
-    const expected = crypto
-        .createHmac('sha256', secret)
-        .update(`${t}.${req.rawBody.toString()}`)
-        .digest('hex');
+    if (Math.abs(Date.now() / 1000 - Number(timestamp)) > 300) {
+        res.status(401).send('Stale timestamp.');
+        return;
+    }
+    const expected = crypto.createHmac('sha256', secret).update(req.rawBody).digest('hex');
     const expectedBuf = Buffer.from(expected);
-    const actualBuf = Buffer.from(v1);
+    const actualBuf = Buffer.from(signature);
     if (expectedBuf.length !== actualBuf.length || !crypto.timingSafeEqual(expectedBuf, actualBuf)) {
         res.status(401).send('Bad signature.');
         return;
     }
-    // Reject replays of old signed payloads (Persona's t is unix seconds).
-    if (Math.abs(Date.now() / 1000 - Number(t)) > 5 * 60) {
-        res.status(401).send('Stale signature.');
+    const body = req.body ?? {};
+    const uid = body.vendor_data ?? null;
+    const status = body.status;
+    const sessionId = body.session_id ?? null;
+    // Terminal statuses settle the monthly cost ledger exactly once per
+    // session; non-terminal ones (Not Started / In Progress / In Review /
+    // Resubmitted) leave the reservation pending.
+    if (sessionId && status && ['Approved', 'Declined', 'Abandoned', 'Expired'].includes(status)) {
+        await settleVerificationSlot(sessionId, status);
+    }
+    // Only a final Approved decision mints verified=true. Everything else
+    // (Declined / In Review / Abandoned / Expired / progress events) is
+    // acknowledged and ignored.
+    if (!uid || status !== 'Approved') {
+        res.status(200).send('Not an approval.');
         return;
     }
-    const payload = req.body?.data;
-    const eventName = payload?.attributes?.name;
-    if (eventName !== 'inquiry.completed') {
-        res.status(200).send('Ignored.');
-        return;
-    }
-    const inquiry = payload?.attributes?.payload?.data;
-    const status = inquiry?.attributes?.status;
-    const uid = inquiry?.attributes?.['reference-id'];
-    // 'completed' = every required verification passed; 'approved' = a decision
-    // workflow signed off. Anything else (failed / declined / expired /
-    // needs_review) must NOT mint verified=true. If the inquiry template uses
-    // decisioning, point the webhook at inquiry.approved instead and this
-    // check still holds.
-    if (!uid || (status !== 'completed' && status !== 'approved')) {
-        res.status(200).send('Not a passing inquiry.');
-        return;
-    }
-    const fields = inquiry?.attributes?.fields ?? {};
-    const wardRaw = Number(fields['ward_id']?.value);
-    const wardId = Number.isInteger(wardRaw) && wardRaw >= WARD_MIN && wardRaw <= WARD_MAX ? wardRaw : null;
-    // One verified human, one verified account. Persona assigns each person a
-    // stable account id (enable account deduplication on the inquiry
-    // template); if this identity already verified a different uid, refuse.
-    const personaAccountId = inquiry?.relationships?.account?.data?.id ?? null;
-    if (personaAccountId) {
+    // Hash the document identity for the one-human-one-account claim.
+    const idv = body.decision?.id_verifications?.[0] ?? {};
+    const docKey = idv.document_number && idv.issuing_state
+        ? crypto
+            .createHash('sha256')
+            .update(`${idv.issuing_state}:${idv.document_number}:${idv.date_of_birth ?? ''}`)
+            .digest('hex')
+        : null;
+    if (docKey) {
         const claimed = await db.runTransaction(async (tx) => {
-            const mapRef = db.doc(`personaAccounts/${personaAccountId}`);
+            const mapRef = db.doc(`identityClaims/${docKey}`);
             const existing = await tx.get(mapRef);
             if (existing.exists && existing.data().uid !== uid)
                 return false;
@@ -588,25 +694,24 @@ exports.personaWebhook = (0, https_2.onRequest)(async (req, res) => {
             return true;
         });
         if (!claimed) {
-            console.warn(`Duplicate identity: Persona account ${personaAccountId} already verified another uid.`);
+            console.warn('Duplicate identity: document already verified another uid.');
             res.status(200).send('Identity already verified on another account.');
             return;
         }
     }
     else {
-        console.warn('Inquiry carried no Persona account id - dedup not enforced for this verification.');
+        console.warn('Approved session carried no document identity - dedup not enforced.');
     }
     try {
         await db.doc(`users/${uid}`).update({
             verified: true,
-            wardId,
-            personaAccountId,
+            identityClaimId: docKey,
         });
     }
     catch {
-        // The account may have been deleted between inquiry and webhook. A 200
-        // stops Persona from retrying a verification that can never land.
-        console.warn(`Verified inquiry for missing user ${uid} - profile not found.`);
+        // The account may have been deleted between session and webhook. A 200
+        // stops Didit from retrying a verification that can never land.
+        console.warn(`Approved session for missing user ${uid} - profile not found.`);
         res.status(200).send('No such user.');
         return;
     }

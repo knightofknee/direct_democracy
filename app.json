@@ -69,7 +69,8 @@
       ],
       "@react-native-firebase/app",
       "@react-native-firebase/app-check",
-      "expo-build-properties"
+      "expo-build-properties",
+      "./plugins/with-rnfirebase-no-spm.js"
     ],
     "experiments": {
       "typedRoutes": true,

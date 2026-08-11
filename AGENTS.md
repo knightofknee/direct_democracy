@@ -32,7 +32,7 @@ Conventions:
 - Vote docs snapshot the voter's `verified`/`wardId` at cast time;
   triggers remove the old ballot under its stored slices before adding the new.
 - Roles: `citizen` vs `official` on `users/{uid}`; `verified` and `wardId` are
-  written only by the Admin SDK / Cloud Functions (Persona webhook), never by
+  written only by the Admin SDK / Cloud Functions (Didit webhook), never by
   clients - security rules enforce this.
 - Officials are graded on two axes in `src/services/officials.ts`: constituent
   approval (5-ballot minimum) and the community-judged answer score, averaged
