@@ -31,9 +31,16 @@ Conventions:
   triggers instead, and keep `firestore.rules` deny-by-default on those fields.
 - Vote docs snapshot the voter's `verified`/`wardId` at cast time;
   triggers remove the old ballot under its stored slices before adding the new.
-- Roles: `citizen` vs `official` on `users/{uid}`; `verified` and `wardId` are
-  written only by the Admin SDK / Cloud Functions (Didit webhook), never by
-  clients - security rules enforce this.
+- Roles: `citizen` / `official` / `candidate` on `users/{uid}`; roles,
+  `verified`, and `wardId` are written only by the Admin SDK / Cloud Functions
+  (Didit webhook, `scripts/add-candidate.ts`), never by clients - security
+  rules enforce this.
+- The more perfect platform: `candidates/{uid}/policies/{policyId}` with
+  support/oppose ballots and comments. Synced policies (`source: 'site'`) are
+  written only by the platform-sync functions from the candidate's
+  operator-provisioned `sourceUrl` (`functions/src/platform.ts` parses the
+  page); never add a client write path to them. In-app policies
+  (`source: 'app'`) are the candidate's own.
 - Officials are graded on two axes in `src/services/officials.ts`: constituent
   approval (5-ballot minimum) and the community-judged answer score, averaged
   into an overall letter. Approval ballots live at

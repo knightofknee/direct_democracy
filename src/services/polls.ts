@@ -19,7 +19,7 @@ import {
   type VoteValue,
 } from '@/lib/types';
 
-/** Officials only (enforced again by security rules). */
+/** Officials and candidates only (enforced again by security rules). */
 export async function createPoll(
   profile: UserProfile,
   input: {
@@ -31,7 +31,9 @@ export async function createPoll(
     wardId: number | null;
   }
 ): Promise<string> {
-  if (profile.role !== 'official') throw new Error('Only officials can create polls.');
+  if (profile.role !== 'official' && profile.role !== 'candidate') {
+    throw new Error('Only officials and candidates can create polls.');
+  }
 
   const options: PollOption[] =
     input.type === 'yesNo'

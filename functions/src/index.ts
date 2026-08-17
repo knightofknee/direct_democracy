@@ -10,8 +10,10 @@ import {
 } from 'firebase-functions/v2/firestore';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
 import { onRequest } from 'firebase-functions/v2/https';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { defineSecret } from 'firebase-functions/params';
 
+import { parsePlatformHtml } from './platform';
 import {
   ANSWER_JUDGMENT_QUORUM,
   PRIORITY_WEIGHTS,
@@ -303,21 +305,24 @@ export const onPollVoteWrite = onDocumentWritten(
   }
 );
 
-/** One trigger body for both directions of a comment's life. */
+/**
+ * One trigger body for both directions of a comment's life, shared by every
+ * commentable parent (concerns, platform policies).
+ */
 async function applyCommentDelta(
   eventId: string | undefined,
-  concernId: string,
+  parentPath: string,
   authorUid: string | undefined,
   delta: 1 | -1
 ) {
-  const concernRef = db.doc(`concerns/${concernId}`);
+  const parentRef = db.doc(parentPath);
   await db.runTransaction(async (tx) => {
     if (!(await claimEvent(tx, eventId))) return;
-    const snap = await tx.get(concernRef);
+    const snap = await tx.get(parentRef);
     const stat = await readStat(tx, authorUid, delta);
-    // The concern may already be gone (withdrawal cascades to its comments).
+    // The parent may already be gone (withdrawal cascades to its comments).
     if (snap.exists) {
-      tx.update(concernRef, { commentCount: step(snap.data()?.commentCount, delta) });
+      tx.update(parentRef, { commentCount: step(snap.data()?.commentCount, delta) });
     }
     writeStat(tx, stat, 'comments', delta);
     markEvent(tx, eventId);
@@ -327,13 +332,13 @@ async function applyCommentDelta(
 export const onCommentCreated = onDocumentCreated(
   'concerns/{concernId}/comments/{commentId}',
   async (event) =>
-    applyCommentDelta(event.id, event.params.concernId, event.data?.data()?.authorUid, 1)
+    applyCommentDelta(event.id, `concerns/${event.params.concernId}`, event.data?.data()?.authorUid, 1)
 );
 
 export const onCommentDeleted = onDocumentDeleted(
   'concerns/{concernId}/comments/{commentId}',
   async (event) =>
-    applyCommentDelta(event.id, event.params.concernId, event.data?.data()?.authorUid, -1)
+    applyCommentDelta(event.id, `concerns/${event.params.concernId}`, event.data?.data()?.authorUid, -1)
 );
 
 /** A withdrawn concern takes its ballots and comments with it. */
@@ -350,6 +355,102 @@ export const onConcernDeleted = onDocumentDeleted('concerns/{concernId}', async 
   // can't carry a recursive delete anyway).
   await db.recursiveDelete(db.doc(`concerns/${event.params.concernId}`));
 });
+
+// ── The more perfect platform (candidate policies) ──────────────────────
+
+/** Stance votes on a platform policy - a straight support/oppose dual tally. */
+export const onPolicyVoteWrite = onDocumentWritten(
+  'candidates/{candidateUid}/policies/{policyId}/votes/{voterUid}',
+  async (event) => {
+    const before = event.data?.before.exists ? (event.data.before.data() as BallotDoc) : null;
+    const after = event.data?.after.exists ? (event.data.after.data() as BallotDoc) : null;
+    const policyRef = db.doc(
+      `candidates/${event.params.candidateUid}/policies/${event.params.policyId}`
+    );
+    const statDelta = ballotStatDelta(before, after);
+
+    await db.runTransaction(async (tx) => {
+      if (!(await claimEvent(tx, event.id))) return;
+      const snap = await tx.get(policyRef);
+      const stat = await readStat(tx, event.params.voterUid, statDelta);
+
+      if (snap.exists) {
+        // Rules pin the value to one of the two stances, but the trigger is
+        // still the integrity gate: anything else counts nowhere.
+        const sanitize = (value: VoteValue): string[] =>
+          (Array.isArray(value) ? value.slice(0, 1) : [value]).filter(
+            (k) => k === 'support' || k === 'oppose'
+          );
+
+        let tallies = snap.data()!.tallies as DualTally;
+        const beforeKeys = before ? sanitize(before.value) : [];
+        const afterKeys = after ? sanitize(after.value) : [];
+        if (before && beforeKeys.length) {
+          tallies = removeBallot(tallies, beforeKeys, slicesOf(before));
+        }
+        if (after && afterKeys.length) tallies = addBallot(tallies, afterKeys, slicesOf(after));
+        tx.update(policyRef, { tallies });
+      }
+      writeStat(tx, stat, 'votes', statDelta);
+      markEvent(tx, event.id);
+    });
+  }
+);
+
+export const onPolicyCommentCreated = onDocumentCreated(
+  'candidates/{candidateUid}/policies/{policyId}/comments/{commentId}',
+  async (event) =>
+    applyCommentDelta(
+      event.id,
+      `candidates/${event.params.candidateUid}/policies/${event.params.policyId}`,
+      event.data?.data()?.authorUid,
+      1
+    )
+);
+
+export const onPolicyCommentDeleted = onDocumentDeleted(
+  'candidates/{candidateUid}/policies/{policyId}/comments/{commentId}',
+  async (event) =>
+    applyCommentDelta(
+      event.id,
+      `candidates/${event.params.candidateUid}/policies/${event.params.policyId}`,
+      event.data?.data()?.authorUid,
+      -1
+    )
+);
+
+/**
+ * Keeps the candidate's live policy count honest (created/archived/deleted),
+ * and cascades a deleted policy to its votes and comments.
+ */
+export const onPolicyWrite = onDocumentWritten(
+  'candidates/{candidateUid}/policies/{policyId}',
+  async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const liveDelta = (after && !after.archived ? 1 : 0) - (before && !before.archived ? 1 : 0);
+
+    if (liveDelta !== 0) {
+      const candidateRef = db.doc(`candidates/${event.params.candidateUid}`);
+      await db.runTransaction(async (tx) => {
+        if (!(await claimEvent(tx, event.id))) return;
+        const snap = await tx.get(candidateRef);
+        if (snap.exists) {
+          tx.update(candidateRef, { policyCount: step(snap.data()?.policyCount, liveDelta) });
+        }
+        markEvent(tx, event.id);
+      });
+    }
+
+    // A withdrawn or taken-down policy takes its ballots and comments with
+    // it. Safe to repeat on redelivery - re-deleting is a no-op.
+    if (!after) {
+      await db.recursiveDelete(
+        db.doc(`candidates/${event.params.candidateUid}/policies/${event.params.policyId}`)
+      );
+    }
+  }
+);
 
 /**
  * A question can vanish two ways: the asker withdraws it while unanswered, or
@@ -573,10 +674,10 @@ export const deleteAccount = onCall(APP_CHECK, async (request) => {
   }
   const uid = request.auth.uid;
   const profile = await db.doc(`users/${uid}`).get();
-  if (profile.exists && profile.data()!.role === 'official') {
+  if (profile.exists && ['official', 'candidate'].includes(profile.data()!.role)) {
     throw new HttpsError(
       'failed-precondition',
-      'Official accounts are removed by the platform operator.'
+      'Official and candidate accounts are removed by the platform operator.'
     );
   }
 
@@ -610,6 +711,113 @@ export const deleteAccount = onCall(APP_CHECK, async (request) => {
   await db.recursiveDelete(db.doc(`users/${uid}`));
   await getAuth().deleteUser(uid);
   return { ok: true };
+});
+
+// ── Platform sync ────────────────────────────────────────────────────────
+// Candidates with an operator-provisioned sourceUrl get their platform
+// scraped from their own campaign site, so the site stays the single source
+// of truth and nobody hand-enters policies twice. Synced policies are keyed
+// by a slug of their title: edits on the site update the same document in
+// place, so votes and comments survive; policies that vanish from the site
+// are archived (never deleted) for the same reason.
+
+async function syncCandidatePlatform(
+  candidateUid: string,
+  sourceUrl: string
+): Promise<{ synced: number; archived: number }> {
+  const resp = await fetch(sourceUrl, { headers: { accept: 'text/html' } });
+  if (!resp.ok) throw new Error(`Fetching ${sourceUrl} failed: ${resp.status}`);
+  // parsePlatformHtml throws on an unrecognized layout rather than returning
+  // nothing - a site redesign must fail the sync, not archive the platform.
+  const parsed = parsePlatformHtml(await resp.text());
+
+  const policiesRef = db.collection(`candidates/${candidateUid}/policies`);
+  const existing = await policiesRef.get();
+  const byId = new Map(existing.docs.map((d) => [d.id, d]));
+
+  const batch = db.batch();
+  const seen = new Set<string>();
+  for (const p of parsed) {
+    const current = byId.get(p.slug);
+    // An in-app policy already owns this id - never let the site hijack it.
+    if (current && current.data().source !== 'site') {
+      console.warn(`Sync skipped "${p.title}": id ${p.slug} is an in-app policy.`);
+      continue;
+    }
+    seen.add(p.slug);
+    const fields = {
+      section: p.section,
+      title: p.title,
+      body: p.body,
+      links: p.links,
+      order: p.order,
+      archived: false,
+      updatedAt: FieldValue.serverTimestamp(),
+    };
+    if (current) {
+      batch.update(current.ref, fields);
+    } else {
+      batch.set(policiesRef.doc(p.slug), {
+        ...fields,
+        candidateUid,
+        source: 'site',
+        tallies: { all: {}, verified: {}, totalAll: 0, totalVerified: 0 },
+        commentCount: 0,
+        createdAt: FieldValue.serverTimestamp(),
+      });
+    }
+  }
+
+  let archived = 0;
+  for (const doc of existing.docs) {
+    if (doc.data().source === 'site' && !seen.has(doc.id) && !doc.data().archived) {
+      batch.update(doc.ref, { archived: true, updatedAt: FieldValue.serverTimestamp() });
+      archived += 1;
+    }
+  }
+
+  batch.update(db.doc(`candidates/${candidateUid}`), {
+    lastSyncedAt: FieldValue.serverTimestamp(),
+  });
+  await batch.commit();
+  console.log(`Synced ${seen.size} policies (${archived} archived) for ${candidateUid}.`);
+  return { synced: seen.size, archived };
+}
+
+/** Nightly sweep of every candidate whose platform lives on their own site. */
+export const syncPlatforms = onSchedule(
+  { schedule: '0 6 * * *', timeZone: 'America/Chicago' },
+  async () => {
+    const candidates = await db.collection('candidates').where('sourceUrl', '!=', null).get();
+    for (const c of candidates.docs) {
+      try {
+        await syncCandidatePlatform(c.id, c.data().sourceUrl as string);
+      } catch (err) {
+        console.error(`Platform sync failed for ${c.id}:`, err);
+      }
+    }
+  }
+);
+
+/** "Sync now" for a candidate who just updated their campaign site. */
+export const syncMyPlatform = onCall(APP_CHECK, async (request) => {
+  if (!request.auth) {
+    throw new HttpsError('unauthenticated', 'Sign in first.');
+  }
+  const snap = await db.doc(`candidates/${request.auth.uid}`).get();
+  const sourceUrl = snap.exists ? (snap.data()!.sourceUrl as string | null) : null;
+  if (!sourceUrl) {
+    throw new HttpsError(
+      'failed-precondition',
+      'No campaign site is linked to this candidate profile.'
+    );
+  }
+  try {
+    return await syncCandidatePlatform(request.auth.uid, sourceUrl);
+  } catch (err) {
+    console.error(`Platform sync failed for ${request.auth.uid}:`, err);
+    throw new HttpsError('internal', 'Could not read the campaign site. Try again shortly.');
+  }
 });
 
 /**

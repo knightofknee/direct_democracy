@@ -23,6 +23,10 @@ service cloud.firestore {
       return signedIn() && me().role == 'official';
     }
 
+    function isCandidate() {
+      return signedIn() && me().role == 'candidate';
+    }
+
     // Platform operator - may review reports and remove reported content.
     // Tied to the operator's sign-in email for now; move to custom claims
     // when there's more than one admin.
@@ -112,7 +116,11 @@ service cloud.firestore {
       // inside it, whatever matches() does with unanchored patterns.
       function pathMatchesType(path, type) {
         return (type == 'concern' && path.matches('^concerns/[^/]+$'))
-          || (type == 'comment' && path.matches('^concerns/[^/]+/comments/[^/]+$'))
+          || (type == 'comment' && (
+            path.matches('^concerns/[^/]+/comments/[^/]+$')
+            || path.matches('^candidates/[^/]+/policies/[^/]+/comments/[^/]+$')
+          ))
+          || (type == 'policy' && path.matches('^candidates/[^/]+/policies/[^/]+$'))
           || (type in ['question', 'response'] && path.matches('^officials/[^/]+/questions/[^/]+$'));
       }
       allow create: if signedIn()
@@ -123,7 +131,7 @@ service cloud.firestore {
         && request.resource.data.reporterUid == request.auth.uid
         && request.resource.data.contentPath is string
         && request.resource.data.contentPath.size() <= 300
-        && request.resource.data.contentType in ['concern', 'comment', 'question', 'response']
+        && request.resource.data.contentType in ['concern', 'comment', 'question', 'response', 'policy']
         && pathMatchesType(request.resource.data.contentPath, request.resource.data.contentType)
         && request.resource.data.reason in ['spam', 'harassment', 'misleading', 'other']
         && request.resource.data.excerpt is string
@@ -206,9 +214,14 @@ service cloud.firestore {
 
       match /comments/{commentId} {
         allow read: if true;
+        // threadId/replyToName make a comment a threaded reply (null or
+        // absent on top-level comments). Shape-only validation: a bogus
+        // threadId just renders as an orphaned thread - it can't move any
+        // count, so no exists() read is spent on it.
         allow create: if signedIn()
           && request.resource.data.keys().hasOnly([
-            'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt'
+            'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt',
+            'threadId', 'replyToName'
           ])
           && request.resource.data.authorUid == request.auth.uid
           && request.resource.data.authorName == me().displayName
@@ -216,18 +229,28 @@ service cloud.firestore {
           && request.resource.data.body is string
           && request.resource.data.body.size() >= 1
           && request.resource.data.body.size() <= 2000
-          && request.resource.data.createdAt == request.time;
+          && request.resource.data.createdAt == request.time
+          && (
+            !('threadId' in request.resource.data)
+            || request.resource.data.threadId == null
+            || (request.resource.data.threadId is string && request.resource.data.threadId.size() <= 40)
+          )
+          && (
+            !('replyToName' in request.resource.data)
+            || request.resource.data.replyToName == null
+            || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 30)
+          );
         // Authors may remove their own comments (admin: takedowns);
         // onCommentDeleted keeps the count honest.
         allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
       }
     }
 
-    // ── Polls (questions from elected officials) ─────────────────────────
+    // ── Polls (questions from elected officials and candidates) ──────────
     match /polls/{pollId} {
       allow read: if true;
 
-      allow create: if isOfficial()
+      allow create: if (isOfficial() || isCandidate())
         && request.resource.data.keys().hasOnly([
           'question', 'detail', 'type', 'options', 'scope', 'wardId',
           'authorUid', 'authorName', 'open', 'tallies', 'createdAt'
@@ -397,6 +420,149 @@ service cloud.firestore {
             && request.resource.data.verified == me().verified
             && get(/databases/$(database)/documents/officials/$(officialUid)/questions/$(questionId)).data.response != null;
           allow delete: if signedIn() && request.auth.uid == judgeUid;
+        }
+      }
+    }
+
+    // ── Candidates & the more perfect platform ───────────────────────────
+    // Candidate records are operator-provisioned (Admin SDK), like officials.
+    // A candidate's platform is a list of policies; each policy carries a
+    // support/oppose dual tally, a votes subcollection, and a full comments
+    // section. Synced policies (source 'site') are written only by the
+    // platform-sync Cloud Function so the campaign site stays the single
+    // source of truth; only in-app policies (source 'app') are client-editable.
+    match /candidates/{candidateUid} {
+      allow read: if true;
+
+      // Candidates edit their own card: bio, portrait link, website link.
+      // Name/office/sourceUrl are provisioned; counters are trigger-only.
+      allow update: if signedIn()
+        && request.auth.uid == candidateUid
+        && onlyChanges(['bio', 'photoUrl', 'websiteUrl'])
+        && (
+          !('bio' in request.resource.data)
+          || (request.resource.data.bio is string && request.resource.data.bio.size() <= 1000)
+        )
+        && (
+          !('photoUrl' in request.resource.data)
+          || request.resource.data.photoUrl == null
+          || (
+            request.resource.data.photoUrl is string
+            && request.resource.data.photoUrl.matches('https://.*')
+            && request.resource.data.photoUrl.size() <= 500
+          )
+        )
+        && (
+          !('websiteUrl' in request.resource.data)
+          || request.resource.data.websiteUrl == null
+          || (
+            request.resource.data.websiteUrl is string
+            && request.resource.data.websiteUrl.matches('https://.*')
+            && request.resource.data.websiteUrl.size() <= 500
+          )
+        );
+
+      match /policies/{policyId} {
+        allow read: if true;
+
+        // Candidates add in-app policies to their own platform, starting with
+        // zeroed aggregates. Synced policies never enter through this door -
+        // source is pinned to 'app'.
+        allow create: if isCandidate()
+          && request.auth.uid == candidateUid
+          && request.resource.data.keys().hasOnly([
+            'candidateUid', 'section', 'title', 'body', 'links', 'order',
+            'source', 'archived', 'tallies', 'commentCount', 'createdAt',
+            'updatedAt'
+          ])
+          && request.resource.data.candidateUid == candidateUid
+          && request.resource.data.source == 'app'
+          && request.resource.data.archived == false
+          && emptyTally(request.resource.data.tallies)
+          && request.resource.data.commentCount == 0
+          && request.resource.data.title is string
+          && request.resource.data.title.size() >= 3
+          && request.resource.data.title.size() <= 140
+          && request.resource.data.body is string
+          && request.resource.data.body.size() <= 8000
+          && request.resource.data.section is string
+          && request.resource.data.section.size() <= 60
+          && request.resource.data.links is list
+          && request.resource.data.links.size() <= 20
+          && request.resource.data.order is number
+          && request.resource.data.createdAt == request.time;
+
+        // Only in-app policies are editable here - synced ones are edited on
+        // the campaign site and land via the sync function (Admin SDK).
+        // Tallies and commentCount stay trigger-only.
+        allow update: if signedIn()
+          && request.auth.uid == candidateUid
+          && resource.data.source == 'app'
+          && onlyChanges(['section', 'title', 'body', 'links', 'order', 'archived', 'updatedAt'])
+          && request.resource.data.title is string
+          && request.resource.data.title.size() >= 3
+          && request.resource.data.title.size() <= 140
+          && request.resource.data.body is string
+          && request.resource.data.body.size() <= 8000
+          && request.resource.data.section is string
+          && request.resource.data.section.size() <= 60
+          && request.resource.data.links is list
+          && request.resource.data.links.size() <= 20
+          && request.resource.data.order is number
+          && request.resource.data.archived is bool;
+
+        // Candidates may withdraw their in-app policies (admin: takedowns);
+        // the onPolicyWrite trigger cascades to votes and comments.
+        allow delete: if (
+            signedIn()
+            && request.auth.uid == candidateUid
+            && resource.data.source == 'app'
+          ) || isAdmin();
+
+        match /votes/{voterUid} {
+          allow read: if signedIn() && request.auth.uid == voterUid;
+          // One stance per person; the verified/ward snapshot must match the
+          // voter's actual profile (candidate platforms are citywide, so the
+          // verified slice counts every verified Chicagoan).
+          allow create, update: if signedIn()
+            && request.auth.uid == voterUid
+            && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'wardId', 'createdAt'])
+            && request.resource.data.uid == request.auth.uid
+            && request.resource.data.verified == me().verified
+            && request.resource.data.wardId == me().wardId
+            && request.resource.data.value in ['support', 'oppose'];
+          // Retract entirely - the trigger removes the ballot from the tallies.
+          allow delete: if signedIn() && request.auth.uid == voterUid;
+        }
+
+        match /comments/{commentId} {
+          allow read: if true;
+          // Same threaded-reply shape as concern comments (see above).
+          allow create: if signedIn()
+            && request.resource.data.keys().hasOnly([
+              'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt',
+              'threadId', 'replyToName'
+            ])
+            && request.resource.data.authorUid == request.auth.uid
+            && request.resource.data.authorName == me().displayName
+            && request.resource.data.authorVerified == me().verified
+            && request.resource.data.body is string
+            && request.resource.data.body.size() >= 1
+            && request.resource.data.body.size() <= 2000
+            && request.resource.data.createdAt == request.time
+            && (
+              !('threadId' in request.resource.data)
+              || request.resource.data.threadId == null
+              || (request.resource.data.threadId is string && request.resource.data.threadId.size() <= 40)
+            )
+            && (
+              !('replyToName' in request.resource.data)
+              || request.resource.data.replyToName == null
+              || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 30)
+            );
+          // Authors may remove their own comments (admin: takedowns);
+          // onPolicyCommentDeleted keeps the count honest.
+          allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
         }
       }
     }

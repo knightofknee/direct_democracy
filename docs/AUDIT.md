@@ -5,6 +5,50 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-08-13: candidates and the more perfect platform
+
+New role `candidate` plus a public platform feature (candidates/{uid} with a
+policies subcollection; each policy has a support/oppose dual tally, a votes
+subcollection, and a comments section). Trust model extensions:
+
+- **Role provisioning stays Admin-SDK-only.** Self-registration still pins
+  `role == 'citizen'`; `scripts/add-candidate.ts` is the only path that mints
+  a candidate, exactly like officials. `deleteAccount` refuses candidate
+  accounts so a public platform can't self-erase.
+- **Aggregates stay trigger-only.** Policy tallies, commentCount, and the
+  candidate's policyCount are written exclusively by `onPolicyVoteWrite`,
+  `onPolicyCommentCreated/Deleted`, and `onPolicyWrite` (which also cascades
+  a deleted policy to its votes and comments). Rules pin creates to zeroed
+  aggregates and `onlyChanges` on every update path.
+- **Platform sync trusts only an operator-provisioned URL.** A candidate's
+  `sourceUrl` is written by the provisioning script, never by clients, so the
+  sync function (`syncPlatforms` nightly + `syncMyPlatform` callable, caller's
+  own doc only) fetches only URLs the operator approved. Synced policies
+  (`source: 'site'`) are not client-editable - the rules reject updates - so
+  the campaign site remains the single source of truth. The parser throws on
+  an unrecognized page layout instead of returning an empty platform, so a
+  site redesign fails the sync loudly rather than archiving every policy;
+  policies that legitimately leave the site are archived, never deleted,
+  preserving their votes and comments. A slug collision with an in-app policy
+  is skipped, so the site can never overwrite a policy it doesn't own.
+- **Ballot integrity matches the rest of the app.** Policy ballots snapshot
+  `verified`/`wardId` at cast time; the trigger sanitizes values to the two
+  stances and removes the old ballot under its stored slices before adding
+  the new. Candidate platforms are citywide, so the verified slice counts
+  every verified Chicagoan.
+- **Moderation covers the new surfaces.** `pathMatchesType` accepts policy
+  and policy-comment paths, `contentType: 'policy'` is validated, and the
+  admin takedown route resolves candidate paths. The existing
+  collection-group sweep in `deleteAccount` re-attributes policy comments
+  because they reuse the `comments` subcollection name.
+- **Accepted limitation:** the scraped site content is rendered as plain text
+  (tags stripped, entities decoded); links are extracted into a receipts list
+  and opened via the system browser only when https. A candidate can publish
+  whatever text they like on their own platform page - same as their bio -
+  so this is reputational surface, not an integrity one. Candidates widen
+  poll creation (`isOfficial() || isCandidate()`), with identical pinned
+  create rules.
+
 ## Update - 2026-08-11: monthly verification cost cap
 
 Didit bills per module that runs in a session, whether the verdict is Approved

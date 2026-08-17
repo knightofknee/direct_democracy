@@ -52,7 +52,8 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "emulators": "PATH=\"$(brew --prefix openjdk 2>/dev/null)/bin:$PATH\" firebase emulators:start",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "add-candidate": "tsx scripts/add-candidate.ts"
   },
   "private": true
 }

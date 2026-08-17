@@ -23,7 +23,7 @@ export async function reportContent(
   input: {
     /** Firestore path of the offending document. */
     contentPath: string;
-    contentType: 'concern' | 'comment' | 'question' | 'response';
+    contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy';
     reason: ReportReason;
     /** Snapshot of the offending text so the report is reviewable even if edited. */
     excerpt: string;

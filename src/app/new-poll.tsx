@@ -32,10 +32,13 @@ export default function NewPollScreen() {
   const [optionsText, setOptionsText] = useState('');
   const [saving, setSaving] = useState(false);
 
-  if (profile?.role !== 'official') {
+  if (profile?.role !== 'official' && profile?.role !== 'candidate') {
     return (
       <Screen>
-        <EmptyState icon="lock-closed-outline" message="Only elected officials can create polls." />
+        <EmptyState
+          icon="lock-closed-outline"
+          message="Only elected officials and candidates can create polls."
+        />
       </Screen>
     );
   }

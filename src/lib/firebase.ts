@@ -1,4 +1,5 @@
 import { getApps, initializeApp } from 'firebase/app';
+import { CustomProvider, initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import {
   connectAuthEmulator,
   getAuth,
@@ -69,11 +70,9 @@ export const functions = getFunctions(app);
  */
 const recaptchaKey = process.env.EXPO_PUBLIC_RECAPTCHA_V3_SITE_KEY;
 if (!usingEmulators && Platform.OS === 'web' && recaptchaKey) {
-  import('firebase/app-check').then(({ initializeAppCheck, ReCaptchaV3Provider }) => {
-    initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider(recaptchaKey),
-      isTokenAutoRefreshEnabled: true,
-    });
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(recaptchaKey),
+    isTokenAutoRefreshEnabled: true,
   });
 }
 
@@ -82,45 +81,53 @@ if (!usingEmulators && Platform.OS === 'web' && recaptchaKey) {
 // and Functions calls carry them. Fails soft: until the apps are registered
 // in Firebase console -> App Check, tokens just don't attach, and nothing
 // breaks while enforcement is off.
+//
+// Registration must be SYNCHRONOUS, in this module's evaluation, before any
+// screen subscribes to Firestore: with console-side enforcement ON, a
+// listener that fires before App Check is registered goes out unattested,
+// gets permission-denied, and never recovers - the cold-start "big board is
+// empty" bug. Only the token getter is async; Firestore awaits it per
+// request, so the first queries now wait for attestation instead of racing it.
 if (!usingEmulators && Platform.OS !== 'web') {
-  (async () => {
-    try {
-      const rnfbApp = await import('@react-native-firebase/app');
-      const rnfbAppCheck = await import('@react-native-firebase/app-check');
-      // Dev builds can't do real attestation, so they present a fixed debug
-      // token (EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN in the gitignored .env.local)
-      // that's allowlisted once in Firebase console -> App Check -> Manage
-      // debug tokens. No log fishing.
-      const debugToken = process.env.EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN;
-      const provider = new rnfbAppCheck.ReactNativeFirebaseAppCheckProvider();
-      provider.configure({
-        apple: {
-          provider: __DEV__ ? 'debug' : 'appAttestWithDeviceCheckFallback',
-          ...(debugToken ? { debugToken } : {}),
-        },
-        android: {
-          provider: __DEV__ ? 'debug' : 'playIntegrity',
-          ...(debugToken ? { debugToken } : {}),
-        },
-      });
-      const appCheckInstance = await rnfbAppCheck.initializeAppCheck(rnfbApp.getApp(), {
-        provider,
-        isTokenAutoRefreshEnabled: true,
-      });
-      const { initializeAppCheck, CustomProvider } = await import('firebase/app-check');
-      initializeAppCheck(app, {
-        provider: new CustomProvider({
-          getToken: async () => {
-            const { token } = await rnfbAppCheck.getToken(appCheckInstance, false);
-            return { token, expireTimeMillis: Date.now() + 30 * 60 * 1000 };
-          },
-        }),
-        isTokenAutoRefreshEnabled: true,
-      });
-    } catch (e) {
-      console.warn('App Check native attestation not active yet:', e);
-    }
+  const nativeAppCheck = (async () => {
+    const rnfbApp = await import('@react-native-firebase/app');
+    const rnfbAppCheck = await import('@react-native-firebase/app-check');
+    // Dev builds can't do real attestation, so they present a fixed debug
+    // token (EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN in the gitignored .env.local)
+    // that's allowlisted once in Firebase console -> App Check -> Manage
+    // debug tokens. No log fishing.
+    const debugToken = process.env.EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN;
+    const provider = new rnfbAppCheck.ReactNativeFirebaseAppCheckProvider();
+    provider.configure({
+      apple: {
+        provider: __DEV__ ? 'debug' : 'appAttestWithDeviceCheckFallback',
+        ...(debugToken ? { debugToken } : {}),
+      },
+      android: {
+        provider: __DEV__ ? 'debug' : 'playIntegrity',
+        ...(debugToken ? { debugToken } : {}),
+      },
+    });
+    const instance = await rnfbAppCheck.initializeAppCheck(rnfbApp.getApp(), {
+      provider,
+      isTokenAutoRefreshEnabled: true,
+    });
+    return { rnfbAppCheck, instance };
   })();
+  // Surface init failures once; each getToken call still rejects (and the
+  // SDK then proceeds unattested), preserving the fail-soft behavior.
+  nativeAppCheck.catch((e) => console.warn('App Check native attestation not active yet:', e));
+
+  initializeAppCheck(app, {
+    provider: new CustomProvider({
+      getToken: async () => {
+        const { rnfbAppCheck, instance } = await nativeAppCheck;
+        const { token } = await rnfbAppCheck.getToken(instance, false);
+        return { token, expireTimeMillis: Date.now() + 30 * 60 * 1000 };
+      },
+    }),
+    isTokenAutoRefreshEnabled: true,
+  });
 }
 
 if (usingEmulators) {

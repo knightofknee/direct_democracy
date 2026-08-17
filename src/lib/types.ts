@@ -1,13 +1,16 @@
 import type { Timestamp } from 'firebase/firestore';
 
 /**
- * Three groups of people use the app:
+ * Four groups of people use the app:
  *  - unverified users  (role 'citizen', verified: false)
  *  - verified users    (role 'citizen', verified: true) - proved identity via a
  *    third-party provider (Didit); we only ever store the boolean + ward.
  *  - elected officials (role 'official') - approved admins who run polls and AMAs.
+ *  - candidates        (role 'candidate') - provisioned by the operator; they
+ *    publish a platform (the more perfect platform) and run polls, but are not
+ *    graded like sitting officials.
  */
-export type Role = 'citizen' | 'official';
+export type Role = 'citizen' | 'official' | 'candidate';
 
 /** Personal participation counters, written only by Cloud Functions triggers. */
 export interface UserStats {
@@ -55,6 +58,68 @@ export interface Official {
 
 /** One person's standing approval of an official - changeable any time. */
 export type ApprovalValue = 'approve' | 'disapprove';
+
+/**
+ * A candidate for office (not yet elected). Provisioned by the operator like
+ * officials; candidates publish a platform and can poll their audience, but
+ * carry none of the grading machinery until they hold office.
+ */
+export interface Candidate {
+  uid: string;
+  name: string;
+  /** e.g. "Candidate for Mayor" */
+  office: string;
+  bio: string;
+  /** Externally hosted portrait (https URL) - never stored or proxied. */
+  photoUrl?: string | null;
+  /** The campaign's public website, shown as a link. */
+  websiteUrl?: string | null;
+  /**
+   * Campaign page the platform syncs from (operator-provisioned). When set,
+   * a Cloud Function parses the page and upserts the candidate's policies;
+   * those synced policies are read-only in the app so the site stays the
+   * single source of truth. Null means the platform is managed in-app.
+   */
+  sourceUrl?: string | null;
+  lastSyncedAt?: Timestamp | null;
+  /** Live (unarchived) policy count, maintained by Cloud Functions triggers. */
+  policyCount: number;
+}
+
+/** Option keys for a policy's DualTally - a straight stance vote. */
+export const POLICY_STANCES = ['support', 'oppose'] as const;
+export type PolicyStance = (typeof POLICY_STANCES)[number];
+
+/** A cited source on a policy - "the receipts". */
+export interface PolicyLink {
+  label: string;
+  url: string;
+}
+
+/**
+ * One plank of a candidate's platform (the more perfect platform). Synced
+ * policies (`source: 'site'`) are written only by the platform-sync Cloud
+ * Function; in-app policies (`source: 'app'`) are the candidate's own writes.
+ * Policies that disappear from a synced site are archived, not deleted, so
+ * their votes and comments survive a site reshuffle.
+ */
+export interface Policy {
+  id: string;
+  candidateUid: string;
+  /** Grouping header, e.g. "Health & Home". */
+  section: string;
+  title: string;
+  body: string;
+  links: PolicyLink[];
+  /** Display order across the whole platform. */
+  order: number;
+  source: 'site' | 'app';
+  archived: boolean;
+  tallies: DualTally;
+  commentCount: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
 
 /**
  * Every vote is tallied two ways: all users, and verified users. On
@@ -107,7 +172,21 @@ export interface Comment {
   authorName: string;
   authorVerified: boolean;
   body: string;
+  /**
+   * Threaded replies: the id of the thread's ROOT comment, null on top-level
+   * comments. Replies to replies stay in the same thread (flat, chronological,
+   * one visual indent) so the back-and-forth is unlimited but stays readable.
+   */
+  threadId?: string | null;
+  /** Display name of the comment being answered - "replying to X" context. */
+  replyToName?: string | null;
   createdAt: Timestamp;
+}
+
+/** Target of a reply: the thread root plus who is being answered. */
+export interface CommentReply {
+  threadId: string;
+  replyToName: string;
 }
 
 /** Poll formats officials can choose from - deliberately not just up/down. */

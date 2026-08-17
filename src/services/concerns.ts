@@ -12,6 +12,7 @@ import { db } from '@/lib/firebase';
 import { emptyTally } from '@/lib/tally';
 import {
   CONCERN_PRIORITIES,
+  type CommentReply,
   type ConcernPriority,
   type Scope,
   type UserProfile,
@@ -101,13 +102,16 @@ export async function deleteComment(
 export async function addComment(
   profile: UserProfile,
   concernId: string,
-  body: string
+  body: string,
+  reply?: CommentReply | null
 ): Promise<void> {
   await addDoc(collection(db, 'concerns', concernId, 'comments'), {
     authorUid: profile.uid,
     authorName: profile.displayName,
     authorVerified: profile.verified,
     body: body.trim(),
+    threadId: reply?.threadId ?? null,
+    replyToName: reply?.replyToName ?? null,
     createdAt: serverTimestamp(),
   });
 }

@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { timeAgo } from '@/lib/format';
+import { plural, timeAgo } from '@/lib/format';
 import { notifyError } from '@/lib/notify';
 import type { Concern, ConcernPriority, TallyLens, VoteDoc } from '@/lib/types';
 import { voteConcernPriority } from '@/services/concerns';
@@ -96,7 +96,7 @@ export function ConcernCard({
           <View style={styles.stat}>
             <Ionicons name="flame" size={14} color={theme.accent} />
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {score} priority pts · {voters} voters
+              {score} · {plural(voters, 'vote')}
             </ThemedText>
           </View>
           <View style={styles.stat}>

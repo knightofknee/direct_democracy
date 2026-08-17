@@ -9,13 +9,14 @@ Built with React Native (Expo) for iOS and Android, backed by Firebase.
 
 ## How it works
 
-**Three kinds of people use the app:**
+**Four kinds of people use the app:**
 
 | Group | What they can do |
 | --- | --- |
 | Unverified users | Vote and comment on all citywide concerns and citywide polls, and **browse every ward's** board and ballots |
 | Verified users | Everything above, plus a home ward: their votes count in its verified tallies and they vote on their alderman's polls (the ward tab defaults to home; the city big board is everyone's default view) |
 | Elected officials | Approved admins - post polls to their ward or the whole city, and answer their AMA |
+| Candidates | Operator-provisioned challengers - publish **the more perfect platform** (below) and poll their audience, but carry no report card until they hold office |
 
 **Every result is shown two ways:** all users, and identity-verified users. You
 always see the general vote % and the verified-only % side by side. On
@@ -37,6 +38,18 @@ constituents only, 5-ballot minimum) and the answer score above, averaged into
 an overall A–F. Portraits are links to externally hosted images - the platform
 never stores the photo. Participation earns celebrations: first concern, tenth
 post, hundredth vote.
+
+**The more perfect platform.** The election tab lists every candidate for
+mayor; each publishes their full platform as individual policies - a title,
+all the text the case needs, and a receipts list of cited sources. Every
+policy takes support/oppose votes (dual-tallied like everything else) and has
+a full comments section where the candidate's own replies are marked with a
+candidate badge. A candidate can manage policies in-app, or link their
+campaign site as the source of truth: a nightly Cloud Function (plus a "Sync
+from my site" button) parses the site's policy list and upserts it, so the
+website and the app are edited in one place. Policies that leave the site are
+hidden, never deleted - their votes and comments survive. Provision a
+candidate with `npm run add-candidate`.
 
 **Identity verification is third-party.** Didit checks the government ID and
 address; direct democracy only ever stores `verified: yes/no` and the ward.

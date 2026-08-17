@@ -158,6 +158,108 @@ async function main() {
   });
   console.log('  ✓ 2 demo citizens');
 
+  // ── Candidates (fictional) ─────────────────────────────────────────────
+  // A demo candidate whose platform is managed in-app (no sourceUrl). To demo
+  // the site-sync flow instead, provision with:
+  //   npm run add-candidate -- --emulator --email candidate@demo.local \
+  //     --name "Avery Santos" --source https://www.waldgrave.com/chigui
+  const candidateUid = await ensureUser('candidate@demo.local', 'Avery Santos');
+  await db.doc(`users/${candidateUid}`).set({
+    displayName: 'Avery Santos',
+    role: 'candidate',
+    verified: true,
+    wardId: 12,
+    stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
+    createdAt: FieldValue.serverTimestamp(),
+  });
+  await db.doc(`candidates/${candidateUid}`).set({
+    uid: candidateUid,
+    name: 'Avery Santos',
+    office: 'Candidate for Mayor',
+    bio: 'Fictional demo candidate. Transit nerd, budget hawk, believes receipts beat slogans.',
+    photoUrl: null,
+    websiteUrl: null,
+    sourceUrl: null,
+    lastSyncedAt: null,
+    policyCount: 0, // onPolicyWrite counts the seeded policies below
+  });
+
+  const demoPolicies = [
+    {
+      section: 'Getting Around',
+      title: 'Buses every 6 minutes',
+      body: 'Frequency is freedom. Fund operator hiring and signal priority so no one plans their life around a bus schedule. Cities that boosted off-peak frequency saw ridership recover fastest; the operating cost is a fraction of one highway interchange.',
+      links: [{ label: 'transitcenter.org', url: 'https://transitcenter.org' }],
+      t: tally({ support: 74, oppose: 12 }, { support: 39, oppose: 6 }),
+    },
+    {
+      section: 'Getting Around',
+      title: 'Fix the intersections that hurt people',
+      body: 'The same 40 intersections produce a huge share of serious crashes. Rebuild them with raised crossings, daylighting, and hardened turns before repaving another mile of straightaway.',
+      links: [],
+      t: tally({ support: 51, oppose: 9 }, { support: 22, oppose: 4 }),
+    },
+    {
+      section: 'The Money',
+      title: 'Publish every contract over $10k',
+      body: 'A searchable public ledger of city contracts, amendments, and change orders, posted within 30 days. Sunshine is the cheapest inspector general the city will ever hire.',
+      links: [],
+      t: tally({ support: 88, oppose: 3 }, { support: 45, oppose: 1 }),
+    },
+  ];
+  const policiesRef = db.collection(`candidates/${candidateUid}/policies`);
+  let order = 0;
+  let firstPolicyRef: FirebaseFirestore.DocumentReference | null = null;
+  for (const p of demoPolicies) {
+    const ref = policiesRef.doc();
+    await ref.set({
+      candidateUid,
+      section: p.section,
+      title: p.title,
+      body: p.body,
+      links: p.links,
+      order: order++,
+      source: 'app',
+      archived: false,
+      tallies: p.t,
+      commentCount: 0, // onPolicyCommentCreated counts the seeded comments
+      createdAt: FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    firstPolicyRef ??= ref;
+  }
+  // A threaded debate where the candidate replies as OP and gets pushback.
+  if (firstPolicyRef) {
+    const rootComment = await firstPolicyRef.collection('comments').add({
+      authorUid: verifiedUid,
+      authorName: 'Steadfast Heron',
+      authorVerified: true,
+      body: 'How do you pay for the extra operators without cutting coverage elsewhere?',
+      threadId: null,
+      replyToName: null,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    await firstPolicyRef.collection('comments').add({
+      authorUid: candidateUid,
+      authorName: 'Avery Santos',
+      authorVerified: true,
+      body: 'Fair question: the first tranche comes from the ad-contract renegotiation and ending two consultant retainers; the rest is in the capital-to-operating swap in the budget plank.',
+      threadId: rootComment.id,
+      replyToName: 'Steadfast Heron',
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    await firstPolicyRef.collection('comments').add({
+      authorUid: unverifiedUid,
+      authorName: 'Breezy Tugboat',
+      authorVerified: false,
+      body: 'The consultant retainers barely cover two routes. What happens in year two?',
+      threadId: rootComment.id,
+      replyToName: 'Avery Santos',
+      createdAt: FieldValue.serverTimestamp(),
+    });
+  }
+  console.log('  ✓ 1 candidate with 3 policies');
+
   // ── Citywide concerns (the big board) ──────────────────────────────────
   const cityConcerns = [
     {
@@ -440,6 +542,7 @@ async function main() {
   console.log('\nDone. Demo accounts (password: password123):');
   console.log('  verified@demo.local      - verified citizen, 1st Ward');
   console.log('  unverified@demo.local    - unverified citizen');
+  console.log('  candidate@demo.local     - Avery Santos, candidate for mayor');
   console.log('  bricarlis@gmail.com      - platform operator (admin report queue)');
   console.log('  alder.ward1@demo.local   - Alderman, 1st Ward (official)');
   console.log('  alder.ward43@demo.local  - Alderman, 43rd Ward (official)');

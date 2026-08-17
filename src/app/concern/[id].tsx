@@ -3,16 +3,16 @@ import { collection, doc, orderBy, query } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
 import { LensToggle } from '@/components/lens-toggle';
 import { Screen } from '@/components/screen';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, Chip, EmptyState, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
+import { Button, Chip, EmptyState, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
-import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
@@ -49,8 +49,6 @@ export default function ConcernScreen() {
   const router = useRouter();
   const { profile } = useAuth();
   const [lens, setLens] = useState<TallyLens>('all');
-  const [commentText, setCommentText] = useState('');
-  const [savingComment, setSavingComment] = useState(false);
   const [savingVote, setSavingVote] = useState(false);
 
   const { data: concern, loading } = useLiveDoc<Concern>(
@@ -65,7 +63,6 @@ export default function ConcernScreen() {
     () => (id ? query(collection(db, 'concerns', id, 'comments'), orderBy('createdAt', 'desc')) : null),
     [id]
   );
-  const { isBlocked } = useBlocks();
   const [editing, setEditing] = useState<{ title: string; body: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [savingEdit, setSavingEdit] = useState(false);
@@ -124,24 +121,6 @@ export default function ConcernScreen() {
       notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setSavingVote(false);
-    }
-  };
-
-  const submitComment = async () => {
-    if (!profile) {
-      router.push('/sign-in');
-      return;
-    }
-    const body = commentText.trim();
-    if (!body) return;
-    setSavingComment(true);
-    try {
-      await addComment(profile, concern.id, body);
-      setCommentText('');
-    } catch (e) {
-      notify('Comment failed', e instanceof Error ? e.message : 'Something went wrong.');
-    } finally {
-      setSavingComment(false);
     }
   };
 
@@ -249,78 +228,13 @@ export default function ConcernScreen() {
       )}
 
       <SectionHeader title={`Comments (${concern.commentCount})`} />
-      {profile ? (
-        <Card>
-          <Field
-            placeholder="Add to the discussion…"
-            value={commentText}
-            onChangeText={setCommentText}
-            multiline
-          />
-          <Button
-            title="Post comment"
-            onPress={submitComment}
-            disabled={!commentText.trim()}
-            loading={savingComment}
-          />
-        </Card>
-      ) : (
-        <Button title="Sign in to comment" variant="secondary" onPress={() => router.push('/sign-in')} />
-      )}
-
-      {comments.length === 0 ? (
-        <EmptyState icon="chatbubble-ellipses-outline" message="No comments yet." />
-      ) : (
-        comments
-          .filter((comment) => !isBlocked(comment.authorUid))
-          .map((comment) => <CommentRow key={comment.id} concernId={concern.id} comment={comment} />)
-      )}
+      <CommentsSection
+        comments={comments}
+        contentPathFor={(comment) => `concerns/${concern.id}/comments/${comment.id}`}
+        onSubmit={(body, reply) => addComment(profile!, concern.id, body, reply)}
+        onDelete={(comment) => deleteComment(profile!, concern.id, comment)}
+      />
     </Screen>
-  );
-}
-
-function CommentRow({ concernId, comment }: { concernId: string; comment: Comment }) {
-  const { profile } = useAuth();
-  const [confirmRemove, setConfirmRemove] = useState(false);
-  const isMine = profile?.uid === comment.authorUid;
-
-  const remove = async () => {
-    if (!profile) return;
-    try {
-      await deleteComment(profile, concernId, comment);
-    } catch (e) {
-      notifyError('Could not delete comment', e);
-    }
-  };
-
-  return (
-    <Card>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
-        <ThemedText type="smallBold">{comment.authorName}</ThemedText>
-        {comment.authorVerified && <VerifiedBadge compact />}
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          {timeAgo(comment.createdAt)}
-        </ThemedText>
-        <View style={{ flex: 1 }} />
-        <ContentActions
-          contentPath={`concerns/${concernId}/comments/${comment.id}`}
-          contentType="comment"
-          excerpt={comment.body}
-          authorUid={comment.authorUid}
-          authorName={comment.authorName}
-        />
-      </View>
-      <ThemedText type="small">{comment.body}</ThemedText>
-      {isMine &&
-        (confirmRemove ? (
-          <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-            <Button title="Yes, remove" variant="danger" onPress={remove} />
-            <Button title="Keep" variant="ghost" onPress={() => setConfirmRemove(false)} />
-          </View>
-        ) : (
-          <Button title="Remove my comment" variant="ghost" onPress={() => setConfirmRemove(true)} />
-        ))}
-    </Card>
   );
 }
 

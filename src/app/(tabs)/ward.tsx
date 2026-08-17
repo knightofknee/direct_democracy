@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { collection, orderBy, query, where } from 'firebase/firestore';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { OfficialAvatar } from '@/components/avatar';
@@ -59,7 +59,7 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-          Every ward’s board and ballot is public. Pick one to browse.
+          Every ward’s board is public. Pick one to browse.
         </ThemedText>
         <FlagAccent />
       </View>
@@ -75,7 +75,7 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
               key={w.id}
               onPress={() => onPick(w.id)}
               style={[styles.wardCell, { borderColor: theme.border, backgroundColor: theme.background }]}>
-              <ThemedText type="small" style={{ fontSize: 12 }}>
+              <ThemedText type="small" style={{ fontSize: 13 }}>
                 {w.id}
               </ThemedText>
             </Pressable>
@@ -92,9 +92,8 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
                 Verify your residency
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                Verify so your votes count in your ward’s verified tallies and you can vote on your
-                alderman’s ballot questions. We never see your documents, only a yes/no and your
-                ward.
+                Verify so your votes count in your ward’s verified tallies and you can vote on
+                your alderman’s ballot questions. We only ever see a yes/no and your ward.
               </ThemedText>
             </View>
           </View>
@@ -105,6 +104,13 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
           )}
         </Card>
       )}
+
+      <View style={{ alignItems: 'center', gap: Spacing.one }}>
+        <FlagAccent />
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          50 wards, one city
+        </ThemedText>
+      </View>
     </Screen>
   );
 }
@@ -220,8 +226,29 @@ function WardHome({
         subtitle="Anyone can weigh in. Verified counts are residents of this ward only."
       />
       <LensToggle value={lens} onChange={setLens} />
-      {isHomeWard && (profile?.verified || profile?.role === 'official') && (
+      {isHomeWard && (profile?.verified || profile?.role === 'official') ? (
         <Button title="Raise a ward concern" variant="secondary" onPress={() => router.push('/new-concern')} />
+      ) : !profile ? (
+        // Signed-out visitors get a door, not a dead end.
+        <>
+          <Button title="Sign in to vote and comment" variant="secondary" onPress={() => router.push('/sign-in')} />
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+            Raising a ward concern takes a verified resident of the ward.
+          </ThemedText>
+        </>
+      ) : !profile.verified ? (
+        <>
+          <Button title="Verify to unlock your home ward" variant="secondary" onPress={() => router.push('/verify')} />
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+            Anyone can vote and comment here; raising a ward concern takes a verified resident.
+          </ThemedText>
+        </>
+      ) : (
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          {profile.wardId == null
+            ? 'Anyone can vote and comment here; ward posting unlocks once your verification includes your ward.'
+            : `Anyone can vote and comment here; you raise ward concerns in your home ward, the ${wardLabel(profile.wardId)}.`}
+        </ThemedText>
       )}
       {loading ? (
         <SkeletonCards />
@@ -264,10 +291,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 6,
   },
+  // flexBasis packs 7 per row on phones (8 rows, so the picker fits without
+  // scrolling); flexGrow then stretches each row edge to edge, and maxWidth
+  // keeps a short last row (the lone 50) from ballooning.
   wardCell: {
-    width: 44,
+    flexGrow: 1,
+    flexBasis: 38,
+    maxWidth: 52,
     height: 36,
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',

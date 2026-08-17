@@ -13,17 +13,26 @@ import { useEffect, useState } from 'react';
  * (e.g. while signed out) - that renders as an instant empty result.
  */
 
+/**
+ * A subscription that errors is dead - Firestore does not retry it. Transient
+ * startup failures (attestation warming up, network blips) get a few spaced
+ * retries so screens self-heal instead of sitting empty until a remount.
+ */
+const MAX_SUBSCRIBE_RETRIES = 3;
+
 export function useLiveQuery<T>(makeQuery: () => Query | null, deps: unknown[]): {
   data: T[];
   loading: boolean;
 } {
   const key = JSON.stringify(deps);
   const [result, setResult] = useState<{ key: string; data: T[] } | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     const q = makeQuery();
     if (!q) return;
-    return onSnapshot(
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    const unsubscribe = onSnapshot(
       q,
       (snap) => {
         setResult({ key, data: snap.docs.map((d) => ({ id: d.id, ...d.data() }) as T) });
@@ -31,10 +40,17 @@ export function useLiveQuery<T>(makeQuery: () => Query | null, deps: unknown[]):
       (err) => {
         console.warn('useLiveQuery error:', err.message);
         setResult({ key, data: [] });
+        if (attempt < MAX_SUBSCRIBE_RETRIES) {
+          retryTimer = setTimeout(() => setAttempt((a) => a + 1), 1500 * (attempt + 1));
+        }
       }
     );
+    return () => {
+      unsubscribe();
+      if (retryTimer) clearTimeout(retryTimer);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  }, [key, attempt]);
 
   if (!makeQuery()) return { data: [], loading: false };
   const fresh = result?.key === key;
@@ -47,11 +63,13 @@ export function useLiveDoc<T>(makeRef: () => DocumentReference | null, deps: unk
 } {
   const key = JSON.stringify(deps);
   const [result, setResult] = useState<{ key: string; data: T | null } | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     const ref = makeRef();
     if (!ref) return;
-    return onSnapshot(
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    const unsubscribe = onSnapshot(
       ref,
       (snap) => {
         setResult({ key, data: snap.exists() ? ({ id: snap.id, ...snap.data() } as T) : null });
@@ -59,10 +77,17 @@ export function useLiveDoc<T>(makeRef: () => DocumentReference | null, deps: unk
       (err) => {
         console.warn('useLiveDoc error:', err.message);
         setResult({ key, data: null });
+        if (attempt < MAX_SUBSCRIBE_RETRIES) {
+          retryTimer = setTimeout(() => setAttempt((a) => a + 1), 1500 * (attempt + 1));
+        }
       }
     );
+    return () => {
+      unsubscribe();
+      if (retryTimer) clearTimeout(retryTimer);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  }, [key, attempt]);
 
   if (!makeRef()) return { data: null, loading: false };
   const fresh = result?.key === key;

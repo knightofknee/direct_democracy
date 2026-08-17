@@ -112,16 +112,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!user) return;
     const ref = doc(db, 'users', user.uid);
-    return onSnapshot(ref, (snap) => {
-      if (snap.exists()) {
-        setProfile({ uid: snap.id, ...snap.data() } as UserProfile);
-      } else if (creatingProfileFor.current !== user.uid) {
-        creatingProfileFor.current = user.uid;
-        setDoc(ref, newProfileDoc()).catch(() => {
-          creatingProfileFor.current = null;
-        });
+    return onSnapshot(
+      ref,
+      (snap) => {
+        if (snap.exists()) {
+          setProfile({ uid: snap.id, ...snap.data() } as UserProfile);
+        } else if (creatingProfileFor.current !== user.uid) {
+          creatingProfileFor.current = user.uid;
+          setDoc(ref, newProfileDoc()).catch(() => {
+            creatingProfileFor.current = null;
+          });
+        }
+      },
+      (err) => {
+        console.warn('Profile listener error:', err.message);
       }
-    });
+    );
   }, [user]);
 
   const value = useMemo<AuthContextValue>(

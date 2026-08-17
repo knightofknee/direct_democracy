@@ -12,7 +12,7 @@ import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { db } from '@/lib/firebase';
-import { timeAgo } from '@/lib/format';
+import { plural, timeAgo } from '@/lib/format';
 import type { AmaQuestion, Concern } from '@/lib/types';
 
 /** Everything you've put on the record, in one place. */
@@ -74,7 +74,8 @@ export default function MyActivityScreen() {
             <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center', flexWrap: 'wrap' }}>
               <Chip label={wardLabel(c.wardId)} tone={c.scope === 'city' ? 'primary' : 'neutral'} />
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {c.tallies.totalAll} voters · {c.commentCount} comments · {timeAgo(c.createdAt)}
+                {plural(c.tallies.totalAll, 'vote')} · {plural(c.commentCount, 'comment')} ·{' '}
+                {timeAgo(c.createdAt)}
               </ThemedText>
             </View>
           </Card>

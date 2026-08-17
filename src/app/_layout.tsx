@@ -1,11 +1,13 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { Pressable, useColorScheme } from 'react-native';
 
 import { CelebrationProvider } from '@/components/celebration';
 import { Colors } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
+import { useTheme } from '@/hooks/use-theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,6 +24,30 @@ function SplashGate() {
   }, [loading]);
   return null;
 }
+
+/**
+ * Explicit close affordance for modal screens - dragging down works on iOS,
+ * but not everyone thinks to drag (and web/Android need a button anyway).
+ */
+function ModalClose() {
+  const router = useRouter();
+  const theme = useTheme();
+  return (
+    <Pressable
+      onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+      hitSlop={12}
+      accessibilityRole="button"
+      accessibilityLabel="Close">
+      <Ionicons name="close" size={24} color={theme.text} />
+    </Pressable>
+  );
+}
+
+/** Shared options for every modal screen. */
+const MODAL = {
+  presentation: 'modal' as const,
+  headerRight: () => <ModalClose />,
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -53,10 +79,13 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="concern/[id]" options={{ title: 'Concern' }} />
             <Stack.Screen name="official/[id]" options={{ title: 'AMA' }} />
-            <Stack.Screen name="sign-in" options={{ title: 'Sign in', presentation: 'modal' }} />
-            <Stack.Screen name="new-concern" options={{ title: 'Raise a concern', presentation: 'modal' }} />
-            <Stack.Screen name="new-poll" options={{ title: 'New poll', presentation: 'modal' }} />
-            <Stack.Screen name="verify" options={{ title: 'Verify identity', presentation: 'modal' }} />
+            <Stack.Screen name="candidate/[id]/index" options={{ title: 'Candidate' }} />
+            <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: 'Policy' }} />
+            <Stack.Screen name="sign-in" options={{ title: 'Sign in', ...MODAL }} />
+            <Stack.Screen name="new-concern" options={{ title: 'Raise a concern', ...MODAL }} />
+            <Stack.Screen name="new-poll" options={{ title: 'New poll', ...MODAL }} />
+            <Stack.Screen name="edit-policy" options={{ title: 'Platform policy', ...MODAL }} />
+            <Stack.Screen name="verify" options={{ title: 'Verify identity', ...MODAL }} />
             <Stack.Screen name="my-activity" options={{ title: 'My activity' }} />
             <Stack.Screen name="privacy" options={{ title: 'Privacy & data' }} />
             <Stack.Screen name="settings" options={{ title: 'Settings' }} />

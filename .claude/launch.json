@@ -2,22 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "expo-web",
+      "name": "expo-web-emulators",
       "runtimeExecutable": "env",
-      "runtimeArgs": ["EXPO_PUBLIC_USE_EMULATORS=1", "npx", "expo", "start", "--web", "--port", "8081"],
-      "port": 8081
-    },
-    {
-      "name": "expo-web-8082",
-      "runtimeExecutable": "env",
-      "runtimeArgs": ["EXPO_PUBLIC_USE_EMULATORS=1", "npx", "expo", "start", "--web", "--port", "8082"],
-      "port": 8082
-    },
-    {
-      "name": "waldgrave-web",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "/Users/briancarlisle/Documents/GitHub/the-waldgave2", "run", "dev"],
-      "port": 3000
+      "runtimeArgs": ["EXPO_PUBLIC_USE_EMULATORS=1", "npx", "expo", "start", "--web", "--port", "8090"],
+      "port": 8090
     }
   ]
 }

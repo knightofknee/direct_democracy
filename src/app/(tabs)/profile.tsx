@@ -78,6 +78,7 @@ export default function ProfileScreen() {
                 <Chip label="Unverified" tone="neutral" icon="shield-outline" />
               )}
               {profile.role === 'official' && <Chip label="Elected official" tone="primary" icon="ribbon" />}
+              {profile.role === 'candidate' && <Chip label="Candidate" tone="primary" icon="ribbon" />}
               {profile.wardId != null && <Chip label={wardLabel(profile.wardId)} />}
             </View>
           </View>

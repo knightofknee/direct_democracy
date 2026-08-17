@@ -24,7 +24,7 @@ export function ContentActions({
   authorName,
 }: {
   contentPath: string;
-  contentType: 'concern' | 'comment' | 'question' | 'response';
+  contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy';
   excerpt: string;
   authorUid: string;
   authorName: string;

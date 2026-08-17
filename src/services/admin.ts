@@ -15,7 +15,7 @@ export interface Report {
   id: string;
   reporterUid: string;
   contentPath: string;
-  contentType: 'concern' | 'comment' | 'question' | 'response';
+  contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy';
   reason: ReportReason;
   excerpt: string;
   authorUid: string | null;
@@ -28,6 +28,9 @@ export function reportContentRoute(report: Report): string | null {
   const parts = report.contentPath.split('/');
   if (parts[0] === 'concerns' && parts.length >= 2) return `/concern/${parts[1]}`;
   if (parts[0] === 'officials' && parts.length >= 2) return `/official/${parts[1]}`;
+  // Policies and their comments both live under candidates/{uid}/policies/{id}.
+  if (parts[0] === 'candidates' && parts.length >= 4) return `/candidate/${parts[1]}/${parts[3]}`;
+  if (parts[0] === 'candidates' && parts.length >= 2) return `/candidate/${parts[1]}`;
   return null;
 }
 

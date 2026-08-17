@@ -31,7 +31,7 @@ export default function SettingsScreen() {
     <Screen>
       <Button title="Privacy & data" variant="secondary" onPress={() => router.push('/privacy')} />
 
-      {profile.role !== 'official' && (
+      {profile.role === 'citizen' && (
         <Card>
           <ThemedText type="smallBold" style={{ fontSize: 13, color: theme.danger }}>
             Delete account
