@@ -237,6 +237,10 @@ async function main() {
       body: 'How do you pay for the extra operators without cutting coverage elsewhere?',
       threadId: null,
       replyToName: null,
+      // The candidate credited this question for sharpening the funding plan;
+      // onPolicyCommentCredited counts it on the author's stats.
+      credited: true,
+      creditedAt: FieldValue.serverTimestamp(),
       createdAt: FieldValue.serverTimestamp(),
     });
     await firstPolicyRef.collection('comments').add({
@@ -257,6 +261,21 @@ async function main() {
       replyToName: 'Avery Santos',
       createdAt: FieldValue.serverTimestamp(),
     });
+    // A newer thread without candidate engagement, plus synthetic rating
+    // scores (score = up minus down, hidden, ordering-only) so the "best"
+    // sort demos: the credited question outranks this newer comment.
+    await firstPolicyRef.collection('comments').add({
+      authorUid: unverifiedUid,
+      authorName: 'Breezy Tugboat',
+      authorVerified: false,
+      body: 'Six minute headways on which routes, though? All 100+?',
+      threadId: null,
+      replyToName: null,
+      score: 4,
+      scoreVerified: 2,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    await rootComment.update({ score: 17, scoreVerified: 9 });
   }
   console.log('  ✓ 1 candidate with 3 policies');
 

@@ -40,7 +40,11 @@ export default function NewConcernScreen() {
     setSaving(true);
     try {
       const id = await createConcern(profile, { title, body, scope });
-      router.replace(`/concern/${id}`);
+      // Land on the newly opened concern. Dismiss the modal first - a bare
+      // replace() from inside a native modal can pop to whatever screen sat
+      // under it instead of the target.
+      if (router.canDismiss()) router.dismiss();
+      router.push(`/concern/${id}`);
     } catch (e) {
       notify('Could not post', e instanceof Error ? e.message : 'Something went wrong.');
       setSaving(false);

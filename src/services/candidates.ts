@@ -14,6 +14,7 @@ import { emptyTally } from '@/lib/tally';
 import {
   POLICY_STANCES,
   type CommentReply,
+  type CommentVoteValue,
   type Policy,
   type PolicyLink,
   type PolicyStance,
@@ -152,6 +153,64 @@ export async function addPolicyComment(
     body: body.trim(),
     threadId: reply?.threadId ?? null,
     replyToName: reply?.replyToName ?? null,
+    createdAt: serverTimestamp(),
+  });
+}
+
+/**
+ * Award (or retract) a writing credit: the candidate's public acknowledgment
+ * that this comment changed their policy. Recognition only - the author's
+ * lifetime count is aggregated by the onPolicyCommentCredited trigger.
+ */
+export async function setCommentCredit(
+  profile: UserProfile,
+  candidateUid: string,
+  policyId: string,
+  comment: { id: string; authorUid: string },
+  credited: boolean
+): Promise<void> {
+  if (profile.uid !== candidateUid) {
+    throw new Error('Only the candidate can award writing credits on their platform.');
+  }
+  if (comment.authorUid === candidateUid) {
+    throw new Error('You cannot credit your own comment.');
+  }
+  await updateDoc(
+    doc(db, 'candidates', candidateUid, 'policies', policyId, 'comments', comment.id),
+    { credited, creditedAt: serverTimestamp() }
+  );
+}
+
+/**
+ * Rate a policy comment up or down (null retracts). Placement-only: the
+ * trigger folds ballots into the comment's hidden ordering score.
+ */
+export async function voteOnPolicyComment(
+  profile: UserProfile,
+  candidateUid: string,
+  policyId: string,
+  commentId: string,
+  value: CommentVoteValue | null
+): Promise<void> {
+  const ref = doc(
+    db,
+    'candidates',
+    candidateUid,
+    'policies',
+    policyId,
+    'comments',
+    commentId,
+    'votes',
+    profile.uid
+  );
+  if (value === null) {
+    await deleteDoc(ref);
+    return;
+  }
+  await setDoc(ref, {
+    uid: profile.uid,
+    value,
+    verified: profile.verified,
     createdAt: serverTimestamp(),
   });
 }

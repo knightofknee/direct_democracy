@@ -16,13 +16,15 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { notify, notifyError } from '@/lib/notify';
+import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import type { Candidate, Comment, Policy, PolicyStance, VoteDoc } from '@/lib/types';
 import {
   addPolicyComment,
   deletePolicy,
   deletePolicyComment,
+  setCommentCredit,
   setPolicyArchived,
+  voteOnPolicyComment,
   votePolicy,
 } from '@/services/candidates';
 
@@ -166,6 +168,12 @@ export default function PolicyScreen() {
         onDelete={(comment) =>
           deletePolicyComment(profile!, policy.candidateUid, policy.id, comment)
         }
+        onCredit={(comment, credited) =>
+          setCommentCredit(profile!, policy.candidateUid, policy.id, comment, credited)
+        }
+        onVote={(comment, value) =>
+          voteOnPolicyComment(profile!, policy.candidateUid, policy.id, comment.id, value)
+        }
       />
     </Screen>
   );
@@ -227,6 +235,14 @@ function CandidateTools({ policy }: { policy: Policy }) {
   };
 
   const remove = async () => {
+    // Third gate on top of the inline two-step - deleting a plank takes the
+    // whole debate with it, so it must be hard to do by accident.
+    const sure = await confirmDestructive(
+      'Delete this policy?',
+      'This permanently removes the policy, everyone’s votes on it, and its comments. It cannot be undone.',
+      'Delete forever'
+    );
+    if (!sure) return;
     setBusy(true);
     try {
       await deletePolicy(profile, policy);

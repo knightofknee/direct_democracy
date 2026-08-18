@@ -137,7 +137,7 @@ function areaSlicesOf(
   return { verified: !!ballot.verified && inArea };
 }
 
-type StatKey = 'concerns' | 'comments' | 'votes' | 'judgments';
+type StatKey = 'concerns' | 'comments' | 'votes' | 'judgments' | 'credits';
 
 /**
  * Exactly-once delivery.
@@ -337,8 +337,82 @@ export const onCommentCreated = onDocumentCreated(
 
 export const onCommentDeleted = onDocumentDeleted(
   'concerns/{concernId}/comments/{commentId}',
+  async (event) => {
+    await applyCommentDelta(
+      event.id,
+      `concerns/${event.params.concernId}`,
+      event.data?.data()?.authorUid,
+      -1
+    );
+    // A deleted comment takes its rating ballots with it (safe on redelivery).
+    await db.recursiveDelete(
+      db.doc(`concerns/${event.params.concernId}/comments/${event.params.commentId}`)
+    );
+  }
+);
+
+/**
+ * Comment ratings: up minus down, folded into hidden score fields on the
+ * comment. Ratings are placement-only - never displayed - so there is no
+ * DualTally here, just the two ordering scores (all voters / verified voters).
+ */
+async function applyCommentVote(
+  eventId: string | undefined,
+  commentPath: string,
+  voterUid: string,
+  before: BallotDoc | null,
+  after: BallotDoc | null
+) {
+  const weight = (ballot: BallotDoc | null): number =>
+    ballot ? (ballot.value === 'up' ? 1 : ballot.value === 'down' ? -1 : 0) : 0;
+  const delta = weight(after) - weight(before);
+  const deltaVerified =
+    (after?.verified ? weight(after) : 0) - (before?.verified ? weight(before) : 0);
+  const statDelta = ballotStatDelta(before, after);
+  if (delta === 0 && deltaVerified === 0 && statDelta === 0) return;
+
+  const commentRef = db.doc(commentPath);
+  await db.runTransaction(async (tx) => {
+    if (!(await claimEvent(tx, eventId))) return;
+    const snap = await tx.get(commentRef);
+    const stat = await readStat(tx, voterUid, statDelta);
+    // The comment may already be gone (deletion cascades to its ballots);
+    // the voter's own counter still has to settle. Scores may go negative.
+    if (snap.exists) {
+      const c = snap.data()!;
+      tx.update(commentRef, {
+        score: (typeof c.score === 'number' ? c.score : 0) + delta,
+        scoreVerified:
+          (typeof c.scoreVerified === 'number' ? c.scoreVerified : 0) + deltaVerified,
+      });
+    }
+    writeStat(tx, stat, 'votes', statDelta);
+    markEvent(tx, eventId);
+  });
+}
+
+export const onCommentVoteWrite = onDocumentWritten(
+  'concerns/{concernId}/comments/{commentId}/votes/{voterUid}',
   async (event) =>
-    applyCommentDelta(event.id, `concerns/${event.params.concernId}`, event.data?.data()?.authorUid, -1)
+    applyCommentVote(
+      event.id,
+      `concerns/${event.params.concernId}/comments/${event.params.commentId}`,
+      event.params.voterUid,
+      event.data?.before.exists ? (event.data.before.data() as BallotDoc) : null,
+      event.data?.after.exists ? (event.data.after.data() as BallotDoc) : null
+    )
+);
+
+export const onPolicyCommentVoteWrite = onDocumentWritten(
+  'candidates/{candidateUid}/policies/{policyId}/comments/{commentId}/votes/{voterUid}',
+  async (event) =>
+    applyCommentVote(
+      event.id,
+      `candidates/${event.params.candidateUid}/policies/${event.params.policyId}/comments/${event.params.commentId}`,
+      event.params.voterUid,
+      event.data?.before.exists ? (event.data.before.data() as BallotDoc) : null,
+      event.data?.after.exists ? (event.data.after.data() as BallotDoc) : null
+    )
 );
 
 /** A withdrawn concern takes its ballots and comments with it. */
@@ -410,13 +484,45 @@ export const onPolicyCommentCreated = onDocumentCreated(
 
 export const onPolicyCommentDeleted = onDocumentDeleted(
   'candidates/{candidateUid}/policies/{policyId}/comments/{commentId}',
-  async (event) =>
-    applyCommentDelta(
+  async (event) => {
+    await applyCommentDelta(
       event.id,
       `candidates/${event.params.candidateUid}/policies/${event.params.policyId}`,
       event.data?.data()?.authorUid,
       -1
-    )
+    );
+    // A deleted comment takes its rating ballots with it (safe on redelivery).
+    await db.recursiveDelete(
+      db.doc(
+        `candidates/${event.params.candidateUid}/policies/${event.params.policyId}/comments/${event.params.commentId}`
+      )
+    );
+  }
+);
+
+/**
+ * Writing credits: a candidate marking (or retracting) a comment as one that
+ * changed their policy moves the author's lifetime credit count. The delta is
+ * derived from the credited flag's transitions, so deleting a credited
+ * comment walks the count back too. The event id is namespaced because
+ * onPolicyCommentCreated/Deleted claim ids on this same document path.
+ */
+export const onPolicyCommentCredited = onDocumentWritten(
+  'candidates/{candidateUid}/policies/{policyId}/comments/{commentId}',
+  async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const delta = (after?.credited ? 1 : 0) - (before?.credited ? 1 : 0);
+    if (delta === 0) return;
+    const authorUid = (after ?? before)?.authorUid as string | undefined;
+
+    await db.runTransaction(async (tx) => {
+      if (!(await claimEvent(tx, event.id ? `credit-${event.id}` : undefined))) return;
+      const stat = await readStat(tx, authorUid, delta);
+      writeStat(tx, stat, 'credits', delta);
+      markEvent(tx, event.id ? `credit-${event.id}` : undefined);
+    });
+  }
 );
 
 /**

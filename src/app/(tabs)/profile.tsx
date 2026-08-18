@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useBlocks } from '@/hooks/use-blocks';
 import { useTheme } from '@/hooks/use-theme';
 import { isAdminUser } from '@/lib/admin';
+import { plural } from '@/lib/format';
 import { nextMilestones } from '@/lib/milestones';
 import { randomDisplayName } from '@/lib/names';
 import { notify } from '@/lib/notify';
@@ -120,6 +121,15 @@ export default function ProfileScreen() {
           <StatTile label="Votes" value={profile.stats?.votes ?? 0} icon="checkbox" />
           <StatTile label="Judgments" value={profile.stats?.judgments ?? 0} icon="scale" />
         </View>
+        {(profile.stats?.credits ?? 0) > 0 && (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Ionicons name="pencil" size={13} color={theme.verified} />
+            <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, flex: 1 }}>
+              {plural(profile.stats!.credits!, 'writing credit')} - candidates changed a policy
+              because of your comments.
+            </ThemedText>
+          </View>
+        )}
         {nextMilestones(profile.stats ?? { concerns: 0, comments: 0, votes: 0, judgments: 0 })
           .slice(0, 2)
           .map((m) => (

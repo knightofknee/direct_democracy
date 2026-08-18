@@ -13,6 +13,7 @@ import { emptyTally } from '@/lib/tally';
 import {
   CONCERN_PRIORITIES,
   type CommentReply,
+  type CommentVoteValue,
   type ConcernPriority,
   type Scope,
   type UserProfile,
@@ -86,6 +87,29 @@ export async function deleteConcern(
 ): Promise<void> {
   if (profile.uid !== concern.authorUid) throw new Error('Only the author can delete a concern.');
   await deleteDoc(doc(db, 'concerns', concern.id));
+}
+
+/**
+ * Rate a comment up or down (null retracts). Placement-only: the trigger
+ * folds ballots into the comment's hidden ordering score.
+ */
+export async function voteOnComment(
+  profile: UserProfile,
+  concernId: string,
+  commentId: string,
+  value: CommentVoteValue | null
+): Promise<void> {
+  const ref = doc(db, 'concerns', concernId, 'comments', commentId, 'votes', profile.uid);
+  if (value === null) {
+    await deleteDoc(ref);
+    return;
+  }
+  await setDoc(ref, {
+    uid: profile.uid,
+    value,
+    verified: profile.verified,
+    createdAt: serverTimestamp(),
+  });
 }
 
 /** Remove one of your own comments; onCommentDeleted keeps the count honest. */

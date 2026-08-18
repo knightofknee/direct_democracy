@@ -8,7 +8,7 @@ import { Button, Card } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
-import { notify, notifyError } from '@/lib/notify';
+import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { deleteAccount } from '@/services/users';
 
 /** The rarely-needed account plumbing, kept out of the profile's way. */
@@ -49,6 +49,14 @@ export default function SettingsScreen() {
                 loading={deleting}
                 style={{ flex: 1 }}
                 onPress={async () => {
+                  // Third gate: the most destructive action in the app gets a
+                  // system alert on top of the inline two-step.
+                  const sure = await confirmDestructive(
+                    'Delete your account?',
+                    'This permanently removes your sign-in, profile, verification, and standing approvals. Posts stay on the record as [deleted] and cast ballots remain counted. It cannot be undone.',
+                    'Delete forever'
+                  );
+                  if (!sure) return;
                   setDeleting(true);
                   try {
                     await deleteAccount();

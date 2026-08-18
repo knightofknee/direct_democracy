@@ -5,6 +5,37 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-08-17: comment ratings (placement-only)
+
+Signed-in users rate comments up/down: one ballot per person at
+`.../comments/{id}/votes/{voterUid}` (own-doc writes, verified snapshot,
+value pinned to up/down), folded by `onCommentVoteWrite` /
+`onPolicyCommentVoteWrite` into hidden `score`/`scoreVerified` fields on the
+comment. Scores are never displayed - they exist only to order the "best"
+sort (newest / oldest / best; there is deliberately no worst-first sort, and
+thread-internal conversation order never changes). No client write path
+touches the scores; comment deletion cascades to its ballots and the vote
+triggers settle voters' stats even when the comment is already gone.
+
+## Update - 2026-08-15: threaded comments and writing credits
+
+Comments (concerns and policies) gained threaded replies: optional
+`threadId`/`replyToName` on the comment doc, validated shape-only in rules - a
+forged threadId renders as an orphaned thread and cannot move any count, so no
+per-create exists() reads are spent. No trigger changes: commentCount already
+counts every doc in the subcollection, and grouping is client-side. Thread
+order stays neutral (newest first) so a candidate's attention cannot decide
+which comments are seen; their replies lead only within their own thread.
+
+Writing credits: a candidate may set `credited`/`creditedAt` on comments under
+their own policies (rules: candidate only, never on their own comments,
+`onlyChanges` pins everything else). It is recognition only - the author's
+lifetime `stats.credits` is written exclusively by the
+`onPolicyCommentCredited` trigger, which derives deltas from the flag's
+transitions (including deletes of credited comments) and namespaces its
+exactly-once markers to coexist with the comment-count triggers on the same
+path.
+
 ## Update - 2026-08-13: candidates and the more perfect platform
 
 New role `candidate` plus a public platform feature (candidates/{uid} with a

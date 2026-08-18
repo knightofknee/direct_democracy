@@ -243,6 +243,19 @@ service cloud.firestore {
         // Authors may remove their own comments (admin: takedowns);
         // onCommentDeleted keeps the count honest.
         allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
+
+        // Comment ratings: one up/down per person, placement-only (scores are
+        // never displayed). The comment's score fields are trigger-only.
+        match /votes/{voterUid} {
+          allow read: if signedIn() && request.auth.uid == voterUid;
+          allow create, update: if signedIn()
+            && request.auth.uid == voterUid
+            && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'createdAt'])
+            && request.resource.data.uid == request.auth.uid
+            && request.resource.data.verified == me().verified
+            && request.resource.data.value in ['up', 'down'];
+          allow delete: if signedIn() && request.auth.uid == voterUid;
+        }
       }
     }
 
@@ -560,9 +573,31 @@ service cloud.firestore {
               || request.resource.data.replyToName == null
               || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 30)
             );
+          // Writing credit: the candidate marks a comment as one that changed
+          // their policy - recognition only, retractable, never self-awarded.
+          // The author's lifetime credit count is trigger-only.
+          allow update: if signedIn()
+            && request.auth.uid == candidateUid
+            && resource.data.authorUid != candidateUid
+            && onlyChanges(['credited', 'creditedAt'])
+            && request.resource.data.credited is bool
+            && request.resource.data.creditedAt == request.time;
+
           // Authors may remove their own comments (admin: takedowns);
           // onPolicyCommentDeleted keeps the count honest.
           allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
+
+          // Comment ratings, same shape as concern comment votes above.
+          match /votes/{voterUid} {
+            allow read: if signedIn() && request.auth.uid == voterUid;
+            allow create, update: if signedIn()
+              && request.auth.uid == voterUid
+              && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'createdAt'])
+              && request.resource.data.uid == request.auth.uid
+              && request.resource.data.verified == me().verified
+              && request.resource.data.value in ['up', 'down'];
+            allow delete: if signedIn() && request.auth.uid == voterUid;
+          }
         }
       }
     }

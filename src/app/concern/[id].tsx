@@ -16,7 +16,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { notify, notifyError } from '@/lib/notify';
+import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { timeAgo } from '@/lib/format';
 import {
   CONCERN_PRIORITIES,
@@ -32,6 +32,7 @@ import {
   deleteConcern,
   updateConcern,
   voteConcernPriority,
+  voteOnComment,
 } from '@/services/concerns';
 
 const PRIORITY_LABELS: Record<ConcernPriority, string> = {
@@ -99,6 +100,14 @@ export default function ConcernScreen() {
 
   const removeConcern = async () => {
     if (!profile) return;
+    // Third gate on top of the inline two-step: a system alert, so a stray
+    // double-tap can never withdraw a concern.
+    const sure = await confirmDestructive(
+      'Withdraw this concern?',
+      'This permanently removes the concern, everyone’s votes on it, and its comments. It cannot be undone.',
+      'Withdraw forever'
+    );
+    if (!sure) return;
     try {
       await deleteConcern(profile, concern);
       notify('Concern withdrawn', 'Your concern and its votes were removed.');
@@ -233,6 +242,7 @@ export default function ConcernScreen() {
         contentPathFor={(comment) => `concerns/${concern.id}/comments/${comment.id}`}
         onSubmit={(body, reply) => addComment(profile!, concern.id, body, reply)}
         onDelete={(comment) => deleteComment(profile!, concern.id, comment)}
+        onVote={(comment, value) => voteOnComment(profile!, concern.id, comment.id, value)}
       />
     </Screen>
   );

@@ -18,6 +18,8 @@ export interface UserStats {
   comments: number;
   votes: number;
   judgments: number;
+  /** Writing credits awarded by candidates; absent on accounts that predate them. */
+  credits?: number;
 }
 
 export interface UserProfile {
@@ -180,8 +182,27 @@ export interface Comment {
   threadId?: string | null;
   /** Display name of the comment being answered - "replying to X" context. */
   replyToName?: string | null;
+  /**
+   * Writing credit: the candidate marked this comment as one that changed
+   * their policy. Pure recognition - it confers nothing but the credit.
+   * Only set on policy comments, only by the policy's candidate.
+   */
+  credited?: boolean;
+  creditedAt?: Timestamp | null;
+  /**
+   * Up minus down votes, trigger-maintained and never displayed - ratings
+   * exist only to order the "best" sort. scoreVerified is the same figure
+   * over verified voters. Absent until the first vote lands.
+   */
+  score?: number;
+  scoreVerified?: number;
   createdAt: Timestamp;
 }
+
+/** A comment rating - placement only, no public counts. */
+export type CommentVoteValue = 'up' | 'down';
+
+export type CommentSort = 'newest' | 'oldest' | 'best';
 
 /** Target of a reply: the thread root plus who is being answered. */
 export interface CommentReply {
