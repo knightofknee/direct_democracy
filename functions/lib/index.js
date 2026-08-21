@@ -563,14 +563,16 @@ exports.onJudgmentWrite = (0, firestore_2.onDocumentWritten)('officials/{officia
             // Only verified users decide the verdict - unverified judgments are
             // displayed but can't flip the status, so a stack of throwaway
             // accounts can't brand an official a dodger (or launder a real dodge).
+            // A response counts as answered until verified dodge votes outnumber
+            // verified answered votes - no quorum, the verdict is live.
             prevStatus = q.status;
             nextStatus = !q.response
                 ? prevStatus
-                : yesVerified + noVerified >= tally_1.ANSWER_JUDGMENT_QUORUM
-                    ? yesVerified > noVerified
+                : noVerified > yesVerified
+                    ? 'dodged'
+                    : yesVerified > 0
                         ? 'answered'
-                        : 'dodged'
-                    : 'underReview';
+                        : 'underReview';
             counts = {
                 answeredYes: yes,
                 answeredNo: no,

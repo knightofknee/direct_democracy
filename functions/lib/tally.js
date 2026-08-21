@@ -6,18 +6,22 @@
  * both in sync if the ballot model changes).
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ANSWER_JUDGMENT_QUORUM = exports.PRIORITY_WEIGHTS = void 0;
+exports.PRIORITY_WEIGHTS = void 0;
 exports.addBallot = addBallot;
 exports.removeBallot = removeBallot;
 exports.weightedScore = weightedScore;
 exports.PRIORITY_WEIGHTS = {
-    critical: 3,
-    high: 2,
-    medium: 1,
-    low: 0,
+    '1': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    // Legacy named ballots cast before the numeric scale, mapped onto it.
+    critical: 5,
+    high: 4,
+    medium: 2,
+    low: 1,
 };
-/** Minimum VERIFIED judgments before a question's status flips. */
-exports.ANSWER_JUDGMENT_QUORUM = 5;
 function keysOf(value) {
     return Array.isArray(value) ? value : [value];
 }

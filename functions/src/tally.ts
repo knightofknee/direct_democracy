@@ -19,14 +19,17 @@ export interface VoterSlices {
 }
 
 export const PRIORITY_WEIGHTS: Record<string, number> = {
-  critical: 3,
-  high: 2,
-  medium: 1,
-  low: 0,
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  '5': 5,
+  // Legacy named ballots cast before the numeric scale, mapped onto it.
+  critical: 5,
+  high: 4,
+  medium: 2,
+  low: 1,
 };
-
-/** Minimum VERIFIED judgments before a question's status flips. */
-export const ANSWER_JUDGMENT_QUORUM = 5;
 
 function keysOf(value: VoteValue): string[] {
   return Array.isArray(value) ? value : [value];

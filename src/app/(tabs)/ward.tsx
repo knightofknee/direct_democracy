@@ -227,7 +227,11 @@ function WardHome({
       />
       <LensToggle value={lens} onChange={setLens} />
       {isHomeWard && (profile?.verified || profile?.role === 'official') ? (
-        <Button title="Raise a ward concern" variant="secondary" onPress={() => router.push('/new-concern')} />
+        <Button
+          title="Raise a ward concern"
+          variant="secondary"
+          onPress={() => router.push({ pathname: '/new-concern', params: { scope: 'ward' } })}
+        />
       ) : !profile ? (
         // Signed-out visitors get a door, not a dead end.
         <>

@@ -3,9 +3,10 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { FlagAccent } from '@/components/flag-accent';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, Chip, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
+import { Button, Card, ChicagoStar, Chip, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
@@ -13,7 +14,6 @@ import { useBlocks } from '@/hooks/use-blocks';
 import { useTheme } from '@/hooks/use-theme';
 import { isAdminUser } from '@/lib/admin';
 import { plural } from '@/lib/format';
-import { nextMilestones } from '@/lib/milestones';
 import { randomDisplayName } from '@/lib/names';
 import { notify } from '@/lib/notify';
 import { unblockUser } from '@/services/moderation';
@@ -32,9 +32,15 @@ export default function ProfileScreen() {
   if (!user || !profile) {
     return (
       <Screen tab>
-        <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34, textAlign: 'center' }}>
-          profile
-        </ThemedText>
+        <View style={{ gap: Spacing.one, alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+            <ChicagoStar size={18} />
+            <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+              profile
+            </ThemedText>
+          </View>
+          <FlagAccent />
+        </View>
         <Card>
           <View style={{ alignItems: 'center', gap: Spacing.three, paddingVertical: Spacing.three }}>
             <Ionicons name="person-circle-outline" size={44} color={theme.primary} />
@@ -113,7 +119,7 @@ export default function ProfileScreen() {
         </ThemedText>
       </Card>
 
-      <SectionHeader title="Civic record" subtitle="Counted as you participate - milestones celebrate along the way" />
+      <SectionHeader title="Civic record" />
       <Card>
         <View style={styles.statsGrid}>
           <StatTile label="Concerns" value={profile.stats?.concerns ?? 0} icon="megaphone" />
@@ -130,31 +136,6 @@ export default function ProfileScreen() {
             </ThemedText>
           </View>
         )}
-        {nextMilestones(profile.stats ?? { concerns: 0, comments: 0, votes: 0, judgments: 0 })
-          .slice(0, 2)
-          .map((m) => (
-            <View key={m.label} style={{ gap: 3 }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                  {m.label} - next milestone
-                </ThemedText>
-                <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                  {m.current} / {m.target}
-                </ThemedText>
-              </View>
-              <View style={[styles.progressTrack, { backgroundColor: theme.backgroundSelected }]}>
-                <View
-                  style={[
-                    styles.progressFill,
-                    {
-                      backgroundColor: theme.primary,
-                      width: `${Math.min(100, Math.round((m.current / m.target) * 100))}%`,
-                    },
-                  ]}
-                />
-              </View>
-            </View>
-          ))}
       </Card>
 
       <Button title="My activity" variant="secondary" onPress={() => router.push('/my-activity')} />
@@ -265,14 +246,5 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     paddingVertical: Spacing.two,
-  },
-  progressTrack: {
-    height: 6,
-    borderRadius: 3,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 3,
   },
 });

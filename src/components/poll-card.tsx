@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { LensToggle } from '@/components/lens-toggle';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip } from '@/components/ui';
@@ -14,7 +13,7 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { notify } from '@/lib/notify';
-import type { Poll, TallyLens, VoteDoc } from '@/lib/types';
+import type { Poll, VoteDoc } from '@/lib/types';
 import { closePoll, votePoll } from '@/services/polls';
 
 const TYPE_LABELS: Record<Poll['type'], string> = {
@@ -28,7 +27,6 @@ export function PollCard({ poll }: { poll: Poll }) {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
-  const [lens, setLens] = useState<TallyLens>('all');
   const [draft, setDraft] = useState<{ from: string; keys: string[] } | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -89,8 +87,7 @@ export function PollCard({ poll }: { poll: Poll }) {
 
       {hasVoted || !canVote ? (
         <View style={{ gap: Spacing.two }}>
-          <LensToggle value={lens} onChange={setLens} />
-          <TallyResults tally={poll.tallies} options={poll.options} lens={lens} highlightKeys={myKeys} />
+          <TallyResults tally={poll.tallies} options={poll.options} highlightKeys={myKeys} />
           {hasVoted && poll.open && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
               You voted - tap an option below to change it.

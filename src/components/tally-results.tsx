@@ -6,27 +6,24 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { pct, plural } from '@/lib/format';
 import { tallyFor } from '@/lib/tally';
-import type { DualTally, TallyLens } from '@/lib/types';
+import type { DualTally } from '@/lib/types';
 
 /**
- * Result bars for one tally through the selected lens, with the other key
- * lens shown inline so the "all users vs verified" comparison is always
- * one glance away - that contrast is the product.
+ * Result bars for one tally, all users and verified side by side - the
+ * "all users vs verified" contrast is the product, no toggle to hunt for.
  */
 export function TallyResults({
   tally,
   options,
-  lens,
   highlightKeys,
 }: {
   tally: DualTally;
   options: { key: string; label: string }[];
-  lens: TallyLens;
   /** Option keys the current user picked - rendered with the primary color. */
   highlightKeys?: string[];
 }) {
   const theme = useTheme();
-  const { counts, total } = tallyFor(tally, lens);
+  const { counts, total } = tallyFor(tally, 'all');
   const verified = tallyFor(tally, 'verified');
 
   return (
@@ -44,9 +41,7 @@ export function TallyResults({
                 {mine ? '  ✓' : ''}
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {lens === 'verified'
-                  ? `${percent}%`
-                  : `${percent}% · verified ${verifiedPercent}%`}
+                {`${percent}% · verified ${verifiedPercent}%`}
               </ThemedText>
             </View>
             <View style={[styles.barTrack, { backgroundColor: theme.backgroundSelected }]}>
@@ -64,8 +59,7 @@ export function TallyResults({
         );
       })}
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {plural(total, 'vote')}
-        {lens === 'all' ? ` · ${plural(tally.totalVerified, 'verified vote')}` : ''}
+        {plural(total, 'vote')} · {plural(tally.totalVerified, 'verified vote')}
       </ThemedText>
     </View>
   );

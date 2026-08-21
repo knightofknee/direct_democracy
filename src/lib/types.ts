@@ -146,7 +146,8 @@ export type Scope = 'city' | 'ward';
  * Concerns are voted on by priority - how much does this matter - rather than
  * up/down. Option keys for a concern's DualTally.
  */
-export const CONCERN_PRIORITIES = ['critical', 'high', 'medium', 'low'] as const;
+/** 1 (barely) to 5 (critical). Older ballots may hold legacy named keys. */
+export const CONCERN_PRIORITIES = ['1', '2', '3', '4', '5'] as const;
 export type ConcernPriority = (typeof CONCERN_PRIORITIES)[number];
 // Priority → board-score weights live server-side in functions/src/tally.ts.
 
@@ -278,10 +279,3 @@ export interface AmaQuestion {
   answeredNoVerified?: number;
   createdAt: Timestamp;
 }
-
-/**
- * Minimum VERIFIED judgments before a question flips to answered/dodged.
- * Unverified judgments are shown but don't decide - sockpuppets can't brand
- * an official a dodger or launder a real dodge.
- */
-export const ANSWER_JUDGMENT_QUORUM = 5;

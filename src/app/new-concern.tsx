@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -17,20 +17,23 @@ export default function NewConcernScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
+  const params = useLocalSearchParams<{ scope?: string }>();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [scope, setScope] = useState<Scope>('city');
+  const [scope, setScope] = useState<Scope>(params.scope === 'ward' ? 'ward' : 'city');
   const [saving, setSaving] = useState(false);
 
   const canPostToWard = profile?.wardId != null && (profile.verified || profile.role === 'official');
+  // A deep link could ask for ward scope without the standing to use it.
+  if (scope === 'ward' && profile && !canPostToWard) setScope('city');
 
   const submit = async () => {
     if (!profile) {
       router.replace('/sign-in');
       return;
     }
-    if (title.trim().length < 8) {
-      notify('Almost there', 'Give your concern a title of at least 8 characters.');
+    if (title.trim().length < 4) {
+      notify('Almost there', 'Give your concern a title of at least 4 characters.');
       return;
     }
     if (body.trim().length < 20) {

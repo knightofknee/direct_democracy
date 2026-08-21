@@ -15,7 +15,7 @@ export interface Milestone {
 }
 
 interface MilestoneTrack {
-  stat: keyof UserStats | 'posts';
+  stat: keyof UserStats;
   thresholds: number[];
   title: (n: number) => string;
   message: (n: number) => string;
@@ -31,12 +31,6 @@ const TRACKS: MilestoneTrack[] = [
       n === 1
         ? 'Your voice is officially on the board. This is how change starts.'
         : 'You keep putting real issues in front of the city. Keep them coming.',
-  },
-  {
-    stat: 'posts', // concerns + comments combined
-    thresholds: [10, 100],
-    title: (n) => `${n} posts!`,
-    message: () => 'Concerns, comments - you show up for the conversation.',
   },
   {
     stat: 'votes',
@@ -59,7 +53,6 @@ const TRACKS: MilestoneTrack[] = [
 ];
 
 function statValue(stats: UserStats, stat: MilestoneTrack['stat']): number {
-  if (stat === 'posts') return (stats.concerns ?? 0) + (stats.comments ?? 0);
   return stats[stat] ?? 0;
 }
 
@@ -114,24 +107,4 @@ export async function takeNewMilestone(
     title: best.track.title(best.threshold),
     message: best.track.message(best.threshold),
   };
-}
-
-/** Progress toward the next milestone on each track - shown on the profile. */
-export function nextMilestones(stats: UserStats): {
-  label: string;
-  current: number;
-  target: number;
-}[] {
-  const labels: Record<string, string> = {
-    concerns: 'Concerns raised',
-    posts: 'Posts',
-    votes: 'Votes cast',
-    judgments: 'Answers judged',
-  };
-  return TRACKS.flatMap((track) => {
-    const value = statValue(stats, track.stat);
-    const target = track.thresholds.find((t) => value < t);
-    if (target == null) return [];
-    return [{ label: labels[track.stat], current: value, target }];
-  });
 }

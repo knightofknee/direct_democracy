@@ -29,7 +29,9 @@ export function Screen({
         },
         style,
       ]}
-      keyboardShouldPersistTaps="handled">
+      keyboardShouldPersistTaps="handled"
+      bounces={false}
+      overScrollMode="never">
       <View style={styles.inner}>{children}</View>
     </ScrollView>
   );

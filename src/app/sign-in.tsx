@@ -20,9 +20,11 @@ export default function SignInScreen() {
   const [busy, setBusy] = useState(false);
 
   const done = () => {
-    // Deep links can land here with no history to pop.
-    if (router.canGoBack()) router.back();
-    else router.replace('/');
+    // Always land on the big board, wherever sign-in was opened from.
+    // Dismiss the modal first - a bare replace() from inside a native modal
+    // can pop to whatever screen sat under it instead of the target.
+    if (router.canDismiss()) router.dismiss();
+    router.replace('/');
   };
 
   const submit = async () => {

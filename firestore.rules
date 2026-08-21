@@ -160,7 +160,7 @@ service cloud.firestore {
         && request.resource.data.authorName == me().displayName
         && request.resource.data.authorVerified == me().verified
         && request.resource.data.title is string
-        && request.resource.data.title.size() >= 8
+        && request.resource.data.title.size() >= 4
         && request.resource.data.title.size() <= 140
         && request.resource.data.body is string
         && request.resource.data.body.size() <= 4000
@@ -186,7 +186,7 @@ service cloud.firestore {
         && request.auth.uid == resource.data.authorUid
         && onlyChanges(['title', 'body'])
         && request.resource.data.title is string
-        && request.resource.data.title.size() >= 8
+        && request.resource.data.title.size() >= 4
         && request.resource.data.title.size() <= 140
         && request.resource.data.body.size() <= 4000
         && resource.data.tallies.totalAll == 0
@@ -207,7 +207,7 @@ service cloud.firestore {
           && request.resource.data.uid == request.auth.uid
           && request.resource.data.verified == me().verified
           && request.resource.data.wardId == me().wardId
-          && request.resource.data.value in ['critical', 'high', 'medium', 'low'];
+          && request.resource.data.value in ['1', '2', '3', '4', '5'];
         // Retract entirely - the trigger removes the ballot from the tallies.
         allow delete: if signedIn() && request.auth.uid == voterUid;
       }

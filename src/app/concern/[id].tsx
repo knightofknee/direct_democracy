@@ -5,7 +5,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
-import { LensToggle } from '@/components/lens-toggle';
 import { Screen } from '@/components/screen';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
@@ -23,7 +22,6 @@ import {
   type Comment,
   type Concern,
   type ConcernPriority,
-  type TallyLens,
   type VoteDoc,
 } from '@/lib/types';
 import {
@@ -35,21 +33,13 @@ import {
   voteOnComment,
 } from '@/services/concerns';
 
-const PRIORITY_LABELS: Record<ConcernPriority, string> = {
-  critical: '🔥 Critical',
-  high: 'High priority',
-  medium: 'Medium priority',
-  low: 'Low priority',
-};
-
-const PRIORITY_OPTIONS = CONCERN_PRIORITIES.map((key) => ({ key, label: PRIORITY_LABELS[key] }));
+const PRIORITY_OPTIONS = CONCERN_PRIORITIES.map((key) => ({ key, label: key }));
 
 export default function ConcernScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
-  const [lens, setLens] = useState<TallyLens>('all');
   const [savingVote, setSavingVote] = useState(false);
 
   const { data: concern, loading } = useLiveDoc<Concern>(
@@ -83,8 +73,8 @@ export default function ConcernScreen() {
 
   const saveEdit = async () => {
     if (!profile || !editing) return;
-    if (editing.title.trim().length < 8) {
-      notify('Almost there', 'Give your concern a title of at least 8 characters.');
+    if (editing.title.trim().length < 4) {
+      notify('Almost there', 'Give your concern a title of at least 4 characters.');
       return;
     }
     setSavingEdit(true);
@@ -186,16 +176,16 @@ export default function ConcernScreen() {
             {confirmDelete ? (
               <>
                 <Button title="Yes, withdraw it" variant="danger" onPress={removeConcern} />
-                <Button title="Keep it" variant="ghost" onPress={() => setConfirmDelete(false)} />
+                <Button title="Keep it" variant="secondary" onPress={() => setConfirmDelete(false)} />
               </>
             ) : (
-              <Button title="Withdraw concern" variant="ghost" onPress={() => setConfirmDelete(true)} />
+              <Button title="Withdraw concern" variant="secondary" onPress={() => setConfirmDelete(true)} />
             )}
           </View>
         )}
       </View>
 
-      <SectionHeader title="How much does this matter?" subtitle="Your vote sets this concern’s rank on the board" />
+      <SectionHeader title="How much does this matter?" />
       <View style={styles.priorityRow}>
         {PRIORITY_OPTIONS.map((option) => {
           const selected = myPriority === option.key;
@@ -212,8 +202,8 @@ export default function ConcernScreen() {
                 },
               ]}>
               <ThemedText
-                type="small"
-                style={selected ? { color: theme.primary, fontWeight: '700' } : undefined}>
+                type="smallBold"
+                style={selected ? { color: theme.primary } : undefined}>
                 {option.label}
               </ThemedText>
             </Pressable>
@@ -222,19 +212,11 @@ export default function ConcernScreen() {
       </View>
 
       <SectionHeader title="Results" />
-      <LensToggle value={lens} onChange={setLens} />
       <TallyResults
         tally={concern.tallies}
         options={PRIORITY_OPTIONS}
-        lens={lens}
         highlightKeys={myPriority ? [myPriority] : undefined}
       />
-      {concern.scope === 'ward' && (
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          Anyone can vote here, but the verified counts include only verified residents of the{' '}
-          {wardLabel(concern.wardId)}.
-        </ThemedText>
-      )}
 
       <SectionHeader title={`Comments (${concern.commentCount})`} />
       <CommentsSection
@@ -251,13 +233,13 @@ export default function ConcernScreen() {
 const styles = StyleSheet.create({
   priorityRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: Spacing.two,
   },
   priorityButton: {
+    flex: 1,
+    alignItems: 'center',
     borderRadius: 12,
     borderWidth: 1.5,
     paddingVertical: 10,
-    paddingHorizontal: Spacing.three,
   },
 });

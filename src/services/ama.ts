@@ -99,33 +99,46 @@ export interface OfficialScore {
   score: number | null;
   grade: string;
   responded: number;
+  /** Every response counts as answered until the community judges it a dodge. */
   answered: number;
   dodged: number;
   ignored: number;
+  /** Unanswered questions still inside the grace week - not yet ignored. */
+  pending: number;
   asked: number;
 }
 
 /**
- * The accountability score. Answered questions earn full credit, a response
- * the community hasn't judged yet earns half, dodges and silence earn nothing.
+ * The accountability score. A response is answered until the community
+ * judges it a dodge; dodges and silence earn nothing. `pending` (unanswered
+ * questions younger than the grace week, counted by the caller from the live
+ * question list) is held out entirely: it neither counts as ignored nor
+ * drags the score. Callers without question ages pass nothing and every
+ * unanswered question counts as ignored, as before.
  */
-export function computeScore(o: {
-  questionsAsked: number;
-  questionsResponded: number;
-  questionsAnswered: number;
-  questionsDodged: number;
-}): OfficialScore {
+export function computeScore(
+  o: {
+    questionsAsked: number;
+    questionsResponded: number;
+    questionsAnswered: number;
+    questionsDodged: number;
+  },
+  pending = 0
+): OfficialScore {
   const asked = o.questionsAsked ?? 0;
   const responded = o.questionsResponded ?? 0;
-  const answered = o.questionsAnswered ?? 0;
   const dodged = o.questionsDodged ?? 0;
-  const ignored = Math.max(0, asked - responded);
-  const underReview = Math.max(0, responded - answered - dodged);
+  const answered = Math.max(0, responded - dodged);
+  const held = Math.min(Math.max(0, pending), Math.max(0, asked - responded));
+  const ignored = Math.max(0, asked - responded - held);
+  const graded = asked - held;
 
-  if (asked === 0) return { score: null, grade: '-', responded, answered, dodged, ignored, asked };
+  if (graded <= 0) {
+    return { score: null, grade: '-', responded, answered, dodged, ignored, pending: held, asked };
+  }
 
-  const score = Math.round(((answered + underReview * 0.5) / asked) * 100);
+  const score = Math.round((answered / graded) * 100);
   const grade =
     score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F';
-  return { score, grade, responded, answered, dodged, ignored, asked };
+  return { score, grade, responded, answered, dodged, ignored, pending: held, asked };
 }

@@ -6,7 +6,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
-import { LensToggle } from '@/components/lens-toggle';
 import { Screen } from '@/components/screen';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
@@ -38,7 +37,6 @@ export default function PolicyScreen() {
   const { id, policyId } = useLocalSearchParams<{ id: string; policyId: string }>();
   const router = useRouter();
   const { profile } = useAuth();
-  const [lens, setLens] = useState<'all' | 'verified'>('all');
   const [savingVote, setSavingVote] = useState(false);
 
   const { data: candidate } = useLiveDoc<Candidate>(
@@ -127,7 +125,7 @@ export default function PolicyScreen() {
 
       {isThisCandidate && <CandidateTools policy={policy} />}
 
-      <SectionHeader title="Where do you stand?" subtitle="Both counts are public: everyone, and verified Chicagoans" />
+      <SectionHeader title="Where do you stand?" />
       <View style={styles.stanceRow}>
         {STANCE_OPTIONS.map((option) => {
           const selected = myStance === option.key;
@@ -147,11 +145,9 @@ export default function PolicyScreen() {
       </View>
 
       <SectionHeader title="Results" />
-      <LensToggle value={lens} onChange={setLens} />
       <TallyResults
         tally={policy.tallies}
         options={STANCE_OPTIONS}
-        lens={lens}
         highlightKeys={myStance ? [myStance] : undefined}
       />
 

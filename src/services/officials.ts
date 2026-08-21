@@ -25,8 +25,6 @@ import { computeScore, type OfficialScore } from '@/services/ama';
  */
 
 export const APPROVAL_MIN_BALLOTS = 5;
-/** The answer axis also needs a real sample before it grades. */
-export const ANSWERS_MIN_QUESTIONS = 3;
 
 export interface ApprovalRating {
   /** 0–100 approval among constituents, or null below the ballot minimum. */
@@ -75,14 +73,14 @@ export function letterFor(score: number | null): string {
   return 'F';
 }
 
-export function computeGrade(official: Official): OfficialGrade {
+export function computeGrade(official: Official, pendingQuestions = 0): OfficialGrade {
   const approval = computeApproval(official);
-  const answers = computeScore(official);
+  const answers = computeScore(official, pendingQuestions);
 
   const axes: number[] = [];
   if (approval.constituentPct != null) axes.push(approval.constituentPct);
-  // One ignored question shouldn't tank a grade - the axis needs a sample.
-  const answersGraded = answers.score != null && answers.asked >= ANSWERS_MIN_QUESTIONS;
+  // The answer axis grades from the first question that isn't pending.
+  const answersGraded = answers.score != null;
   if (answersGraded && answers.score != null) axes.push(answers.score);
   const overall = axes.length
     ? Math.round(axes.reduce((a, b) => a + b, 0) / axes.length)

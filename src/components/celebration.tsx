@@ -153,7 +153,7 @@ function CelebrationOverlay({
         <Particle key={p.id} particle={p} progress={progress} />
       ))}
       <Animated.View
-        entering={ZoomIn.springify().damping(14)}
+        entering={ZoomIn.duration(220)}
         style={[styles.card, { backgroundColor: theme.background, borderColor: theme.border }]}>
         <View style={[styles.starBubble, { backgroundColor: theme.primarySoft }]}>
           <Ionicons name="star" size={30} color={theme.accent} />

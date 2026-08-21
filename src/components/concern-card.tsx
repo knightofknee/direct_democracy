@@ -15,15 +15,12 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
 import { notifyError } from '@/lib/notify';
-import type { Concern, ConcernPriority, TallyLens, VoteDoc } from '@/lib/types';
+import { CONCERN_PRIORITIES, type Concern, type ConcernPriority, type TallyLens, type VoteDoc } from '@/lib/types';
 import { voteConcernPriority } from '@/services/concerns';
 
-const QUICK_PRIORITIES: { key: ConcernPriority; label: string }[] = [
-  { key: 'critical', label: '🔥 Critical' },
-  { key: 'high', label: 'High' },
-  { key: 'medium', label: 'Med' },
-  { key: 'low', label: 'Low' },
-];
+const QUICK_PRIORITIES: { key: ConcernPriority; label: string }[] = CONCERN_PRIORITIES.map(
+  (key) => ({ key, label: key })
+);
 
 export function ConcernCard({
   concern,
@@ -168,12 +165,12 @@ const styles = StyleSheet.create({
   quickRow: {
     flexDirection: 'row',
     gap: 6,
-    flexWrap: 'wrap',
   },
   quickPill: {
+    flex: 1,
+    alignItems: 'center',
     borderRadius: 999,
     borderWidth: 1.5,
     paddingVertical: 5,
-    paddingHorizontal: 12,
   },
 });

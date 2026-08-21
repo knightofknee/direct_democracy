@@ -304,10 +304,13 @@ Two consequences of the exactly-once work to know about:
   `status`. `onQuestionDeleted` now rebalances asked/responded/answered/dodged
   and sweeps judgments so an admin takedown of an answered thread leaves every
   report card consistent (verified by test).
-- **Verified-only verdicts**: a question's answered/dodged flip now counts
-  ONLY verified judgments (quorum 5). Verified by test: five unverified
-  judgments left a question underReview; five verified ones decided it.
-  Unverified judgments remain visible alongside.
+- **Verified-only verdicts**: a question's answered/dodged flip counts ONLY
+  verified judgments. The quorum was later removed by product decision
+  (2026-08-20): a response counts as answered immediately and flips to dodged
+  whenever verified dodge votes outnumber verified answered votes, live from
+  the first judgment. Unverified judgments remain visible alongside but never
+  decide. Accepted risk: a single verified account can flip a verdict until
+  outvoted by other verified users.
 - **One human, one verified account**: the Persona webhook maps the inquiry's
   Persona account id to the uid in `personaAccounts/{accountId}` (deny-by-
   default collection) and refuses to verify an identity that already verified
@@ -364,8 +367,9 @@ Two consequences of the exactly-once work to know about:
   a 5-ballot minimum before an axis grades - one grumpy neighbor can't hand
   out an F.
 - Officials cannot rate themselves or judge their own responses (rules).
-- The answer score is community-judged with a 5-judgment quorum; status flips
-  and every counter move only in `onJudgmentWrite`.
+- The answer score is community-judged with no quorum (verified majority,
+  live; answered until dodges lead); status flips and every counter move only
+  in `onJudgmentWrite`.
 
 ### Known limitations (accepted for now, revisit before scale)
 

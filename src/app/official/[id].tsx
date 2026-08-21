@@ -21,9 +21,12 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { timeAgo } from '@/lib/format';
 import { notify, notifyError } from '@/lib/notify';
-import { ANSWER_JUDGMENT_QUORUM, type AmaQuestion, type Official } from '@/lib/types';
+import type { AmaQuestion, Official } from '@/lib/types';
 import { askQuestion, deleteQuestion, judgeResponse, respondToQuestion } from '@/services/ama';
-import { computeGrade, letterFor, updateOfficialCard } from '@/services/officials';
+import { APPROVAL_MIN_BALLOTS, computeGrade, updateOfficialCard } from '@/services/officials';
+
+/** Unanswered questions younger than this count as pending, not ignored. */
+const IGNORED_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
 
 export default function OfficialAmaScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -55,7 +58,14 @@ export default function OfficialAmaScreen() {
     );
   }
 
-  const grade = computeGrade(official);
+  // A just-asked question has a null createdAt until the server timestamp
+  // lands - treat it as pending rather than ignored.
+  const pendingQuestions = questions.filter(
+    (q) =>
+      q.status === 'awaitingResponse' &&
+      (!q.createdAt || Date.now() - q.createdAt.toMillis() < IGNORED_AFTER_MS)
+  ).length;
+  const grade = computeGrade(official, pendingQuestions);
   const isThisOfficial = profile?.uid === official.uid;
 
   const ask = async () => {
@@ -168,7 +178,6 @@ function GradeCard({
               ? '-'
               : `${grade.approval.constituentPct}%`
           }
-          letter={letterFor(grade.approval.constituentPct)}
           score={grade.approval.constituentPct}
         />
         <View style={[styles.axisDivider, { backgroundColor: theme.border }]} />
@@ -176,16 +185,20 @@ function GradeCard({
           title="Answers"
           subtitle="straight answers given"
           value={!grade.answersGraded || grade.answers.score == null ? '-' : `${grade.answers.score}`}
-          letter={grade.answersGraded ? grade.answers.grade : '-'}
           score={grade.answersGraded ? grade.answers.score : null}
         />
       </View>
 
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {grade.answers.answered} answered · {grade.answers.dodged} dodged · {grade.answers.ignored}{' '}
-        ignored, as judged by the community - never by the official. The overall grade averages
-        constituent approval with the answer score.
+        {grade.answers.answered} answered · {grade.answers.dodged} dodged ·{' '}
+        {grade.answers.ignored} ignored · {grade.answers.pending} pending
       </ThemedText>
+      {grade.approval.constituentBallots < APPROVAL_MIN_BALLOTS && (
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          At least {APPROVAL_MIN_BALLOTS} votes are needed to show an approval score -{' '}
+          {grade.approval.constituentBallots} so far.
+        </ThemedText>
+      )}
     </Card>
   );
 }
@@ -194,27 +207,20 @@ function AxisSummary({
   title,
   subtitle,
   value,
-  letter,
   score,
 }: {
   title: string;
   subtitle: string;
   value: string;
-  letter: string;
   score: number | null;
 }) {
   const theme = useTheme();
   const color = gradeColor(score, theme);
   return (
     <View style={{ flex: 1, gap: 2, alignItems: 'center' }}>
-      <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 6 }}>
-        <ThemedText type="subtitle" style={{ fontSize: 26, lineHeight: 32, color }}>
-          {value}
-        </ThemedText>
-        <ThemedText type="smallBold" style={{ color, fontSize: 14 }}>
-          {letter}
-        </ThemedText>
-      </View>
+      <ThemedText type="subtitle" style={{ fontSize: 26, lineHeight: 32, color }}>
+        {value}
+      </ThemedText>
       <ThemedText type="smallBold" style={{ fontSize: 12 }}>
         {title}
       </ThemedText>
@@ -315,7 +321,8 @@ function QuestionCard({
 
   const statusChip = {
     awaitingResponse: { label: 'Awaiting response', tone: 'warning' as const },
-    underReview: { label: 'Community reviewing', tone: 'primary' as const },
+    // A response counts as answered unless the community judges it a dodge.
+    underReview: { label: 'Answered', tone: 'success' as const },
     answered: { label: 'Answered', tone: 'success' as const },
     dodged: { label: 'Dodged', tone: 'danger' as const },
   }[question.status];
@@ -347,8 +354,6 @@ function QuestionCard({
       setBusy(false);
     }
   };
-
-  const verifiedJudgments = (question.answeredYesVerified ?? 0) + (question.answeredNoVerified ?? 0);
 
   return (
     <Card>
@@ -412,14 +417,14 @@ function QuestionCard({
           </ThemedText>
           <View style={styles.judgeRow}>
             <Button
-              title={`Yes${myJudgment?.answered === true ? ' ✓' : ''}`}
+              title={`Answered${myJudgment?.answered === true ? ' ✓' : ''}`}
               variant={myJudgment?.answered === true ? 'primary' : 'secondary'}
               onPress={() => judge(true)}
               disabled={busy}
               style={{ flex: 1 }}
             />
             <Button
-              title={`No, it dodged${myJudgment?.answered === false ? ' ✓' : ''}`}
+              title={`Dodged${myJudgment?.answered === false ? ' ✓' : ''}`}
               variant={myJudgment?.answered === false ? 'danger' : 'secondary'}
               onPress={() => judge(false)}
               disabled={busy}
@@ -429,9 +434,6 @@ function QuestionCard({
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {question.answeredYes} say answered ({question.answeredYesVerified ?? 0} verified) ·{' '}
             {question.answeredNo} say dodged ({question.answeredNoVerified ?? 0} verified)
-            {verifiedJudgments < ANSWER_JUDGMENT_QUORUM
-              ? ` · ${ANSWER_JUDGMENT_QUORUM - verifiedJudgments} more verified judgments to decide`
-              : ''}
           </ThemedText>
         </View>
       )}

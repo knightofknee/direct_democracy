@@ -15,7 +15,6 @@ import { defineSecret } from 'firebase-functions/params';
 
 import { parsePlatformHtml } from './platform';
 import {
-  ANSWER_JUDGMENT_QUORUM,
   PRIORITY_WEIGHTS,
   addBallot,
   removeBallot,
@@ -724,14 +723,16 @@ export const onJudgmentWrite = onDocumentWritten(
         // Only verified users decide the verdict - unverified judgments are
         // displayed but can't flip the status, so a stack of throwaway
         // accounts can't brand an official a dodger (or launder a real dodge).
+        // A response counts as answered until verified dodge votes outnumber
+        // verified answered votes - no quorum, the verdict is live.
         prevStatus = q.status as string;
         nextStatus = !q.response
           ? prevStatus
-          : yesVerified + noVerified >= ANSWER_JUDGMENT_QUORUM
-            ? yesVerified > noVerified
+          : noVerified > yesVerified
+            ? 'dodged'
+            : yesVerified > 0
               ? 'answered'
-              : 'dodged'
-            : 'underReview';
+              : 'underReview';
 
         counts = {
           answeredYes: yes,
