@@ -2,10 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { collection, doc, orderBy, query, where } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { OfficialAvatar } from '@/components/avatar';
+import { ClaimGate } from '@/components/claim-gate';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
@@ -16,15 +17,12 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { pct, plural, timeAgo } from '@/lib/format';
+import { host, plural, timeAgo } from '@/lib/format';
 import { notify, notifyError } from '@/lib/notify';
+import { openLink } from '@/lib/open-link';
 import type { Candidate, Policy, Poll } from '@/lib/types';
 import { syncMyPlatform, updateCandidateCard } from '@/services/candidates';
 
-async function openLink(url: string) {
-  const { openBrowserAsync } = await import('expo-web-browser');
-  await openBrowserAsync(url);
-}
 
 /** A candidate's public page: who they are, and the more perfect platform. */
 export default function CandidateScreen() {
@@ -92,6 +90,7 @@ export default function CandidateScreen() {
 
       {isThisCandidate && (
         <>
+          <ClaimGate claimed={candidate.claimed} name={candidate.name} />
           <EditCard candidate={candidate} />
           <SyncCard candidate={candidate} />
           <View style={{ flexDirection: 'row', gap: Spacing.two }}>
@@ -115,8 +114,22 @@ export default function CandidateScreen() {
 
       <SectionHeader
         title="the more perfect platform"
-        subtitle="Every policy, open to your vote and your arguments"
+        subtitle="Every policy, open to your arguments"
       />
+      {candidate.platformNote ? (
+        <PlatformNote
+          note={candidate.platformNote}
+          tone={candidate.platformNoteTone}
+          onPress={
+            candidate.platformNoteTone === 'success' && candidate.sourceUrl
+              ? () => void openLink(candidate.sourceUrl!)
+              : undefined
+          }
+        />
+      ) : null}
+      {candidate.sourceUrl && visiblePolicies.some((p) => p.source === 'site') ? (
+        <ImportedNote sourceUrl={candidate.sourceUrl} />
+      ) : null}
       {visiblePolicies.length === 0 ? (
         <EmptyState icon="document-text-outline" message="No policies published yet." />
       ) : (
@@ -135,6 +148,64 @@ export default function CandidateScreen() {
         </>
       )}
     </Screen>
+  );
+}
+
+/**
+ * Operator-written editorial callout above the platform - loud on purpose,
+ * for what a voter should not scroll past: amber calls out a gap (a
+ * candidate with no real platform for the office), green credits good work
+ * and taps through to the campaign's own page.
+ */
+function PlatformNote({
+  note,
+  tone = 'warning',
+  onPress,
+}: {
+  note: string;
+  tone?: 'warning' | 'success' | null;
+  onPress?: () => void;
+}) {
+  const theme = useTheme();
+  const colors =
+    tone === 'success'
+      ? { border: theme.verified, bg: theme.verifiedSoft, icon: theme.verified }
+      : { border: theme.warning, bg: theme.warningSoft, icon: theme.warning };
+  return (
+    <Card
+      onPress={onPress}
+      style={{ borderColor: colors.border, borderWidth: 1, backgroundColor: colors.bg }}>
+      <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'flex-start' }}>
+        <Ionicons
+          name={tone === 'success' ? 'checkmark-circle' : 'alert-circle'}
+          size={18}
+          color={colors.icon}
+        />
+        <ThemedText type="smallBold" style={{ flex: 1, fontSize: 14, lineHeight: 20 }}>
+          {note}
+        </ThemedText>
+        {onPress ? <Ionicons name="open-outline" size={16} color={colors.icon} /> : null}
+      </View>
+    </Card>
+  );
+}
+
+/**
+ * Provenance label for platforms pulled from the campaign's own website:
+ * shown until the candidate takes their policies over by editing them here.
+ */
+function ImportedNote({ sourceUrl }: { sourceUrl: string }) {
+  const theme = useTheme();
+  return (
+    <Pressable
+      onPress={() => void openLink(sourceUrl)}
+      accessibilityRole="link"
+      style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+      <Ionicons name="globe-outline" size={14} color={theme.primary} />
+      <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
+        Imported from {host(sourceUrl)}
+      </ThemedText>
+    </Pressable>
   );
 }
 
@@ -158,7 +229,6 @@ function PlatformList({ candidateUid, policies }: { candidateUid: string; polici
         </ThemedText>
       );
     }
-    const support = pct(policy.tallies.all['support'] ?? 0, policy.tallies.totalAll);
     rows.push(
       <Animated.View key={policy.id} entering={FadeInDown.duration(240).delay(Math.min(i, 10) * 25)}>
         <Card onPress={() => router.push(`/candidate/${candidateUid}/${policy.id}`)}>
@@ -173,8 +243,7 @@ function PlatformList({ candidateUid, policies }: { candidateUid: string; polici
             {policy.body}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {policy.tallies.totalAll > 0 ? `${support}% support · ` : ''}
-            {plural(policy.tallies.totalAll, 'vote')} · {plural(policy.commentCount, 'comment')}
+            {plural(policy.commentCount, 'comment')}
           </ThemedText>
         </Card>
       </Animated.View>

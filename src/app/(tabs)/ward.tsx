@@ -13,7 +13,7 @@ import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
+import { Button, Card, ChicagoStar, Chip, EmptyState, SectionHeader } from '@/components/ui';
 import { WARDS, wardById, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
@@ -189,38 +189,8 @@ function WardHome({
         </Pressable>
       </View>
 
-      {alderman && (
-        <Card onPress={() => router.push(`/official/${alderman.uid}`)}>
-          <View style={styles.aldermanRow}>
-            <OfficialAvatar name={alderman.name} photoUrl={alderman.photoUrl} size={48} />
-            <View style={{ flex: 1, gap: 2 }}>
-              <ThemedText type="smallBold">{alderman.name}</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {alderman.title} · ask them anything
-              </ThemedText>
-            </View>
-            <GradeBadge
-              letter={computeGrade(alderman).letter}
-              score={computeGrade(alderman).overall}
-            />
-            <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
-          </View>
-        </Card>
-      )}
-
-      {isWardOfficial && (
-        <Button title="Put a question to your ward" onPress={() => router.push('/new-poll')} />
-      )}
-
-      {openPolls.length > 0 && (
-        <>
-          <SectionHeader title="On the ballot" subtitle="Open votes from your alderman - verified residents only" />
-          {openPolls.map((poll) => (
-            <PollCard key={poll.id} poll={poll} />
-          ))}
-        </>
-      )}
-
+      {/* Residents first: the ward's own concerns lead the page, the
+          alderman and their ballot questions follow. */}
       <SectionHeader
         title="Ward leaderboard"
         subtitle="Anyone can weigh in. Verified counts are residents of this ward only."
@@ -265,6 +235,41 @@ function WardHome({
         visibleConcerns.map((concern, i) => (
           <ConcernCard key={concern.id} concern={concern} rank={i + 1} lens={lens} index={i} />
         ))
+      )}
+
+      {alderman && (
+        <Card onPress={() => router.push(`/official/${alderman.uid}`)}>
+          <View style={styles.aldermanRow}>
+            <OfficialAvatar name={alderman.name} photoUrl={alderman.photoUrl} size={48} />
+            <View style={{ flex: 1, gap: 2 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+                <ThemedText type="smallBold">{alderman.name}</ThemedText>
+                {alderman.claimed && <Chip label="on the platform" tone="success" />}
+              </View>
+              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+                {alderman.title} · ask them anything
+              </ThemedText>
+            </View>
+            <GradeBadge
+              letter={computeGrade(alderman).letter}
+              score={computeGrade(alderman).overall}
+            />
+            <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
+          </View>
+        </Card>
+      )}
+
+      {isWardOfficial && (
+        <Button title="Put a question to your ward" onPress={() => router.push('/new-poll')} />
+      )}
+
+      {openPolls.length > 0 && (
+        <>
+          <SectionHeader title="On the ballot" subtitle="Open votes from your alderman - verified residents only" />
+          {openPolls.map((poll) => (
+            <PollCard key={poll.id} poll={poll} />
+          ))}
+        </>
       )}
 
       {closedPolls.length > 0 && (

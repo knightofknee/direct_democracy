@@ -397,3 +397,50 @@ Two consequences of the exactly-once work to know about:
 - No feedback moments → milestone celebrations (server-counted, replay-proof).
 - Cold visual hierarchy → Chicago-flag accents, portraits, grade badges,
   entrance/press animations.
+
+## Update - 2026-08-23: imported platforms and policy takeover
+
+Real mayoral campaigns are now imported from their own websites, which changes
+two things in the trust model:
+
+- **Synced policies gained exactly one client write path: takeover.** The
+  owning candidate may update a `source: 'site'` policy, and the rules force
+  the written `source` to `'app'` in the same update - so the only possible
+  transition is site -> app, one way, by the owner. After takeover the sync
+  function skips the doc (it already refused to touch non-site ids), so the
+  campaign site can never overwrite what the candidate wrote in-app. Tallies
+  and counters remain trigger-only. Until takeover, imported policies are
+  publicly labeled "Imported from <host>" with a link to the source page, so
+  nobody mistakes an operator import for the candidate's own in-app words.
+- **Placeholder candidate accounts.** `add-candidate --create` provisions a
+  candidate who never signed up: a passwordless Auth user keyed to the
+  campaign's published contact address (from their own website), plus a
+  `users/{uid}` profile (`verified: false`). Nobody can sign into the account
+  without controlling that inbox (password reset is the claim path), which is
+  the same trust anchor as the sourceUrl itself. The operator remains the
+  only path that mints candidates.
+- The platform parser now recognizes three page layouts (grouped lists,
+  Elementor popup cards, accordion cards). It still throws on an unrecognized
+  layout so a redesign fails the sync loudly instead of archiving a platform.
+
+## Update - 2026-08-24: claim gating and notifications
+
+- **Every act-as-politician write now requires a verified email.** Rules gate
+  official/candidate card edits, AMA responses, poll creation, policy
+  writes, and writing credits on `request.auth.token.email_verified`. All
+  legitimate claim paths for the placeholder accounts (password reset, magic
+  link, SSO) verify the address by construction, so an email/password
+  sign-in that never proved inbox control can read but do nothing. Operator
+  scripts (`verify-user`) mark their accounts verified explicitly.
+- **`claimed` is server-derived, never client-written.** `refreshClaim`
+  (callable, self only) and the nightly `sweepClaims` set it from whether
+  the auth account has any provider attached - which for a placeholder can
+  only happen via a claim path. It drives the public "on the platform"
+  status and holds unanswered questions as pending (not ignored) until a
+  real person is behind the account.
+- **Notifications are a one-way, trigger-only surface.** Docs under
+  `users/{uid}/notifications` are created exclusively by Cloud Functions
+  (deny-by-default create in rules), so nobody can forge a notification into
+  another user's inbox; owners can only read, flip `read`, and delete.
+  Notification doc ids derive from trigger event ids, so redelivered events
+  overwrite rather than duplicate.

@@ -78,7 +78,8 @@ export default function RootLayout() {
             }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="concern/[id]" options={{ title: 'Concern' }} />
-            <Stack.Screen name="official/[id]" options={{ title: 'AMA' }} />
+            <Stack.Screen name="official/[id]" options={{ title: 'Official' }} />
+            <Stack.Screen name="officials" options={{ title: 'Officials' }} />
             <Stack.Screen name="candidate/[id]/index" options={{ title: 'Candidate' }} />
             <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: 'Policy' }} />
             <Stack.Screen name="sign-in" options={{ title: 'Sign in', ...MODAL }} />

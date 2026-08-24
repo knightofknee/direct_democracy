@@ -3,6 +3,7 @@ import { httpsCallable } from 'firebase/functions';
 
 import { db, functions, usingEmulators } from '@/lib/firebase';
 import { validateDisplayName } from '@/lib/names';
+import { openLink } from '@/lib/open-link';
 
 export async function updateDisplayName(uid: string, name: string): Promise<void> {
   const error = validateDisplayName(name);
@@ -50,7 +51,6 @@ export async function startVerification(input: {
   const { data } = await createSession({});
   // The hosted Didit inquiry is opened in the browser; the webhook finishes
   // the job and the profile listener picks up verified=true when it lands.
-  const { openBrowserAsync } = await import('expo-web-browser');
-  await openBrowserAsync(data.inquiryUrl);
+  await openLink(data.inquiryUrl);
   return { mode: 'didit' };
 }

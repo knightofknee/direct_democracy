@@ -23,3 +23,12 @@ export function pct(count: number, total: number): number {
 export function plural(n: number, singular: string, pluralForm?: string): string {
   return `${n.toLocaleString()} ${n === 1 ? singular : (pluralForm ?? `${singular}s`)}`;
 }
+
+/** "https://www.example.org/page" -> "example.org", for compact link labels. */
+export function host(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+}

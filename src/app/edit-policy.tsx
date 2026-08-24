@@ -17,8 +17,9 @@ import { createPolicy, updatePolicy } from '@/services/candidates';
 
 /**
  * Write or edit one plank of the platform. Creating: pass nextOrder so the
- * policy lands at the end. Editing: pass candidateId + policyId (in-app
- * policies only - synced ones are edited on the campaign site).
+ * policy lands at the end. Editing: pass candidateId + policyId. Editing a
+ * synced policy takes it over - it becomes an in-app policy and the campaign
+ * site stops updating it.
  */
 export default function EditPolicyScreen() {
   const { candidateId, policyId, nextOrder } = useLocalSearchParams<{
@@ -170,6 +171,12 @@ function PolicyForm({
       />
 
       <View style={{ gap: Spacing.two }}>
+        {existing?.source === 'site' && (
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+            This policy was imported from your campaign site. Saving takes it over: it becomes
+            yours to manage here, its votes and comments stay, and the site no longer updates it.
+          </ThemedText>
+        )}
         <Button
           title={existing ? 'Save changes' : 'Publish policy'}
           onPress={submit}

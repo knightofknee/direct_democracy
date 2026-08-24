@@ -68,8 +68,18 @@ export const functions = getFunctions(app);
  * @react-native-firebase/app-check in the dev-build config before flipping
  * enforcement, or native clients will be locked out.
  */
+// The `document` check skips static rendering (expo-router's node pass,
+// where reCAPTCHA would crash); real browsers re-run this module and attest.
 const recaptchaKey = process.env.EXPO_PUBLIC_RECAPTCHA_V3_SITE_KEY;
-if (!usingEmulators && Platform.OS === 'web' && recaptchaKey) {
+if (!usingEmulators && Platform.OS === 'web' && recaptchaKey && typeof document !== 'undefined') {
+  if (__DEV__) {
+    // localhost can't pass real reCAPTCHA attestation; dev web presents the
+    // same registered debug token the native dev builds use (the token must
+    // be registered under the WEB app in console -> App Check).
+    (
+      globalThis as { FIREBASE_APPCHECK_DEBUG_TOKEN?: string | boolean }
+    ).FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN ?? true;
+  }
   initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(recaptchaKey),
     isTokenAutoRefreshEnabled: true,

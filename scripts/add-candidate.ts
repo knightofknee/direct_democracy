@@ -20,6 +20,12 @@
  *   --source  https://…   platform page to sync policies from; the nightly
  *                         job (or the in-app "Sync from my site" button)
  *                         imports every policy on it - nothing hand-entered.
+ *   --create              provision a candidate who has NOT signed up yet:
+ *                         creates a passwordless account under the given
+ *                         email (use the campaign's published contact
+ *                         address) plus a users/{uid} profile. The campaign
+ *                         claims the account later by signing in with that
+ *                         email (password reset lands in their own inbox).
  */
 
 function arg(name: string): string | null {
@@ -37,7 +43,7 @@ if (useEmulator) {
 
 import { applicationDefault, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 
 const PROJECT_ID = 'direct-democracy-e338a';
 
@@ -57,6 +63,15 @@ async function main() {
   const office = arg('office') ?? 'Candidate for Mayor';
   const websiteUrl = arg('website');
   const sourceUrl = arg('source');
+  // Editorial callout pinned above the platform (--note "" clears it).
+  // --note-tone success renders it green and taps through to the source
+  // page; the default (warning) renders amber.
+  const note = arg('note');
+  const noteTone = arg('note-tone');
+  if (noteTone && !['warning', 'success'].includes(noteTone)) {
+    console.error('--note-tone must be "warning" or "success".');
+    process.exit(1);
+  }
   for (const [flag, url] of [['website', websiteUrl], ['source', sourceUrl]] as const) {
     if (url && !url.startsWith('https://')) {
       console.error(`--${flag} must be an https:// URL.`);
@@ -64,13 +79,33 @@ async function main() {
     }
   }
 
-  const user = await auth.getUserByEmail(email).catch(() => null);
+  let user = await auth.getUserByEmail(email).catch(() => null);
+  if (!user && process.argv.includes('--create')) {
+    user = await auth.createUser({ email, displayName: name, emailVerified: false });
+    console.log(`  Created placeholder account ${user.uid} for ${email} (no password set).`);
+  }
   if (!user) {
-    console.error(`No account found for ${email} - have them sign up in the app first.`);
+    console.error(
+      `No account found for ${email} - have them sign up in the app first, or pass --create.`
+    );
     process.exit(1);
   }
 
-  await db.doc(`users/${user.uid}`).update({ role: 'candidate' });
+  const profileRef = db.doc(`users/${user.uid}`);
+  if ((await profileRef.get()).exists) {
+    await profileRef.update({ role: 'candidate' });
+  } else {
+    // Placeholder profile for a --create account; verification fills in
+    // wardId if the candidate ever verifies like any other resident.
+    await profileRef.set({
+      displayName: name,
+      role: 'candidate',
+      verified: false,
+      wardId: null,
+      stats: { concerns: 0, comments: 0, votes: 0, judgments: 0 },
+      createdAt: FieldValue.serverTimestamp(),
+    });
+  }
 
   const cardRef = db.doc(`candidates/${user.uid}`);
   const existing = await cardRef.get();
@@ -81,6 +116,8 @@ async function main() {
       office,
       websiteUrl: websiteUrl ?? existing.data()?.websiteUrl ?? null,
       sourceUrl: sourceUrl ?? existing.data()?.sourceUrl ?? null,
+      platformNote: note !== null ? note || null : (existing.data()?.platformNote ?? null),
+      platformNoteTone: noteTone ?? existing.data()?.platformNoteTone ?? null,
       // Bio/photo are the candidate's own to edit in the app; counters are
       // trigger-maintained. Only seed them on first provision.
       ...(existing.exists

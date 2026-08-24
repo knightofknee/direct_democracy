@@ -304,6 +304,32 @@ export const onPollVoteWrite = onDocumentWritten(
   }
 );
 
+// ── Notifications ────────────────────────────────────────────────────────
+// In-app notification docs at users/{uid}/notifications/{id}, written only
+// here (rules let owners read/mark-read/delete, never create). Doc ids
+// derive from the trigger event id, so a retried trigger overwrites its own
+// notification instead of duplicating it.
+
+function excerpt(text: unknown, max = 140): string {
+  return typeof text === 'string' ? text.replace(/\s+/g, ' ').trim().slice(0, max) : '';
+}
+
+async function sendNotification(
+  uid: string | null | undefined,
+  eventKey: string,
+  data: { type: string; title: string; body: string; link: string },
+  actorUid?: string | null
+) {
+  // Never notify someone about their own action.
+  if (!uid || uid === actorUid) return;
+  const id = `n-${eventKey.replace(/[^A-Za-z0-9_-]/g, '').slice(-80)}`;
+  await db.doc(`users/${uid}/notifications/${id}`).set({
+    ...data,
+    read: false,
+    createdAt: FieldValue.serverTimestamp(),
+  });
+}
+
 /**
  * One trigger body for both directions of a comment's life, shared by every
  * commentable parent (concerns, platform policies).
@@ -328,10 +354,62 @@ async function applyCommentDelta(
   });
 }
 
+/**
+ * Who hears about a new comment: the parent's owner, plus the thread root's
+ * author when the comment is a reply (deduped, never the commenter).
+ */
+async function notifyNewComment(
+  eventId: string | undefined,
+  parentPath: string,
+  comment: FirebaseFirestore.DocumentData | undefined,
+  parent: {
+    ownerField: 'authorUid' | 'candidateUid';
+    link: string;
+    ownerTitle: (p: FirebaseFirestore.DocumentData, authorName: string) => string;
+  }
+) {
+  if (!eventId || !comment) return;
+  const parentSnap = await db.doc(parentPath).get();
+  if (!parentSnap.exists) return;
+  const p = parentSnap.data()!;
+  const authorName = (comment.authorName as string) ?? 'Someone';
+
+  const targets = new Map<string, string>();
+  targets.set(p[parent.ownerField] as string, parent.ownerTitle(p, authorName));
+  if (comment.threadId) {
+    const root = await db.doc(`${parentPath}/comments/${comment.threadId}`).get();
+    const rootAuthor = root.data()?.authorUid as string | undefined;
+    if (rootAuthor && !targets.has(rootAuthor)) {
+      targets.set(rootAuthor, `${authorName} replied to your comment`);
+    }
+  }
+
+  let n = 0;
+  for (const [uid, title] of targets) {
+    await sendNotification(
+      uid,
+      `${eventId}-c${n++}`,
+      { type: 'comment', title, body: excerpt(comment.body), link: parent.link },
+      comment.authorUid as string
+    );
+  }
+}
+
 export const onCommentCreated = onDocumentCreated(
   'concerns/{concernId}/comments/{commentId}',
-  async (event) =>
-    applyCommentDelta(event.id, `concerns/${event.params.concernId}`, event.data?.data()?.authorUid, 1)
+  async (event) => {
+    await applyCommentDelta(
+      event.id,
+      `concerns/${event.params.concernId}`,
+      event.data?.data()?.authorUid,
+      1
+    );
+    await notifyNewComment(event.id, `concerns/${event.params.concernId}`, event.data?.data(), {
+      ownerField: 'authorUid',
+      link: `/concern/${event.params.concernId}`,
+      ownerTitle: (_p, name) => `${name} commented on your concern`,
+    });
+  }
 );
 
 export const onCommentDeleted = onDocumentDeleted(
@@ -472,13 +550,15 @@ export const onPolicyVoteWrite = onDocumentWritten(
 
 export const onPolicyCommentCreated = onDocumentCreated(
   'candidates/{candidateUid}/policies/{policyId}/comments/{commentId}',
-  async (event) =>
-    applyCommentDelta(
-      event.id,
-      `candidates/${event.params.candidateUid}/policies/${event.params.policyId}`,
-      event.data?.data()?.authorUid,
-      1
-    )
+  async (event) => {
+    const policyPath = `candidates/${event.params.candidateUid}/policies/${event.params.policyId}`;
+    await applyCommentDelta(event.id, policyPath, event.data?.data()?.authorUid, 1);
+    await notifyNewComment(event.id, policyPath, event.data?.data(), {
+      ownerField: 'candidateUid',
+      link: `/candidate/${event.params.candidateUid}/${event.params.policyId}`,
+      ownerTitle: (p, name) => `${name} commented on "${excerpt(p.title, 60)}"`,
+    });
+  }
 );
 
 export const onPolicyCommentDeleted = onDocumentDeleted(
@@ -521,6 +601,22 @@ export const onPolicyCommentCredited = onDocumentWritten(
       writeStat(tx, stat, 'credits', delta);
       markEvent(tx, event.id ? `credit-${event.id}` : undefined);
     });
+
+    // A writing credit is the platform's highest compliment - tell the author.
+    if (delta === 1 && event.id) {
+      const candidate = await db.doc(`candidates/${event.params.candidateUid}`).get();
+      await sendNotification(
+        authorUid,
+        `${event.id}-credit`,
+        {
+          type: 'credit',
+          title: `${candidate.data()?.name ?? 'The candidate'} credited your comment`,
+          body: 'Your argument changed the platform. It now carries a writing credit.',
+          link: `/candidate/${event.params.candidateUid}/${event.params.policyId}`,
+        },
+        event.params.candidateUid
+      );
+    }
   }
 );
 
@@ -657,8 +753,21 @@ async function bumpOfficialCounter(
 
 export const onQuestionCreated = onDocumentCreated(
   'officials/{officialUid}/questions/{questionId}',
-  async (event) =>
-    bumpOfficialCounter(event.id, event.params.officialUid, 'questionsAsked', 1)
+  async (event) => {
+    await bumpOfficialCounter(event.id, event.params.officialUid, 'questionsAsked', 1);
+    const q = event.data?.data();
+    await sendNotification(
+      event.params.officialUid,
+      `${event.id}-asked`,
+      {
+        type: 'question',
+        title: 'New question in your AMA',
+        body: excerpt(q?.body),
+        link: `/official/${event.params.officialUid}`,
+      },
+      q?.authorUid as string
+    );
+  }
 );
 
 /** The official posting their response moves questionsResponded. */
@@ -669,6 +778,18 @@ export const onQuestionResponded = onDocumentWritten(
     const after = event.data?.after.exists ? event.data.after.data() : null;
     if (!after || before?.response || !after.response) return;
     await bumpOfficialCounter(event.id, event.params.officialUid, 'questionsResponded', 1);
+    const official = await db.doc(`officials/${event.params.officialUid}`).get();
+    await sendNotification(
+      after.authorUid as string,
+      `${event.id}-responded`,
+      {
+        type: 'response',
+        title: `${official.data()?.name ?? 'The official'} responded to your question`,
+        body: excerpt(after.response),
+        link: `/official/${event.params.officialUid}`,
+      },
+      event.params.officialUid
+    );
   }
 );
 
@@ -687,6 +808,9 @@ export const onJudgmentWrite = onDocumentWritten(
     );
     const officialRef = db.doc(`officials/${event.params.officialUid}`);
     const statDelta = ballotStatDelta(before, after);
+    // Captured out of the transaction so the verdict can be delivered as
+    // notifications after it commits.
+    let verdict: { next: string; authorUid?: string; body?: string } | null = null;
 
     await db.runTransaction(async (tx) => {
       if (!(await claimEvent(tx, event.id))) return;
@@ -742,7 +866,16 @@ export const onJudgmentWrite = onDocumentWritten(
           status: nextStatus,
         };
         // The official's answered/dodged counters move with the status flip.
-        if (prevStatus !== nextStatus) officialSnap = await tx.get(officialRef);
+        if (prevStatus !== nextStatus) {
+          officialSnap = await tx.get(officialRef);
+          if (nextStatus === 'answered' || nextStatus === 'dodged') {
+            verdict = {
+              next: nextStatus,
+              authorUid: q.authorUid as string | undefined,
+              body: excerpt(q.body),
+            };
+          }
+        }
       }
 
       // ── every read is done; writes only from here ──
@@ -761,6 +894,29 @@ export const onJudgmentWrite = onDocumentWritten(
       writeStat(tx, stat, 'judgments', statDelta);
       markEvent(tx, event.id);
     });
+
+    // Deliver the community's verdict to both sides of the exchange.
+    if (verdict && event.id) {
+      const v = verdict as { next: string; authorUid?: string; body?: string };
+      const answered = v.next === 'answered';
+      const link = `/official/${event.params.officialUid}`;
+      await sendNotification(v.authorUid, `${event.id}-v-author`, {
+        type: 'verdict',
+        title: answered
+          ? 'The community marked your question answered'
+          : 'The community judged the response a dodge',
+        body: v.body ?? '',
+        link,
+      });
+      await sendNotification(event.params.officialUid, `${event.id}-v-official`, {
+        type: 'verdict',
+        title: answered
+          ? 'Your response was judged a straight answer'
+          : 'Your response was judged a dodge',
+        body: v.body ?? '',
+        link,
+      });
+    }
   }
 );
 
@@ -891,6 +1047,53 @@ async function syncCandidatePlatform(
   return { synced: seen.size, archived };
 }
 
+// ── Account claims ───────────────────────────────────────────────────────
+// Officials and candidates are provisioned as passwordless placeholder
+// accounts keyed to their published email. "Claimed" means someone proved
+// control of that inbox: a password reset, magic link, or SSO sign-in all
+// attach a provider to the account, and every one of those paths requires
+// receiving mail at (or owning) the address. providerData is therefore the
+// claim signal; rules separately require email_verified on the auth token
+// before any politician action, so an unconfirmed sign-in can do nothing.
+
+async function refreshClaimFor(uid: string): Promise<boolean> {
+  const user = await getAuth().getUser(uid).catch(() => null);
+  const claimed = !!user && user.providerData.length > 0;
+  for (const col of ['officials', 'candidates']) {
+    const ref = db.doc(`${col}/${uid}`);
+    const snap = await ref.get();
+    if (snap.exists && snap.data()!.claimed !== claimed) {
+      await ref.update({ claimed });
+    }
+  }
+  return claimed;
+}
+
+/** Nightly recheck of who has claimed their public profile. */
+export const sweepClaims = onSchedule(
+  { schedule: '30 6 * * *', timeZone: 'America/Chicago' },
+  async () => {
+    for (const col of ['officials', 'candidates']) {
+      const snap = await db.collection(col).get();
+      for (const d of snap.docs) {
+        try {
+          await refreshClaimFor(d.id);
+        } catch (err) {
+          console.error(`Claim check failed for ${col}/${d.id}:`, err);
+        }
+      }
+    }
+  }
+);
+
+/** Instant claim check, called by the app when a politician signs in. */
+export const refreshClaim = onCall(APP_CHECK, async (request) => {
+  if (!request.auth) {
+    throw new HttpsError('unauthenticated', 'Sign in first.');
+  }
+  return { claimed: await refreshClaimFor(request.auth.uid) };
+});
+
 /** Nightly sweep of every candidate whose platform lives on their own site. */
 export const syncPlatforms = onSchedule(
   { schedule: '0 6 * * *', timeZone: 'America/Chicago' },
@@ -939,8 +1142,10 @@ export const devVerify = onCall(async (request) => {
     throw new HttpsError('unauthenticated', 'Sign in first.');
   }
   const wardId = Number(request.data?.wardId);
-  if (!Number.isInteger(wardId) || wardId < WARD_MIN || wardId > WARD_MAX) {
-    throw new HttpsError('invalid-argument', `wardId must be ${WARD_MIN}–${WARD_MAX}.`);
+  // 51 is the hidden test ward (TEST_WARD in the app) - allowed here so
+  // emulator test accounts can live outside the real 50 wards.
+  if (!Number.isInteger(wardId) || wardId < WARD_MIN || wardId > WARD_MAX + 1) {
+    throw new HttpsError('invalid-argument', `wardId must be ${WARD_MIN}–${WARD_MAX + 1}.`);
   }
   await applyVerification(request.auth.uid, { verified: true, wardId });
   return { ok: true };

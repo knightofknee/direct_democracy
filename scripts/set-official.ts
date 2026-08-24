@@ -81,8 +81,9 @@ async function main() {
   }
 
   const wardId = Number(arg('ward') ?? 1);
-  if (!Number.isInteger(wardId) || wardId < 1 || wardId > 50) {
-    console.error('--ward must be a whole number from 1 to 50.');
+  // 51 is the hidden test ward for fictional test officials (TEST_WARD).
+  if (!Number.isInteger(wardId) || wardId < 1 || wardId > 51) {
+    console.error('--ward must be a whole number from 1 to 50 (or 51, the test ward).');
     process.exit(1);
   }
   const title = arg('title') ?? `Alderman, ${ordinal(wardId)} Ward`;

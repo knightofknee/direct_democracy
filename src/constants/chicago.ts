@@ -89,7 +89,16 @@ export function ordinal(n: number): string {
   return `${n}th`;
 }
 
+/**
+ * Ward 51 does not exist in Chicago - it is the hidden test ward. It never
+ * appears in the ward picker or public lists; only accounts whose wardId is
+ * set to 51 by the operator (verify-user/set-official scripts) ever see it,
+ * which keeps test officials, polls, and concerns out of the real 50 wards.
+ */
+export const TEST_WARD = 51;
+
 export function wardLabel(id: number | null | undefined): string {
   if (id == null) return 'Citywide';
+  if (id === TEST_WARD) return 'Test Ward';
   return `${ordinal(id)} Ward`;
 }

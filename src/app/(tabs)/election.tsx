@@ -42,7 +42,7 @@ export default function ElectionScreen() {
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
           The more perfect platform: every candidate lays out their full platform, and the city
-          votes and debates each policy, plank by plank.
+          debates each policy, plank by plank.
         </ThemedText>
         <FlagAccent />
       </View>
@@ -67,7 +67,7 @@ export default function ElectionScreen() {
                     {candidate.office}
                   </ThemedText>
                   <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                    {plural(candidate.policyCount ?? 0, 'policy', 'policies')} on the platform
+                    {plural(candidate.policyCount ?? 0, 'policy', 'policies')}
                   </ThemedText>
                 </View>
                 <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />

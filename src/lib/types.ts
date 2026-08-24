@@ -45,6 +45,18 @@ export interface Official {
    * store the image itself. Null shows an initials avatar.
    */
   photoUrl?: string | null;
+  /** The official's public website, shown as a link. */
+  websiteUrl?: string | null;
+  /** Public ward-office contact info, as published by the city. */
+  contactEmail?: string | null;
+  phone?: string | null;
+  /**
+   * True once the person proved control of their published email (password
+   * reset, magic link, or SSO). Written only by Cloud Functions
+   * (refreshClaim / nightly sweepClaims). Unclaimed profiles are public
+   * record: askable, but silence is held as pending, never graded ignored.
+   */
+  claimed?: boolean;
   /** AMA responsiveness counters, maintained by Cloud Functions triggers. */
   questionsAsked: number;
   questionsResponded: number;
@@ -84,8 +96,35 @@ export interface Candidate {
    */
   sourceUrl?: string | null;
   lastSyncedAt?: Timestamp | null;
+  /**
+   * Operator-written editorial note shown prominently above the platform,
+   * e.g. calling out that a candidate has published no real platform for the
+   * office they seek. Null hides it.
+   */
+  platformNote?: string | null;
+  /**
+   * How the note reads: 'warning' (amber, calling out a gap) or 'success'
+   * (green, crediting good work; tapping it opens the campaign's platform
+   * page). Defaults to warning.
+   */
+  platformNoteTone?: 'warning' | 'success' | null;
+  /** Same claim signal as Official.claimed (refreshClaim / sweepClaims). */
+  claimed?: boolean;
   /** Live (unarchived) policy count, maintained by Cloud Functions triggers. */
   policyCount: number;
+}
+
+/** One in-app notification, written only by Cloud Functions triggers. */
+export interface AppNotification {
+  id: string;
+  type: string;
+  title: string;
+  /** One-line excerpt of the thing that happened. */
+  body: string;
+  /** App route the notification opens. */
+  link: string;
+  read: boolean;
+  createdAt: Timestamp;
 }
 
 /** Option keys for a policy's DualTally - a straight stance vote. */

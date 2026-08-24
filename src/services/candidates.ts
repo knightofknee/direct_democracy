@@ -24,8 +24,10 @@ import {
 /**
  * The more perfect platform, client-side. Candidates write their own card and
  * their in-app policies; everyone writes only their own ballot/comment docs.
- * Synced policies (source 'site') are written exclusively by the platform-sync
- * Cloud Function - no client path touches them (rules enforce all of this).
+ * Synced policies (source 'site') are written by the platform-sync Cloud
+ * Function until the candidate edits one here - editing takes it over
+ * (source flips to 'app') and the site stops updating it. Tallies and
+ * counters stay trigger-only (rules enforce all of this).
  */
 
 /** Candidates update their own public card. */
@@ -72,21 +74,23 @@ export async function createPolicy(
   return ref.id;
 }
 
-/** Edit an in-app policy. Synced policies are edited on the campaign site. */
+/**
+ * Edit a policy. Editing a synced policy takes it over: source flips to
+ * 'app', the "imported" label disappears, and the nightly site sync leaves
+ * it alone from then on (votes and comments carry through untouched).
+ */
 export async function updatePolicy(
   profile: UserProfile,
   policy: Policy,
   input: { section: string; title: string; body: string; links: PolicyLink[] }
 ): Promise<void> {
   if (profile.uid !== policy.candidateUid) throw new Error('Only the candidate can edit a policy.');
-  if (policy.source !== 'app') {
-    throw new Error('This policy is synced from the campaign site - edit it there and sync.');
-  }
   await updateDoc(doc(db, 'candidates', policy.candidateUid, 'policies', policy.id), {
     section: input.section.trim(),
     title: input.title.trim(),
     body: input.body.trim(),
     links: input.links,
+    source: 'app',
     updatedAt: serverTimestamp(),
   });
 }
@@ -99,7 +103,7 @@ export async function setPolicyArchived(
 ): Promise<void> {
   if (profile.uid !== policy.candidateUid) throw new Error('Only the candidate can edit a policy.');
   if (policy.source !== 'app') {
-    throw new Error('This policy is synced from the campaign site - edit it there and sync.');
+    throw new Error('This policy still syncs from the campaign site - edit it first to take it over.');
   }
   await updateDoc(doc(db, 'candidates', policy.candidateUid, 'policies', policy.id), {
     archived,
@@ -113,7 +117,7 @@ export async function deletePolicy(profile: UserProfile, policy: Policy): Promis
     throw new Error('Only the candidate can delete a policy.');
   }
   if (policy.source !== 'app') {
-    throw new Error('This policy is synced from the campaign site - edit it there and sync.');
+    throw new Error('This policy still syncs from the campaign site - edit it first to take it over.');
   }
   await deleteDoc(doc(db, 'candidates', policy.candidateUid, 'policies', policy.id));
 }

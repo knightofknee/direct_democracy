@@ -54,7 +54,9 @@
     "emulators": "PATH=\"$(brew --prefix openjdk 2>/dev/null)/bin:$PATH\" firebase emulators:start",
     "seed": "tsx scripts/seed.ts",
     "add-candidate": "tsx scripts/add-candidate.ts",
+    "sync-platform": "tsx scripts/sync-platform.ts",
     "set-official": "tsx scripts/set-official.ts",
+    "seed-aldermen": "tsx scripts/seed-aldermen.ts",
     "verify-user": "tsx scripts/verify-user.ts"
   },
   "private": true

@@ -60,12 +60,17 @@ async function main() {
   }
 
   const wardId = Number(arg('ward') ?? 1);
-  if (!Number.isInteger(wardId) || wardId < 1 || wardId > 50) {
-    console.error('--ward must be a whole number from 1 to 50.');
+  // 51 is the hidden test ward: real users never see it, operator-assigned
+  // test accounts live there (see TEST_WARD in src/constants/chicago.ts).
+  if (!Number.isInteger(wardId) || wardId < 1 || wardId > 51) {
+    console.error('--ward must be a whole number from 1 to 50 (or 51, the test ward).');
     process.exit(1);
   }
 
   await db.doc(`users/${user.uid}`).update({ verified: true, wardId });
+  // Operator verification vouches for the account, so the auth email counts
+  // as confirmed too (rules gate politician actions on email_verified).
+  await auth.updateUser(user.uid, { emailVerified: true });
   console.log(`✓ ${email} is verified in ward ${wardId}.`);
   console.log(`  users/${user.uid}: verified true, wardId ${wardId}`);
 }

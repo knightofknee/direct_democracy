@@ -7,7 +7,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
 import { Screen } from '@/components/screen';
-import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip, EmptyState, SectionHeader } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
@@ -15,8 +14,10 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
+import { host } from '@/lib/format';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
-import type { Candidate, Comment, Policy, PolicyStance, VoteDoc } from '@/lib/types';
+import { openLink } from '@/lib/open-link';
+import type { Candidate, Comment, Policy } from '@/lib/types';
 import {
   addPolicyComment,
   deletePolicy,
@@ -24,20 +25,14 @@ import {
   setCommentCredit,
   setPolicyArchived,
   voteOnPolicyComment,
-  votePolicy,
 } from '@/services/candidates';
 
-const STANCE_OPTIONS: { key: PolicyStance; label: string }[] = [
-  { key: 'support', label: 'Support' },
-  { key: 'oppose', label: 'Oppose' },
-];
-
-/** One plank of a platform: the full text, the receipts, the vote, the fight. */
+/** One plank of a platform: the full text, the receipts, the feedback. */
 export default function PolicyScreen() {
   const { id, policyId } = useLocalSearchParams<{ id: string; policyId: string }>();
   const router = useRouter();
+  const theme = useTheme();
   const { profile } = useAuth();
-  const [savingVote, setSavingVote] = useState(false);
 
   const { data: candidate } = useLiveDoc<Candidate>(
     () => (id ? doc(db, 'candidates', id) : null),
@@ -46,13 +41,6 @@ export default function PolicyScreen() {
   const { data: policy, loading } = useLiveDoc<Policy>(
     () => (id && policyId ? doc(db, 'candidates', id, 'policies', policyId) : null),
     [id, policyId]
-  );
-  const { data: myVote } = useLiveDoc<VoteDoc>(
-    () =>
-      id && policyId && profile
-        ? doc(db, 'candidates', id, 'policies', policyId, 'votes', profile.uid)
-        : null,
-    [id, policyId, profile?.uid]
   );
   const { data: comments } = useLiveQuery<Comment>(
     () =>
@@ -73,23 +61,7 @@ export default function PolicyScreen() {
     );
   }
 
-  const myStance = (myVote?.value as PolicyStance | undefined) ?? null;
   const isThisCandidate = profile?.uid === policy.candidateUid;
-
-  const castVote = async (stance: PolicyStance) => {
-    if (!profile) {
-      router.push('/sign-in');
-      return;
-    }
-    setSavingVote(true);
-    try {
-      await votePolicy(profile, policy.candidateUid, policy.id, stance);
-    } catch (e) {
-      notifyError('Vote failed', e);
-    } finally {
-      setSavingVote(false);
-    }
-  };
 
   return (
     <Screen>
@@ -118,38 +90,25 @@ export default function PolicyScreen() {
             </ThemedText>
           </Pressable>
         )}
+        {policy.source === 'site' && candidate?.sourceUrl ? (
+          // Imported wholesale from the campaign site; the label goes away
+          // the moment the candidate edits the policy in the app (takeover).
+          <Pressable
+            onPress={() => void openLink(candidate.sourceUrl!)}
+            style={styles.linkRow}
+            accessibilityRole="link">
+            <Ionicons name="globe-outline" size={14} color={theme.primary} />
+            <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
+              Imported from {host(candidate.sourceUrl)}
+            </ThemedText>
+          </Pressable>
+        ) : null}
         <ThemedText>{policy.body}</ThemedText>
       </View>
 
       {policy.links.length > 0 && <Receipts links={policy.links} />}
 
       {isThisCandidate && <CandidateTools policy={policy} />}
-
-      <SectionHeader title="Where do you stand?" />
-      <View style={styles.stanceRow}>
-        {STANCE_OPTIONS.map((option) => {
-          const selected = myStance === option.key;
-          return (
-            <Button
-              key={option.key}
-              title={`${option.label}${selected ? ' ✓' : ''}`}
-              variant={
-                selected ? (option.key === 'support' ? 'primary' : 'danger') : 'secondary'
-              }
-              onPress={() => castVote(option.key)}
-              disabled={savingVote}
-              style={{ flex: 1 }}
-            />
-          );
-        })}
-      </View>
-
-      <SectionHeader title="Results" />
-      <TallyResults
-        tally={policy.tallies}
-        options={STANCE_OPTIONS}
-        highlightKeys={myStance ? [myStance] : undefined}
-      />
 
       <SectionHeader title={`Comments (${policy.commentCount})`} />
       <CommentsSection
@@ -179,18 +138,16 @@ export default function PolicyScreen() {
 function Receipts({ links }: { links: Policy['links'] }) {
   const theme = useTheme();
 
-  const open = async (url: string) => {
-    const { openBrowserAsync } = await import('expo-web-browser');
-    await openBrowserAsync(url);
-  };
-
   return (
     <Card>
       <ThemedText type="smallBold" style={{ fontSize: 13 }}>
         Receipts
       </ThemedText>
       {links.map((link, i) => (
-        <Pressable key={`${link.url}-${i}`} onPress={() => void open(link.url)} style={styles.linkRow}>
+        <Pressable
+          key={`${link.url}-${i}`}
+          onPress={() => void openLink(link.url)}
+          style={styles.linkRow}>
           <Ionicons name="link-outline" size={14} color={theme.primary} />
           <ThemedText type="small" style={{ color: theme.primary, flex: 1 }} numberOfLines={2}>
             {link.label}
@@ -212,10 +169,24 @@ function CandidateTools({ policy }: { policy: Policy }) {
 
   if (policy.source === 'site') {
     return (
-      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        This policy is synced from your campaign site - edit it there and it updates here on the
-        next sync.
-      </ThemedText>
+      <View style={{ gap: Spacing.two }}>
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          This policy syncs from your campaign site. Edit it there and it updates on the next
+          sync - or edit it here to take it over, after which the site no longer updates it.
+        </ThemedText>
+        <View style={{ flexDirection: 'row' }}>
+          <Button
+            title="Edit here and take over"
+            variant="secondary"
+            onPress={() =>
+              router.push({
+                pathname: '/edit-policy',
+                params: { candidateId: policy.candidateUid, policyId: policy.id },
+              })
+            }
+          />
+        </View>
+      </View>
     );
   }
 
@@ -288,10 +259,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.two,
     flexWrap: 'wrap',
-  },
-  stanceRow: {
-    flexDirection: 'row',
-    gap: Spacing.two,
   },
   linkRow: {
     flexDirection: 'row',

@@ -5,7 +5,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-/** Scrollable screen shell: safe areas, tab-bar inset, centered max width. */
+/**
+ * Scrollable screen shell: safe areas, tab-bar inset, centered max width,
+ * keyboard avoidance. Every screen with a text input must live inside this
+ * shell (or another ScrollView with automaticallyAdjustKeyboardInsets) so the
+ * keyboard never covers what the user is typing: iOS shifts the content via
+ * the keyboard inset; Android resizes the window (softwareKeyboardLayoutMode
+ * defaults to resize).
+ */
 export function Screen({
   children,
   tab,
@@ -30,6 +37,8 @@ export function Screen({
         style,
       ]}
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive"
+      automaticallyAdjustKeyboardInsets
       bounces={false}
       overScrollMode="never">
       <View style={styles.inner}>{children}</View>

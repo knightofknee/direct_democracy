@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
   ActivityIndicator,
+  Modal,
   Pressable,
   StyleSheet,
   TextInput,
@@ -203,7 +204,68 @@ export function ChicagoStar({ size = 14 }: { size?: number }) {
   return <Ionicons name="star" size={size} color={theme.accent} />;
 }
 
+/**
+ * Centered explainer dialog behind an info icon: details that would clutter
+ * the screen as visible text. Closes on the backdrop or the X.
+ */
+export function InfoModal({
+  visible,
+  onClose,
+  title,
+  children,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+}) {
+  const theme = useTheme();
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <Pressable style={styles.modalBackdrop} onPress={onClose}>
+        <Pressable
+          style={[
+            styles.modalCard,
+            { backgroundColor: theme.background, borderColor: theme.border },
+          ]}
+          // Swallow taps so touching the card doesn't dismiss it.
+          onPress={() => {}}>
+          <View style={styles.modalHeader}>
+            <ThemedText type="smallBold" style={{ fontSize: 17, flex: 1 }}>
+              {title}
+            </ThemedText>
+            <Pressable onPress={onClose} hitSlop={10} accessibilityLabel="Close">
+              <Ionicons name="close" size={20} color={theme.textSecondary} />
+            </Pressable>
+          </View>
+          {children}
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
 const styles = StyleSheet.create({
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing.four,
+  },
+  modalCard: {
+    borderRadius: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: Spacing.four,
+    gap: Spacing.three,
+    width: '100%',
+    maxWidth: 420,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
   card: {
     borderRadius: 16,
     borderWidth: StyleSheet.hairlineWidth,

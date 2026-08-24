@@ -2,11 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { ApprovalWidget } from '@/components/approval-widget';
 import { OfficialAvatar } from '@/components/avatar';
+import { ClaimGate } from '@/components/claim-gate';
 import { ContentActions } from '@/components/content-actions';
 import { GradeBadge, gradeColor } from '@/components/grade-badge';
 import { Screen } from '@/components/screen';
@@ -19,8 +20,9 @@ import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { timeAgo } from '@/lib/format';
+import { host, timeAgo } from '@/lib/format';
 import { notify, notifyError } from '@/lib/notify';
+import { openLink } from '@/lib/open-link';
 import type { AmaQuestion, Official } from '@/lib/types';
 import { askQuestion, deleteQuestion, judgeResponse, respondToQuestion } from '@/services/ama';
 import { APPROVAL_MIN_BALLOTS, computeGrade, updateOfficialCard } from '@/services/officials';
@@ -59,11 +61,14 @@ export default function OfficialAmaScreen() {
   }
 
   // A just-asked question has a null createdAt until the server timestamp
-  // lands - treat it as pending rather than ignored.
+  // lands - treat it as pending rather than ignored. The pending/ignored
+  // boundary is a week wide, so a per-render clock read is deliberate.
+  // eslint-disable-next-line react-hooks/purity
+  const now = Date.now();
   const pendingQuestions = questions.filter(
     (q) =>
       q.status === 'awaitingResponse' &&
-      (!q.createdAt || Date.now() - q.createdAt.toMillis() < IGNORED_AFTER_MS)
+      (!q.createdAt || now - q.createdAt.toMillis() < IGNORED_AFTER_MS)
   ).length;
   const grade = computeGrade(official, pendingQuestions);
   const isThisOfficial = profile?.uid === official.uid;
@@ -95,6 +100,7 @@ export default function OfficialAmaScreen() {
 
       {isThisOfficial ? (
         <>
+          <ClaimGate claimed={official.claimed} name={official.name} />
           <EditCard official={official} />
           <Button
             title={official.wardId != null ? 'Put a question to your ward or the city' : 'Put a question to the city'}
@@ -110,6 +116,10 @@ export default function OfficialAmaScreen() {
         </Card>
       )}
 
+      <SectionHeader
+        title="AMA"
+        subtitle="Ask anything. The community judges whether the answer was real."
+      />
       {!isThisOfficial && (
         <Card>
           <Field
@@ -135,6 +145,27 @@ export default function OfficialAmaScreen() {
           ))
       )}
     </Screen>
+  );
+}
+
+/** One public point of contact: website, ward-office email, or phone. */
+function ContactRow({
+  icon,
+  label,
+  onPress,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  onPress: () => void;
+}) {
+  const theme = useTheme();
+  return (
+    <Pressable onPress={onPress} accessibilityRole="link" style={styles.contactRow}>
+      <Ionicons name={icon} size={14} color={theme.primary} />
+      <ThemedText type="small" style={{ color: theme.primary, fontSize: 13, flex: 1 }}>
+        {label}
+      </ThemedText>
+    </Pressable>
   );
 }
 
@@ -168,6 +199,46 @@ function GradeCard({
       </View>
 
       {official.bio ? <ThemedText type="small">{official.bio}</ThemedText> : null}
+
+      {official.claimed ? (
+        <View style={styles.contactRow}>
+          <Ionicons name="checkmark-circle" size={14} color={theme.verified} />
+          <ThemedText type="small" style={{ color: theme.verified, fontSize: 12 }}>
+            On the platform - this official answers here
+          </ThemedText>
+        </View>
+      ) : (
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          Not on the platform yet. This profile is public record; {official.name.split(' ')[0]} can
+          claim it any time, and unanswered questions stay pending until they do.
+        </ThemedText>
+      )}
+
+      {(official.websiteUrl || official.contactEmail || official.phone) && (
+        <View style={{ gap: Spacing.one }}>
+          {official.websiteUrl ? (
+            <ContactRow
+              icon="globe-outline"
+              label={host(official.websiteUrl)}
+              onPress={() => void openLink(official.websiteUrl!)}
+            />
+          ) : null}
+          {official.contactEmail ? (
+            <ContactRow
+              icon="mail-outline"
+              label={official.contactEmail}
+              onPress={() => void Linking.openURL(`mailto:${official.contactEmail}`)}
+            />
+          ) : null}
+          {official.phone ? (
+            <ContactRow
+              icon="call-outline"
+              label={official.phone}
+              onPress={() => void Linking.openURL(`tel:${official.phone!.replace(/[^+\d]/g, '')}`)}
+            />
+          ) : null}
+        </View>
+      )}
 
       <View style={styles.axesRow}>
         <AxisSummary
@@ -463,6 +534,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
+  },
+  contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
   },
   axesRow: {
     flexDirection: 'row',

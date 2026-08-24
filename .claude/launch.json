@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "expo-web-emulators",
-      "runtimeExecutable": "env",
-      "runtimeArgs": ["EXPO_PUBLIC_USE_EMULATORS=1", "npx", "expo", "start", "--web", "--port", "8090"],
-      "port": 8090
+      "name": "expo-web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--web", "--port", "8085"],
+      "port": 8085
     }
   ]
 }

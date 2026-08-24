@@ -35,12 +35,20 @@ Conventions:
   `verified`, and `wardId` are written only by the Admin SDK / Cloud Functions
   (Didit webhook, `scripts/add-candidate.ts`), never by clients - security
   rules enforce this.
-- The more perfect platform: `candidates/{uid}/policies/{policyId}` with
-  support/oppose ballots and comments. Synced policies (`source: 'site'`) are
-  written only by the platform-sync functions from the candidate's
-  operator-provisioned `sourceUrl` (`functions/src/platform.ts` parses the
-  page); never add a client write path to them. In-app policies
-  (`source: 'app'`) are the candidate's own.
+- The more perfect platform: `candidates/{uid}/policies/{policyId}`. Feedback
+  comes through comments only - there is deliberately no support/oppose vote
+  on policies (the goal is arguments, not approval ratings; the ballot
+  machinery still exists in the schema/triggers but no UI reaches it).
+  Synced policies (`source: 'site'`) are
+  written by the platform-sync functions from the candidate's
+  operator-provisioned `sourceUrl` (`functions/src/platform.ts` recognizes
+  several page layouts) and are labeled "Imported from <host>" in the app,
+  with a link to the original. The one client write allowed on them is the
+  owning candidate's takeover: editing a synced policy flips `source` to
+  `'app'`, after which the site never touches it again. In-app policies
+  (`source: 'app'`) are the candidate's own. Candidates who never signed up
+  are provisioned with `add-candidate --create` (passwordless account under
+  the campaign's published contact email; they claim it via password reset).
 - Officials are graded on two axes in `src/services/officials.ts`: constituent
   approval (5-ballot minimum) and the community-judged answer score, averaged
   into an overall letter. Approval ballots live at
@@ -50,9 +58,24 @@ Conventions:
 - Personal stats on `users/{uid}.stats` are trigger-written and drive the
   milestone celebrations in `src/components/celebration.tsx` +
   `src/lib/milestones.ts`.
+- Notifications live at `users/{uid}/notifications/{id}`, written ONLY by
+  Cloud Functions triggers (question asked/responded, community verdicts,
+  comment replies, writing credits); clients read, mark read, and delete.
+  The notifications tab replaced the ama tab (the officials directory moved
+  to `/officials`; wards link to each alderman directly).
+- Claimed profiles: `claimed` on officials/candidates is set by
+  `refreshClaim`/`sweepClaims` (a provider attached to the placeholder
+  account = someone proved control of the published inbox). Rules require
+  `email_verified` on the auth token for every act-as-politician write.
+  Unclaimed officials' unanswered questions stay pending, never "ignored" -
+  the ignore clock starts at claim.
 - Use `notify()` from `src/lib/notify.ts` for user-facing errors - RN's
   Alert is a silent no-op on web.
 - Seed data must never depict real Chicago officials - fictional names only.
+  Production is the opposite: real aldermen are provisioned by
+  `scripts/seed-aldermen.ts` from the city's Ward Offices dataset
+  (data.cityofchicago.org htai-wnw4, re-runnable after council changes), as
+  claimable placeholder accounts keyed to each ward's published email.
 - Security posture and accepted limitations are documented in `docs/AUDIT.md`;
   update it when the trust model changes.
 - Typecheck with `npm run typecheck` before finishing.

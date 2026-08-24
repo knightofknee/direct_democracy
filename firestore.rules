@@ -27,6 +27,14 @@ service cloud.firestore {
       return signedIn() && me().role == 'candidate';
     }
 
+    // Politician accounts are provisioned as placeholders keyed to a public
+    // email; every act-as-politician write requires a verified email so a
+    // sign-in that never proved control of the inbox can do nothing. All
+    // real claim paths (password reset, magic link, SSO) verify the email.
+    function verifiedEmail() {
+      return request.auth.token.email_verified == true;
+    }
+
     // Platform operator - may review reports and remove reported content.
     // Tied to the operator's sign-in email for now; move to custom claims
     // when there's more than one admin.
@@ -91,6 +99,17 @@ service cloud.firestore {
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() >= 3
         && request.resource.data.displayName.size() <= 30;
+
+      // In-app notifications, written only by Cloud Functions triggers.
+      // The owner reads them, flips the read flag, and may delete - never
+      // create, so nobody can forge a notification into someone's inbox.
+      match /notifications/{noteId} {
+        allow read, delete: if signedIn() && request.auth.uid == uid;
+        allow update: if signedIn()
+          && request.auth.uid == uid
+          && onlyChanges(['read'])
+          && request.resource.data.read is bool;
+      }
 
       // Personal block list - hides the blocked user's content on this
       // account's devices. The displayName snapshot powers the management
@@ -264,6 +283,7 @@ service cloud.firestore {
       allow read: if true;
 
       allow create: if (isOfficial() || isCandidate())
+        && verifiedEmail()
         && request.resource.data.keys().hasOnly([
           'question', 'detail', 'type', 'options', 'scope', 'wardId',
           'authorUid', 'authorName', 'open', 'tallies', 'createdAt'
@@ -344,6 +364,7 @@ service cloud.firestore {
       // Name/title are provisioned by admins; all counters are trigger-only.
       allow update: if signedIn()
         && request.auth.uid == officialUid
+        && verifiedEmail()
         && onlyChanges(['bio', 'photoUrl'])
         && (
           !('photoUrl' in request.resource.data)
@@ -412,6 +433,7 @@ service cloud.firestore {
         // Judgment counts and status flips are written by onJudgmentWrite.
         allow update: if signedIn()
           && request.auth.uid == officialUid
+          && verifiedEmail()
           && resource.data.response == null
           && onlyChanges(['response', 'respondedAt', 'status'])
           && request.resource.data.response is string
@@ -451,6 +473,7 @@ service cloud.firestore {
       // Name/office/sourceUrl are provisioned; counters are trigger-only.
       allow update: if signedIn()
         && request.auth.uid == candidateUid
+        && verifiedEmail()
         && onlyChanges(['bio', 'photoUrl', 'websiteUrl'])
         && (
           !('bio' in request.resource.data)
@@ -483,6 +506,7 @@ service cloud.firestore {
         // source is pinned to 'app'.
         allow create: if isCandidate()
           && request.auth.uid == candidateUid
+          && verifiedEmail()
           && request.resource.data.keys().hasOnly([
             'candidateUid', 'section', 'title', 'body', 'links', 'order',
             'source', 'archived', 'tallies', 'commentCount', 'createdAt',
@@ -505,13 +529,15 @@ service cloud.firestore {
           && request.resource.data.order is number
           && request.resource.data.createdAt == request.time;
 
-        // Only in-app policies are editable here - synced ones are edited on
-        // the campaign site and land via the sync function (Admin SDK).
+        // Candidates edit their own policies. Editing a synced policy takes
+        // it over: source may change, but only to 'app', which also stops the
+        // sync function from touching the doc again (it skips in-app ids).
         // Tallies and commentCount stay trigger-only.
         allow update: if signedIn()
           && request.auth.uid == candidateUid
-          && resource.data.source == 'app'
-          && onlyChanges(['section', 'title', 'body', 'links', 'order', 'archived', 'updatedAt'])
+          && verifiedEmail()
+          && request.resource.data.source == 'app'
+          && onlyChanges(['section', 'title', 'body', 'links', 'order', 'archived', 'updatedAt', 'source'])
           && request.resource.data.title is string
           && request.resource.data.title.size() >= 3
           && request.resource.data.title.size() <= 140
@@ -529,6 +555,7 @@ service cloud.firestore {
         allow delete: if (
             signedIn()
             && request.auth.uid == candidateUid
+            && verifiedEmail()
             && resource.data.source == 'app'
           ) || isAdmin();
 
@@ -578,6 +605,7 @@ service cloud.firestore {
           // The author's lifetime credit count is trigger-only.
           allow update: if signedIn()
             && request.auth.uid == candidateUid
+            && verifiedEmail()
             && resource.data.authorUid != candidateUid
             && onlyChanges(['credited', 'creditedAt'])
             && request.resource.data.credited is bool

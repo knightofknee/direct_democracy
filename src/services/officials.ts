@@ -75,7 +75,14 @@ export function letterFor(score: number | null): string {
 
 export function computeGrade(official: Official, pendingQuestions = 0): OfficialGrade {
   const approval = computeApproval(official);
-  const answers = computeScore(official, pendingQuestions);
+  // An unclaimed profile is public record nobody is answering from yet, so
+  // silence stays pending instead of counting as ignored; the ignore clock
+  // starts the day the official claims the account.
+  const pending =
+    official.claimed === true
+      ? pendingQuestions
+      : Math.max(0, (official.questionsAsked ?? 0) - (official.questionsResponded ?? 0));
+  const answers = computeScore(official, pending);
 
   const axes: number[] = [];
   if (approval.constituentPct != null) axes.push(approval.constituentPct);
