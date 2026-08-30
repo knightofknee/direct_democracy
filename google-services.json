@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "376113063983-k0at8vgpn7qqf0jrvtrvfhe10651bmt8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.briancarlisle.directdemocracy",
+            "certificate_hash": "b64f6d1b9d39ee5138f623ff9fda627aa6cc15e5"
+          }
+        },
+        {
           "client_id": "376113063983-vh0o9pmoee05tv5rngs0lqlm2usae1mr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
