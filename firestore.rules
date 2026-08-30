@@ -152,7 +152,7 @@ service cloud.firestore {
         && request.resource.data.contentPath.size() <= 300
         && request.resource.data.contentType in ['concern', 'comment', 'question', 'response', 'policy']
         && pathMatchesType(request.resource.data.contentPath, request.resource.data.contentType)
-        && request.resource.data.reason in ['spam', 'harassment', 'misleading', 'other']
+        && request.resource.data.reason in ['spam', 'harassment', 'misleading', 'childSafety', 'other']
         && request.resource.data.excerpt is string
         && request.resource.data.excerpt.size() <= 500
         && request.resource.data.createdAt == request.time

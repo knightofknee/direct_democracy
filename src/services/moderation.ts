@@ -9,12 +9,15 @@ import type { UserProfile } from '@/lib/types';
  * blocked users' content is hidden on this account, not taken down.
  */
 
-export type ReportReason = 'spam' | 'harassment' | 'misleading' | 'other';
+export type ReportReason = 'spam' | 'harassment' | 'misleading' | 'childSafety' | 'other';
 
 export const REPORT_REASONS: { key: ReportReason; label: string }[] = [
   { key: 'spam', label: 'Spam' },
   { key: 'harassment', label: 'Harassment or abuse' },
   { key: 'misleading', label: 'Misleading or fraudulent' },
+  // Named explicitly (not folded into "other") - child safety reports must
+  // be unmistakable to file and impossible to miss in the review queue.
+  { key: 'childSafety', label: 'Child safety' },
   { key: 'other', label: 'Something else' },
 ];
 

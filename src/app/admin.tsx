@@ -88,7 +88,7 @@ function ReportCard({ report }: { report: Report }) {
     <Card>
       <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap', alignItems: 'center' }}>
         <Chip label={report.contentType} tone="primary" />
-        <Chip label={reasonLabel} tone="warning" />
+        <Chip label={reasonLabel} tone={report.reason === 'childSafety' ? 'danger' : 'warning'} />
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
           {timeAgo(report.createdAt)}
         </ThemedText>
