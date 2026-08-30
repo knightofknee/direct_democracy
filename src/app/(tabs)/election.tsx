@@ -1,21 +1,17 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { collection, orderBy, query } from 'firebase/firestore';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { OfficialAvatar } from '@/components/avatar';
 import { FlagAccent } from '@/components/flag-accent';
+import { CandidateRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
-import { Card, ChicagoStar, EmptyState } from '@/components/ui';
+import { ChicagoStar, EmptyState } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useLiveQuery } from '@/hooks/use-firestore';
-import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { plural } from '@/lib/format';
 import type { Candidate } from '@/lib/types';
 
 /**
@@ -24,8 +20,6 @@ import type { Candidate } from '@/lib/types';
  * comments from the whole city.
  */
 export default function ElectionScreen() {
-  const theme = useTheme();
-  const router = useRouter();
   const { data: candidates, loading } = useLiveQuery<Candidate & { id: string }>(
     () => query(collection(db, 'candidates'), orderBy('name')),
     []
@@ -56,34 +50,10 @@ export default function ElectionScreen() {
           <Animated.View
             key={candidate.uid}
             entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
-            <Card onPress={() => router.push(`/candidate/${candidate.uid}`)}>
-              <View style={styles.row}>
-                <OfficialAvatar name={candidate.name} photoUrl={candidate.photoUrl} size={48} />
-                <View style={{ flex: 1, gap: 3 }}>
-                  <ThemedText type="smallBold" style={{ fontSize: 15 }}>
-                    {candidate.name}
-                  </ThemedText>
-                  <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                    {candidate.office}
-                  </ThemedText>
-                  <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                    {plural(candidate.policyCount ?? 0, 'policy', 'policies')}
-                  </ThemedText>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
-              </View>
-            </Card>
+            <CandidateRow candidate={candidate} />
           </Animated.View>
         ))
       )}
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-  },
-});

@@ -5,6 +5,21 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-08-29: concern references and comment sources
+
+Concerns carry an author-supplied `references` list of https links, cited
+inline with `*N` markers. Comments (concern and policy) carry the same
+`references` list as "sources": bodies render the same tappable `*N`
+citations, and a source/sources button opens the full link modal. Accepted limitation: security rules cannot iterate
+list elements, so the rules only pin `references` to a list of at most 10
+entries; per-element validation (https-only, length cap, no interior blanks)
+lives in the client writer. Because a hostile client could therefore store
+arbitrary element values, every renderer re-filters to `https://`-prefixed
+strings before displaying or opening a reference
+(`safeReferences` in `src/components/references.tsx`) - a non-conforming
+element renders as nothing and can never reach `openLink`. Links open in the
+in-app browser; no fetching, unfurling, or storage of the linked content.
+
 ## Update - 2026-08-17: comment ratings (placement-only)
 
 Signed-in users rate comments up/down: one ballot per person at

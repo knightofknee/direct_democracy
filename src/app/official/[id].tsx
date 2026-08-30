@@ -27,9 +27,6 @@ import type { AmaQuestion, Official } from '@/lib/types';
 import { askQuestion, deleteQuestion, judgeResponse, respondToQuestion } from '@/services/ama';
 import { APPROVAL_MIN_BALLOTS, computeGrade, updateOfficialCard } from '@/services/officials';
 
-/** Unanswered questions younger than this count as pending, not ignored. */
-const IGNORED_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
-
 export default function OfficialAmaScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -60,17 +57,7 @@ export default function OfficialAmaScreen() {
     );
   }
 
-  // A just-asked question has a null createdAt until the server timestamp
-  // lands - treat it as pending rather than ignored. The pending/ignored
-  // boundary is a week wide, so a per-render clock read is deliberate.
-  // eslint-disable-next-line react-hooks/purity
-  const now = Date.now();
-  const pendingQuestions = questions.filter(
-    (q) =>
-      q.status === 'awaitingResponse' &&
-      (!q.createdAt || now - q.createdAt.toMillis() < IGNORED_AFTER_MS)
-  ).length;
-  const grade = computeGrade(official, pendingQuestions);
+  const grade = computeGrade(official);
   const isThisOfficial = profile?.uid === official.uid;
 
   const ask = async () => {

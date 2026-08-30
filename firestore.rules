@@ -173,7 +173,7 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly([
           'title', 'body', 'scope', 'wardId', 'authorUid', 'authorName',
           'authorVerified', 'tallies', 'score', 'scoreVerified',
-          'commentCount', 'createdAt'
+          'commentCount', 'createdAt', 'references'
         ])
         && request.resource.data.authorUid == request.auth.uid
         && request.resource.data.authorName == me().displayName
@@ -183,6 +183,11 @@ service cloud.firestore {
         && request.resource.data.title.size() <= 140
         && request.resource.data.body is string
         && request.resource.data.body.size() <= 4000
+        // Source links shown under the concern. Rules can't iterate list
+        // elements, so per-element https validation lives in the client
+        // writer AND every renderer (see docs/AUDIT.md).
+        && request.resource.data.references is list
+        && request.resource.data.references.size() <= 10
         && request.resource.data.createdAt == request.time
         && request.resource.data.commentCount == 0
         && request.resource.data.score == 0
@@ -203,11 +208,13 @@ service cloud.firestore {
       // their votes. Tallies, scores, and commentCount stay trigger-only.
       allow update: if signedIn()
         && request.auth.uid == resource.data.authorUid
-        && onlyChanges(['title', 'body'])
+        && onlyChanges(['title', 'body', 'references'])
         && request.resource.data.title is string
         && request.resource.data.title.size() >= 4
         && request.resource.data.title.size() <= 140
         && request.resource.data.body.size() <= 4000
+        && request.resource.data.references is list
+        && request.resource.data.references.size() <= 10
         && resource.data.tallies.totalAll == 0
         && resource.data.commentCount == 0;
 
@@ -240,7 +247,7 @@ service cloud.firestore {
         allow create: if signedIn()
           && request.resource.data.keys().hasOnly([
             'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt',
-            'threadId', 'replyToName'
+            'threadId', 'replyToName', 'references'
           ])
           && request.resource.data.authorUid == request.auth.uid
           && request.resource.data.authorName == me().displayName
@@ -258,6 +265,12 @@ service cloud.firestore {
             !('replyToName' in request.resource.data)
             || request.resource.data.replyToName == null
             || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 30)
+          )
+          // Source links behind the comment's sources button. Per-element
+          // https validation is client + render side (see docs/AUDIT.md).
+          && (
+            !('references' in request.resource.data)
+            || (request.resource.data.references is list && request.resource.data.references.size() <= 10)
           );
         // Authors may remove their own comments (admin: takedowns);
         // onCommentDeleted keeps the count honest.
@@ -581,7 +594,7 @@ service cloud.firestore {
           allow create: if signedIn()
             && request.resource.data.keys().hasOnly([
               'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt',
-              'threadId', 'replyToName'
+              'threadId', 'replyToName', 'references'
             ])
             && request.resource.data.authorUid == request.auth.uid
             && request.resource.data.authorName == me().displayName
@@ -599,6 +612,12 @@ service cloud.firestore {
               !('replyToName' in request.resource.data)
               || request.resource.data.replyToName == null
               || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 30)
+            )
+            // Source links behind the comment's sources button - same accepted
+            // limitation as concern references (docs/AUDIT.md).
+            && (
+              !('references' in request.resource.data)
+              || (request.resource.data.references is list && request.resource.data.references.size() <= 10)
             );
           // Writing credit: the candidate marks a comment as one that changed
           // their policy - recognition only, retractable, never self-awarded.

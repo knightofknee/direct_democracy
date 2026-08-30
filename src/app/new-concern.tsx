@@ -2,6 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { ReferenceEditor } from '@/components/references';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Field } from '@/components/ui';
@@ -20,6 +21,7 @@ export default function NewConcernScreen() {
   const params = useLocalSearchParams<{ scope?: string }>();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [references, setReferences] = useState<string[]>([]);
   const [scope, setScope] = useState<Scope>(params.scope === 'ward' ? 'ward' : 'city');
   const [saving, setSaving] = useState(false);
 
@@ -42,7 +44,7 @@ export default function NewConcernScreen() {
     }
     setSaving(true);
     try {
-      const id = await createConcern(profile, { title, body, scope });
+      const id = await createConcern(profile, { title, body, scope, references });
       // Land on the newly opened concern. Dismiss the modal first - a bare
       // replace() from inside a native modal can pop to whatever screen sat
       // under it instead of the target.
@@ -69,6 +71,8 @@ export default function NewConcernScreen() {
         multiline
         style={{ minHeight: 120 }}
       />
+
+      <ReferenceEditor references={references} onChange={setReferences} />
 
       <View style={{ gap: Spacing.one }}>
         <ThemedText type="smallBold" themeColor="textSecondary">

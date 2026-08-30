@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { doc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { FlagAccent } from '@/components/flag-accent';
+import { CandidateRow, OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, ChicagoStar, Chip, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
@@ -11,11 +13,14 @@ import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useBlocks } from '@/hooks/use-blocks';
+import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { isAdminUser } from '@/lib/admin';
+import { db } from '@/lib/firebase';
 import { plural } from '@/lib/format';
 import { randomDisplayName } from '@/lib/names';
 import { notify } from '@/lib/notify';
+import type { Candidate, Official } from '@/lib/types';
 import { unblockUser } from '@/services/moderation';
 import { updateDisplayName } from '@/services/users';
 
@@ -26,6 +31,17 @@ export default function ProfileScreen() {
   const { blocks } = useBlocks();
   const [editingName, setEditingName] = useState<string | null>(null);
   const [savingName, setSavingName] = useState(false);
+
+  // Politicians see their own public card - the same row voters get on the
+  // ward and election tabs - so they know how they're being presented.
+  const { data: officialCard } = useLiveDoc<Official>(
+    () => (profile?.role === 'official' ? doc(db, 'officials', profile.uid) : null),
+    [profile?.role, profile?.uid]
+  );
+  const { data: candidateCard } = useLiveDoc<Candidate>(
+    () => (profile?.role === 'candidate' ? doc(db, 'candidates', profile.uid) : null),
+    [profile?.role, profile?.uid]
+  );
 
   if (loading) return <Screen tab>{null}</Screen>;
 
@@ -118,6 +134,17 @@ export default function ProfileScreen() {
           when verified.
         </ThemedText>
       </Card>
+
+      {(officialCard || candidateCard) && (
+        <>
+          <SectionHeader
+            title="Your public card"
+            subtitle="How voters see you - tap to open your page"
+          />
+          {officialCard && <OfficialRow official={officialCard} />}
+          {candidateCard && <CandidateRow candidate={candidateCard} />}
+        </>
+      )}
 
       <SectionHeader title="Civic record" />
       <Card>

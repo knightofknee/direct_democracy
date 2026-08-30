@@ -3,7 +3,9 @@ import { deleteDoc, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/fir
 import { db } from '@/lib/firebase';
 import { pct } from '@/lib/format';
 import type { ApprovalValue, Official, UserProfile } from '@/lib/types';
-import { computeScore, type OfficialScore } from '@/services/ama';
+import { computeScore, letterFor, type OfficialScore } from '@/services/ama';
+
+export { letterFor };
 
 /**
  * The grading system. Two axes, equally weighted:
@@ -22,6 +24,9 @@ import { computeScore, type OfficialScore } from '@/services/ama';
  * Each axis needs a minimum sample before it grades (no F for an official
  * with one grumpy neighbor); until then the axis shows as ungraded and the
  * overall grade rests on whichever axis has data.
+ *
+ * Letters come from letterFor in services/ama.ts, banded for politicians
+ * rather than schoolwork - majority approval is a solid grade, not a fail.
  */
 
 export const APPROVAL_MIN_BALLOTS = 5;
@@ -64,24 +69,21 @@ export interface OfficialGrade {
   answersGraded: boolean;
 }
 
-export function letterFor(score: number | null): string {
-  if (score == null) return '-';
-  if (score >= 90) return 'A';
-  if (score >= 80) return 'B';
-  if (score >= 70) return 'C';
-  if (score >= 60) return 'D';
-  return 'F';
-}
-
-export function computeGrade(official: Official, pendingQuestions = 0): OfficialGrade {
+export function computeGrade(official: Official): OfficialGrade {
   const approval = computeApproval(official);
   // An unclaimed profile is public record nobody is answering from yet, so
   // silence stays pending instead of counting as ignored; the ignore clock
-  // starts the day the official claims the account.
+  // starts the day the official claims the account. For claimed officials the
+  // trigger-written questionsPending counter draws the pending/ignored line
+  // (unanswered questions get a week before they grade as ignored), so every
+  // screen computes the same grade from the official doc alone. Officials
+  // provisioned before the counter existed fall back to all-pending until the
+  // nightly sweep writes it.
+  const unanswered = Math.max(0, (official.questionsAsked ?? 0) - (official.questionsResponded ?? 0));
   const pending =
     official.claimed === true
-      ? pendingQuestions
-      : Math.max(0, (official.questionsAsked ?? 0) - (official.questionsResponded ?? 0));
+      ? Math.min(unanswered, official.questionsPending ?? unanswered)
+      : unanswered;
   const answers = computeScore(official, pending);
 
   const axes: number[] = [];

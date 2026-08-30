@@ -60,6 +60,12 @@ export interface Official {
   /** AMA responsiveness counters, maintained by Cloud Functions triggers. */
   questionsAsked: number;
   questionsResponded: number;
+  /**
+   * Unanswered questions still inside the week-long grace window - they sit
+   * out of the answer grade instead of counting as ignored. Trigger-written,
+   * aged out by the nightly sweepPendingQuestions recount.
+   */
+  questionsPending?: number;
   /** Questions the community confirmed as genuinely answered. */
   questionsAnswered: number;
   /** Questions where the community judged the response a dodge. */
@@ -194,6 +200,12 @@ export interface Concern {
   id: string;
   title: string;
   body: string;
+  /**
+   * Author-supplied source links (https only), in citation order. Typing *1
+   * in the body links the reader to references[0]; uncited links still
+   * render at the bottom of the concern.
+   */
+  references?: string[];
   scope: Scope;
   wardId: number | null; // set when scope === 'ward'
   authorUid: string;
@@ -214,6 +226,8 @@ export interface Comment {
   authorName: string;
   authorVerified: boolean;
   body: string;
+  /** Author-supplied source links (https only), shown behind the sources button. */
+  references?: string[];
   /**
    * Threaded replies: the id of the thread's ROOT comment, null on top-level
    * comments. Replies to replies stay in the same thread (flat, chronological,

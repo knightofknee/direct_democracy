@@ -109,12 +109,26 @@ export interface OfficialScore {
 }
 
 /**
+ * Letter bands for every 0-100 score in the app. Graded on a politician's
+ * curve, not a classroom's: majority approval or answering most questions is
+ * strong performance in the real world, so the bands sit well below the
+ * school scale (where 2 of 3 questions answered would read as a D).
+ */
+export function letterFor(score: number | null): string {
+  if (score == null) return '-';
+  if (score >= 80) return 'A';
+  if (score >= 65) return 'B';
+  if (score >= 50) return 'C';
+  if (score >= 35) return 'D';
+  return 'F';
+}
+
+/**
  * The accountability score. A response is answered until the community
  * judges it a dodge; dodges and silence earn nothing. `pending` (unanswered
- * questions younger than the grace week, counted by the caller from the live
- * question list) is held out entirely: it neither counts as ignored nor
- * drags the score. Callers without question ages pass nothing and every
- * unanswered question counts as ignored, as before.
+ * questions still inside the grace week, per the official doc's
+ * trigger-written questionsPending counter) is held out entirely: it neither
+ * counts as ignored nor drags the score.
  */
 export function computeScore(
   o: {
@@ -138,7 +152,5 @@ export function computeScore(
   }
 
   const score = Math.round((answered / graded) * 100);
-  const grade =
-    score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F';
-  return { score, grade, responded, answered, dodged, ignored, pending: held, asked };
+  return { score, grade: letterFor(score), responded, answered, dodged, ignored, pending: held, asked };
 }

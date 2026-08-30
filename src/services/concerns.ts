@@ -19,9 +19,31 @@ import {
   type UserProfile,
 } from '@/lib/types';
 
+export const MAX_REFERENCES = 10;
+
+/**
+ * Trim the reference list, drop unused trailing blanks, and demand https on
+ * the rest. A blank in the MIDDLE is an error rather than a silent drop -
+ * removing it would renumber every *N citation after it. Shared by concern
+ * references and comment sources.
+ */
+export function cleanReferences(references: string[]): string[] {
+  const refs = references.map((r) => r.trim());
+  while (refs.length && refs[refs.length - 1] === '') refs.pop();
+  refs.forEach((r, i) => {
+    if (!r) throw new Error(`Reference ${i + 1} is blank - fill it in or remove it.`);
+    if (!r.startsWith('https://')) throw new Error(`Reference ${i + 1} must be an https:// link.`);
+    if (r.length > 500) throw new Error(`Reference ${i + 1} is too long (500 characters max).`);
+  });
+  if (refs.length > MAX_REFERENCES) {
+    throw new Error(`At most ${MAX_REFERENCES} references per concern.`);
+  }
+  return refs;
+}
+
 export async function createConcern(
   profile: UserProfile,
-  input: { title: string; body: string; scope: Scope }
+  input: { title: string; body: string; scope: Scope; references?: string[] }
 ): Promise<string> {
   const wardId = input.scope === 'ward' ? profile.wardId : null;
   if (input.scope === 'ward' && wardId == null) {
@@ -30,6 +52,7 @@ export async function createConcern(
   const ref = await addDoc(collection(db, 'concerns'), {
     title: input.title.trim(),
     body: input.body.trim(),
+    references: cleanReferences(input.references ?? []),
     scope: input.scope,
     wardId,
     authorUid: profile.uid,
@@ -71,12 +94,13 @@ export async function voteConcernPriority(
 export async function updateConcern(
   profile: UserProfile,
   concern: { id: string; authorUid: string },
-  input: { title: string; body: string }
+  input: { title: string; body: string; references?: string[] }
 ): Promise<void> {
   if (profile.uid !== concern.authorUid) throw new Error('Only the author can edit a concern.');
   await updateDoc(doc(db, 'concerns', concern.id), {
     title: input.title.trim(),
     body: input.body.trim(),
+    references: cleanReferences(input.references ?? []),
   });
 }
 
@@ -127,13 +151,15 @@ export async function addComment(
   profile: UserProfile,
   concernId: string,
   body: string,
-  reply?: CommentReply | null
+  reply?: CommentReply | null,
+  references?: string[]
 ): Promise<void> {
   await addDoc(collection(db, 'concerns', concernId, 'comments'), {
     authorUid: profile.uid,
     authorName: profile.displayName,
     authorVerified: profile.verified,
     body: body.trim(),
+    references: cleanReferences(references ?? []),
     threadId: reply?.threadId ?? null,
     replyToName: reply?.replyToName ?? null,
     createdAt: serverTimestamp(),

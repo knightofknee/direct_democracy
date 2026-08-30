@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 
 import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { FieldValue, getFirestore, type Timestamp } from 'firebase-admin/firestore';
 import {
   onDocumentCreated,
   onDocumentDeleted,
@@ -29,6 +29,22 @@ const db = getFirestore();
 
 const WARD_MIN = 1;
 const WARD_MAX = 50;
+
+/**
+ * Unanswered questions younger than a week are pending (not yet graded);
+ * older ones grade as ignored. The official doc's questionsPending counter is
+ * the single source of that split: triggers move it as questions arrive and
+ * get answered, and sweepPendingQuestions recounts nightly so questions age
+ * out of pending. Clients read the counter and never compute the boundary.
+ */
+const PENDING_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+/** True while a question still counts as pending rather than ignored. */
+function withinPendingWindow(createdAt: unknown): boolean {
+  const millis = (createdAt as Timestamp | null | undefined)?.toMillis?.();
+  // A missing timestamp means the serverTimestamp hasn't landed - brand new.
+  return millis == null || Date.now() - millis < PENDING_WINDOW_MS;
+}
 
 /**
  * App Check enforcement for callables. The console's "Enforce" toggle only
@@ -673,6 +689,9 @@ export const onQuestionDeleted = onDocumentDeleted(
         if (q?.response) next.questionsResponded = step(o.questionsResponded, -1);
         if (q?.status === 'answered') next.questionsAnswered = step(o.questionsAnswered, -1);
         if (q?.status === 'dodged') next.questionsDodged = step(o.questionsDodged, -1);
+        if (q?.status === 'awaitingResponse' && withinPendingWindow(q?.createdAt)) {
+          next.questionsPending = step(o.questionsPending, -1);
+        }
         tx.update(officialRef, next);
       }
       markEvent(tx, event.id);
@@ -735,18 +754,23 @@ export const onApprovalWrite = onDocumentWritten(
   }
 );
 
-/** Move one of an official's AMA counters by a clamped delta, exactly once. */
-async function bumpOfficialCounter(
+/** Move an official's AMA counters by clamped deltas, exactly once per event. */
+async function bumpOfficialCounters(
   eventId: string | undefined,
   officialUid: string,
-  field: 'questionsAsked' | 'questionsResponded',
-  delta: number
+  deltas: Partial<Record<'questionsAsked' | 'questionsResponded' | 'questionsPending', number>>
 ) {
   const officialRef = db.doc(`officials/${officialUid}`);
   await db.runTransaction(async (tx) => {
     if (!(await claimEvent(tx, eventId))) return;
     const snap = await tx.get(officialRef);
-    if (snap.exists) tx.update(officialRef, { [field]: step(snap.data()?.[field], delta) });
+    if (snap.exists) {
+      const next: Record<string, number> = {};
+      for (const [field, delta] of Object.entries(deltas)) {
+        next[field] = step(snap.data()?.[field], delta as number);
+      }
+      tx.update(officialRef, next);
+    }
     markEvent(tx, eventId);
   });
 }
@@ -754,7 +778,10 @@ async function bumpOfficialCounter(
 export const onQuestionCreated = onDocumentCreated(
   'officials/{officialUid}/questions/{questionId}',
   async (event) => {
-    await bumpOfficialCounter(event.id, event.params.officialUid, 'questionsAsked', 1);
+    await bumpOfficialCounters(event.id, event.params.officialUid, {
+      questionsAsked: 1,
+      questionsPending: 1,
+    });
     const q = event.data?.data();
     await sendNotification(
       event.params.officialUid,
@@ -777,7 +804,12 @@ export const onQuestionResponded = onDocumentWritten(
     const before = event.data?.before.exists ? event.data.before.data() : null;
     const after = event.data?.after.exists ? event.data.after.data() : null;
     if (!after || before?.response || !after.response) return;
-    await bumpOfficialCounter(event.id, event.params.officialUid, 'questionsResponded', 1);
+    await bumpOfficialCounters(event.id, event.params.officialUid, {
+      questionsResponded: 1,
+      // Answering a question the sweep already aged into "ignored" doesn't
+      // touch pending - it was no longer counted there.
+      ...(withinPendingWindow(after.createdAt) ? { questionsPending: -1 } : {}),
+    });
     const official = await db.doc(`officials/${event.params.officialUid}`).get();
     await sendNotification(
       after.authorUid as string,
@@ -1093,6 +1125,34 @@ export const refreshClaim = onCall(APP_CHECK, async (request) => {
   }
   return { claimed: await refreshClaimFor(request.auth.uid) };
 });
+
+/**
+ * Nightly recount of every official's pending-question counter. Triggers keep
+ * questionsPending in step as questions arrive and get answered; only this
+ * sweep moves a question from pending to ignored as it crosses the week line
+ * (and it self-heals any counter drift while it's at it).
+ */
+export const sweepPendingQuestions = onSchedule(
+  { schedule: '15 6 * * *', timeZone: 'America/Chicago' },
+  async () => {
+    const officials = await db.collection('officials').get();
+    for (const o of officials.docs) {
+      try {
+        if ((o.data().questionsAsked ?? 0) === 0 && (o.data().questionsPending ?? 0) === 0) continue;
+        const open = await db
+          .collection(`officials/${o.id}/questions`)
+          .where('status', '==', 'awaitingResponse')
+          .get();
+        const pending = open.docs.filter((q) => withinPendingWindow(q.data().createdAt)).length;
+        if ((o.data().questionsPending ?? 0) !== pending) {
+          await o.ref.update({ questionsPending: pending });
+        }
+      } catch (err) {
+        console.error(`Pending sweep failed for ${o.id}:`, err);
+      }
+    }
+  }
+);
 
 /** Nightly sweep of every candidate whose platform lives on their own site. */
 export const syncPlatforms = onSchedule(

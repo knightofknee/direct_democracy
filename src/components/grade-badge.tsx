@@ -4,10 +4,12 @@ import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { useTheme } from '@/hooks/use-theme';
 
+// Color breaks track the letter bands in services/ama.ts letterFor:
+// green for A/B, amber for C/D, red for F.
 export function gradeColor(score: number | null, theme: ReturnType<typeof useTheme>): string {
   if (score == null) return theme.textSecondary;
-  if (score >= 80) return theme.verified;
-  if (score >= 60) return theme.warning;
+  if (score >= 65) return theme.verified;
+  if (score >= 35) return theme.warning;
   return theme.danger;
 }
 

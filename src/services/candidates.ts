@@ -11,6 +11,7 @@ import { httpsCallable } from 'firebase/functions';
 
 import { db, functions } from '@/lib/firebase';
 import { emptyTally } from '@/lib/tally';
+import { cleanReferences } from '@/services/concerns';
 import {
   POLICY_STANCES,
   type CommentReply,
@@ -148,13 +149,15 @@ export async function addPolicyComment(
   candidateUid: string,
   policyId: string,
   body: string,
-  reply?: CommentReply | null
+  reply?: CommentReply | null,
+  references?: string[]
 ): Promise<void> {
   await addDoc(collection(db, 'candidates', candidateUid, 'policies', policyId, 'comments'), {
     authorUid: profile.uid,
     authorName: profile.displayName,
     authorVerified: profile.verified,
     body: body.trim(),
+    references: cleanReferences(references ?? []),
     threadId: reply?.threadId ?? null,
     replyToName: reply?.replyToName ?? null,
     createdAt: serverTimestamp(),

@@ -117,8 +117,8 @@ export default function PolicyScreen() {
         contentPathFor={(comment) =>
           `candidates/${policy.candidateUid}/policies/${policy.id}/comments/${comment.id}`
         }
-        onSubmit={(body, reply) =>
-          addPolicyComment(profile!, policy.candidateUid, policy.id, body, reply)
+        onSubmit={(body, reply, references) =>
+          addPolicyComment(profile!, policy.candidateUid, policy.id, body, reply, references)
         }
         onDelete={(comment) =>
           deletePolicyComment(profile!, policy.candidateUid, policy.id, comment)

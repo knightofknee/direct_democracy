@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
+import { ReferenceEditor, ReferenceList, ReferencedBody } from '@/components/references';
 import { Screen } from '@/components/screen';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
@@ -54,7 +55,11 @@ export default function ConcernScreen() {
     () => (id ? query(collection(db, 'concerns', id, 'comments'), orderBy('createdAt', 'desc')) : null),
     [id]
   );
-  const [editing, setEditing] = useState<{ title: string; body: string } | null>(null);
+  const [editing, setEditing] = useState<{
+    title: string;
+    body: string;
+    references: string[];
+  } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [savingEdit, setSavingEdit] = useState(false);
 
@@ -148,6 +153,10 @@ export default function ConcernScreen() {
               multiline
               style={{ minHeight: 120 }}
             />
+            <ReferenceEditor
+              references={editing.references}
+              onChange={(references) => setEditing({ ...editing, references })}
+            />
             <View style={{ flexDirection: 'row', gap: Spacing.two }}>
               <Button title="Cancel" variant="ghost" onPress={() => setEditing(null)} style={{ flex: 1 }} />
               <Button title="Save" onPress={saveEdit} loading={savingEdit} style={{ flex: 1 }} />
@@ -161,7 +170,8 @@ export default function ConcernScreen() {
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
               {concern.authorName} · {timeAgo(concern.createdAt)}
             </ThemedText>
-            <ThemedText>{concern.body}</ThemedText>
+            <ReferencedBody body={concern.body} references={concern.references} />
+            <ReferenceList references={concern.references} />
           </>
         )}
         {isAuthor && !editing && (
@@ -170,7 +180,13 @@ export default function ConcernScreen() {
               <Button
                 title="Edit"
                 variant="secondary"
-                onPress={() => setEditing({ title: concern.title, body: concern.body })}
+                onPress={() =>
+                  setEditing({
+                    title: concern.title,
+                    body: concern.body,
+                    references: concern.references ?? [],
+                  })
+                }
               />
             )}
             {confirmDelete ? (
@@ -222,7 +238,7 @@ export default function ConcernScreen() {
       <CommentsSection
         comments={comments}
         contentPathFor={(comment) => `concerns/${concern.id}/comments/${comment.id}`}
-        onSubmit={(body, reply) => addComment(profile!, concern.id, body, reply)}
+        onSubmit={(body, reply, references) => addComment(profile!, concern.id, body, reply, references)}
         onDelete={(comment) => deleteComment(profile!, concern.id, comment)}
         onVote={(comment, value) => voteOnComment(profile!, concern.id, comment.id, value)}
       />

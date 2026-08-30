@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { doc } from 'firebase/firestore';
 
 import { ContentActions } from '@/components/content-actions';
+import { ReferencedBody, ReferenceEditor, SourcesButton } from '@/components/references';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip, EmptyState, Field, VerifiedBadge } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
@@ -48,7 +49,7 @@ export function CommentsSection({
   opChipLabel?: string;
   /** Firestore path of a comment - feeds the report/block affordance. */
   contentPathFor: (comment: Comment) => string;
-  onSubmit: (body: string, reply: CommentReply | null) => Promise<void>;
+  onSubmit: (body: string, reply: CommentReply | null, references: string[]) => Promise<void>;
   onDelete: (comment: Comment) => Promise<void>;
   /** Present on policy pages: the OP awarding/retracting a writing credit. */
   onCredit?: (comment: Comment, credited: boolean) => Promise<void>;
@@ -60,7 +61,14 @@ export function CommentsSection({
   const { profile } = useAuth();
   const { isBlocked } = useBlocks();
   const [text, setText] = useState('');
-  const [replyTo, setReplyTo] = useState<{ threadId: string; name: string } | null>(null);
+  const [replyTo, setReplyTo] = useState<{
+    threadId: string;
+    commentId: string;
+    name: string;
+  } | null>(null);
+  const [sources, setSources] = useState<string[]>([]);
+  // The "..." button reveals composer extras (sources, for now) on demand.
+  const [showExtras, setShowExtras] = useState(false);
   const [saving, setSaving] = useState(false);
   const [sort, setSort] = useState<CommentSort>('newest');
 
@@ -115,7 +123,11 @@ export function CommentsSection({
       return;
     }
     // Replying to a reply joins its thread, answering that specific person.
-    setReplyTo({ threadId: comment.threadId ?? comment.id, name: comment.authorName });
+    setReplyTo({
+      threadId: comment.threadId ?? comment.id,
+      commentId: comment.id,
+      name: comment.authorName,
+    });
   };
 
   const submit = async () => {
@@ -127,8 +139,14 @@ export function CommentsSection({
     if (!body) return;
     setSaving(true);
     try {
-      await onSubmit(body, replyTo ? { threadId: replyTo.threadId, replyToName: replyTo.name } : null);
+      await onSubmit(
+        body,
+        replyTo ? { threadId: replyTo.threadId, replyToName: replyTo.name } : null,
+        sources
+      );
       setText('');
+      setSources([]);
+      setShowExtras(false);
       setReplyTo(null);
     } catch (e) {
       notifyError('Comment failed', e);
@@ -137,37 +155,67 @@ export function CommentsSection({
     }
   };
 
+  // One composer, rendered at the top for new comments and moved inline
+  // under the target comment while replying - the writer keeps their context
+  // (and the keyboard keeps the input) in view.
+  const composer = profile ? (
+    <Card>
+      {replyTo && (
+        <View style={styles.replyBanner}>
+          <Ionicons name="return-down-forward" size={14} color={theme.primary} />
+          <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
+            Replying to {replyTo.name}
+          </ThemedText>
+          <Pressable onPress={() => setReplyTo(null)} hitSlop={8} accessibilityLabel="Cancel reply">
+            <Ionicons name="close" size={16} color={theme.textSecondary} />
+          </Pressable>
+        </View>
+      )}
+      <Field
+        placeholder={replyTo ? `Answer ${replyTo.name}…` : 'Add to the discussion…'}
+        value={text}
+        onChangeText={setText}
+        autoFocus={replyTo != null}
+        multiline
+      />
+      {(showExtras || sources.length > 0) && (
+        <ReferenceEditor
+          references={sources}
+          onChange={setSources}
+          title="Sources"
+          addFirstLabel="Add a source link"
+          addAnotherLabel="Add another source"
+          hint="Type *1 in your comment to cite source 1 - readers tap it to open the link."
+        />
+      )}
+      <View style={styles.composerRow}>
+        <Button
+          title={replyTo ? 'Post reply' : 'Post comment'}
+          onPress={submit}
+          disabled={!text.trim()}
+          loading={saving}
+          style={{ flex: 1 }}
+        />
+        <Pressable
+          onPress={() => setShowExtras((v) => !v)}
+          hitSlop={8}
+          accessibilityLabel="More options"
+          style={[styles.extrasButton, { borderColor: theme.border }]}>
+          <Ionicons
+            name="ellipsis-horizontal"
+            size={18}
+            color={showExtras ? theme.primary : theme.textSecondary}
+          />
+        </Pressable>
+      </View>
+    </Card>
+  ) : (
+    <Button title="Sign in to comment" variant="secondary" onPress={() => router.push('/sign-in')} />
+  );
+
   return (
     <>
-      {profile ? (
-        <Card>
-          {replyTo && (
-            <View style={styles.replyBanner}>
-              <Ionicons name="return-down-forward" size={14} color={theme.primary} />
-              <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
-                Replying to {replyTo.name}
-              </ThemedText>
-              <Pressable onPress={() => setReplyTo(null)} hitSlop={8} accessibilityLabel="Cancel reply">
-                <Ionicons name="close" size={16} color={theme.textSecondary} />
-              </Pressable>
-            </View>
-          )}
-          <Field
-            placeholder={replyTo ? `Answer ${replyTo.name}…` : 'Add to the discussion…'}
-            value={text}
-            onChangeText={setText}
-            multiline
-          />
-          <Button
-            title={replyTo ? 'Post reply' : 'Post comment'}
-            onPress={submit}
-            disabled={!text.trim()}
-            loading={saving}
-          />
-        </Card>
-      ) : (
-        <Button title="Sign in to comment" variant="secondary" onPress={() => router.push('/sign-in')} />
-      )}
+      {replyTo == null && composer}
 
       {threads.length > 0 && (
         <View style={styles.sortRow}>
@@ -208,6 +256,7 @@ export function CommentsSection({
             {root ? (
               <CommentRow
                 comment={root}
+                highlighted={replyTo?.commentId === root.id}
                 opUid={opUid}
                 opChipLabel={opChipLabel}
                 contentPathFor={contentPathFor}
@@ -223,21 +272,25 @@ export function CommentsSection({
                 </ThemedText>
               </Card>
             )}
+            {root != null && replyTo?.commentId === root.id && composer}
             {replies.length > 0 && (
               <View style={[styles.replyGroup, { borderLeftColor: theme.border }]}>
                 {replies.map((reply) => (
-                  <CommentRow
-                    key={reply.id}
-                    comment={reply}
-                    rootAuthorName={root?.authorName}
-                    opUid={opUid}
-                    opChipLabel={opChipLabel}
-                    contentPathFor={contentPathFor}
-                    onDelete={onDelete}
-                    onReply={startReply}
-                    onCredit={onCredit}
-                    onVote={onVote}
-                  />
+                  <React.Fragment key={reply.id}>
+                    <CommentRow
+                      comment={reply}
+                      highlighted={replyTo?.commentId === reply.id}
+                      rootAuthorName={root?.authorName}
+                      opUid={opUid}
+                      opChipLabel={opChipLabel}
+                      contentPathFor={contentPathFor}
+                      onDelete={onDelete}
+                      onReply={startReply}
+                      onCredit={onCredit}
+                      onVote={onVote}
+                    />
+                    {replyTo?.commentId === reply.id && composer}
+                  </React.Fragment>
                 ))}
               </View>
             )}
@@ -250,6 +303,7 @@ export function CommentsSection({
 
 function CommentRow({
   comment,
+  highlighted,
   rootAuthorName,
   opUid,
   opChipLabel,
@@ -260,6 +314,8 @@ function CommentRow({
   onVote,
 }: {
   comment: Comment;
+  /** True while the composer below this comment is answering it. */
+  highlighted?: boolean;
   /** Set on replies - suppresses the "replying to" line when it's the root author. */
   rootAuthorName?: string;
   opUid?: string;
@@ -326,7 +382,14 @@ function CommentRow({
   };
 
   return (
-    <Card style={isOp ? { borderColor: theme.primary, borderWidth: 1 } : undefined}>
+    <Card
+      style={
+        highlighted
+          ? { borderColor: theme.primary, borderWidth: 1.5, backgroundColor: theme.backgroundSelected }
+          : isOp
+            ? { borderColor: theme.primary, borderWidth: 1 }
+            : undefined
+      }>
       <View style={styles.metaRow}>
         <ThemedText type="smallBold">{comment.authorName}</ThemedText>
         {isOp && <Chip label={opChipLabel ?? 'candidate'} tone="primary" icon="ribbon" />}
@@ -352,11 +415,12 @@ function CommentRow({
           </ThemedText>
         </View>
       )}
-      <ThemedText type="small">{comment.body}</ThemedText>
+      <ReferencedBody body={comment.body} references={comment.references} type="small" />
       {/* Frequent actions live on the RIGHT, votes in the outermost thumb
           corner; each target is padded to ~38pt so up/down can't be
           fat-fingered. Remove (rare, own comments) stays quiet on the left. */}
       <View style={styles.actionsRow}>
+        <SourcesButton references={comment.references} />
         {isMine &&
           (confirmRemove ? (
             <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center' }}>
@@ -426,6 +490,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.two,
+  },
+  composerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  extrasButton: {
+    borderRadius: 12,
+    borderWidth: 1.5,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
   },
   replyGroup: {
     marginLeft: Spacing.three,

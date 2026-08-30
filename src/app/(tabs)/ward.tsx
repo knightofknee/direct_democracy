@@ -4,16 +4,15 @@ import { collection, orderBy, query, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { OfficialAvatar } from '@/components/avatar';
 import { ConcernCard } from '@/components/concern-card';
 import { FlagAccent } from '@/components/flag-accent';
-import { GradeBadge } from '@/components/grade-badge';
 import { LensToggle } from '@/components/lens-toggle';
 import { PollCard } from '@/components/poll-card';
+import { OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, ChicagoStar, Chip, EmptyState, SectionHeader } from '@/components/ui';
+import { Button, Card, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
 import { WARDS, wardById, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
@@ -22,7 +21,6 @@ import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { Concern, Official, Poll, TallyLens } from '@/lib/types';
-import { computeGrade } from '@/services/officials';
 
 export default function WardScreen() {
   const { profile, loading } = useAuth();
@@ -237,27 +235,7 @@ function WardHome({
         ))
       )}
 
-      {alderman && (
-        <Card onPress={() => router.push(`/official/${alderman.uid}`)}>
-          <View style={styles.aldermanRow}>
-            <OfficialAvatar name={alderman.name} photoUrl={alderman.photoUrl} size={48} />
-            <View style={{ flex: 1, gap: 2 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
-                <ThemedText type="smallBold">{alderman.name}</ThemedText>
-                {alderman.claimed && <Chip label="on the platform" tone="success" />}
-              </View>
-              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {alderman.title} · ask them anything
-              </ThemedText>
-            </View>
-            <GradeBadge
-              letter={computeGrade(alderman).letter}
-              score={computeGrade(alderman).overall}
-            />
-            <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
-          </View>
-        </Card>
-      )}
+      {alderman && <OfficialRow official={alderman} />}
 
       {isWardOfficial && (
         <Button title="Put a question to your ward" onPress={() => router.push('/new-poll')} />
@@ -285,11 +263,6 @@ function WardHome({
 }
 
 const styles = StyleSheet.create({
-  aldermanRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-  },
   browseButton: {
     flexDirection: 'row',
     alignItems: 'center',
