@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { Pressable, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 
 import { CelebrationProvider } from '@/components/celebration';
 import { Colors } from '@/constants/theme';
@@ -11,6 +12,15 @@ import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
 
 SplashScreen.preventAutoHideAsync();
+
+// Reanimated's dev-only strict mode warns on shared-value reads during React
+// renders. Our own usage is audited clean (no .value reads in render paths or
+// useMemo; first-render reads are exempt by design), and the remaining hits
+// trace to library internals on re-renders - a known false-positive class
+// (software-mansion/react-native-reanimated#6998). Dropping strict keeps
+// every real Reanimated warning and error; this call must run before any
+// component that animates, hence module scope in the root layout.
+configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });
 
 /**
  * Holds the native splash until the persisted auth state is known, so the
