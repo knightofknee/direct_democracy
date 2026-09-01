@@ -59,7 +59,8 @@
     "set-official": "tsx scripts/set-official.ts",
     "seed-aldermen": "tsx scripts/seed-aldermen.ts",
     "verify-user": "tsx scripts/verify-user.ts",
-    "seed-other-candidates": "tsx scripts/seed-other-candidates.ts"
+    "seed-other-candidates": "tsx scripts/seed-other-candidates.ts",
+    "build-ward-map": "tsx scripts/build-ward-map.ts"
   },
   "private": true
 }

@@ -12,6 +12,7 @@ import { OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
+import { WardMap } from '@/components/ward-map';
 import { Button, Card, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
 import { WARDS, wardById, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
@@ -114,6 +115,8 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
           50 wards, one city
         </ThemedText>
       </View>
+
+      <WardMap homeWard={profile?.wardId ?? null} onPick={onPick} />
     </Screen>
   );
 }
