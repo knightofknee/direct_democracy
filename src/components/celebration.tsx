@@ -26,7 +26,8 @@ import { Button } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
-import { takeNewMilestone, type Milestone } from '@/lib/milestones';
+import { takeAnticipatedMilestone, takeNewMilestone, type Milestone } from '@/lib/milestones';
+import type { UserStats } from '@/lib/types';
 
 /**
  * Celebration moments: confetti in Chicago-flag colors over a milestone card.
@@ -35,7 +36,15 @@ import { takeNewMilestone, type Milestone } from '@/lib/milestones';
  * on brand-new accounts.
  */
 
-const CelebrationContext = createContext<{ celebrate: (m: Milestone) => void } | null>(null);
+const CelebrationContext = createContext<{
+  celebrate: (m: Milestone) => void;
+  /**
+   * Call right after a successful FIRST-TIME action (new vote, new concern,
+   * new judgment - not a change to an existing one) so threshold milestones
+   * fire instantly instead of after the Cloud Functions stats round trip.
+   */
+  anticipate: (stat: keyof UserStats) => void;
+} | null>(null);
 
 export function useCelebration() {
   const ctx = useContext(CelebrationContext);
@@ -70,6 +79,24 @@ export function CelebrationProvider({ children }: { children: React.ReactNode })
   const stats = profile?.stats ?? null;
   const statsKey = stats ? JSON.stringify(stats) : null;
 
+  // Refs so anticipate() reads the freshest profile without re-creating the
+  // callback (and the context value) on every stats tick.
+  const uidRef = useRef(uid);
+  uidRef.current = uid;
+  const statsRef = useRef(stats);
+  statsRef.current = stats;
+
+  const anticipate = useCallback(
+    (stat: keyof UserStats) => {
+      if (!uidRef.current) return;
+      const current = statsRef.current ?? { concerns: 0, comments: 0, votes: 0, judgments: 0 };
+      takeAnticipatedMilestone(uidRef.current, current, stat).then((m) => {
+        if (m) celebrate(m);
+      });
+    },
+    [celebrate]
+  );
+
   // Welcome moment for brand-new accounts (created in the last two minutes).
   useEffect(() => {
     if (!uid || !createdMs || Date.now() - createdMs > 2 * 60 * 1000) return;
@@ -98,7 +125,8 @@ export function CelebrationProvider({ children }: { children: React.ReactNode })
   }, [uid, statsKey, celebrate]);
 
   return (
-    <CelebrationContext.Provider value={useMemo(() => ({ celebrate }), [celebrate])}>
+    <CelebrationContext.Provider
+      value={useMemo(() => ({ celebrate, anticipate }), [celebrate, anticipate])}>
       {children}
       {active && <CelebrationOverlay milestone={active} onDismiss={dismiss} />}
     </CelebrationContext.Provider>

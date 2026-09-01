@@ -6,6 +6,7 @@ import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { ApprovalWidget } from '@/components/approval-widget';
+import { useCelebration } from '@/components/celebration';
 import { OfficialAvatar } from '@/components/avatar';
 import { ClaimGate } from '@/components/claim-gate';
 import { ContentActions } from '@/components/content-actions';
@@ -357,6 +358,8 @@ function QuestionCard({
   const [confirmWithdraw, setConfirmWithdraw] = useState(false);
   const isAsker = profile?.uid === question.authorUid;
 
+  const { anticipate } = useCelebration();
+
   const withdraw = async () => {
     if (!profile) return;
     setBusy(true);
@@ -403,9 +406,11 @@ function QuestionCard({
       router.push('/sign-in');
       return;
     }
+    const firstJudgment = myJudgment == null;
     setBusy(true);
     try {
       await judgeResponse(profile, question, answered);
+      if (firstJudgment) anticipate('judgments');
     } catch (e) {
       notifyError('Could not record judgment', e);
     } finally {

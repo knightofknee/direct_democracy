@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { useCelebration } from '@/components/celebration';
 import { SkeletonButton } from '@/components/skeleton';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
@@ -28,6 +29,7 @@ export function PollCard({ poll }: { poll: Poll }) {
   const theme = useTheme();
   const router = useRouter();
   const { profile, loading: authLoading } = useAuth();
+  const { anticipate } = useCelebration();
   const [draft, setDraft] = useState<{ from: string; keys: string[] } | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -50,9 +52,11 @@ export function PollCard({ poll }: { poll: Poll }) {
 
   const cast = async (value: string | string[]) => {
     if (!profile) return;
+    const firstCast = !hasVoted;
     setSaving(true);
     try {
       await votePoll(profile, poll, value);
+      if (firstCast) anticipate('votes');
       setDraft(null); // fall back to the ballot now on record
     } catch (e) {
       notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');

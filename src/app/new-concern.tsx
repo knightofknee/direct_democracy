@@ -2,6 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { useCelebration } from '@/components/celebration';
 import { ReferenceEditor } from '@/components/references';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
@@ -18,6 +19,7 @@ export default function NewConcernScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
+  const { anticipate } = useCelebration();
   const params = useLocalSearchParams<{ scope?: string }>();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -45,6 +47,7 @@ export default function NewConcernScreen() {
     setSaving(true);
     try {
       const id = await createConcern(profile, { title, body, scope, references });
+      anticipate('concerns');
       // Land on the newly opened concern. Dismiss the modal first - a bare
       // replace() from inside a native modal can pop to whatever screen sat
       // under it instead of the target.

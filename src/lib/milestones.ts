@@ -77,6 +77,34 @@ const storageKey = (uid: string) => `dd:celebrated:${uid}`;
  * First call for an account initializes silently - existing users don't get
  * a replay of their whole history.
  */
+/**
+ * Celebrate at the moment of the action instead of waiting for the Cloud
+ * Functions round trip (a cold start can add many seconds). The caller says
+ * which stat just went up; if that lands exactly on a threshold this marks
+ * the key seen and returns the milestone immediately. The server-driven
+ * watcher then finds the key already celebrated and stays quiet - and if the
+ * server got there first, the anticipated value overshoots the threshold and
+ * this returns null, so there is never a duplicate.
+ */
+export async function takeAnticipatedMilestone(
+  uid: string,
+  stats: UserStats,
+  stat: MilestoneTrack['stat']
+): Promise<Milestone | null> {
+  const track = TRACKS.find((t) => t.stat === stat);
+  if (!track) return null;
+  const value = statValue(stats, stat) + 1;
+  if (!track.thresholds.includes(value)) return null;
+
+  const key = `${stat}:${value}`;
+  const raw = await AsyncStorage.getItem(storageKey(uid));
+  const seen: string[] = raw ? JSON.parse(raw) : [...reachedKeys(stats)];
+  if (seen.includes(key)) return null;
+
+  await AsyncStorage.setItem(storageKey(uid), JSON.stringify([...seen, key]));
+  return { key, title: track.title(value), message: track.message(value) };
+}
+
 export async function takeNewMilestone(
   uid: string,
   stats: UserStats

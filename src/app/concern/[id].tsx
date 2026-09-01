@@ -3,6 +3,7 @@ import { collection, doc, orderBy, query } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { useCelebration } from '@/components/celebration';
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
 import { ReferenceEditor, ReferenceList, ReferencedBody } from '@/components/references';
@@ -41,6 +42,7 @@ export default function ConcernScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
+  const { anticipate } = useCelebration();
   const [savingVote, setSavingVote] = useState(false);
 
   const { data: concern, loading } = useLiveDoc<Concern>(
@@ -118,9 +120,11 @@ export default function ConcernScreen() {
       router.push('/sign-in');
       return;
     }
+    const firstCast = myVote == null;
     setSavingVote(true);
     try {
       await voteConcernPriority(profile, concern.id, priority);
+      if (firstCast) anticipate('votes');
     } catch (e) {
       notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
