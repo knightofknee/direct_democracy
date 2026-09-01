@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
+import { PolicyBody } from '@/components/policy-body';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip, EmptyState, SectionHeader } from '@/components/ui';
@@ -103,7 +104,7 @@ export default function PolicyScreen() {
             </ThemedText>
           </Pressable>
         ) : null}
-        <ThemedText>{policy.body}</ThemedText>
+        <PolicyBody body={policy.body} />
       </View>
 
       {policy.links.length > 0 && <Receipts links={policy.links} />}

@@ -7,6 +7,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { ClaimGate } from '@/components/claim-gate';
+import { policyPreview } from '@/components/policy-body';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
@@ -240,7 +241,7 @@ function PlatformList({ candidateUid, policies }: { candidateUid: string; polici
             <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
           </View>
           <ThemedText type="small" themeColor="textSecondary" numberOfLines={2}>
-            {policy.body}
+            {policyPreview(policy.body)}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {plural(policy.commentCount, 'comment')}

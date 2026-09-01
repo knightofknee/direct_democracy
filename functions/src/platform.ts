@@ -71,13 +71,17 @@ function stripTags(html: string): string {
 
 /**
  * Flatten an HTML fragment to readable multi-paragraph text: block elements
- * become lines, list items become "- " bullets, and paragraphs are separated
- * by a blank line (consecutive bullets stay tight).
+ * become lines, list items become "- " bullets, headings become "## " lines,
+ * and paragraphs are separated by a blank line (consecutive bullets stay
+ * tight). The "- " and "## " markers are the entire markup language here -
+ * the app's PolicyBody component renders them with real typography (bullet
+ * glyphs, tighter list spacing, bold sub-heads), so keep both ends in step.
  */
 function blockText(html: string): string {
   const prepped = html
     .replace(/<(script|style)[\s\S]*?<\/\1>/gi, '')
     .replace(/<li[^>]*>/gi, '\n\u0001')
+    .replace(/<h[1-6][^>]*>/gi, '\n\u0002')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/(p|div|section|ul|ol|li|h[1-6])>/gi, '\n');
   const lines = decodeEntities(prepped.replace(/<[^>]+>/g, ''))
@@ -90,7 +94,12 @@ function blockText(html: string): string {
   let prevBullet = false;
   for (const raw of lines) {
     const bullet = raw.startsWith('\u0001');
-    const line = bullet ? `- ${raw.slice(1).trim()}` : raw;
+    const heading = raw.startsWith('\u0002');
+    const line = bullet
+      ? `- ${raw.slice(1).trim()}`
+      : heading
+        ? `## ${raw.slice(1).trim()}`
+        : raw;
     if (text) text += bullet && prevBullet ? '\n' : '\n\n';
     text += line;
     prevBullet = bullet;
