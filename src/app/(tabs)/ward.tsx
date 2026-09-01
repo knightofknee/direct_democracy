@@ -87,25 +87,22 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
         </View>
       </Card>
 
+      {/* One row, not a pitch: the full verification story lives on /verify.
+          Kept compact so the map below clears the fold. */}
       {!profile?.verified && (
-        <Card>
-          <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'flex-start' }}>
+        <Card onPress={() => router.push(profile ? '/verify' : '/sign-in')}>
+          <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center' }}>
             <Ionicons name="shield-checkmark" size={22} color={theme.primary} />
-            <View style={{ flex: 1, gap: Spacing.one }}>
+            <View style={{ flex: 1, gap: 2 }}>
               <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-                Verify your residency
+                {profile ? 'Verify your residency' : 'Sign in to verify your residency'}
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                Verify so your votes count in your ward’s verified tallies and you can vote on
-                your alderman’s ballot questions. We only ever see a yes/no and your ward.
+                Verified votes count in your ward’s verified tallies.
               </ThemedText>
             </View>
+            <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
           </View>
-          {profile ? (
-            <Button title="Verify my identity" onPress={() => router.push('/verify')} />
-          ) : (
-            <Button title="Sign in to get started" onPress={() => router.push('/sign-in')} />
-          )}
         </Card>
       )}
 
@@ -114,9 +111,10 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
           50 wards, one city
         </ThemedText>
+        <View style={{ alignSelf: 'stretch', marginTop: Spacing.one }}>
+          <WardMap homeWard={profile?.wardId ?? null} onPick={onPick} />
+        </View>
       </View>
-
-      <WardMap homeWard={profile?.wardId ?? null} onPick={onPick} />
     </Screen>
   );
 }
