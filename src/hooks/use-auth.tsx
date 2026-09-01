@@ -32,7 +32,12 @@ interface AuthContextValue {
   user: User | null;
   /** Firestore profile; null while loading or signed out. */
   profile: UserProfile | null;
-  /** True until the initial auth state is known. */
+  /**
+   * True until the signed-in/signed-out question is actually answered: the
+   * initial auth restore AND, when a user is present, the first profile
+   * snapshot. Screens must not render signed-out UI (sign-in buttons) while
+   * this is true - show a skeleton instead.
+   */
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
@@ -62,13 +67,16 @@ function newProfileDoc() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [authResolved, setAuthResolved] = useState(false);
+  // True once the profile listener has reported for the current user - the
+  // doc arrived, or it errored and we give up rather than spin forever.
+  const [profileSettled, setProfileSettled] = useState(false);
   const creatingProfileFor = useRef<string | null>(null);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (u) => {
       setUser(u);
-      setLoading(false);
+      setAuthResolved(true);
       if (!u) setProfile(null);
     });
   }, []);
@@ -110,6 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // created on first sight - one registration path, enforced by the same
   // self-registration security rules.
   useEffect(() => {
+    setProfileSettled(false);
     if (!user) return;
     const ref = doc(db, 'users', user.uid);
     return onSnapshot(
@@ -117,18 +126,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (snap) => {
         if (snap.exists()) {
           setProfile({ uid: snap.id, ...snap.data() } as UserProfile);
+          setProfileSettled(true);
         } else if (creatingProfileFor.current !== user.uid) {
+          // Doc missing on first sign-in: still loading while we create it;
+          // the snapshot refires once the write lands. If the write is
+          // rejected, settle anyway so the app is not stuck loading.
           creatingProfileFor.current = user.uid;
           setDoc(ref, newProfileDoc()).catch(() => {
             creatingProfileFor.current = null;
+            setProfileSettled(true);
           });
         }
       },
       (err) => {
         console.warn('Profile listener error:', err.message);
+        setProfileSettled(true);
       }
     );
   }, [user]);
+
+  const loading = !authResolved || (user != null && !profileSettled);
 
   const value = useMemo<AuthContextValue>(
     () => ({

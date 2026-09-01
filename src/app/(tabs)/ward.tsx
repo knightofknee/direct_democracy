@@ -29,7 +29,12 @@ export default function WardScreen() {
   const homeWard = profile?.wardId ?? null;
   const view = selected ?? homeWard ?? 'picker';
 
-  if (loading) return <Screen tab>{null}</Screen>;
+  if (loading)
+    return (
+      <Screen tab>
+        <SkeletonCards />
+      </Screen>
+    );
   if (view === 'picker') return <WardPicker onPick={setSelected} />;
   return (
     <WardHome

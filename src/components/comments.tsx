@@ -7,6 +7,7 @@ import { doc } from 'firebase/firestore';
 
 import { ContentActions } from '@/components/content-actions';
 import { ReferencedBody, ReferenceEditor, SourcesButton } from '@/components/references';
+import { SkeletonButton } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip, EmptyState, Field, VerifiedBadge } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
@@ -58,7 +59,7 @@ export function CommentsSection({
 }) {
   const router = useRouter();
   const theme = useTheme();
-  const { profile } = useAuth();
+  const { profile, loading: authLoading } = useAuth();
   const { isBlocked } = useBlocks();
   const [text, setText] = useState('');
   const [replyTo, setReplyTo] = useState<{
@@ -209,6 +210,8 @@ export function CommentsSection({
         </Pressable>
       </View>
     </Card>
+  ) : authLoading ? (
+    <SkeletonButton />
   ) : (
     <Button title="Sign in to comment" variant="secondary" onPress={() => router.push('/sign-in')} />
   );

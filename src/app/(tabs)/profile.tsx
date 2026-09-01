@@ -7,6 +7,7 @@ import { StyleSheet, View } from 'react-native';
 import { FlagAccent } from '@/components/flag-accent';
 import { CandidateRow, OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
+import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, ChicagoStar, Chip, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
@@ -43,7 +44,12 @@ export default function ProfileScreen() {
     [profile?.role, profile?.uid]
   );
 
-  if (loading) return <Screen tab>{null}</Screen>;
+  if (loading)
+    return (
+      <Screen tab>
+        <SkeletonCards />
+      </Screen>
+    );
 
   if (!user || !profile) {
     return (

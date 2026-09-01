@@ -27,7 +27,7 @@ import { markAllNotificationsRead, markNotificationRead } from '@/services/notif
  */
 export default function NotificationsScreen() {
   const router = useRouter();
-  const { profile } = useAuth();
+  const { profile, loading: authLoading } = useAuth();
 
   const { data: notifications, loading } = useLiveQuery<AppNotification>(
     () =>
@@ -56,7 +56,9 @@ export default function NotificationsScreen() {
         <FlagAccent />
       </View>
 
-      {!profile ? (
+      {authLoading ? (
+        <SkeletonCards />
+      ) : !profile ? (
         <>
           <EmptyState
             icon="notifications-outline"

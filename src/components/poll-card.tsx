@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { SkeletonButton } from '@/components/skeleton';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip } from '@/components/ui';
@@ -26,7 +27,7 @@ const TYPE_LABELS: Record<Poll['type'], string> = {
 export function PollCard({ poll }: { poll: Poll }) {
   const theme = useTheme();
   const router = useRouter();
-  const { profile } = useAuth();
+  const { profile, loading: authLoading } = useAuth();
   const [draft, setDraft] = useState<{ from: string; keys: string[] } | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -157,9 +158,12 @@ export function PollCard({ poll }: { poll: Poll }) {
             : 'Verify your identity to vote on ward polls.'}
         </ThemedText>
       )}
-      {!profile && (
-        <Button title="Sign in to vote" variant="secondary" onPress={() => router.push('/sign-in')} />
-      )}
+      {!profile &&
+        (authLoading ? (
+          <SkeletonButton />
+        ) : (
+          <Button title="Sign in to vote" variant="secondary" onPress={() => router.push('/sign-in')} />
+        ))}
     </Card>
   );
 }

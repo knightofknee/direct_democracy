@@ -11,9 +11,7 @@ import Animated, {
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-/** Pulsing placeholder card shown while a live query warms up. */
-export function SkeletonCards({ count = 3 }: { count?: number }) {
-  const theme = useTheme();
+function usePulse() {
   const pulse = useSharedValue(0.55);
 
   useEffect(() => {
@@ -25,7 +23,13 @@ export function SkeletonCards({ count = 3 }: { count?: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const style = useAnimatedStyle(() => ({ opacity: pulse.value }));
+  return useAnimatedStyle(() => ({ opacity: pulse.value }));
+}
+
+/** Pulsing placeholder card shown while a live query warms up. */
+export function SkeletonCards({ count = 3 }: { count?: number }) {
+  const theme = useTheme();
+  const style = usePulse();
 
   return (
     <View style={{ gap: Spacing.three }}>
@@ -46,6 +50,21 @@ export function SkeletonCards({ count = 3 }: { count?: number }) {
   );
 }
 
+/**
+ * Pulsing placeholder the size of a primary Button. Shown where an
+ * auth-dependent call to action will appear once we know whether the user is
+ * signed in - never flash the signed-out button while auth is restoring.
+ */
+export function SkeletonButton() {
+  const theme = useTheme();
+  const style = usePulse();
+  return (
+    <Animated.View
+      style={[styles.button, { backgroundColor: theme.backgroundElement, borderColor: theme.border }, style]}
+    />
+  );
+}
+
 const styles = StyleSheet.create({
   card: {
     borderRadius: 16,
@@ -56,5 +75,10 @@ const styles = StyleSheet.create({
   line: {
     height: 12,
     borderRadius: 6,
+  },
+  button: {
+    minHeight: 44,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
   },
 });

@@ -9,7 +9,7 @@ import { FlagAccent } from '@/components/flag-accent';
 import { LensToggle } from '@/components/lens-toggle';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
-import { SkeletonCards } from '@/components/skeleton';
+import { SkeletonButton, SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, ChicagoStar, EmptyState, InfoModal, SectionHeader } from '@/components/ui';
 import { CITY } from '@/constants/chicago';
@@ -23,7 +23,7 @@ import type { Concern, Poll, TallyLens } from '@/lib/types';
 
 export default function BigBoardScreen() {
   const router = useRouter();
-  const { profile } = useAuth();
+  const { profile, loading: authLoading } = useAuth();
   const [lens, setLens] = useState<TallyLens>('all');
 
   // Each lens ranks by its own score, so the order you see is the order
@@ -71,7 +71,9 @@ export default function BigBoardScreen() {
 
       <LensToggle value={lens} onChange={setLens} />
 
-      {profile ? (
+      {authLoading ? (
+        <SkeletonButton />
+      ) : profile ? (
         <Button title="Raise a concern" onPress={() => router.push('/new-concern')} />
       ) : (
         <Button title="Sign in to raise a concern" variant="secondary" onPress={() => router.push('/sign-in')} />

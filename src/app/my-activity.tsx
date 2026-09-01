@@ -44,7 +44,12 @@ export default function MyActivityScreen() {
     [profile?.uid]
   );
 
-  if (authLoading) return <Screen>{null}</Screen>;
+  if (authLoading)
+    return (
+      <Screen>
+        <SkeletonCards />
+      </Screen>
+    );
   if (!profile) {
     return (
       <Screen>
