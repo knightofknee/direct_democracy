@@ -63,6 +63,9 @@ export default function PolicyScreen() {
   }
 
   const isThisCandidate = profile?.uid === policy.candidateUid;
+  // Directory entries are people, not policies: readable and linkable, but
+  // not commentable or reportable - the debate belongs on real platforms.
+  const isDirectory = !!candidate?.directory;
 
   return (
     <Screen>
@@ -71,7 +74,7 @@ export default function PolicyScreen() {
           {policy.section ? <Chip label={policy.section} /> : null}
           {policy.archived && <Chip label="Hidden" tone="warning" icon="eye-off" />}
           <View style={{ flex: 1 }} />
-          {candidate && (
+          {candidate && !isDirectory && (
             <ContentActions
               contentPath={`candidates/${policy.candidateUid}/policies/${policy.id}`}
               contentType="policy"
@@ -87,7 +90,9 @@ export default function PolicyScreen() {
         {candidate && (
           <Pressable onPress={() => router.push(`/candidate/${policy.candidateUid}`)}>
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              From the platform of {candidate.name} · {candidate.office}
+              {isDirectory
+                ? 'Declared candidate · no platform published to import'
+                : `From the platform of ${candidate.name} · ${candidate.office}`}
             </ThemedText>
           </Pressable>
         )}
@@ -107,12 +112,16 @@ export default function PolicyScreen() {
         <PolicyBody body={policy.body} />
       </View>
 
-      {policy.links.length > 0 && <Receipts links={policy.links} />}
+      {policy.links.length > 0 && (
+        <Receipts links={policy.links} title={isDirectory ? 'Links' : 'Receipts'} />
+      )}
 
       {isThisCandidate && <CandidateTools policy={policy} />}
 
-      <SectionHeader title={`Comments (${policy.commentCount})`} />
-      <CommentsSection
+      {isDirectory ? null : (
+        <>
+          <SectionHeader title={`Comments (${policy.commentCount})`} />
+          <CommentsSection
         comments={comments}
         opUid={policy.candidateUid}
         contentPathFor={(comment) =>
@@ -127,22 +136,24 @@ export default function PolicyScreen() {
         onCredit={(comment, credited) =>
           setCommentCredit(profile!, policy.candidateUid, policy.id, comment, credited)
         }
-        onVote={(comment, value) =>
-          voteOnPolicyComment(profile!, policy.candidateUid, policy.id, comment.id, value)
-        }
-      />
+            onVote={(comment, value) =>
+              voteOnPolicyComment(profile!, policy.candidateUid, policy.id, comment.id, value)
+            }
+          />
+        </>
+      )}
     </Screen>
   );
 }
 
-/** The cited sources backing the policy. */
-function Receipts({ links }: { links: Policy['links'] }) {
+/** The cited sources backing the policy (or the plain links, for directory entries). */
+function Receipts({ links, title }: { links: Policy['links']; title: string }) {
   const theme = useTheme();
 
   return (
     <Card>
       <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-        Receipts
+        {title}
       </ThemedText>
       {links.map((link, i) => (
         <Pressable

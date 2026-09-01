@@ -46,13 +46,17 @@ export default function ElectionScreen() {
       ) : candidates.length === 0 ? (
         <EmptyState icon="ribbon-outline" message="No candidates on the platform yet." />
       ) : (
-        candidates.map((candidate, i) => (
-          <Animated.View
-            key={candidate.uid}
-            entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
-            <CandidateRow candidate={candidate} />
-          </Animated.View>
-        ))
+        // Real candidates first (alphabetical), the declared-candidates
+        // directory entry at the end.
+        [...candidates.filter((c) => !c.directory), ...candidates.filter((c) => c.directory)].map(
+          (candidate, i) => (
+            <Animated.View
+              key={candidate.uid}
+              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
+              <CandidateRow candidate={candidate} />
+            </Animated.View>
+          )
+        )
       )}
     </Screen>
   );

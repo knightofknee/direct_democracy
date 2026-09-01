@@ -57,7 +57,9 @@ export function CandidateRow({ candidate }: { candidate: Candidate }) {
             {candidate.office}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {plural(candidate.policyCount ?? 0, 'policy', 'policies')}
+            {candidate.directory
+              ? plural(candidate.policyCount ?? 0, 'candidate')
+              : plural(candidate.policyCount ?? 0, 'policy', 'policies')}
           </ThemedText>
         </View>
         <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />

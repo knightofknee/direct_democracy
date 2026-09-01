@@ -373,6 +373,34 @@ function parseGoogleSites(html: string): RawPolicy[] {
   return policies;
 }
 
+// ── Format 7: details/summary accordions (williewilson2027.com) ──────────
+// Native <details> disclosure widgets: the <summary> leads with the policy
+// title in its first inline element, the rest of the summary is a tagline
+// (minus any "Read more" affordance), and the expanded content is the body.
+
+function parseDetailsAccordions(html: string): RawPolicy[] {
+  const policies: RawPolicy[] = [];
+  for (const m of html.matchAll(
+    /<details[^>]*>\s*<summary[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g
+  )) {
+    const summaryHtml = m[1];
+    const first = /<(span|b|strong|h\d)[^>]*>([\s\S]*?)<\/\1>/.exec(summaryHtml);
+    const title = stripTags(first ? first[2] : summaryHtml).slice(0, 140);
+    const tagline = first
+      ? stripTags(summaryHtml.slice(first.index + first[0].length))
+          .replace(/read more\s*$/i, '')
+          .trim()
+      : '';
+    const bodyHtml = m[2];
+    const body = [tagline, blockText(bodyHtml)].filter(Boolean).join('\n\n');
+    if (title && body.trim()) {
+      policies.push({ section: '', title, body, links: collectLinks(bodyHtml) });
+    }
+  }
+  // A lone <details> is site chrome (cookie prefs, FAQs); a platform has many.
+  return policies.length >= 2 ? policies : [];
+}
+
 // ── Dispatch ─────────────────────────────────────────────────────────────
 
 const FORMATS = [
@@ -382,6 +410,7 @@ const FORMATS = [
   parseWpSections,
   parseElementorPairs,
   parseGoogleSites,
+  parseDetailsAccordions,
 ];
 
 /**

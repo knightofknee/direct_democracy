@@ -113,10 +113,17 @@ export default function CandidateScreen() {
         </>
       )}
 
-      <SectionHeader
-        title="the more perfect platform"
-        subtitle="Every policy, open to your arguments"
-      />
+      {candidate.directory ? (
+        <SectionHeader
+          title="the rest of the field"
+          subtitle="Declared candidates who have published no platform to import"
+        />
+      ) : (
+        <SectionHeader
+          title="the more perfect platform"
+          subtitle="Every policy, open to your arguments"
+        />
+      )}
       {candidate.platformNote ? (
         <PlatformNote
           note={candidate.platformNote}
@@ -134,7 +141,11 @@ export default function CandidateScreen() {
       {visiblePolicies.length === 0 ? (
         <EmptyState icon="document-text-outline" message="No policies published yet." />
       ) : (
-        <PlatformList candidateUid={candidate.uid} policies={visiblePolicies} />
+        <PlatformList
+          candidateUid={candidate.uid}
+          policies={visiblePolicies}
+          directory={candidate.directory}
+        />
       )}
 
       {openPolls.length > 0 && (
@@ -211,7 +222,16 @@ function ImportedNote({ sourceUrl }: { sourceUrl: string }) {
 }
 
 /** The platform, grouped by its section headers, in site order. */
-function PlatformList({ candidateUid, policies }: { candidateUid: string; policies: Policy[] }) {
+function PlatformList({
+  candidateUid,
+  policies,
+  directory,
+}: {
+  candidateUid: string;
+  policies: Policy[];
+  /** Directory entries are candidate profiles, not debatable policies - no comment counts. */
+  directory?: boolean;
+}) {
   const router = useRouter();
   const theme = useTheme();
 
@@ -243,9 +263,11 @@ function PlatformList({ candidateUid, policies }: { candidateUid: string; polici
           <ThemedText type="small" themeColor="textSecondary" numberOfLines={2}>
             {policyPreview(policy.body)}
           </ThemedText>
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {plural(policy.commentCount, 'comment')}
-          </ThemedText>
+          {!directory && (
+            <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+              {plural(policy.commentCount, 'comment')}
+            </ThemedText>
+          )}
         </Card>
       </Animated.View>
     );

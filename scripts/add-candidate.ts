@@ -26,6 +26,12 @@
  *                         address) plus a users/{uid} profile. The campaign
  *                         claims the account later by signing in with that
  *                         email (password reset lands in their own inbox).
+ *   --no-email            for a campaign that publishes NO contact email
+ *                         (call that out in --note): creates an email-less
+ *                         placeholder that nobody can claim until an
+ *                         operator attaches an address with the Admin SDK.
+ *                         Re-running finds the existing account by exact
+ *                         name match on the candidates collection.
  */
 
 function arg(name: string): string | null {
@@ -56,8 +62,9 @@ const db = getFirestore(app);
 async function main() {
   const email = arg('email');
   const name = arg('name');
-  if (!email || !name) {
-    console.error('Usage: npm run add-candidate -- --email <email> --name "<name>" [--office "…"] [--website https://…] [--source https://…] [--emulator]');
+  const noEmail = process.argv.includes('--no-email');
+  if (!name || (!email && !noEmail)) {
+    console.error('Usage: npm run add-candidate -- --email <email> --name "<name>" [--office "…"] [--website https://…] [--source https://…] [--no-email] [--emulator]');
     process.exit(1);
   }
   const office = arg('office') ?? 'Candidate for Mayor';
@@ -79,16 +86,28 @@ async function main() {
     }
   }
 
-  let user = await auth.getUserByEmail(email).catch(() => null);
-  if (!user && process.argv.includes('--create')) {
-    user = await auth.createUser({ email, displayName: name, emailVerified: false });
-    console.log(`  Created placeholder account ${user.uid} for ${email} (no password set).`);
-  }
-  if (!user) {
-    console.error(
-      `No account found for ${email} - have them sign up in the app first, or pass --create.`
-    );
-    process.exit(1);
+  let user = null;
+  if (noEmail) {
+    // No email means no lookup key: reuse the account behind an existing
+    // candidate card with this exact name, otherwise mint a fresh one.
+    const match = await db.collection('candidates').where('name', '==', name).limit(1).get();
+    user = match.empty ? null : await auth.getUser(match.docs[0].id).catch(() => null);
+    if (!user) {
+      user = await auth.createUser({ displayName: name });
+      console.log(`  Created email-less placeholder account ${user.uid} (unclaimable until an email is attached).`);
+    }
+  } else {
+    user = await auth.getUserByEmail(email!).catch(() => null);
+    if (!user && process.argv.includes('--create')) {
+      user = await auth.createUser({ email: email!, displayName: name, emailVerified: false });
+      console.log(`  Created placeholder account ${user.uid} for ${email} (no password set).`);
+    }
+    if (!user) {
+      console.error(
+        `No account found for ${email} - have them sign up in the app first, or pass --create.`
+      );
+      process.exit(1);
+    }
   }
 
   const profileRef = db.doc(`users/${user.uid}`);
@@ -127,7 +146,7 @@ async function main() {
     { merge: true }
   );
 
-  console.log(`✓ ${name} (${email}) is now a candidate: ${office}`);
+  console.log(`✓ ${name} (${email ?? 'no email published'}) is now a candidate: ${office}`);
   console.log(`  users/${user.uid}.role = candidate`);
   console.log(`  candidates/${user.uid} ${existing.exists ? 'updated' : 'created'}`);
   if (sourceUrl) {

@@ -58,7 +58,8 @@
     "sync-platform": "tsx scripts/sync-platform.ts",
     "set-official": "tsx scripts/set-official.ts",
     "seed-aldermen": "tsx scripts/seed-aldermen.ts",
-    "verify-user": "tsx scripts/verify-user.ts"
+    "verify-user": "tsx scripts/verify-user.ts",
+    "seed-other-candidates": "tsx scripts/seed-other-candidates.ts"
   },
   "private": true
 }

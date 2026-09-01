@@ -90,6 +90,12 @@ export interface Candidate {
   /** e.g. "Candidate for Mayor" */
   office: string;
   bio: string;
+  /**
+   * A directory entry rather than a person: its "policies" are profiles of
+   * the remaining declared candidates (operator-written, no comments). Listed
+   * after the real candidates on the election tab.
+   */
+  directory?: boolean;
   /** Externally hosted portrait (https URL) - never stored or proxied. */
   photoUrl?: string | null;
   /** The campaign's public website, shown as a link. */
