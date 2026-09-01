@@ -139,7 +139,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       },
       (err) => {
-        console.warn('Profile listener error:', err.message);
+        // A terminal listener error while signed in means the app would
+        // otherwise silently show signed-out UI to an authed user (this is
+        // how the Android App Check outage surfaced). Say so instead.
+        notifyError('Signed in, but your account data could not be loaded', err);
         setProfileSettled(true);
       }
     );

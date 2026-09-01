@@ -338,6 +338,14 @@ Two consequences of the exactly-once work to know about:
 - **App Check**: web reCAPTCHA v3 attestation wired behind
   `EXPO_PUBLIC_RECAPTCHA_V3_SITE_KEY`; native attestation and console
   enforcement documented in the README as launch prerequisites.
+  Firestore enforcement was ON from 2026-08-03 to 2026-09-01, then flipped
+  back to UNENFORCED: the Android (Play closed testing) build's Play
+  Integrity attestation produces invalid tokens, so enforcement locked every
+  Android client out of Firestore (auth succeeded - identitytoolkit is
+  unenforced - while the profile listener was denied, leaving authed users
+  looking signed out). Re-enable only after App Check metrics show the
+  Android app id attesting VALID; the likely fix is linking the Play
+  Integrity API to this Cloud project in Play Console -> App integrity.
 
 ### Known limitations (updated)
 
