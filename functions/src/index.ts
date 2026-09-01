@@ -13,7 +13,20 @@ import { onRequest } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { defineSecret } from 'firebase-functions/params';
 
-import { parsePlatformHtml } from './platform';
+import { parsePlatformUrl } from './platform';
+
+/** Fetch one page of a campaign site; a real UA gets past bot-filtering CDNs. */
+async function fetchPageHtml(url: string): Promise<string> {
+  const resp = await fetch(url, {
+    headers: {
+      accept: 'text/html',
+      'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36',
+    },
+  });
+  if (!resp.ok) throw new Error(`Fetching ${url} failed: ${resp.status}`);
+  return resp.text();
+}
 import {
   PRIORITY_WEIGHTS,
   addBallot,
@@ -1020,11 +1033,10 @@ async function syncCandidatePlatform(
   candidateUid: string,
   sourceUrl: string
 ): Promise<{ synced: number; archived: number }> {
-  const resp = await fetch(sourceUrl, { headers: { accept: 'text/html' } });
-  if (!resp.ok) throw new Error(`Fetching ${sourceUrl} failed: ${resp.status}`);
-  // parsePlatformHtml throws on an unrecognized layout rather than returning
-  // nothing - a site redesign must fail the sync, not archive the platform.
-  const parsed = parsePlatformHtml(await resp.text());
+  // parsePlatformUrl follows hub pages to their per-policy subpages and
+  // throws on an unrecognized layout rather than returning nothing - a site
+  // redesign must fail the sync, not archive the platform.
+  const parsed = await parsePlatformUrl(sourceUrl, fetchPageHtml);
 
   const policiesRef = db.collection(`candidates/${candidateUid}/policies`);
   const existing = await policiesRef.get();

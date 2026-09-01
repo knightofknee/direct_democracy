@@ -14,7 +14,20 @@
 import { applicationDefault, initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 
-import { parsePlatformHtml } from '../functions/src/platform';
+import { parsePlatformUrl } from '../functions/src/platform';
+
+/** Same page fetcher as the deployed sync: real UA to pass bot-filtering CDNs. */
+async function fetchPageHtml(url: string): Promise<string> {
+  const resp = await fetch(url, {
+    headers: {
+      accept: 'text/html',
+      'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36',
+    },
+  });
+  if (!resp.ok) throw new Error(`Fetching ${url} failed: ${resp.status}`);
+  return resp.text();
+}
 
 const app = initializeApp({ credential: applicationDefault(), projectId: 'direct-democracy-e338a' });
 const db = getFirestore(app);
@@ -24,9 +37,7 @@ async function sync(candidateUid: string) {
   const sourceUrl = card.data()?.sourceUrl as string | null;
   if (!sourceUrl) throw new Error(`No sourceUrl on candidates/${candidateUid}`);
 
-  const resp = await fetch(sourceUrl, { headers: { accept: 'text/html' } });
-  if (!resp.ok) throw new Error(`Fetching ${sourceUrl} failed: ${resp.status}`);
-  const parsed = parsePlatformHtml(await resp.text());
+  const parsed = await parsePlatformUrl(sourceUrl, fetchPageHtml);
 
   const policiesRef = db.collection(`candidates/${candidateUid}/policies`);
   const existing = await policiesRef.get();

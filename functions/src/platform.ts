@@ -92,14 +92,27 @@ function blockText(html: string): string {
 
   let text = '';
   let prevBullet = false;
+  // A list item whose glyph is its own element (icon divs, arrow spans)
+  // splits into an empty bullet line followed by its text - carry the bullet
+  // over to that text instead of emitting "- " with nothing after it.
+  let pendingBullet = false;
   for (const raw of lines) {
-    const bullet = raw.startsWith('\u0001');
+    let bullet = raw.startsWith('\u0001');
     const heading = raw.startsWith('\u0002');
-    const line = bullet
-      ? `- ${raw.slice(1).trim()}`
-      : heading
-        ? `## ${raw.slice(1).trim()}`
-        : raw;
+    let content = bullet || heading ? raw.slice(1).trim() : raw;
+    if (/^[\u2192\u2022\u203a\u2713\u00b7-]$/.test(content)) {
+      pendingBullet = pendingBullet || bullet;
+      continue;
+    }
+    if (bullet && !content) {
+      pendingBullet = true;
+      continue;
+    }
+    if (pendingBullet && !heading) {
+      bullet = true;
+      pendingBullet = false;
+    }
+    const line = bullet ? `- ${content}` : heading ? `## ${content}` : content;
     if (text) text += bullet && prevBullet ? '\n' : '\n\n';
     text += line;
     prevBullet = bullet;
@@ -262,9 +275,114 @@ function parseAccordions(html: string): RawPolicy[] {
   return policies;
 }
 
+// ── Format 4: WordPress sectioned headings (susanamendoza.com) ───────────
+// One long page inside <main>: <h2 class="wp-block-heading"> sections, each
+// holding <h3 class="wp-block-heading"> policies with paragraphs between.
+
+function parseWpSections(html: string): RawPolicy[] {
+  const main = /<main[^>]*>([\s\S]*?)<\/main>/.exec(html)?.[1];
+  if (!main) return [];
+
+  const policies: RawPolicy[] = [];
+  const sections = main.split(/<h2[^>]*\bwp-block-heading\b[^>]*>/).slice(1);
+  for (const sectionHtml of sections) {
+    const section = stripTags(sectionHtml.split('</h2>')[0]).slice(0, 60);
+    const items = sectionHtml.split(/<h3[^>]*\bwp-block-heading\b[^>]*>/).slice(1);
+    for (const item of items) {
+      const title = stripTags(item.split('</h3>')[0]).slice(0, 140);
+      const bodyHtml = item.slice(item.indexOf('</h3>') + 5);
+      const body = blockText(bodyHtml);
+      if (title && body) {
+        policies.push({ section, title, body, links: collectLinks(bodyHtml) });
+      }
+    }
+  }
+  // One-off h3s elsewhere on a page are not a platform; demand a real outline.
+  return policies.length >= 2 ? policies : [];
+}
+
+// ── Format 5: Elementor heading pairs (johnkellyforchi.com) ──────────────
+// One long Elementor page where each policy is an <h2> title widget followed
+// IMMEDIATELY by another heading widget (the lede); everything up to the next
+// such pair is the policy body. Intro content before the first pair is
+// dropped, and the page is cut at the consent banner / footer.
+
+function parseElementorPairs(html: string): RawPolicy[] {
+  // This format must never fire on popup-card sites (format 2's layout).
+  if (html.includes('data-elementor-type="popup"')) return [];
+
+  const cutAt = html.search(/<footer\b|wpconsent-banner|data-elementor-type="footer"/i);
+  const page = cutAt >= 0 ? html.slice(0, cutAt) : html;
+
+  const heads = [
+    ...page.matchAll(/<h2[^>]*class="elementor-heading-title[^"]*"[^>]*>([\s\S]*?)<\/h2>/g),
+  ];
+  const titles: { title: string; start: number; bodyFrom: number }[] = [];
+  for (const m of heads) {
+    // A title's very next widget is another heading (its lede); prose
+    // headings are followed by text editors instead.
+    const after = page.slice(m.index + m[0].length, m.index + m[0].length + 700);
+    const nextWidget = /data-widget_type="([^"]+)"/.exec(after);
+    if (nextWidget?.[1] === 'heading.default') {
+      titles.push({
+        title: stripTags(m[1]).slice(0, 140),
+        start: m.index,
+        bodyFrom: m.index + m[0].length,
+      });
+    }
+  }
+  if (titles.length < 2) return [];
+
+  return titles.map((t, i) => {
+    const bodyHtml = page.slice(t.bodyFrom, titles[i + 1]?.start ?? page.length);
+    return {
+      section: '',
+      title: t.title,
+      body: blockText(bodyHtml),
+      links: collectLinks(bodyHtml),
+    };
+  });
+}
+
+// ── Format 6: Google Sites (brooksforchicago.com) ────────────────────────
+// Content lives in <div role="main">; each policy is an <h1> section (the
+// first h1 is the page title and is skipped), with h3 sub-heads and
+// paragraphs following. Google Sites emits inline CSS blobs as text - lines
+// with braces are dropped.
+
+function parseGoogleSites(html: string): RawPolicy[] {
+  if (!/<div[^>]*\brole="main"/.test(html)) return [];
+  // Sites markup never div-balances cleanly; cut the page at its footer and
+  // section on h1s instead (the first h1 is the page title, not a policy).
+  const footer = html.indexOf('<footer');
+  const main = footer >= 0 ? html.slice(0, footer) : html;
+
+  const chunks = main.split(/<h1[^>]*>/).slice(2); // drop preamble + page-title h1
+  const policies: RawPolicy[] = [];
+  for (const chunk of chunks) {
+    const title = stripTags(chunk.split('</h1>')[0]).slice(0, 140);
+    const bodyHtml = chunk.slice(chunk.indexOf('</h1>') + 5);
+    const body = blockText(bodyHtml)
+      .split('\n')
+      .filter((line) => !(line.includes('{') && line.includes('}')))
+      .join('\n');
+    if (title && body.trim()) {
+      policies.push({ section: '', title, body, links: collectLinks(bodyHtml) });
+    }
+  }
+  return policies;
+}
+
 // ── Dispatch ─────────────────────────────────────────────────────────────
 
-const FORMATS = [parseGroupedLists, parseElementorPopups, parseAccordions];
+const FORMATS = [
+  parseGroupedLists,
+  parseElementorPopups,
+  parseAccordions,
+  parseWpSections,
+  parseElementorPairs,
+  parseGoogleSites,
+];
 
 /**
  * Parse a platform page. Returns every policy in page order; throws when the
@@ -275,14 +393,126 @@ export function parsePlatformHtml(html: string): ParsedPolicy[] {
   for (const parse of FORMATS) {
     const raw = parse(html);
     if (raw.length === 0) continue;
-
-    const usedSlugs = new Set<string>();
-    return raw.map((p, order) => {
-      let slug = slugify(p.title);
-      for (let n = 2; usedSlugs.has(slug); n += 1) slug = `${slugify(p.title)}-${n}`;
-      usedSlugs.add(slug);
-      return { ...p, slug, body: p.body.slice(0, 8000), order };
-    });
+    return finalize(raw);
   }
   throw new Error('No policies found - the page layout may have changed.');
+}
+
+function finalize(raw: RawPolicy[]): ParsedPolicy[] {
+  const usedSlugs = new Set<string>();
+  return raw.map((p, order) => {
+    let slug = slugify(p.title);
+    for (let n = 2; usedSlugs.has(slug); n += 1) slug = `${slugify(p.title)}-${n}`;
+    usedSlugs.add(slug);
+    return { ...p, slug, body: p.body.slice(0, 8000), order };
+  });
+}
+
+// ── Multi-page platforms ─────────────────────────────────────────────────
+// Some campaigns keep the platform on subpages behind a hub: the hub gives
+// the list (and order), each subpage becomes ONE policy. Hub detectors are
+// tried first; when none matches (or its subpages yield nothing) the page is
+// parsed as a single-page platform above.
+
+/** How the orchestrator fetches pages - injected so functions and scripts share it. */
+export type FetchHtml = (url: string) => Promise<string>;
+
+interface HubLink {
+  title: string;
+  url: string;
+}
+
+/** Static per-pillar pages (cardenas4chicago.com): links to pillar-*.html. */
+function hubPillarPages(html: string, baseUrl: string): HubLink[] {
+  const links: HubLink[] = [];
+  const seen = new Set<string>();
+  for (const m of html.matchAll(/<a[^>]*href="((?:[^"]*\/)?pillar-[a-z0-9-]+\.html)"[^>]*>([\s\S]*?)<\/a>/g)) {
+    const url = new URL(m[1], baseUrl).toString();
+    if (seen.has(url)) continue;
+    seen.add(url);
+    links.push({ title: stripTags(m[2]).slice(0, 140), url });
+  }
+  return links;
+}
+
+/** Squarespace button hubs (quigleyforchicago.com): sqs buttons to subpages. */
+function hubSquarespaceButtons(html: string, baseUrl: string): HubLink[] {
+  // Site chrome that is never a policy page, even when presented as a button.
+  const chrome = new Set([
+    '/', '/about', '/cart', '/contact', '/donate', '/media', '/news', '/press',
+    '/priorities', '/privacy', '/volunteer',
+  ]);
+  const links: HubLink[] = [];
+  const seen = new Set<string>();
+  for (const m of html.matchAll(
+    /<a[^>]*href="(\/[a-z0-9-]*)"[^>]*class="[^"]*sqs-block-button-element[^"]*"[^>]*>([\s\S]*?)<\/a>/g
+  )) {
+    const path = m[1];
+    const title = stripTags(m[2]).slice(0, 140);
+    if (chrome.has(path) || seen.has(path) || !title) continue;
+    seen.add(path);
+    links.push({ title, url: new URL(path, baseUrl).toString() });
+  }
+  return links;
+}
+
+/** SHOUTING CASE titles (Squarespace headers) read better in title case. */
+function titleCase(text: string): string {
+  if (text !== text.toUpperCase()) return text;
+  return text
+    .toLowerCase()
+    .replace(/(^|[\s-])([a-z])/g, (_, sep: string, ch: string) => sep + ch.toUpperCase());
+}
+
+/** One subpage, one policy: lead heading is the title, <main> is the body. */
+function parseSubpage(html: string, link: HubLink): RawPolicy | null {
+  const mainHtml = /<main[^>]*>([\s\S]*?)<\/main>/.exec(html)?.[1] ?? html;
+  // Cross-promo sections at the tail of pillar pages are chrome, not policy.
+  const cut = mainHtml.search(/>\s*Explore Other Pillars\s*</i);
+  const contentHtml = cut >= 0 ? mainHtml.slice(0, mainHtml.lastIndexOf('<', cut)) : mainHtml;
+
+  const lead = /<(h[1-2])[^>]*>([\s\S]*?)<\/\1>/.exec(contentHtml);
+  const title = titleCase(stripTags(lead?.[2] ?? '') || link.title).slice(0, 140);
+  const bodyHtml = lead ? contentHtml.slice(lead.index + lead[0].length) : contentHtml;
+  const body = blockText(bodyHtml);
+  if (!title || !body.trim()) return null;
+
+  const links = collectLinks(bodyHtml).filter(
+    (l) => !/actblue\.com|winred\.com|\/donate\b/i.test(l.url)
+  );
+  return { section: '', title, body, links };
+}
+
+const HUBS = [hubPillarPages, hubSquarespaceButtons];
+
+/**
+ * Parse a platform from its source URL, following hub pages to their
+ * subpages when the layout calls for it. This is the entry point for the
+ * nightly sync and the operator script; parsePlatformHtml remains the
+ * single-page core. Throws when nothing yields policies.
+ */
+export async function parsePlatformUrl(
+  sourceUrl: string,
+  fetchHtml: FetchHtml
+): Promise<ParsedPolicy[]> {
+  const html = await fetchHtml(sourceUrl);
+
+  for (const hub of HUBS) {
+    const links = hub(html, sourceUrl);
+    if (links.length < 2) continue;
+    const raw: RawPolicy[] = [];
+    for (const link of links) {
+      try {
+        const policy = parseSubpage(await fetchHtml(link.url), link);
+        if (policy) raw.push(policy);
+      } catch (e) {
+        console.warn(`Subpage ${link.url} failed:`, e);
+      }
+    }
+    // Every subpage failing means the hub match was wrong or the site is
+    // down - fall through rather than wrongly archiving the platform.
+    if (raw.length > 0) return finalize(raw);
+  }
+
+  return parsePlatformHtml(html);
 }
