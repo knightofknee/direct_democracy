@@ -82,6 +82,7 @@ export default function RootLayout() {
             <Stack.Screen name="officials" options={{ title: 'Officials' }} />
             <Stack.Screen name="candidate/[id]/index" options={{ title: 'Candidate' }} />
             <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: 'Policy' }} />
+            <Stack.Screen name="election-question/[id]" options={{ title: 'Election AMA' }} />
             <Stack.Screen name="sign-in" options={{ title: 'Sign in', ...MODAL }} />
             <Stack.Screen name="new-concern" options={{ title: 'Raise a concern', ...MODAL }} />
             <Stack.Screen name="new-poll" options={{ title: 'New poll', ...MODAL }} />

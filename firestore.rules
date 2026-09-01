@@ -368,6 +368,79 @@ service cloud.firestore {
       }
     }
 
+    // ── Election AMA (one question, every candidate) ─────────────────────
+    // Anyone signed in proposes a question; any candidate answers, ONE
+    // answer each - the answer doc id is the candidate's uid, and create is
+    // pinned to it. answerCount and the answers' hidden placement scores are
+    // trigger-only.
+    match /electionQuestions/{questionId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'authorUid', 'authorName', 'authorVerified', 'body', 'answerCount', 'createdAt'
+        ])
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorName == me().displayName
+        && request.resource.data.authorVerified == me().verified
+        && request.resource.data.body is string
+        && request.resource.data.body.size() >= 10
+        && request.resource.data.body.size() <= 1000
+        && request.resource.data.answerCount == 0
+        && request.resource.data.createdAt == request.time;
+
+      // The asker may withdraw only while unanswered - an answered question
+      // is part of the candidates' public record. Admin: takedowns.
+      allow delete: if (
+          signedIn()
+          && request.auth.uid == resource.data.authorUid
+          && resource.data.answerCount == 0
+        ) || isAdmin();
+
+      match /answers/{candidateUid} {
+        allow read: if true;
+
+        allow create: if isCandidate()
+          && verifiedEmail()
+          && request.auth.uid == candidateUid
+          && request.resource.data.keys().hasOnly([
+            'candidateUid', 'candidateName', 'body', 'score', 'scoreVerified',
+            'createdAt', 'updatedAt'
+          ])
+          && request.resource.data.candidateUid == request.auth.uid
+          && request.resource.data.candidateName == me().displayName
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 1
+          && request.resource.data.body.size() <= 4000
+          && request.resource.data.score == 0
+          && request.resource.data.scoreVerified == 0;
+
+        // Revisions touch only the text; scores stay trigger-only.
+        allow update: if isCandidate()
+          && verifiedEmail()
+          && request.auth.uid == candidateUid
+          && onlyChanges(['body', 'updatedAt'])
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 1
+          && request.resource.data.body.size() <= 4000;
+
+        allow delete: if (signedIn() && request.auth.uid == candidateUid) || isAdmin();
+
+        // Answer ratings: one up/down per person, placement-only (scores are
+        // never displayed). Same shape as comment ratings.
+        match /votes/{voterUid} {
+          allow read: if signedIn() && request.auth.uid == voterUid;
+          allow create, update: if signedIn()
+            && request.auth.uid == voterUid
+            && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'createdAt'])
+            && request.resource.data.uid == request.auth.uid
+            && request.resource.data.verified == me().verified
+            && request.resource.data.value in ['up', 'down'];
+          allow delete: if signedIn() && request.auth.uid == voterUid;
+        }
+      }
+    }
+
     // ── Officials & AMAs ─────────────────────────────────────────────────
     match /officials/{officialUid} {
       allow read: if true;

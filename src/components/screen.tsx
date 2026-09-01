@@ -13,20 +13,20 @@ import { useTheme } from '@/hooks/use-theme';
  * the keyboard inset; Android resizes the window (softwareKeyboardLayoutMode
  * defaults to resize).
  */
-export function Screen({
-  children,
-  tab,
-  style,
-}: {
-  children: React.ReactNode;
-  /** True for screens inside the tab bar (adds top + bottom insets). */
-  tab?: boolean;
-  style?: StyleProp<ViewStyle>;
-}) {
+export const Screen = React.forwardRef<
+  ScrollView,
+  {
+    children: React.ReactNode;
+    /** True for screens inside the tab bar (adds top + bottom insets). */
+    tab?: boolean;
+    style?: StyleProp<ViewStyle>;
+  }
+>(function Screen({ children, tab, style }, ref) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   return (
     <ScrollView
+      ref={ref}
       style={{ flex: 1, backgroundColor: theme.background }}
       contentContainerStyle={[
         styles.content,
@@ -44,7 +44,7 @@ export function Screen({
       <View style={styles.inner}>{children}</View>
     </ScrollView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   content: {

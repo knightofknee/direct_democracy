@@ -338,3 +338,33 @@ export interface AmaQuestion {
   answeredNoVerified?: number;
   createdAt: Timestamp;
 }
+
+/**
+ * The election AMA: one question put to every candidate at once. Anyone
+ * signed in can ask; any candidate can answer at any time, one answer each
+ * (the answer doc id is the candidate's uid). Answers are ranked by hidden
+ * up/down scores - placement only, never displayed.
+ */
+export interface ElectionQuestion {
+  id: string;
+  authorUid: string;
+  authorName: string;
+  authorVerified: boolean;
+  body: string;
+  /** Candidates who have answered, maintained by onElectionAnswerWrite. */
+  answerCount: number;
+  createdAt: Timestamp;
+}
+
+/** One candidate's answer to an election question; doc id = candidate uid. */
+export interface ElectionAnswer {
+  id: string;
+  candidateUid: string;
+  candidateName: string;
+  body: string;
+  /** Hidden placement scores (up minus down), trigger-written. */
+  score?: number;
+  scoreVerified?: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}

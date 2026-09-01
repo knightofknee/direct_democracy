@@ -536,6 +536,77 @@ export const onConcernDeleted = onDocumentDeleted('concerns/{concernId}', async 
   await db.recursiveDelete(db.doc(`concerns/${event.params.concernId}`));
 });
 
+// ── Election AMA (one question, every candidate) ────────────────────────
+// electionQuestions/{qid}/answers/{candidateUid}: one answer per candidate
+// (the doc id enforces it). answerCount and the answers' hidden placement
+// scores are trigger-only; ratings share applyCommentVote with comments.
+
+export const onElectionAnswerWrite = onDocumentWritten(
+  'electionQuestions/{questionId}/answers/{candidateUid}',
+  async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    const delta = (after ? 1 : 0) - (before ? 1 : 0);
+
+    const questionRef = db.doc(`electionQuestions/${event.params.questionId}`);
+    if (delta !== 0) {
+      await db.runTransaction(async (tx) => {
+        if (!(await claimEvent(tx, event.id))) return;
+        const snap = await tx.get(questionRef);
+        if (snap.exists) {
+          tx.update(questionRef, { answerCount: step(snap.data()?.answerCount, delta) });
+        }
+        markEvent(tx, event.id);
+      });
+    }
+
+    // A first answer is news to the asker.
+    if (!before && after) {
+      const question = (await questionRef.get()).data();
+      await sendNotification(
+        question?.authorUid,
+        `election-answer-${event.params.questionId}-${event.params.candidateUid}`,
+        {
+          type: 'electionAnswer',
+          title: `${after.candidateName} answered your question`,
+          body: excerpt(after.body),
+          link: `/election-question/${event.params.questionId}`,
+        },
+        event.params.candidateUid
+      );
+    }
+
+    // A withdrawn answer takes its ratings with it (no-op on redelivery).
+    if (before && !after) {
+      await db.recursiveDelete(
+        db.doc(
+          `electionQuestions/${event.params.questionId}/answers/${event.params.candidateUid}`
+        )
+      );
+    }
+  }
+);
+
+export const onElectionAnswerVoteWrite = onDocumentWritten(
+  'electionQuestions/{questionId}/answers/{candidateUid}/votes/{voterUid}',
+  async (event) =>
+    applyCommentVote(
+      event.id,
+      `electionQuestions/${event.params.questionId}/answers/${event.params.candidateUid}`,
+      event.params.voterUid,
+      event.data?.before.exists ? (event.data.before.data() as BallotDoc) : null,
+      event.data?.after.exists ? (event.data.after.data() as BallotDoc) : null
+    )
+);
+
+/** A withdrawn question takes its answers (and their ratings) with it. */
+export const onElectionQuestionDeleted = onDocumentDeleted(
+  'electionQuestions/{questionId}',
+  async (event) => {
+    await db.recursiveDelete(db.doc(`electionQuestions/${event.params.questionId}`));
+  }
+);
+
 // ── The more perfect platform (candidate policies) ──────────────────────
 
 /** Stance votes on a platform policy - a straight support/oppose dual tally. */
