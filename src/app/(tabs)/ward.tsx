@@ -98,7 +98,7 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
                 {profile ? 'Verify your residency' : 'Sign in to verify your residency'}
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                Participate in your ward’s board and polls; your votes count as verified.
+                Verify to participate in your ward’s board and polls.
               </ThemedText>
             </View>
             <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
