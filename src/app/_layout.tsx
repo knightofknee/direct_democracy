@@ -3,6 +3,7 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider, useRouter } from 'expo-r
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { Pressable, useColorScheme } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { CelebrationProvider } from '@/components/celebration';
 import { Colors } from '@/constants/theme';
@@ -67,34 +68,38 @@ export default function RootLayout() {
   };
 
   return (
-    <ThemeProvider value={navTheme}>
-      <AuthProvider>
-        <SplashGate />
-        <CelebrationProvider>
-          <Stack
-            screenOptions={{
-              headerShadowVisible: false,
-              headerBackButtonDisplayMode: 'minimal',
-            }}>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="concern/[id]" options={{ title: 'Concern' }} />
-            <Stack.Screen name="official/[id]" options={{ title: 'Official' }} />
-            <Stack.Screen name="officials" options={{ title: 'Officials' }} />
-            <Stack.Screen name="candidate/[id]/index" options={{ title: 'Candidate' }} />
-            <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: 'Policy' }} />
-            <Stack.Screen name="election-question/[id]" options={{ title: 'Election AMA' }} />
-            <Stack.Screen name="sign-in" options={{ title: 'Sign in', ...MODAL }} />
-            <Stack.Screen name="new-concern" options={{ title: 'Raise a concern', ...MODAL }} />
-            <Stack.Screen name="new-poll" options={{ title: 'New poll', ...MODAL }} />
-            <Stack.Screen name="edit-policy" options={{ title: 'Platform policy', ...MODAL }} />
-            <Stack.Screen name="verify" options={{ title: 'Verify identity', ...MODAL }} />
-            <Stack.Screen name="my-activity" options={{ title: 'My activity' }} />
-            <Stack.Screen name="privacy" options={{ title: 'Privacy & data' }} />
-            <Stack.Screen name="settings" options={{ title: 'Settings' }} />
-            <Stack.Screen name="admin" options={{ title: 'Reports' }} />
-          </Stack>
-        </CelebrationProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    // Gesture handling (the ward map's pinch/pan) needs this above every
+    // screen; expo-router does not provide one itself.
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={navTheme}>
+        <AuthProvider>
+          <SplashGate />
+          <CelebrationProvider>
+            <Stack
+              screenOptions={{
+                headerShadowVisible: false,
+                headerBackButtonDisplayMode: 'minimal',
+              }}>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="concern/[id]" options={{ title: 'Concern' }} />
+              <Stack.Screen name="official/[id]" options={{ title: 'Official' }} />
+              <Stack.Screen name="officials" options={{ title: 'Officials' }} />
+              <Stack.Screen name="candidate/[id]/index" options={{ title: 'Candidate' }} />
+              <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: 'Policy' }} />
+              <Stack.Screen name="election-question/[id]" options={{ title: 'Election AMA' }} />
+              <Stack.Screen name="sign-in" options={{ title: 'Sign in', ...MODAL }} />
+              <Stack.Screen name="new-concern" options={{ title: 'Raise a concern', ...MODAL }} />
+              <Stack.Screen name="new-poll" options={{ title: 'New poll', ...MODAL }} />
+              <Stack.Screen name="edit-policy" options={{ title: 'Platform policy', ...MODAL }} />
+              <Stack.Screen name="verify" options={{ title: 'Verify identity', ...MODAL }} />
+              <Stack.Screen name="my-activity" options={{ title: 'My activity' }} />
+              <Stack.Screen name="privacy" options={{ title: 'Privacy & data' }} />
+              <Stack.Screen name="settings" options={{ title: 'Settings' }} />
+              <Stack.Screen name="admin" options={{ title: 'Reports' }} />
+            </Stack>
+          </CelebrationProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
