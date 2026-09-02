@@ -118,7 +118,9 @@ export default function PolicyScreen() {
 
       {isThisCandidate && <CandidateTools policy={policy} />}
 
-      {isDirectory ? null : (
+      {/* Until the candidate doc has loaded we cannot know whether this is a
+          directory entry - render no comment surface rather than risk one. */}
+      {!candidate || isDirectory ? null : (
         <>
           <SectionHeader title={`Comments (${policy.commentCount})`} />
           <CommentsSection

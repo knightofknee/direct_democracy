@@ -546,17 +546,20 @@ export const onElectionAnswerWrite = onDocumentWritten(
   async (event) => {
     const before = event.data?.before.exists ? event.data.before.data() : null;
     const after = event.data?.after.exists ? event.data.after.data() : null;
-    const delta = (after ? 1 : 0) - (before ? 1 : 0);
 
+    // Recount rather than delta: out-of-order delivery of a create/delete
+    // pair can strand a delta-based counter (the -1 clamps at 0, the late +1
+    // sticks), and a recount is idempotent so it needs no once-guard. The
+    // field can then never drift from the truth for longer than one write.
     const questionRef = db.doc(`electionQuestions/${event.params.questionId}`);
-    if (delta !== 0) {
+    if ((before == null) !== (after == null)) {
       await db.runTransaction(async (tx) => {
-        if (!(await claimEvent(tx, event.id))) return;
         const snap = await tx.get(questionRef);
-        if (snap.exists) {
-          tx.update(questionRef, { answerCount: step(snap.data()?.answerCount, delta) });
+        if (!snap.exists) return;
+        const answers = await tx.get(questionRef.collection('answers'));
+        if (snap.data()?.answerCount !== answers.size) {
+          tx.update(questionRef, { answerCount: answers.size });
         }
-        markEvent(tx, event.id);
       });
     }
 

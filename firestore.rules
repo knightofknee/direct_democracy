@@ -400,9 +400,14 @@ service cloud.firestore {
       match /answers/{candidateUid} {
         allow read: if true;
 
+        // Timestamps are pinned: a forged createdAt would game the ranking
+        // tie-break, and an omitted one would hide the answer from the
+        // createdAt-ordered query while still counting it. The parent
+        // question must exist so no orphan answers accumulate.
         allow create: if isCandidate()
           && verifiedEmail()
           && request.auth.uid == candidateUid
+          && exists(/databases/$(database)/documents/electionQuestions/$(questionId))
           && request.resource.data.keys().hasOnly([
             'candidateUid', 'candidateName', 'body', 'score', 'scoreVerified',
             'createdAt', 'updatedAt'
@@ -413,18 +418,27 @@ service cloud.firestore {
           && request.resource.data.body.size() >= 1
           && request.resource.data.body.size() <= 4000
           && request.resource.data.score == 0
-          && request.resource.data.scoreVerified == 0;
+          && request.resource.data.scoreVerified == 0
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
 
-        // Revisions touch only the text; scores stay trigger-only.
+        // Revisions touch the text (and the name snapshot, which must still
+        // match the live profile); scores and createdAt stay frozen.
         allow update: if isCandidate()
           && verifiedEmail()
           && request.auth.uid == candidateUid
-          && onlyChanges(['body', 'updatedAt'])
+          && onlyChanges(['body', 'candidateName', 'updatedAt'])
+          && request.resource.data.candidateName == me().displayName
           && request.resource.data.body is string
           && request.resource.data.body.size() >= 1
-          && request.resource.data.body.size() <= 4000;
+          && request.resource.data.body.size() <= 4000
+          && request.resource.data.updatedAt == request.time;
 
-        allow delete: if (signedIn() && request.auth.uid == candidateUid) || isAdmin();
+        // An answer is part of the public record the moment it posts:
+        // letting the candidate delete would launder away downvotes (delete
+        // cascades the ratings, re-posting starts at score 0). Revise the
+        // text instead; takedowns are the admin's.
+        allow delete: if isAdmin();
 
         // Answer ratings: one up/down per person, placement-only (scores are
         // never displayed). Same shape as comment ratings.

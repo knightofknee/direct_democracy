@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -29,7 +29,7 @@ export default function SignInScreen() {
   const theme = useTheme();
   const isDark = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
-  const { signIn, signUp, signInWithGoogle, signInWithApple, sendMagicLink } = useAuth();
+  const { user, signIn, signUp, signInWithGoogle, signInWithApple, sendMagicLink } = useAuth();
 
   const [mode, setMode] = useState<'signIn' | 'signUp'>('signIn');
   const [email, setEmail] = useState('');
@@ -38,10 +38,18 @@ export default function SignInScreen() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [ssoLoading, setSsoLoading] = useState<'google' | 'apple' | null>(null);
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [pwFocused, setPwFocused] = useState(false);
 
-  const anyLoading = submitting || ssoLoading != null;
+  const anyLoading = submitting || ssoLoading != null || sendingEmail;
+
+  // Already signed in with nothing in flight (a restored session, or a
+  // magic link that completed while this screen was up): nothing to do here.
+  useEffect(() => {
+    if (user && !submitting && !ssoLoading) done();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const done = () => {
     // Always land on the big board, wherever sign-in was opened from.
@@ -75,7 +83,11 @@ export default function SignInScreen() {
       else await signInWithApple();
       done();
     } catch (e) {
-      setError(e instanceof Error ? friendlyAuthError(e.message) : 'Something went wrong.');
+      const message = e instanceof Error ? e.message : '';
+      // Backing out of the provider sheet is not an error to shout about.
+      if (!/cancel|popup-closed-by-user/i.test(message)) {
+        setError(message ? friendlyAuthError(message) : 'Something went wrong.');
+      }
       setSsoLoading(null);
     }
   };
@@ -91,22 +103,28 @@ export default function SignInScreen() {
   const magicLink = async () => {
     if (!requireEmail()) return;
     setError('');
+    setSendingEmail(true);
     try {
       await sendMagicLink(email);
       notify('Link sent', 'Check your email on this device. The link signs you in with no password.');
     } catch (e) {
       setError(e instanceof Error ? friendlyAuthError(e.message) : 'Something went wrong.');
+    } finally {
+      setSendingEmail(false);
     }
   };
 
   const forgotPassword = async () => {
     if (!requireEmail()) return;
     setError('');
+    setSendingEmail(true);
     try {
       await sendPasswordResetEmail(auth, email.trim());
       notify('Reset email sent', 'Check your inbox for a link to set a new password.');
     } catch (e) {
       setError(e instanceof Error ? friendlyAuthError(e.message) : 'Something went wrong.');
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -396,6 +414,9 @@ function friendlyAuthError(message: string): string {
   }
   if (message.includes('auth/too-many-requests')) {
     return 'Too many attempts. Try again later.';
+  }
+  if (message.includes('auth/network-request-failed')) {
+    return 'Network problem. Check your connection and try again.';
   }
   return message;
 }

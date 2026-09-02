@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 import { collection, orderBy, query } from 'firebase/firestore';
 import React, { useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { FlagAccent } from '@/components/flag-accent';
@@ -29,7 +28,6 @@ import { askElectionQuestion } from '@/services/election';
  */
 export default function ElectionScreen() {
   const theme = useTheme();
-  const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const amaY = useRef(0);
 
@@ -92,9 +90,11 @@ export default function ElectionScreen() {
 
       <View
         onLayout={(e) => {
-          // Convert the section's inner-content y to a scroll offset (the
-          // Screen shell pads the content top by insets + spacing).
-          amaY.current = e.nativeEvent.layout.y + insets.top + Spacing.three;
+          // layout.y is relative to the Screen shell's inner view, which sits
+          // at contentContainer paddingTop (insets.top + spacing). Landing at
+          // layout.y + spacing puts the section header just under the status
+          // bar instead of behind it.
+          amaY.current = e.nativeEvent.layout.y + Spacing.three;
         }}>
         <ElectionAma />
       </View>

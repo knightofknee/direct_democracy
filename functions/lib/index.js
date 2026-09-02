@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.diditWebhook = exports.createVerificationSession = exports.devVerify = exports.syncMyPlatform = exports.syncPlatforms = exports.sweepPendingQuestions = exports.refreshClaim = exports.sweepClaims = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onPolicyWrite = exports.onPolicyCommentCredited = exports.onPolicyCommentDeleted = exports.onPolicyCommentCreated = exports.onPolicyVoteWrite = exports.onConcernDeleted = exports.onPolicyCommentVoteWrite = exports.onCommentVoteWrite = exports.onCommentDeleted = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onConcernCreated = void 0;
+exports.diditWebhook = exports.createVerificationSession = exports.devVerify = exports.syncMyPlatform = exports.syncPlatforms = exports.sweepPendingQuestions = exports.refreshClaim = exports.sweepClaims = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onPolicyWrite = exports.onPolicyCommentCredited = exports.onPolicyCommentDeleted = exports.onPolicyCommentCreated = exports.onPolicyVoteWrite = exports.onElectionQuestionDeleted = exports.onElectionAnswerVoteWrite = exports.onElectionAnswerWrite = exports.onConcernDeleted = exports.onPolicyCommentVoteWrite = exports.onCommentVoteWrite = exports.onCommentDeleted = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onConcernCreated = void 0;
 const crypto = __importStar(require("crypto"));
 const app_1 = require("firebase-admin/app");
 const auth_1 = require("firebase-admin/auth");
@@ -44,6 +44,18 @@ const https_2 = require("firebase-functions/v2/https");
 const scheduler_1 = require("firebase-functions/v2/scheduler");
 const params_1 = require("firebase-functions/params");
 const platform_1 = require("./platform");
+/** Fetch one page of a campaign site; a real UA gets past bot-filtering CDNs. */
+async function fetchPageHtml(url) {
+    const resp = await fetch(url, {
+        headers: {
+            accept: 'text/html',
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36',
+        },
+    });
+    if (!resp.ok)
+        throw new Error(`Fetching ${url} failed: ${resp.status}`);
+    return resp.text();
+}
 const tally_1 = require("./tally");
 (0, app_1.initializeApp)();
 const db = (0, firestore_1.getFirestore)();
@@ -407,6 +419,49 @@ exports.onConcernDeleted = (0, firestore_2.onDocumentDeleted)('concerns/{concern
     // to repeat on redelivery and stays outside the once-guard (a transaction
     // can't carry a recursive delete anyway).
     await db.recursiveDelete(db.doc(`concerns/${event.params.concernId}`));
+});
+// ── Election AMA (one question, every candidate) ────────────────────────
+// electionQuestions/{qid}/answers/{candidateUid}: one answer per candidate
+// (the doc id enforces it). answerCount and the answers' hidden placement
+// scores are trigger-only; ratings share applyCommentVote with comments.
+exports.onElectionAnswerWrite = (0, firestore_2.onDocumentWritten)('electionQuestions/{questionId}/answers/{candidateUid}', async (event) => {
+    const before = event.data?.before.exists ? event.data.before.data() : null;
+    const after = event.data?.after.exists ? event.data.after.data() : null;
+    // Recount rather than delta: out-of-order delivery of a create/delete
+    // pair can strand a delta-based counter (the -1 clamps at 0, the late +1
+    // sticks), and a recount is idempotent so it needs no once-guard. The
+    // field can then never drift from the truth for longer than one write.
+    const questionRef = db.doc(`electionQuestions/${event.params.questionId}`);
+    if ((before == null) !== (after == null)) {
+        await db.runTransaction(async (tx) => {
+            const snap = await tx.get(questionRef);
+            if (!snap.exists)
+                return;
+            const answers = await tx.get(questionRef.collection('answers'));
+            if (snap.data()?.answerCount !== answers.size) {
+                tx.update(questionRef, { answerCount: answers.size });
+            }
+        });
+    }
+    // A first answer is news to the asker.
+    if (!before && after) {
+        const question = (await questionRef.get()).data();
+        await sendNotification(question?.authorUid, `election-answer-${event.params.questionId}-${event.params.candidateUid}`, {
+            type: 'electionAnswer',
+            title: `${after.candidateName} answered your question`,
+            body: excerpt(after.body),
+            link: `/election-question/${event.params.questionId}`,
+        }, event.params.candidateUid);
+    }
+    // A withdrawn answer takes its ratings with it (no-op on redelivery).
+    if (before && !after) {
+        await db.recursiveDelete(db.doc(`electionQuestions/${event.params.questionId}/answers/${event.params.candidateUid}`));
+    }
+});
+exports.onElectionAnswerVoteWrite = (0, firestore_2.onDocumentWritten)('electionQuestions/{questionId}/answers/{candidateUid}/votes/{voterUid}', async (event) => applyCommentVote(event.id, `electionQuestions/${event.params.questionId}/answers/${event.params.candidateUid}`, event.params.voterUid, event.data?.before.exists ? event.data.before.data() : null, event.data?.after.exists ? event.data.after.data() : null));
+/** A withdrawn question takes its answers (and their ratings) with it. */
+exports.onElectionQuestionDeleted = (0, firestore_2.onDocumentDeleted)('electionQuestions/{questionId}', async (event) => {
+    await db.recursiveDelete(db.doc(`electionQuestions/${event.params.questionId}`));
 });
 // ── The more perfect platform (candidate policies) ──────────────────────
 /** Stance votes on a platform policy - a straight support/oppose dual tally. */
@@ -810,12 +865,10 @@ exports.deleteAccount = (0, https_1.onCall)(APP_CHECK, async (request) => {
 // place, so votes and comments survive; policies that vanish from the site
 // are archived (never deleted) for the same reason.
 async function syncCandidatePlatform(candidateUid, sourceUrl) {
-    const resp = await fetch(sourceUrl, { headers: { accept: 'text/html' } });
-    if (!resp.ok)
-        throw new Error(`Fetching ${sourceUrl} failed: ${resp.status}`);
-    // parsePlatformHtml throws on an unrecognized layout rather than returning
-    // nothing - a site redesign must fail the sync, not archive the platform.
-    const parsed = (0, platform_1.parsePlatformHtml)(await resp.text());
+    // parsePlatformUrl follows hub pages to their per-policy subpages and
+    // throws on an unrecognized layout rather than returning nothing - a site
+    // redesign must fail the sync, not archive the platform.
+    const parsed = await (0, platform_1.parsePlatformUrl)(sourceUrl, fetchPageHtml);
     const policiesRef = db.collection(`candidates/${candidateUid}/policies`);
     const existing = await policiesRef.get();
     const byId = new Map(existing.docs.map((d) => [d.id, d]));

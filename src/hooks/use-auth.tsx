@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 import * as Linking from 'expo-linking';
 import {
   createUserWithEmailAndPassword,
@@ -26,6 +27,18 @@ import type { UserProfile } from '@/lib/types';
 /** Where the device remembers which address a sign-in link was sent to. */
 const EMAIL_LINK_KEY = 'dd:emailForSignIn';
 const BUNDLE_ID = 'com.briancarlisle.directdemocracy';
+
+/**
+ * While the delete-account callable runs server-side (recursiveDelete on the
+ * profile, then deleteUser), this client's profile listener sees the doc
+ * vanish and would helpfully re-create it - resurrecting a deleted account.
+ * The settings screen arms this flag around the deletion; the listener
+ * checks it before auto-creating.
+ */
+let deletingAccount = false;
+export function setDeletingAccount(value: boolean): void {
+  deletingAccount = value;
+}
 
 interface AuthContextValue {
   /** Firebase auth user; null when signed out. */
@@ -100,6 +113,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Scrub the one-time code out of the address bar and history.
           window.history.replaceState({}, '', window.location.pathname);
         }
+        // The link's continue URL lands on /sign-in (web) or wherever the
+        // deep link opened; a signed-in user parked on the sign-in form
+        // looks like the link failed. Land on the big board instead.
+        router.replace('/');
       } catch (e) {
         notifyError('Sign-in link failed', e);
       }
@@ -126,6 +143,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (snap) => {
         if (snap.exists()) {
           setProfile({ uid: snap.id, ...snap.data() } as UserProfile);
+          setProfileSettled(true);
+        } else if (deletingAccount) {
+          // The doc vanished because deletion is in flight - do NOT recreate.
+          setProfile(null);
           setProfileSettled(true);
         } else if (creatingProfileFor.current !== user.uid) {
           // Doc missing on first sign-in: still loading while we create it;

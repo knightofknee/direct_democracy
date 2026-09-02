@@ -49,7 +49,7 @@ export default function ConcernScreen() {
     () => (id ? doc(db, 'concerns', id) : null),
     [id]
   );
-  const { data: myVote } = useLiveDoc<VoteDoc & { id: string }>(
+  const { data: myVote, loading: myVoteLoading } = useLiveDoc<VoteDoc & { id: string }>(
     () => (id && profile ? doc(db, 'concerns', id, 'votes', profile.uid) : null),
     [id, profile?.uid]
   );
@@ -120,7 +120,8 @@ export default function ConcernScreen() {
       router.push('/sign-in');
       return;
     }
-    const firstCast = myVote == null;
+    // "First" only once the vote doc has actually loaded (see milestones.ts).
+    const firstCast = !myVoteLoading && myVote == null;
     setSavingVote(true);
     try {
       await voteConcernPriority(profile, concern.id, priority);

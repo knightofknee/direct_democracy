@@ -113,7 +113,11 @@ export async function takeNewMilestone(
   const raw = await AsyncStorage.getItem(storageKey(uid));
   const seen: string[] | null = raw ? JSON.parse(raw) : null;
 
-  await AsyncStorage.setItem(storageKey(uid), JSON.stringify([...reached]));
+  // Union, never replace: replacing would drop keys the server stats do not
+  // (yet) support - an anticipated milestone whose trigger is still in
+  // flight, or a threshold crossed then un-crossed by a retraction - and a
+  // dropped key means the same celebration fires again later.
+  await AsyncStorage.setItem(storageKey(uid), JSON.stringify([...new Set([...(seen ?? []), ...reached])]));
 
   if (seen === null) return null; // first sighting of this account on this device
 

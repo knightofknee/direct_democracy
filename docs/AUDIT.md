@@ -5,6 +5,46 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-09-01: election AMA, candidate directory, Wilson account
+
+- **Election AMA** (`electionQuestions/{qid}` + `answers/{candidateUid}` +
+  `votes/{voterUid}`): anyone signed in proposes a question to all
+  candidates; only candidates (verified email, own uid) answer, exactly one
+  answer each because the answer doc id IS the candidate uid and rules pin
+  creation to it. `answerCount` and the answers' hidden `score` /
+  `scoreVerified` (up minus down, placement-only, never displayed) are
+  trigger-written (`onElectionAnswerWrite`, `onElectionAnswerVoteWrite`
+  reusing the comment-rating trigger). Askers may withdraw only unanswered
+  questions; answered ones are public record (rules-enforced, verified live).
+  Questions are not editable after creation (no update path, deliberate).
+  Hardened after a same-day adversarial pass: answer `createdAt`/`updatedAt`
+  are pinned to `request.time` (a forged createdAt would game the ranking
+  tie-break; an omitted one would hide the answer from the ordered query
+  while still counting it); answer creation requires the parent question to
+  exist (no orphans); **answers are not deletable by the candidate** (only
+  revisable, admin takedowns aside) because delete-and-repost would cascade
+  the ratings away and shed downvotes; `answerCount` is maintained by
+  recount rather than delta so out-of-order trigger delivery cannot strand
+  it; and placement ranks by `scoreVerified` first (all-voters score only
+  breaks ties), so sybil accounts cannot reorder campaigns once verified
+  voters weigh in.
+  Accepted limitations, consistent with the rest of the app: no rate limit
+  on question creation (same posture as concerns, see rate-limiting note
+  below); a hostile client can write a vote doc under a nonexistent answer
+  path, which bumps only their own stats counter and no visible number; an
+  answer that lands in the instant between the asker's withdraw check and
+  the delete commit is cascaded away with the question.
+- **Declared-candidates directory**: `candidates/other-declared-candidates`
+  (`directory: true`, no auth account) holds operator-written profiles of
+  declared candidates without platforms as read-only pseudo-policies; the
+  app hides comments/votes/report UI for it. A hostile client could still
+  write comments on those policy docs via the generic policy-comment rules;
+  they render nowhere (comment UI hidden and counts not shown) - accepted.
+- **Willie Wilson**: provisioned with `add-candidate --no-email` because the
+  campaign publishes no email - an email-less auth account nobody can claim
+  until an operator attaches an address; the amber platformNote says so
+  publicly.
+
 ## Update - 2026-08-29: concern references and comment sources
 
 Concerns carry an author-supplied `references` list of https links, cited

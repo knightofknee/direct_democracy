@@ -372,7 +372,7 @@ function QuestionCard({
     }
   };
 
-  const { data: myJudgment } = useLiveDoc<{ answered: boolean }>(
+  const { data: myJudgment, loading: myJudgmentLoading } = useLiveDoc<{ answered: boolean }>(
     () =>
       profile
         ? doc(db, 'officials', question.officialUid, 'questions', question.id, 'judgments', profile.uid)
@@ -406,7 +406,8 @@ function QuestionCard({
       router.push('/sign-in');
       return;
     }
-    const firstJudgment = myJudgment == null;
+    // "First" only once the judgment doc has actually loaded (see milestones.ts).
+    const firstJudgment = !myJudgmentLoading && myJudgment == null;
     setBusy(true);
     try {
       await judgeResponse(profile, question, answered);

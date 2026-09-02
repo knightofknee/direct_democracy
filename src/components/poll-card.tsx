@@ -33,7 +33,7 @@ export function PollCard({ poll }: { poll: Poll }) {
   const [draft, setDraft] = useState<{ from: string; keys: string[] } | null>(null);
   const [saving, setSaving] = useState(false);
 
-  const { data: myVote } = useLiveDoc<VoteDoc & { id: string }>(
+  const { data: myVote, loading: myVoteLoading } = useLiveDoc<VoteDoc & { id: string }>(
     () => (profile ? doc(db, 'polls', poll.id, 'votes', profile.uid) : null),
     [profile?.uid, poll.id]
   );
@@ -52,7 +52,8 @@ export function PollCard({ poll }: { poll: Poll }) {
 
   const cast = async (value: string | string[]) => {
     if (!profile) return;
-    const firstCast = !hasVoted;
+    // "First" only once the vote doc has actually loaded (see milestones.ts).
+    const firstCast = !myVoteLoading && !hasVoted;
     setSaving(true);
     try {
       await votePoll(profile, poll, value);

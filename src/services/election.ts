@@ -15,7 +15,9 @@ import type { CommentVoteValue, ElectionQuestion, UserProfile } from '@/lib/type
  * signed in can ask; any candidate can answer at any time. One answer per
  * candidate per question - the answer doc id IS the candidate's uid, so a
  * second post can only revise the first, and rules pin the id to the
- * writer's auth uid.
+ * writer's auth uid. Posted answers are public record: revisable, never
+ * deletable by the candidate (deletion would cascade the ratings away and
+ * let a re-post shed its downvotes).
  *
  * Clients only write their own documents. answerCount and the answers'
  * hidden placement scores are aggregated by Cloud Functions triggers.
@@ -69,14 +71,6 @@ export async function answerElectionQuestion(
     },
     { merge: isRevision }
   );
-}
-
-/** A candidate may take their answer down; its votes cascade away. */
-export async function deleteElectionAnswer(
-  profile: UserProfile,
-  questionId: string
-): Promise<void> {
-  await deleteDoc(doc(db, 'electionQuestions', questionId, 'answers', profile.uid));
 }
 
 /**

@@ -19,7 +19,6 @@ import { notify, notifyError } from '@/lib/notify';
 import type { CommentVoteValue, ElectionAnswer, ElectionQuestion, UserProfile } from '@/lib/types';
 import {
   answerElectionQuestion,
-  deleteElectionAnswer,
   deleteElectionQuestion,
   voteElectionAnswer,
 } from '@/services/election';
@@ -60,9 +59,13 @@ export default function ElectionQuestionScreen() {
     );
   }
 
-  // Hidden scores drive placement only; ties fall back to first-answered.
+  // Hidden scores drive placement only. Verified voters decide (same
+  // principle as community verdicts); all-voters score breaks their ties so
+  // the list still ranks before anyone verified has voted, then
+  // first-answered. Keeps sybil accounts from reordering campaigns.
   const ranked = [...answers].sort(
     (a, b) =>
+      (b.scoreVerified ?? 0) - (a.scoreVerified ?? 0) ||
       (b.score ?? 0) - (a.score ?? 0) ||
       (a.createdAt?.toMillis?.() ?? 0) - (b.createdAt?.toMillis?.() ?? 0)
   );
@@ -144,18 +147,6 @@ function AnswerComposer({ profile, questionId }: { profile: UserProfile; questio
     }
   };
 
-  const remove = async () => {
-    setSaving(true);
-    try {
-      await deleteElectionAnswer(profile, questionId);
-      setDraft(null);
-    } catch (e) {
-      notifyError('Could not remove your answer', e);
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
     <Card>
       <ThemedText type="smallBold" style={{ fontSize: 13 }}>
@@ -168,18 +159,17 @@ function AnswerComposer({ profile, questionId }: { profile: UserProfile; questio
         multiline
         maxLength={4000}
       />
-      <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-        <Button
-          title={mine ? 'Update answer' : 'Post answer'}
-          onPress={save}
-          loading={saving}
-          disabled={!text.trim() || (mine != null && text.trim() === mine.body)}
-          style={{ flex: 1 }}
-        />
-        {mine && (
-          <Button title="Remove" variant="ghost" onPress={remove} disabled={saving} />
-        )}
-      </View>
+      <Button
+        title={mine ? 'Update answer' : 'Post answer'}
+        onPress={save}
+        loading={saving}
+        disabled={!text.trim() || (mine != null && text.trim() === mine.body)}
+      />
+      {mine && (
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          Answers are part of the public record; revise the text, but it cannot be taken down.
+        </ThemedText>
+      )}
     </Card>
   );
 }
@@ -192,7 +182,7 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
   const { anticipate } = useCelebration();
   const [expanded, setExpanded] = useState(false);
 
-  const { data: myVote } = useLiveDoc<{ value: CommentVoteValue }>(
+  const { data: myVote, loading: myVoteLoading } = useLiveDoc<{ value: CommentVoteValue }>(
     () =>
       profile
         ? doc(db, 'electionQuestions', questionId, 'answers', answer.id, 'votes', profile.uid)
@@ -205,7 +195,9 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
       router.push('/sign-in');
       return;
     }
-    const firstCast = myVote == null;
+    // "First" only once the vote doc has actually loaded - a null from a
+    // still-loading doc would mark future milestones seen and skip them.
+    const firstCast = !myVoteLoading && myVote == null;
     const next = myVote?.value === value ? null : value;
     try {
       await voteElectionAnswer(profile, questionId, answer.candidateUid, next);

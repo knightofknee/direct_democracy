@@ -6,7 +6,7 @@ import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
-import { useAuth } from '@/hooks/use-auth';
+import { setDeletingAccount, useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { deleteAccount } from '@/services/users';
@@ -58,6 +58,9 @@ export default function SettingsScreen() {
                   );
                   if (!sure) return;
                   setDeleting(true);
+                  // Stop the profile listener from re-creating the doc the
+                  // server is busy deleting (it would resurrect the account).
+                  setDeletingAccount(true);
                   try {
                     await deleteAccount();
                     await signOut();
@@ -65,6 +68,8 @@ export default function SettingsScreen() {
                   } catch (e) {
                     notifyError('Could not delete account', e);
                     setDeleting(false);
+                  } finally {
+                    setDeletingAccount(false);
                   }
                 }}
               />
