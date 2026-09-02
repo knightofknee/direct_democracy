@@ -49,7 +49,16 @@ export function OfficialAvatar({
         styles.fallback,
         { width: size, height: size, borderRadius: radius, backgroundColor: theme.primarySoft },
       ]}>
-      <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: size * 0.36 }}>
+      <ThemedText
+        type="smallBold"
+        // lineHeight must scale with the font: smallBold's fixed 20pt line
+        // clips the glyphs on any avatar larger than ~55pt (fontSize outgrows
+        // the line box and iOS crops it).
+        style={{
+          color: theme.primary,
+          fontSize: size * 0.36,
+          lineHeight: Math.round(size * 0.5),
+        }}>
         {initials || '?'}
       </ThemedText>
     </View>

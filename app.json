@@ -2,14 +2,14 @@
   "expo": {
     "name": "direct democracy",
     "slug": "direct-democracy",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "directdemocracy",
     "userInterfaceStyle": "automatic",
     "ios": {
       "bundleIdentifier": "com.briancarlisle.directdemocracy",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "googleServicesFile": "./GoogleService-Info.plist",
       "usesAppleSignIn": true,
       "infoPlist": {

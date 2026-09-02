@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useCelebration } from '@/components/celebration';
@@ -18,6 +18,7 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
+import { withBallotDelta, type BallotDelta } from '@/lib/tally';
 import { timeAgo } from '@/lib/format';
 import {
   CONCERN_PRIORITIES,
@@ -43,7 +44,11 @@ export default function ConcernScreen() {
   const router = useRouter();
   const { profile } = useAuth();
   const { anticipate } = useCelebration();
-  const [savingVote, setSavingVote] = useState(false);
+  const [optimistic, setOptimistic] = useState<{
+    delta: BallotDelta;
+    /** The server tally at cast time - any change to it means the trigger landed. */
+    baseline: string;
+  } | null>(null);
 
   const { data: concern, loading } = useLiveDoc<Concern>(
     () => (id ? doc(db, 'concerns', id) : null),
@@ -65,6 +70,15 @@ export default function ConcernScreen() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [savingEdit, setSavingEdit] = useState(false);
 
+  // The moment the server tally moves (almost always our own trigger
+  // landing), the optimistic overlay hands back to the real numbers.
+  const talliesJson = concern ? JSON.stringify(concern.tallies) : null;
+  useEffect(() => {
+    if (optimistic && talliesJson && talliesJson !== optimistic.baseline) {
+      setOptimistic(null);
+    }
+  }, [talliesJson, optimistic]);
+
   if (!concern) {
     return (
       <Screen>
@@ -73,7 +87,12 @@ export default function ConcernScreen() {
     );
   }
 
-  const myPriority = (myVote?.value as ConcernPriority | undefined) ?? null;
+  const recordedPriority = (myVote?.value as ConcernPriority | undefined) ?? null;
+  // The overlayed choice wins while in flight so the tap highlights NOW.
+  const myPriority = (optimistic?.delta.to as ConcernPriority | undefined) ?? recordedPriority;
+  const shownTallies = optimistic
+    ? withBallotDelta(concern.tallies, optimistic.delta)
+    : concern.tallies;
   const isAuthor = profile?.uid === concern.authorUid;
   // Editing is only possible before anyone engages (rules enforce the same).
   const canEdit = isAuthor && concern.tallies.totalAll === 0 && concern.commentCount === 0;
@@ -115,22 +134,35 @@ export default function ConcernScreen() {
     }
   };
 
-  const castVote = async (priority: ConcernPriority) => {
+  // Optimistic feedback: a tap counts NOW - the tally overlay and milestone
+  // fire before the server ack, because the round trip through the tally
+  // trigger (worse on a cold start) is seconds, and feedback that slow reads
+  // as a broken button. On failure we roll back and say so.
+  const castVote = (priority: ConcernPriority) => {
     if (!profile) {
       router.push('/sign-in');
       return;
     }
     // "First" only once the vote doc has actually loaded (see milestones.ts).
     const firstCast = !myVoteLoading && myVote == null;
-    setSavingVote(true);
-    try {
-      await voteConcernPriority(profile, concern.id, priority);
-      if (firstCast) anticipate('votes');
-    } catch (e) {
+    if (firstCast) anticipate('votes');
+    setOptimistic({
+      delta: {
+        // The RECORDED ballot, not the overlayed one - rapid re-taps must
+        // each diff against what the server will actually replace.
+        from: recordedPriority,
+        to: priority,
+        // Mirror of the trigger's areaSlicesOf: the verified slice of a ward
+        // concern counts only verified residents of that ward.
+        verified:
+          !!profile.verified && (concern.scope !== 'ward' || profile.wardId === concern.wardId),
+      },
+      baseline: JSON.stringify(concern.tallies),
+    });
+    voteConcernPriority(profile, concern.id, priority).catch((e) => {
+      setOptimistic(null);
       notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
-    } finally {
-      setSavingVote(false);
-    }
+    });
   };
 
   return (
@@ -213,7 +245,6 @@ export default function ConcernScreen() {
           return (
             <Pressable
               key={option.key}
-              disabled={savingVote}
               onPress={() => castVote(option.key)}
               style={[
                 styles.priorityButton,
@@ -234,7 +265,7 @@ export default function ConcernScreen() {
 
       <SectionHeader title="Results" />
       <TallyResults
-        tally={concern.tallies}
+        tally={shownTallies}
         options={PRIORITY_OPTIONS}
         highlightKeys={myPriority ? [myPriority] : undefined}
       />

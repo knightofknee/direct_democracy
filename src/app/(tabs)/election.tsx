@@ -24,7 +24,7 @@ import { askElectionQuestion } from '@/services/election';
 /**
  * The election tab: every candidate on the platform, each carrying their
  * more perfect platform - and below the field, the election AMA, where one
- * question goes to every campaign at once.
+ * question goes to every candidate at once.
  */
 export default function ElectionScreen() {
   const theme = useTheme();
@@ -102,7 +102,7 @@ export default function ElectionScreen() {
   );
 }
 
-/** One question, every campaign: propose questions, read answers side by side. */
+/** One question, every candidate: propose questions, read answers side by side. */
 function ElectionAma() {
   const router = useRouter();
   const theme = useTheme();
@@ -136,7 +136,7 @@ function ElectionAma() {
     <View style={{ gap: Spacing.three }}>
       <SectionHeader
         title="election ama"
-        subtitle="One question, every campaign on the record. Answers land side by side, ranked by your votes."
+        subtitle="One question, every candidate on the record. Answers land side by side, ranked by your votes."
       />
 
       <Card>

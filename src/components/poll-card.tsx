@@ -1,6 +1,6 @@
 import { doc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useCelebration } from '@/components/celebration';
@@ -15,6 +15,7 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { notify } from '@/lib/notify';
+import { withBallotDelta, type BallotDelta } from '@/lib/tally';
 import type { Poll, VoteDoc } from '@/lib/types';
 import { closePoll, votePoll } from '@/services/polls';
 
@@ -32,15 +33,35 @@ export function PollCard({ poll }: { poll: Poll }) {
   const { anticipate } = useCelebration();
   const [draft, setDraft] = useState<{ from: string; keys: string[] } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [optimistic, setOptimistic] = useState<{
+    delta: BallotDelta;
+    /** The server tally at cast time - any change to it means the trigger landed. */
+    baseline: string;
+  } | null>(null);
 
   const { data: myVote, loading: myVoteLoading } = useLiveDoc<VoteDoc & { id: string }>(
     () => (profile ? doc(db, 'polls', poll.id, 'votes', profile.uid) : null),
     [profile?.uid, poll.id]
   );
 
-  const myKeys = myVote ? (Array.isArray(myVote.value) ? myVote.value : [myVote.value]) : [];
+  // The moment the server tally moves, the optimistic overlay hands back.
+  const talliesJson = JSON.stringify(poll.tallies);
+  useEffect(() => {
+    if (optimistic && talliesJson !== optimistic.baseline) setOptimistic(null);
+  }, [talliesJson, optimistic]);
+
+  const recordedKeys = myVote ? (Array.isArray(myVote.value) ? myVote.value : [myVote.value]) : [];
+  // The overlayed ballot wins while in flight so the tap highlights NOW.
+  const myKeys = optimistic
+    ? optimistic.delta.to == null
+      ? []
+      : Array.isArray(optimistic.delta.to)
+        ? optimistic.delta.to
+        : [optimistic.delta.to]
+    : recordedKeys;
   const hasVoted = myKeys.length > 0;
   const myKeysJson = JSON.stringify(myKeys);
+  const shownTallies = optimistic ? withBallotDelta(poll.tallies, optimistic.delta) : poll.tallies;
 
   // Approval polls collect selections before casting. The draft remembers the
   // ballot it started from, so it falls back to the recorded ballot whenever
@@ -50,20 +71,29 @@ export function PollCard({ poll }: { poll: Poll }) {
   const wardLocked = poll.scope === 'ward' && (!profile?.verified || profile.wardId !== poll.wardId);
   const canVote = !!profile && poll.open && !wardLocked;
 
-  const cast = async (value: string | string[]) => {
+  // Optimistic: the tap counts NOW (tally overlay + milestone), because the
+  // tally-trigger round trip is seconds and that reads as a broken button.
+  // On failure we roll back and say so.
+  const cast = (value: string | string[]) => {
     if (!profile) return;
     // "First" only once the vote doc has actually loaded (see milestones.ts).
-    const firstCast = !myVoteLoading && !hasVoted;
-    setSaving(true);
-    try {
-      await votePoll(profile, poll, value);
-      if (firstCast) anticipate('votes');
-      setDraft(null); // fall back to the ballot now on record
-    } catch (e) {
+    const firstCast = !myVoteLoading && recordedKeys.length === 0;
+    if (firstCast) anticipate('votes');
+    setOptimistic({
+      delta: {
+        from: recordedKeys.length > 0 ? recordedKeys : null,
+        to: value,
+        // Ward polls only accept ward-resident verified voters (rules), so a
+        // voter who can cast at all counts in the verified slice iff verified.
+        verified: !!profile.verified && (poll.scope !== 'ward' || profile.wardId === poll.wardId),
+      },
+      baseline: JSON.stringify(poll.tallies),
+    });
+    setDraft(null); // fall back to the ballot now on record
+    votePoll(profile, poll, value).catch((e) => {
+      setOptimistic(null);
       notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
-    } finally {
-      setSaving(false);
-    }
+    });
   };
 
   const toggleApproval = (key: string) => {
@@ -93,7 +123,7 @@ export function PollCard({ poll }: { poll: Poll }) {
 
       {hasVoted || !canVote ? (
         <View style={{ gap: Spacing.two }}>
-          <TallyResults tally={poll.tallies} options={poll.options} highlightKeys={myKeys} />
+          <TallyResults tally={shownTallies} options={poll.options} highlightKeys={myKeys} />
           {hasVoted && poll.open && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
               You voted - tap an option below to change it.

@@ -11,7 +11,7 @@ import { db } from '@/lib/firebase';
 import type { CommentVoteValue, ElectionQuestion, UserProfile } from '@/lib/types';
 
 /**
- * The election AMA: one question, every campaign on the record. Anyone
+ * The election AMA: one question, every candidate on the record. Anyone
  * signed in can ask; any candidate can answer at any time. One answer per
  * candidate per question - the answer doc id IS the candidate's uid, so a
  * second post can only revise the first, and rules pin the id to the

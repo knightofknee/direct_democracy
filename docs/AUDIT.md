@@ -380,12 +380,19 @@ Two consequences of the exactly-once work to know about:
   enforcement documented in the README as launch prerequisites.
   Firestore enforcement was ON from 2026-08-03 to 2026-09-01, then flipped
   back to UNENFORCED: the Android (Play closed testing) build's Play
-  Integrity attestation produces invalid tokens, so enforcement locked every
+  Integrity attestation produced invalid tokens, so enforcement locked every
   Android client out of Firestore (auth succeeded - identitytoolkit is
   unenforced - while the profile listener was denied, leaving authed users
-  looking signed out). Re-enable only after App Check metrics show the
-  Android app id attesting VALID; the likely fix is linking the Play
-  Integrity API to this Cloud project in Play Console -> App integrity.
+  looking signed out). ROOT CAUSE (found 2026-09-02): the Play App Signing
+  key had been rotated, and the PREVIOUS signing key's SHA-256 was never
+  registered on the Firebase Android app - Play-installed builds signed by
+  it decoded fine but failed App Check's certificate-digest match. Fixed by
+  registering the previous key's SHA-256 and SHA-1 (all three keys - upload,
+  current, previous - now registered under both hash types); Android then
+  attested VALID and Firestore enforcement was re-ENFORCED 2026-09-02.
+  Lesson for the next key event: App Check matches SHA-256, Google Sign-In
+  matches SHA-1 - register BOTH for every signing key, from Play Console ->
+  Protected with Play -> App signing.
 
 ### Known limitations (updated)
 

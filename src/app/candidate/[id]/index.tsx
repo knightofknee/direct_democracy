@@ -260,7 +260,9 @@ function PlatformList({
             {policy.archived && <Chip label="Hidden" tone="warning" icon="eye-off" />}
             <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
           </View>
-          <ThemedText type="small" themeColor="textSecondary" numberOfLines={2}>
+          {/* Directory entries get a line more: the preview is most of their
+              content, and that list is only a handful of cards. */}
+          <ThemedText type="small" themeColor="textSecondary" numberOfLines={directory ? 4 : 3}>
             {policyPreview(policy.body)}
           </ThemedText>
           {!directory && (

@@ -27,7 +27,7 @@ import {
 const COLLAPSE_OVER = 280;
 
 /**
- * One election-AMA question and every campaign's answer to it, side by
+ * One election-AMA question and every candidate's answer to it, side by
  * side. Answers are ordered by their hidden up/down score (placement only,
  * never displayed); each shows its first lines so several can be compared
  * at a glance, expanding in place for the full text.
@@ -62,7 +62,7 @@ export default function ElectionQuestionScreen() {
   // Hidden scores drive placement only. Verified voters decide (same
   // principle as community verdicts); all-voters score breaks their ties so
   // the list still ranks before anyone verified has voted, then
-  // first-answered. Keeps sybil accounts from reordering campaigns.
+  // first-answered. Keeps sybil accounts from reordering candidates.
   const ranked = [...answers].sort(
     (a, b) =>
       (b.scoreVerified ?? 0) - (a.scoreVerified ?? 0) ||
@@ -108,7 +108,7 @@ export default function ElectionQuestionScreen() {
 
       <SectionHeader
         title={plural(question.answerCount, 'answer')}
-        subtitle="Every campaign's answer, side by side. Your votes set the order; no numbers are shown."
+        subtitle="Every candidate's answer, side by side. Your votes set the order; no numbers are shown."
       />
       {ranked.length === 0 ? (
         <EmptyState
@@ -124,7 +124,7 @@ export default function ElectionQuestionScreen() {
   );
 }
 
-/** The candidate's one answer: post it, revise it, or take it down. */
+/** The candidate's one answer: post it once, revise it any time. */
 function AnswerComposer({ profile, questionId }: { profile: UserProfile; questionId: string }) {
   const { data: mine } = useLiveDoc<ElectionAnswer>(
     () => doc(db, 'electionQuestions', questionId, 'answers', profile.uid),
@@ -153,7 +153,7 @@ function AnswerComposer({ profile, questionId }: { profile: UserProfile; questio
         {mine ? 'Your answer (one per candidate - edits replace it)' : 'Your answer'}
       </ThemedText>
       <Field
-        placeholder="Answer as your campaign, on the record…"
+        placeholder="Answer the city yourself, on the record…"
         value={text}
         onChangeText={setDraft}
         multiline
@@ -174,7 +174,7 @@ function AnswerComposer({ profile, questionId }: { profile: UserProfile; questio
   );
 }
 
-/** One campaign's answer: first lines at a glance, full text on expand. */
+/** One candidate's answer: first lines at a glance, full text on expand. */
 function AnswerCard({ questionId, answer }: { questionId: string; answer: ElectionAnswer }) {
   const router = useRouter();
   const theme = useTheme();
