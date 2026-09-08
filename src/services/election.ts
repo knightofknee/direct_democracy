@@ -30,9 +30,33 @@ export async function askElectionQuestion(profile: UserProfile, body: string): P
     authorVerified: profile.verified,
     body: body.trim(),
     answerCount: 0,
+    upvotes: 0,
+    upvotesVerified: 0,
     createdAt: serverTimestamp(),
   });
   return ref.id;
+}
+
+/**
+ * Join an election question ("I want this answered too") or leave it. One
+ * voice per person; the trigger recounts the question's upvote fields, which
+ * order the AMA list so the questions people care about lead.
+ */
+export async function setElectionQuestionUpvote(
+  profile: UserProfile,
+  questionId: string,
+  up: boolean
+): Promise<void> {
+  const ref = doc(db, 'electionQuestions', questionId, 'votes', profile.uid);
+  if (!up) {
+    await deleteDoc(ref);
+    return;
+  }
+  await setDoc(ref, {
+    uid: profile.uid,
+    verified: profile.verified,
+    createdAt: serverTimestamp(),
+  });
 }
 
 /**

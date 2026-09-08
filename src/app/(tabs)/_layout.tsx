@@ -7,9 +7,11 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
+import { useT } from '@/lib/i18n';
 
 export default function TabsLayout() {
   const theme = useTheme();
+  const t = useT();
   const { profile } = useAuth();
   // Unread count for the notifications tab badge. Capped at 10 reads; the
   // badge shows "9+" past that.
@@ -38,28 +40,28 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'big board',
+          title: t('big board'),
           tabBarIcon: ({ color, size }) => <Ionicons name="podium" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="ward"
         options={{
-          title: 'wards',
+          title: t('wards'),
           tabBarIcon: ({ color, size }) => <Ionicons name="location" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="election"
         options={{
-          title: 'election',
+          title: t('election'),
           tabBarIcon: ({ color, size }) => <Ionicons name="ribbon" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="notifications"
         options={{
-          title: 'notifications',
+          title: t('notifications'),
           tabBarBadge: badge,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="notifications" size={size} color={color} />
@@ -69,7 +71,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'profile',
+          title: t('profile'),
           tabBarIcon: ({ color, size }) => <Ionicons name="person" size={size} color={color} />,
         }}
       />

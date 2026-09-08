@@ -602,6 +602,30 @@ export const onElectionAnswerVoteWrite = onDocumentWritten(
     )
 );
 
+/**
+ * An election-question upvote ("I want this answered too") landed or was
+ * retracted: recount the question's upvote fields from its votes
+ * subcollection. The counts order the election AMA list, so the questions
+ * people join lead the page; no candidate grading hangs off them.
+ */
+export const onElectionQuestionUpvoteWrite = onDocumentWritten(
+  'electionQuestions/{questionId}/votes/{voterUid}',
+  async (event) => {
+    const questionRef = db.doc(`electionQuestions/${event.params.questionId}`);
+    await db.runTransaction(async (tx) => {
+      const snap = await tx.get(questionRef);
+      if (!snap.exists) return;
+      const votes = await tx.get(questionRef.collection('votes'));
+      const upvotes = votes.size;
+      const upvotesVerified = votes.docs.filter((v) => v.data().verified === true).length;
+      const q = snap.data()!;
+      if (q.upvotes !== upvotes || q.upvotesVerified !== upvotesVerified) {
+        tx.update(questionRef, { upvotes, upvotesVerified });
+      }
+    });
+  }
+);
+
 /** A withdrawn question takes its answers (and their ratings) with it. */
 export const onElectionQuestionDeleted = onDocumentDeleted(
   'electionQuestions/{questionId}',
@@ -787,6 +811,7 @@ export const onQuestionDeleted = onDocumentDeleted(
     await db.recursiveDelete(
       db.doc(`officials/${event.params.officialUid}/questions/${event.params.questionId}`)
     );
+    await recountAnswerWeights(event.params.officialUid);
   }
 );
 
@@ -862,6 +887,101 @@ async function bumpOfficialCounters(
   });
 }
 
+/**
+ * Recount the official's upvote-weighted answer buckets from scratch. Each
+ * question weighs 1 + its verified upvotes (the same only-verified-moves-
+ * the-needle rule as verdicts), bucketed by its current state: responses not
+ * judged dodges earn credit, dodges and aged-out silence cost, questions
+ * inside the grace window are held out. A full recount per event instead of
+ * incremental bucket surgery: questions per official are few, upvotes land
+ * after (and independent of) every status change, and a recount is
+ * idempotent, so the buckets can never drift for longer than one write. The
+ * client folds ignored back into pending for unclaimed officials.
+ */
+async function recountAnswerWeights(officialUid: string): Promise<void> {
+  const officialRef = db.doc(`officials/${officialUid}`);
+  const questions = await db.collection(`officials/${officialUid}/questions`).get();
+  const weights = { credit: 0, dodged: 0, ignored: 0, pending: 0 };
+  for (const q of questions.docs) {
+    const d = q.data();
+    const w = 1 + Math.max(0, (d.upvotesVerified as number) ?? 0);
+    if (d.status === 'dodged') weights.dodged += w;
+    else if (d.response) weights.credit += w;
+    else if (withinPendingWindow(d.createdAt)) weights.pending += w;
+    else weights.ignored += w;
+  }
+  // The official may be gone (account deletion mid-event); nothing to grade.
+  await officialRef.update({ answerWeights: weights }).catch(() => {});
+}
+
+/**
+ * Officials get one alert per question when it reaches their upvote
+ * threshold (a per-official setting on their card; this is the fallback for
+ * officials who never set one). Silence on a popular question is what the
+ * weighted grade punishes hardest, so it must never be ignorance.
+ */
+const DEFAULT_UPVOTE_ALERT_THRESHOLD = 10;
+
+/**
+ * A question upvote ("I want this answered too") landed or was retracted:
+ * recount the question's upvote fields from its votes subcollection (recount
+ * over delta for the same idempotency reasons as onElectionAnswerWrite),
+ * re-weight the official's answer grade, and alert the official when an
+ * unanswered question crosses their threshold.
+ */
+export const onQuestionUpvoteWrite = onDocumentWritten(
+  'officials/{officialUid}/questions/{questionId}/votes/{voterUid}',
+  async (event) => {
+    const questionRef = db.doc(
+      `officials/${event.params.officialUid}/questions/${event.params.questionId}`
+    );
+    // Captured from the last (committed) transaction attempt.
+    let counted: { prev: number; next: number; unanswered: boolean; body: string } | null = null;
+    await db.runTransaction(async (tx) => {
+      counted = null;
+      const snap = await tx.get(questionRef);
+      if (!snap.exists) return;
+      const votes = await tx.get(questionRef.collection('votes'));
+      const upvotes = votes.size;
+      const upvotesVerified = votes.docs.filter((v) => v.data().verified === true).length;
+      const q = snap.data()!;
+      counted = {
+        prev: (q.upvotes as number) ?? 0,
+        next: upvotes,
+        unanswered: q.status === 'awaitingResponse',
+        body: (q.body as string) ?? '',
+      };
+      if (q.upvotes !== upvotes || q.upvotesVerified !== upvotesVerified) {
+        tx.update(questionRef, { upvotes, upvotesVerified });
+      }
+    });
+    await recountAnswerWeights(event.params.officialUid);
+
+    // One alert per question per threshold value: the eventKey dedupes, so
+    // vote churn around the line can't re-nag, while a raised threshold can
+    // fire once more when the question reaches the new bar.
+    const c = counted as { prev: number; next: number; unanswered: boolean; body: string } | null;
+    if (!c || !c.unanswered || c.next <= c.prev) return;
+    const official = await db.doc(`officials/${event.params.officialUid}`).get();
+    if (!official.exists) return;
+    const threshold =
+      (official.data()!.upvoteAlertThreshold as number | undefined) ??
+      DEFAULT_UPVOTE_ALERT_THRESHOLD;
+    if (c.prev < threshold && c.next >= threshold) {
+      await sendNotification(
+        event.params.officialUid,
+        `upvotes-${event.params.questionId}-${threshold}`,
+        {
+          type: 'question',
+          title: `${c.next} people want this answered`,
+          body: excerpt(c.body),
+          link: `/official/${event.params.officialUid}`,
+        }
+      );
+    }
+  }
+);
+
 export const onQuestionCreated = onDocumentCreated(
   'officials/{officialUid}/questions/{questionId}',
   async (event) => {
@@ -869,6 +989,7 @@ export const onQuestionCreated = onDocumentCreated(
       questionsAsked: 1,
       questionsPending: 1,
     });
+    await recountAnswerWeights(event.params.officialUid);
     const q = event.data?.data();
     await sendNotification(
       event.params.officialUid,
@@ -897,6 +1018,7 @@ export const onQuestionResponded = onDocumentWritten(
       // touch pending - it was no longer counted there.
       ...(withinPendingWindow(after.createdAt) ? { questionsPending: -1 } : {}),
     });
+    await recountAnswerWeights(event.params.officialUid);
     const official = await db.doc(`officials/${event.params.officialUid}`).get();
     await sendNotification(
       after.authorUid as string,
@@ -927,9 +1049,6 @@ export const onJudgmentWrite = onDocumentWritten(
     );
     const officialRef = db.doc(`officials/${event.params.officialUid}`);
     const statDelta = ballotStatDelta(before, after);
-    // Captured out of the transaction so the verdict can be delivered as
-    // notifications after it commits.
-    let verdict: { next: string; authorUid?: string; body?: string } | null = null;
 
     await db.runTransaction(async (tx) => {
       if (!(await claimEvent(tx, event.id))) return;
@@ -985,15 +1104,11 @@ export const onJudgmentWrite = onDocumentWritten(
           status: nextStatus,
         };
         // The official's answered/dodged counters move with the status flip.
+        // Status flips deliberately do NOT notify anyone: a verdict is a
+        // community vote, and notifications are reserved for things a person
+        // can respond to (questions, responses, replies), not vote outcomes.
         if (prevStatus !== nextStatus) {
           officialSnap = await tx.get(officialRef);
-          if (nextStatus === 'answered' || nextStatus === 'dodged') {
-            verdict = {
-              next: nextStatus,
-              authorUid: q.authorUid as string | undefined,
-              body: excerpt(q.body),
-            };
-          }
         }
       }
 
@@ -1013,29 +1128,8 @@ export const onJudgmentWrite = onDocumentWritten(
       writeStat(tx, stat, 'judgments', statDelta);
       markEvent(tx, event.id);
     });
-
-    // Deliver the community's verdict to both sides of the exchange.
-    if (verdict && event.id) {
-      const v = verdict as { next: string; authorUid?: string; body?: string };
-      const answered = v.next === 'answered';
-      const link = `/official/${event.params.officialUid}`;
-      await sendNotification(v.authorUid, `${event.id}-v-author`, {
-        type: 'verdict',
-        title: answered
-          ? 'The community marked your question answered'
-          : 'The community judged the response a dodge',
-        body: v.body ?? '',
-        link,
-      });
-      await sendNotification(event.params.officialUid, `${event.id}-v-official`, {
-        type: 'verdict',
-        title: answered
-          ? 'Your response was judged a straight answer'
-          : 'Your response was judged a dodge',
-        body: v.body ?? '',
-        link,
-      });
-    }
+    // A verdict flip moves the question between weight buckets.
+    await recountAnswerWeights(event.params.officialUid);
   }
 );
 
@@ -1233,8 +1327,95 @@ export const sweepPendingQuestions = onSchedule(
         if ((o.data().questionsPending ?? 0) !== pending) {
           await o.ref.update({ questionsPending: pending });
         }
+        // Questions crossing the week line also move between weight buckets,
+        // and this recount backfills answerWeights for officials provisioned
+        // before weighting existed.
+        await recountAnswerWeights(o.id);
       } catch (err) {
         console.error(`Pending sweep failed for ${o.id}:`, err);
+      }
+    }
+  }
+);
+
+/**
+ * Voting milestones for the deadline reminders. Mirror of VOTING_MILESTONES
+ * in src/constants/elections.ts (the app package and this one don't share
+ * code); keep both in sync when the Board of Elections changes a date.
+ */
+const VOTING_MILESTONES: { date: string; title: string; body: string }[] = [
+  {
+    date: '2026-10-01',
+    title: 'Early voting opens downtown',
+    body: 'Any Chicago voter can vote early at 137 S. State St. starting today. Ward sites open October 19.',
+  },
+  {
+    date: '2026-10-06',
+    title: 'Last day to register by mail',
+    body: 'Mail registrations must be postmarked today. Online registration stays open through October 18, and in-person registration runs through election day with two forms of ID.',
+  },
+  {
+    date: '2026-10-18',
+    title: 'Last day to register online',
+    body: 'Online registration closes today (needs an Illinois license or state ID). After this, register in person at any early voting site or polling place with two forms of ID.',
+  },
+  {
+    date: '2026-10-19',
+    title: 'Early voting opens in every ward',
+    body: 'One early voting site per ward opens today, and any Chicago voter can use any site.',
+  },
+  {
+    date: '2026-10-29',
+    title: 'Last day to apply for a mail ballot',
+    body: 'Mail ballot applications close at 5 pm today. Return your ballot by mail or at any secured drop box; it must be postmarked by November 3.',
+  },
+  {
+    date: '2026-11-03',
+    title: 'Election day',
+    body: 'Polls are open 6 am to 7 pm at your precinct or any vote center in the city. Same-day registration is available with two forms of ID.',
+  },
+  {
+    date: '2027-02-23',
+    title: 'Municipal election day',
+    body: 'Mayor, city clerk, city treasurer, your alderman, and your police district council are on the ballot. Polls are open 6 am to 7 pm.',
+  },
+];
+
+/** Whole days from today (Chicago) to an ISO date. */
+function daysUntilChicago(iso: string): number {
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' });
+  const [ty, tm, td] = today.split('-').map(Number);
+  const [y, m, d] = iso.split('-').map(Number);
+  return Math.round((Date.UTC(y, m - 1, d) - Date.UTC(ty, tm - 1, td)) / 86_400_000);
+}
+
+/**
+ * Deadline reminders for everyone: the day before and the day of each voting
+ * milestone, every account gets a notification in its inbox (the same quiet
+ * inbox as replies and answers; nothing pushes). One write per user per
+ * milestone-day, idempotent by id, so a re-run can't double up.
+ */
+export const sendDeadlineReminders = onSchedule(
+  { schedule: '0 9 * * *', timeZone: 'America/Chicago' },
+  async () => {
+    const due = VOTING_MILESTONES.map((m) => ({ ...m, days: daysUntilChicago(m.date) })).filter(
+      (m) => m.days === 0 || m.days === 1
+    );
+    if (due.length === 0) return;
+    const users = await db.collection('users').select().get();
+    for (const m of due) {
+      const title = m.days === 0 ? `Today: ${m.title.toLowerCase()}` : `Tomorrow: ${m.title.toLowerCase()}`;
+      for (const u of users.docs) {
+        try {
+          await sendNotification(u.id, `deadline-${m.date}-${m.days}`, {
+            type: 'deadline',
+            title,
+            body: m.body,
+            link: '/election',
+          });
+        } catch (err) {
+          console.error(`Deadline reminder failed for ${u.id}:`, err);
+        }
       }
     }
   }

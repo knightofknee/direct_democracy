@@ -12,11 +12,14 @@ import { db } from '@/lib/firebase';
 import type { AmaQuestion, QuestionStatus, UserProfile } from '@/lib/types';
 
 /**
- * AMAs are ongoing, per-official. Anyone signed in can ask. The official
- * posts one response per question; the community then judges whether it
- * actually answered the question. There is no upvoting or downvoting a
- * politician's response - only "did this answer it?" - and dodging (or
- * ignoring) questions drags the official's score down.
+ * AMAs are ongoing, per-official. Anyone signed in can ask, and anyone can
+ * JOIN an existing question (an upvote: "I want this answered too") instead
+ * of re-asking it - shared questions concentrate their weight rather than
+ * splitting it. The official posts one response per question; the community
+ * then judges whether it actually answered the question. There is no
+ * upvoting or downvoting a politician's response - only "did this answer
+ * it?" - and dodging (or ignoring) questions drags the official's score
+ * down, weighted by how many verified people joined the question.
  *
  * Clients only write their own documents here. All counters (questionsAsked,
  * questionsResponded, answered/dodged, judgment totals, status flips) are
@@ -41,6 +44,39 @@ export async function askQuestion(
     answeredNo: 0,
     answeredYesVerified: 0,
     answeredNoVerified: 0,
+    upvotes: 0,
+    upvotesVerified: 0,
+    createdAt: serverTimestamp(),
+  });
+}
+
+/**
+ * Join a question ("I want this answered too") or leave it again. One voice
+ * per person; the trigger recounts the question's upvote fields and the
+ * official's answer weights, so silence on a question many people joined
+ * costs the official far more than silence on an unbacked one.
+ */
+export async function setQuestionUpvote(
+  profile: UserProfile,
+  question: AmaQuestion,
+  up: boolean
+): Promise<void> {
+  const ref = doc(
+    db,
+    'officials',
+    question.officialUid,
+    'questions',
+    question.id,
+    'votes',
+    profile.uid
+  );
+  if (!up) {
+    await deleteDoc(ref);
+    return;
+  }
+  await setDoc(ref, {
+    uid: profile.uid,
+    verified: profile.verified,
     createdAt: serverTimestamp(),
   });
 }
@@ -129,6 +165,20 @@ export function letterFor(score: number | null): string {
  * questions still inside the grace week, per the official doc's
  * trigger-written questionsPending counter) is held out entirely: it neither
  * counts as ignored nor drags the score.
+ *
+ * The score is UPVOTE-WEIGHTED when the trigger-written answerWeights
+ * buckets are present: each question weighs 1 + its verified upvotes, so
+ * dodging or ignoring a question fifty people joined drags the score far
+ * more than one nobody backed - and answering it earns proportionally more
+ * credit. Only verified upvotes carry weight, the same sybil defense as
+ * verdicts (a stack of throwaway accounts must not be able to tank a grade
+ * by piling votes on a gotcha). The displayed counts stay unweighted; the
+ * weighting lives in the score. Officials not yet recounted fall back to
+ * the unweighted question counts.
+ *
+ * `holdIgnored` (unclaimed officials) folds the ignored bucket back into
+ * pending: silence on a profile nobody is answering from is not a dodge,
+ * so the ignore clock starts at claim.
  */
 export function computeScore(
   o: {
@@ -136,8 +186,10 @@ export function computeScore(
     questionsResponded: number;
     questionsAnswered: number;
     questionsDodged: number;
+    answerWeights?: { credit: number; dodged: number; ignored: number; pending: number };
   },
-  pending = 0
+  pending = 0,
+  holdIgnored = false
 ): OfficialScore {
   const asked = o.questionsAsked ?? 0;
   const responded = o.questionsResponded ?? 0;
@@ -145,12 +197,19 @@ export function computeScore(
   const answered = Math.max(0, responded - dodged);
   const held = Math.min(Math.max(0, pending), Math.max(0, asked - responded));
   const ignored = Math.max(0, asked - responded - held);
-  const graded = asked - held;
+  const counts = { responded, answered, dodged, ignored, pending: held, asked };
 
-  if (graded <= 0) {
-    return { score: null, grade: '-', responded, answered, dodged, ignored, pending: held, asked };
+  const w = o.answerWeights;
+  if (w) {
+    const wIgnored = holdIgnored ? 0 : Math.max(0, w.ignored ?? 0);
+    const wGraded = Math.max(0, w.credit ?? 0) + Math.max(0, w.dodged ?? 0) + wIgnored;
+    if (wGraded <= 0) return { score: null, grade: '-', ...counts };
+    const score = Math.round((Math.max(0, w.credit ?? 0) / wGraded) * 100);
+    return { score, grade: letterFor(score), ...counts };
   }
 
+  const graded = asked - held;
+  if (graded <= 0) return { score: null, grade: '-', ...counts };
   const score = Math.round((answered / graded) * 100);
-  return { score, grade: letterFor(score), responded, answered, dodged, ignored, pending: held, asked };
+  return { score, grade: letterFor(score), ...counts };
 }

@@ -22,7 +22,6 @@ import type { Comment, CommentReply, CommentSort, CommentVoteValue } from '@/lib
 
 const SORTS: { key: CommentSort; label: string }[] = [
   { key: 'newest', label: 'Newest' },
-  { key: 'oldest', label: 'Oldest' },
   { key: 'best', label: 'Best' },
 ];
 
@@ -111,7 +110,8 @@ export function CommentsSection({
     // thread never reorders. "Best" ranks by the hidden rating score (worst
     // sinks to the bottom - there is deliberately no worst-first sort), with
     // recency breaking ties via the stable sort over the newest-first list.
-    if (sort === 'oldest') result.reverse();
+    // There is also no oldest-first: early comments already accumulate votes,
+    // so the spare visibility belongs to new ones.
     if (sort === 'best') {
       result.sort((a, b) => (b.root?.score ?? 0) - (a.root?.score ?? 0));
     }

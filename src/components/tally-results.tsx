@@ -16,11 +16,14 @@ export function TallyResults({
   tally,
   options,
   highlightKeys,
+  noun = 'vote',
 }: {
   tally: DualTally;
   options: { key: string; label: string }[];
   /** Option keys the current user picked - rendered with the primary color. */
   highlightKeys?: string[];
+  /** What one ballot is called in the summary line ("vote", "verdict"). */
+  noun?: string;
 }) {
   const theme = useTheme();
   const { counts, total } = tallyFor(tally, 'all');
@@ -59,7 +62,7 @@ export function TallyResults({
         );
       })}
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {plural(total, 'vote')} · {plural(tally.totalVerified, 'verified vote')}
+        {plural(total, noun)} · {plural(tally.totalVerified, `verified ${noun}`)}
       </ThemedText>
     </View>
   );

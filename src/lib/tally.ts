@@ -5,6 +5,24 @@ import type { DualTally, TallyLens } from '@/lib/types';
  * functions/src/tally.ts - clients only ever write their own ballot docs.
  */
 
+/**
+ * Priority → board-score weights, the client mirror of PRIORITY_WEIGHTS in
+ * functions/src/tally.ts (the tally of record). Used only for optimistic
+ * score bumps; keep both in sync if the scale changes.
+ */
+export const PRIORITY_WEIGHTS: Record<string, number> = {
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  '5': 5,
+  // Legacy named ballots cast before the numeric scale, mapped onto it.
+  critical: 5,
+  high: 4,
+  medium: 2,
+  low: 1,
+};
+
 export function emptyTally(): DualTally {
   return { all: {}, verified: {}, totalAll: 0, totalVerified: 0 };
 }

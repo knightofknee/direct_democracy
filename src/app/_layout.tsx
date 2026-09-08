@@ -7,9 +7,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 
 import { CelebrationProvider } from '@/components/celebration';
+import { LanguagePrompt } from '@/components/language-prompt';
+import { UpdateModal } from '@/components/update-modal';
 import { Colors } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
+import { LocaleProvider } from '@/lib/i18n';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -82,6 +85,7 @@ export default function RootLayout() {
     // screen; expo-router does not provide one itself.
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={navTheme}>
+        <LocaleProvider>
         <AuthProvider>
           <SplashGate />
           <CelebrationProvider>
@@ -97,6 +101,11 @@ export default function RootLayout() {
               <Stack.Screen name="candidate/[id]/index" options={{ title: 'Candidate' }} />
               <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: 'Policy' }} />
               <Stack.Screen name="election-question/[id]" options={{ title: 'Election AMA' }} />
+              <Stack.Screen name="school-board/[race]" options={{ title: 'School board' }} />
+              <Stack.Screen name="school-board-candidate/[id]" options={{ title: 'Candidate' }} />
+              <Stack.Screen name="election-race/[race]" options={{ title: 'On your ballot' }} />
+              <Stack.Screen name="election-candidate/[id]" options={{ title: 'Candidate' }} />
+              <Stack.Screen name="ward-race/[ward]" options={{ title: 'Ward race' }} />
               <Stack.Screen name="sign-in" options={{ title: 'Sign in', ...MODAL }} />
               <Stack.Screen name="new-concern" options={{ title: 'Raise a concern', ...MODAL }} />
               <Stack.Screen name="new-poll" options={{ title: 'New poll', ...MODAL }} />
@@ -107,8 +116,11 @@ export default function RootLayout() {
               <Stack.Screen name="settings" options={{ title: 'Settings' }} />
               <Stack.Screen name="admin" options={{ title: 'Reports' }} />
             </Stack>
+            <LanguagePrompt />
+            <UpdateModal />
           </CelebrationProvider>
         </AuthProvider>
+        </LocaleProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

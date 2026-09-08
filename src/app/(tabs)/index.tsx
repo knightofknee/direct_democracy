@@ -10,6 +10,7 @@ import { LensToggle } from '@/components/lens-toggle';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
 import { SkeletonButton, SkeletonCards } from '@/components/skeleton';
+import { SortToggle, sortConcerns, type ConcernSort } from '@/components/sort-toggle';
 import { ThemedText } from '@/components/themed-text';
 import { Button, ChicagoStar, EmptyState, InfoModal, SectionHeader } from '@/components/ui';
 import { CITY } from '@/constants/chicago';
@@ -25,6 +26,7 @@ export default function BigBoardScreen() {
   const router = useRouter();
   const { profile, loading: authLoading } = useAuth();
   const [lens, setLens] = useState<TallyLens>('all');
+  const [sort, setSort] = useState<ConcernSort>('top');
 
   // Each lens ranks by its own score, so the order you see is the order
   // that lens's voters produced.
@@ -42,6 +44,10 @@ export default function BigBoardScreen() {
 
   const { isBlocked } = useBlocks();
   const visibleConcerns = concerns.filter((c) => !isBlocked(c.authorUid));
+  // Ranks come from the score order regardless of the display sort, so a
+  // concern keeps its board position while the list shows it by date.
+  const rankById = new Map(visibleConcerns.map((c, i) => [c.id, i + 1]));
+  const displayConcerns = sortConcerns(visibleConcerns, sort);
 
   const { data: cityPolls } = useLiveQuery<Poll>(
     () =>
@@ -70,6 +76,7 @@ export default function BigBoardScreen() {
       </View>
 
       <LensToggle value={lens} onChange={setLens} />
+      <SortToggle value={sort} onChange={setSort} />
 
       {authLoading ? (
         <SkeletonButton />
@@ -87,8 +94,14 @@ export default function BigBoardScreen() {
           message="No citywide concerns yet. Be the first to raise one."
         />
       ) : (
-        visibleConcerns.map((concern, i) => (
-          <ConcernCard key={concern.id} concern={concern} rank={i + 1} lens={lens} index={i} />
+        displayConcerns.map((concern, i) => (
+          <ConcernCard
+            key={concern.id}
+            concern={concern}
+            rank={rankById.get(concern.id)}
+            lens={lens}
+            index={i}
+          />
         ))
       )}
 

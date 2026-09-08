@@ -94,11 +94,12 @@ export function ordinal(n: number): string {
  * appears in the ward picker or public lists; only accounts whose wardId is
  * set to 51 by the operator (verify-user/set-official scripts) ever see it,
  * which keeps test officials, polls, and concerns out of the real 50 wards.
+ * It labels as "51st Ward" like any other so operator screenshots read
+ * naturally; anyone who knows Chicago knows there is no ward 51.
  */
 export const TEST_WARD = 51;
 
 export function wardLabel(id: number | null | undefined): string {
   if (id == null) return 'Citywide';
-  if (id === TEST_WARD) return 'Test Ward';
   return `${ordinal(id)} Ward`;
 }

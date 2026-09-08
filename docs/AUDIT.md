@@ -5,6 +5,53 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-09-07: question upvotes, weighted grading, election directories
+
+- **Question upvotes** (`officials/{uid}/questions/{qid}/votes/{voterUid}`
+  and `electionQuestions/{qid}/votes/{voterUid}`): presence-only ballots
+  (uid, verified snapshot, pinned createdAt), one per person, create/delete
+  own only; officials cannot join questions put to themselves. Counts are
+  trigger-recounted from the subcollection (idempotent, no client write
+  path). The verified snapshot must match the live profile at cast time,
+  same as every other ballot.
+- **Upvote-weighted answer grade**: `officials/{uid}.answerWeights` is
+  trigger-only (recountAnswerWeights, full recount per event plus the
+  nightly sweep as backfill/self-heal). Each question weighs
+  1 + VERIFIED upvotes; only verified voices move the grade, matching the
+  only-verified-decides verdict rule, so throwaway accounts can neither
+  tank nor launder a grade by piling votes on questions. Displayed counts
+  remain all-user.
+- **Backward-compat rule pattern**: new pinned-to-zero fields on
+  client-created docs (upvotes/upvotesVerified on questions) use
+  `data.get(field, 0) == 0` so binaries shipped before the fields existed
+  can still create the docs.
+- **Approval ballots gated to verified residents** (same day): the 1.0.8+
+  widget disables the buttons for unverified accounts and routes them to
+  /verify, and the service refuses. The matching rules clause
+  (`me().verified == true && me().wardId != null`) was deployed and then
+  ROLLED BACK the same day: the 1.0.7 binary in the store shows live
+  buttons to everyone, and a rules deny there surfaces as a raw permissions
+  error. Accepted interim exposure: unverified users on 1.0.7 can still cast
+  approvals, exactly as before. Re-enable the clause once 1.0.8 is the
+  installed base. The graded constituent slice was always verified-only.
+- **Headshots on election cards** (same day): `photoUrl` on
+  electionCandidates and schoolBoardCandidates is an external https link
+  rendered by the client and never stored, the same posture as officials'
+  portraits; the seed validates https. Hosts are Wikimedia Commons, official
+  office sites, campaign sites, and Ballotpedia; a dead link degrades to an
+  initials avatar.
+- **Upvote threshold alerts**: officials may set `upvoteAlertThreshold`
+  (int 1..10000) on their own card - the only new client-writable field,
+  validated in rules alongside bio/photoUrl. onQuestionUpvoteWrite sends at
+  most one notification per question per threshold value (deduped by
+  notification id), only while the question is unanswered.
+- **Election directories** (`electionCandidates`, `electionRaceNotes`):
+  public read, client writes denied; seeded only via Admin SDK
+  (scripts/seed-election.ts) from sourced JSON, same contract as
+  schoolBoardCandidates. `config/app` (update nudge) likewise
+  world-readable, admin-write-only, and holds only the released version
+  string and public store links.
+
 ## Update - 2026-09-01: election AMA, candidate directory, Wilson account
 
 - **Election AMA** (`electionQuestions/{qid}` + `answers/{candidateUid}` +

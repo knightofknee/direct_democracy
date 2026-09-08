@@ -9,9 +9,9 @@ import { ThemedText } from '@/components/themed-text';
 import { Card, Chip } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { plural } from '@/lib/format';
 import type { Candidate, Official } from '@/lib/types';
 import { computeGrade } from '@/services/officials';
+import { usePlural } from '@/lib/i18n';
 
 /**
  * An official's public row card - portrait, claim status, grade - as shown on
@@ -45,6 +45,7 @@ export function OfficialRow({ official }: { official: Official }) {
 export function CandidateRow({ candidate }: { candidate: Candidate }) {
   const router = useRouter();
   const theme = useTheme();
+  const pluralT = usePlural();
   return (
     <Card onPress={() => router.push(`/candidate/${candidate.uid}`)}>
       <View style={styles.row}>
@@ -58,8 +59,8 @@ export function CandidateRow({ candidate }: { candidate: Candidate }) {
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {candidate.directory
-              ? plural(candidate.policyCount ?? 0, 'candidate')
-              : plural(candidate.policyCount ?? 0, 'policy', 'policies')}
+              ? pluralT(candidate.policyCount ?? 0, 'candidate')
+              : pluralT(candidate.policyCount ?? 0, 'policy', 'policies')}
           </ThemedText>
         </View>
         <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />

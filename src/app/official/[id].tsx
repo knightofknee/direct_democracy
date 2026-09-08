@@ -1,18 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { ApprovalWidget } from '@/components/approval-widget';
-import { useCelebration } from '@/components/celebration';
 import { OfficialAvatar } from '@/components/avatar';
+import { useCelebration } from '@/components/celebration';
 import { ClaimGate } from '@/components/claim-gate';
 import { ContentActions } from '@/components/content-actions';
 import { GradeBadge, gradeColor } from '@/components/grade-badge';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
+import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip, EmptyState, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
@@ -22,11 +23,29 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { host, timeAgo } from '@/lib/format';
+import { tapHaptic } from '@/lib/haptics';
 import { notify, notifyError } from '@/lib/notify';
+import { useOptimistic } from '@/lib/optimistic';
 import { openLink } from '@/lib/open-link';
-import type { AmaQuestion, Official } from '@/lib/types';
-import { askQuestion, deleteQuestion, judgeResponse, respondToQuestion } from '@/services/ama';
-import { APPROVAL_MIN_BALLOTS, computeGrade, updateOfficialCard } from '@/services/officials';
+import type { AmaQuestion, DualTally, Official } from '@/lib/types';
+import { UpvotePill, useOptimisticUpvotes } from '@/components/upvote-pill';
+import {
+  askQuestion,
+  deleteQuestion,
+  judgeResponse,
+  respondToQuestion,
+  setQuestionUpvote,
+} from '@/services/ama';
+import {
+  computeGrade,
+  DEFAULT_UPVOTE_ALERT_THRESHOLD,
+  updateOfficialCard,
+} from '@/services/officials';
+
+const VERDICT_OPTIONS = [
+  { key: 'answered', label: 'Answered' },
+  { key: 'dodged', label: 'Dodged' },
+];
 
 export default function OfficialAmaScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -106,7 +125,7 @@ export default function OfficialAmaScreen() {
 
       <SectionHeader
         title="AMA"
-        subtitle="Ask anything. The community judges whether the answer was real."
+        subtitle="Ask anything. The community judges whether the question was answered sufficiently."
       />
       {!isThisOfficial && (
         <Card>
@@ -124,7 +143,12 @@ export default function OfficialAmaScreen() {
       {questions.length === 0 ? (
         <EmptyState icon="help-circle-outline" message="No questions yet. Ask the first one." />
       ) : (
-        questions
+        // The questions people join lead the list (recency breaks ties via
+        // the stable sort over the newest-first query) - upvoting an
+        // existing question beats re-asking it, so the shared one must be
+        // what a new reader sees first.
+        [...questions]
+          .sort((a, b) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
           .filter((q) => !isBlocked(q.authorUid))
           .map((q, i) => (
             <Animated.View key={q.id} entering={FadeInDown.duration(260).delay(Math.min(i, 8) * 40)}>
@@ -245,6 +269,12 @@ function GradeCard({
           subtitle="straight answers given"
           value={!grade.answersGraded || grade.answers.score == null ? '-' : `${grade.answers.score}`}
           score={grade.answersGraded ? grade.answers.score : null}
+          onInfo={() =>
+            notify(
+              'How answers are graded',
+              'Every response counts as answered until the community judges it a dodge. Each question is weighted by the verified people who joined it, so ignoring a question fifty people want answered costs far more than ignoring one nobody backed. Unanswered questions get a week of grace before they count as ignored.'
+            )
+          }
         />
       </View>
 
@@ -252,12 +282,6 @@ function GradeCard({
         {grade.answers.answered} answered · {grade.answers.dodged} dodged ·{' '}
         {grade.answers.ignored} ignored · {grade.answers.pending} pending
       </ThemedText>
-      {grade.approval.constituentBallots < APPROVAL_MIN_BALLOTS && (
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          At least {APPROVAL_MIN_BALLOTS} votes are needed to show an approval score -{' '}
-          {grade.approval.constituentBallots} so far.
-        </ThemedText>
-      )}
     </Card>
   );
 }
@@ -267,11 +291,14 @@ function AxisSummary({
   subtitle,
   value,
   score,
+  onInfo,
 }: {
   title: string;
   subtitle: string;
   value: string;
   score: number | null;
+  /** Explainer behind an info icon, sitting on the number it explains. */
+  onInfo?: () => void;
 }) {
   const theme = useTheme();
   const color = gradeColor(score, theme);
@@ -280,9 +307,20 @@ function AxisSummary({
       <ThemedText type="subtitle" style={{ fontSize: 26, lineHeight: 32, color }}>
         {value}
       </ThemedText>
-      <ThemedText type="smallBold" style={{ fontSize: 12 }}>
-        {title}
-      </ThemedText>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <ThemedText type="smallBold" style={{ fontSize: 12 }}>
+          {title}
+        </ThemedText>
+        {onInfo && (
+          <Pressable
+            onPress={onInfo}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={`How ${title.toLowerCase()} are graded`}>
+            <Ionicons name="information-circle-outline" size={14} color={theme.textSecondary} />
+          </Pressable>
+        )}
+      </View>
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 11, lineHeight: 14 }}>
         {subtitle}
       </ThemedText>
@@ -296,14 +334,22 @@ function EditCard({ official }: { official: Official }) {
   const [editing, setEditing] = useState(false);
   const [bio, setBio] = useState(official.bio ?? '');
   const [photoUrl, setPhotoUrl] = useState(official.photoUrl ?? '');
+  const [threshold, setThreshold] = useState(
+    String(official.upvoteAlertThreshold ?? DEFAULT_UPVOTE_ALERT_THRESHOLD)
+  );
   const [saving, setSaving] = useState(false);
 
   if (!profile) return null;
 
   const save = async () => {
+    const parsed = Number(threshold.trim());
+    if (!Number.isInteger(parsed) || parsed < 1) {
+      notify('Almost there', 'The question alert threshold must be a whole number, 1 or more.');
+      return;
+    }
     setSaving(true);
     try {
-      await updateOfficialCard(profile, { bio, photoUrl });
+      await updateOfficialCard(profile, { bio, photoUrl, upvoteAlertThreshold: parsed });
       setEditing(false);
     } catch (e) {
       notifyError('Could not save', e);
@@ -332,6 +378,16 @@ function EditCard({ official }: { official: Official }) {
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
         Link a photo hosted on your own site or campaign page - direct democracy displays it but
         never stores the image.
+      </ThemedText>
+      <Field
+        label="Question alert threshold"
+        value={threshold}
+        onChangeText={setThreshold}
+        keyboardType="number-pad"
+        maxLength={5}
+      />
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+        {"You'll get a notification when a question in your AMA reaches this many upvotes."}
       </ThemedText>
       <View style={{ flexDirection: 'row', gap: Spacing.two }}>
         <Button title="Cancel" variant="ghost" onPress={() => setEditing(false)} style={{ flex: 1 }} />
@@ -380,6 +436,53 @@ function QuestionCard({
     [profile?.uid, question.id]
   );
 
+  const { data: myUpvote } = useLiveDoc<{ uid: string }>(
+    () =>
+      profile
+        ? doc(db, 'officials', question.officialUid, 'questions', question.id, 'votes', profile.uid)
+        : null,
+    [profile?.uid, question.id]
+  );
+  const { count: upvoteCount, bump, settle } = useOptimisticUpvotes(question.upvotes ?? 0);
+
+  // Assume success: the count moves the instant they tap, and only a failed
+  // write (rare - it is the user's own vote doc) rolls back and alerts.
+  const toggleUpvote = async () => {
+    if (!profile) {
+      router.push('/sign-in');
+      return;
+    }
+    tapHaptic();
+    const up = myUpvote == null;
+    bump(up ? 1 : -1);
+    try {
+      await setQuestionUpvote(profile, question, up);
+    } catch (e) {
+      settle();
+      notifyError('Your voice was not recorded', e);
+    }
+  };
+
+  // Assume success: the verdict bars move the instant they judge, handed
+  // back to the server counts when onJudgmentWrite lands.
+  const verdictCounts = useOptimistic({
+    yes: question.answeredYes ?? 0,
+    no: question.answeredNo ?? 0,
+    yesVerified: question.answeredYesVerified ?? 0,
+    noVerified: question.answeredNoVerified ?? 0,
+  });
+
+  // The community verdict is a two-option tally like any poll, so it renders
+  // through the same results component. Counter fields may be absent on
+  // questions judged before the verified split existed.
+  const v = verdictCounts.value;
+  const verdictTally: DualTally = {
+    all: { answered: v.yes, dodged: v.no },
+    verified: { answered: v.yesVerified, dodged: v.noVerified },
+    totalAll: v.yes + v.no,
+    totalVerified: v.yesVerified + v.noVerified,
+  };
+
   const statusChip = {
     awaitingResponse: { label: 'Awaiting response', tone: 'warning' as const },
     // A response counts as answered unless the community judges it a dodge.
@@ -401,22 +504,32 @@ function QuestionCard({
     }
   };
 
-  const judge = async (answered: boolean) => {
+  const judge = (answered: boolean) => {
     if (!profile) {
       router.push('/sign-in');
       return;
     }
+    if (myJudgment?.answered === answered) return;
+    tapHaptic();
     // "First" only once the judgment doc has actually loaded (see milestones.ts).
     const firstJudgment = !myJudgmentLoading && myJudgment == null;
-    setBusy(true);
-    try {
-      await judgeResponse(profile, question, answered);
-      if (firstJudgment) anticipate('judgments');
-    } catch (e) {
+    if (firstJudgment) anticipate('judgments');
+    const prev = myJudgment?.answered ?? null;
+    const verified = !!profile.verified;
+    verdictCounts.predict({
+      yes: Math.max(0, v.yes - (prev === true ? 1 : 0)) + (answered ? 1 : 0),
+      no: Math.max(0, v.no - (prev === false ? 1 : 0)) + (answered ? 0 : 1),
+      yesVerified: verified
+        ? Math.max(0, v.yesVerified - (prev === true ? 1 : 0)) + (answered ? 1 : 0)
+        : v.yesVerified,
+      noVerified: verified
+        ? Math.max(0, v.noVerified - (prev === false ? 1 : 0)) + (answered ? 0 : 1)
+        : v.noVerified,
+    });
+    judgeResponse(profile, question, answered).catch((e) => {
+      verdictCounts.rollback();
       notifyError('Could not record judgment', e);
-    } finally {
-      setBusy(false);
-    }
+    });
   };
 
   return (
@@ -424,10 +537,25 @@ function QuestionCard({
       <View style={styles.metaRow}>
         <Chip label={statusChip.label} tone={statusChip.tone} />
         {question.authorVerified && <VerifiedBadge compact />}
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+        {/* One guaranteed line: the name yields (truncates) so the status
+            chip, checkmark, and upvote pill always stay aligned. */}
+        <ThemedText
+          type="small"
+          themeColor="textSecondary"
+          numberOfLines={1}
+          style={{ fontSize: 12, flexShrink: 1 }}>
           {question.authorName} · {timeAgo(question.createdAt)}
         </ThemedText>
         <View style={{ flex: 1 }} />
+        {/* The official sees the count too (it is their priority signal),
+            they just cannot join questions put to themselves. */}
+        <UpvotePill
+          count={upvoteCount}
+          active={myUpvote != null}
+          onPress={toggleUpvote}
+          disabled={isThisOfficial}
+        />
+
         <ContentActions
           contentPath={`officials/${question.officialUid}/questions/${question.id}`}
           contentType="question"
@@ -495,10 +623,16 @@ function QuestionCard({
               style={{ flex: 1 }}
             />
           </View>
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {question.answeredYes} say answered ({question.answeredYesVerified ?? 0} verified) ·{' '}
-            {question.answeredNo} say dodged ({question.answeredNoVerified ?? 0} verified)
-          </ThemedText>
+          {verdictTally.totalAll > 0 && (
+            <TallyResults
+              tally={verdictTally}
+              options={VERDICT_OPTIONS}
+              highlightKeys={
+                myJudgment ? [myJudgment.answered ? 'answered' : 'dodged'] : undefined
+              }
+              noun="verdict"
+            />
+          )}
         </View>
       )}
 
@@ -546,7 +680,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.two,
-    flexWrap: 'wrap',
   },
   response: {
     borderRadius: 12,

@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
+import { tapHaptic } from '@/lib/haptics';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { withBallotDelta, type BallotDelta } from '@/lib/tally';
 import { timeAgo } from '@/lib/format';
@@ -143,6 +144,7 @@ export default function ConcernScreen() {
       router.push('/sign-in');
       return;
     }
+    tapHaptic();
     // "First" only once the vote doc has actually loaded (see milestones.ts).
     const firstCast = !myVoteLoading && myVote == null;
     if (firstCast) anticipate('votes');

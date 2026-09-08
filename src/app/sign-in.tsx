@@ -44,13 +44,6 @@ export default function SignInScreen() {
 
   const anyLoading = submitting || ssoLoading != null || sendingEmail;
 
-  // Already signed in with nothing in flight (a restored session, or a
-  // magic link that completed while this screen was up): nothing to do here.
-  useEffect(() => {
-    if (user && !submitting && !ssoLoading) done();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
   const done = () => {
     // Always land on the big board, wherever sign-in was opened from.
     // Dismiss the modal first - a bare replace() from inside a native modal
@@ -58,6 +51,13 @@ export default function SignInScreen() {
     if (router.canDismiss()) router.dismiss();
     router.replace('/');
   };
+
+  // Already signed in with nothing in flight (a restored session, or a
+  // magic link that completed while this screen was up): nothing to do here.
+  useEffect(() => {
+    if (user && !submitting && !ssoLoading) done();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const submit = async () => {
     if (!email.trim() || !password) return;

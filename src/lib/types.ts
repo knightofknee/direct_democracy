@@ -74,6 +74,21 @@ export interface Official {
   approvalTallies?: DualTally;
   /** Approval among the official's own constituents (ward residents). */
   approvalConstituents?: { approve: number; disapprove: number };
+  /**
+   * Notify this official when a question reaches this many upvotes (their
+   * own setting, edited on their card; onQuestionUpvoteWrite sends the
+   * alert). Absent means the default threshold.
+   */
+  upvoteAlertThreshold?: number;
+  /**
+   * Upvote-weighted answer buckets, recounted by Cloud Functions whenever a
+   * question, response, verdict, or question upvote changes (and nightly).
+   * Each question weighs 1 + its verified upvotes, so ignoring a question
+   * fifty people joined costs far more than ignoring one nobody backed.
+   * credit = responses not judged dodges; pending/ignored split follows the
+   * same grace window as questionsPending. Absent until first recount.
+   */
+  answerWeights?: { credit: number; dodged: number; ignored: number; pending: number };
 }
 
 /** One person's standing approval of an official - changeable any time. */
@@ -84,6 +99,81 @@ export type ApprovalValue = 'approve' | 'disapprove';
  * officials; candidates publish a platform and can poll their audience, but
  * carry none of the grading machinery until they hold office.
  */
+/**
+ * A nominee in the 2026 school board election. Not an account - a read-only
+ * voter-info card seeded by the operator (scripts/seed-school-board.ts) from
+ * public sources. If a nominee ever joins the platform they get a real
+ * candidate account; these docs stay the directory either way.
+ */
+/**
+ * A nominee in an upcoming election - the general-purpose voter directory
+ * (November 2026 statewide/county races, February 2027 municipal races).
+ * Not an account: a read-only card seeded by the operator
+ * (scripts/seed-election.ts) from public sources, same contract as
+ * SchoolBoardCandidate. Race ids and labels live in
+ * src/constants/elections.ts.
+ */
+export interface ElectionCandidateCard {
+  id: string;
+  /** Which ballot: '2026-general' or '2027-municipal'. */
+  election: string;
+  /** Race id, e.g. 'governor', 'cook-assessor', 'clerk', 'ward-25'. */
+  race: string;
+  name: string;
+  /** Ballot party; null for Chicago's nonpartisan municipal races. */
+  party: string | null;
+  incumbent: boolean;
+  website: string | null;
+  /** Externally hosted headshot (https), rendered by link, never stored. */
+  photoUrl?: string | null;
+  /** What the candidate says they are running on, in neutral summary. */
+  runningOn: string;
+  priorCareer: string | null;
+  /** Judicial races: the vacancy being filled ("Vacancy of Hon. ..."). */
+  seat?: string | null;
+  /** Judicial: the court ("Circuit Court of Cook County"). */
+  court?: string | null;
+  /**
+   * Bar association and Injustice Watch findings, quoted exactly as the
+   * rating body words them. Empty until a body publishes for this cycle.
+   */
+  ratings?: { source: string; rating: string; url?: string | null }[];
+  /** Public sources the summary was compiled from. */
+  sourceUrls: string[];
+}
+
+/**
+ * Editorial note on one race (an open seat, an unopposed incumbent, a
+ * not-yet-announced field). Seeded read-only alongside the candidate cards;
+ * doc id is `${election}--${race}`.
+ */
+export interface ElectionRaceNote {
+  id: string;
+  election: string;
+  race: string;
+  note: string;
+  sourceUrls?: string[];
+}
+
+export interface SchoolBoardCandidate {
+  id: string;
+  name: string;
+  /** 'president' (citywide) or a district id like '4b'. */
+  race: string;
+  /** Sitting board member. */
+  incumbent: boolean;
+  /** Official campaign site (https), if the campaign has one. */
+  website: string | null;
+  /** Externally hosted headshot (https), rendered by link, never stored. */
+  photoUrl?: string | null;
+  /** What the candidate has said they are running on, in neutral summary. */
+  runningOn: string;
+  /** Factual professional background, when public record has it. */
+  priorCareer: string | null;
+  /** Public sources the summary was compiled from. */
+  sourceUrls: string[];
+}
+
 export interface Candidate {
   uid: string;
   name: string;
@@ -262,7 +352,7 @@ export interface Comment {
 /** A comment rating - placement only, no public counts. */
 export type CommentVoteValue = 'up' | 'down';
 
-export type CommentSort = 'newest' | 'oldest' | 'best';
+export type CommentSort = 'newest' | 'best';
 
 /** Target of a reply: the thread root plus who is being answered. */
 export interface CommentReply {
@@ -336,6 +426,14 @@ export interface AmaQuestion {
   /** Same counts over verified users only - the verified lens on judgments. */
   answeredYesVerified?: number;
   answeredNoVerified?: number;
+  /**
+   * People who joined the question ("I want this answered too"), aggregated
+   * by trigger from the votes subcollection. The verified count is what
+   * weights the official's answer grade - the same sybil defense as
+   * judgment verdicts, where only verified voices move the needle.
+   */
+  upvotes?: number;
+  upvotesVerified?: number;
   createdAt: Timestamp;
 }
 
@@ -353,6 +451,9 @@ export interface ElectionQuestion {
   body: string;
   /** Candidates who have answered, maintained by onElectionAnswerWrite. */
   answerCount: number;
+  /** People who joined the question, aggregated by trigger; orders the list. */
+  upvotes?: number;
+  upvotesVerified?: number;
   createdAt: Timestamp;
 }
 

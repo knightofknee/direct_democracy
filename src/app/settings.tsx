@@ -8,6 +8,7 @@ import { Button, Card } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { setDeletingAccount, useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
+import { useLocale, useT } from '@/lib/i18n';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { deleteAccount } from '@/services/users';
 
@@ -16,12 +17,38 @@ export default function SettingsScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { profile, signOut } = useAuth();
+  const { locale, setLocale } = useLocale();
+  const t = useT();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  // Language is the one setting that must work signed out too.
+  const language = (
+    <Card>
+      <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+        Language · Idioma
+      </ThemedText>
+      <View style={{ flexDirection: 'row', gap: Spacing.two }}>
+        <Button
+          title="English"
+          variant={locale === 'en' ? 'primary' : 'secondary'}
+          onPress={() => setLocale('en')}
+          style={{ flex: 1 }}
+        />
+        <Button
+          title="Español"
+          variant={locale === 'es' ? 'primary' : 'secondary'}
+          onPress={() => setLocale('es')}
+          style={{ flex: 1 }}
+        />
+      </View>
+    </Card>
+  );
 
   if (!profile) {
     return (
       <Screen>
+        {language}
         <Button title="Sign in first" onPress={() => router.replace('/sign-in')} />
       </Screen>
     );
@@ -29,7 +56,8 @@ export default function SettingsScreen() {
 
   return (
     <Screen>
-      <Button title="Privacy & data" variant="secondary" onPress={() => router.push('/privacy')} />
+      {language}
+      <Button title={t('Privacy & data')} variant="secondary" onPress={() => router.push('/privacy')} />
 
       {profile.role === 'citizen' && (
         <Card>

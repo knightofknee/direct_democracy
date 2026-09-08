@@ -49,10 +49,50 @@ Conventions:
   (`source: 'app'`) are the candidate's own. Candidates who never signed up
   are provisioned with `add-candidate --create` (passwordless account under
   the campaign's published contact email; they claim it via password reset).
+- Election directories: `electionCandidates/{election--slug}` +
+  `electionRaceNotes/{election--race}` are read-only voter directories for the
+  Nov 3, 2026 general ballot ('2026-general': statewide + Cook County races)
+  and the Feb 23, 2027 municipal ballot ('2027-municipal': citywide clerk /
+  treasurer + ward-N aldermanic races), seeded by `npm run seed-election` from
+  `scripts/data/general-2026.json` and `municipal-2027.json` (full sync per
+  election, same contract as the school board). Cards carry an optional
+  `photoUrl` (external https headshot, rendered by link like officials'
+  portraits, never stored); race screens show each candidate's runningOn
+  preview so the comparison happens without a tap. Race ids/labels and the
+  how-to-vote dates live in `src/constants/elections.ts`; sections render on
+  the election tab (`november-section.tsx`, `ward-race-section.tsx`), and
+  `/ward-race/[ward]` pairs the incumbent's report card with declared
+  challengers. A weekly scheduled task (Mondays, "weekly-election-data-refresh")
+  re-verifies all three data files against current sources and re-seeds.
+- School board 2026: `schoolBoardCandidates/{slug}` is a read-only voter
+  directory (public read, no client writes), seeded by
+  `npm run seed-school-board` from `scripts/data/school-board-2026.json`.
+  Not accounts - nominee cards with race ('president' or '1a'..'10b'),
+  runningOn, priorCareer, website, and the sourceUrls each summary was
+  compiled from. Races/labels live in `src/constants/school-board.ts`.
+  Withdrawn/removed candidates are dropped from the JSON and the seed's
+  full sync deletes them. Copy must stay neutral and sourced; candidates
+  with no findable platform say so plainly.
 - Officials are graded on two axes in `src/services/officials.ts`: constituent
   approval (5-ballot minimum) and the community-judged answer score, averaged
   into an overall letter. Approval ballots live at
-  `officials/{uid}/approvals/{voterUid}` and aggregate in `onApprovalWrite`.
+  `officials/{uid}/approvals/{voterUid}` and aggregate in `onApprovalWrite`;
+  casting one requires a VERIFIED ward resident (service + widget enforce it;
+  unverified accounts see the buttons disabled with the verify path). The
+  matching rules clause is deliberately OFF until the 1.0.8+ client is the
+  installed base, because the 1.0.7 binary shows live buttons to everyone
+  and a rules deny is a raw error there. Re-add `me().verified == true &&
+  me().wardId != null` to the approvals rule when set-latest-version flips. Officials set their own `upvoteAlertThreshold` on their card; the
+  upvote trigger notifies them once per question when it crosses that bar.
+- Question upvotes ("I want this answered too"): one presence-only vote doc at
+  `officials/{uid}/questions/{qid}/votes/{voterUid}` (and the same under
+  `electionQuestions`). Triggers recount the question's upvotes/upvotesVerified
+  and the official's `answerWeights` buckets; the answer score weights every
+  question by 1 + its VERIFIED upvotes (same only-verified-decides rule as
+  verdicts), so ignoring a question fifty people joined costs far more than
+  ignoring an unbacked one. Question lists sort by upvotes, recency breaking
+  ties. `recountAnswerWeights` is a full recount per event (idempotent, cheap
+  at this scale); the nightly sweep backfills and self-heals it.
 - Official portraits are external https links (`photoUrl`) - never store or
   proxy the image.
 - Personal stats on `users/{uid}.stats` are trigger-written and drive the
@@ -71,11 +111,47 @@ Conventions:
   the ignore clock starts at claim.
 - Use `notify()` from `src/lib/notify.ts` for user-facing errors - RN's
   Alert is a silent no-op on web.
+- Assume success on a user's own vote/action: every displayed aggregate a
+  tap changes moves optimistically at tap time via `useOptimistic`
+  (src/lib/optimistic.ts) or the tally overlay in concern/[id].tsx and
+  poll-card.tsx, handing back to the server numbers when the trigger lands;
+  only a failed write rolls back and alerts. Never make a tap wait on the
+  tally round trip.
 - Seed data must never depict real Chicago officials - fictional names only.
   Production is the opposite: real aldermen are provisioned by
   `scripts/seed-aldermen.ts` from the city's Ward Offices dataset
   (data.cityofchicago.org htai-wnw4, re-runnable after council changes), as
   claimable placeholder accounts keyed to each ward's published email.
+- Spanish: `src/lib/i18n.tsx` (`useT()`, `usePlural()`, `useLocale()`) with
+  strings keyed by their English source text in `src/i18n/es.ts`; a missing
+  key renders the English. The locale lives on the device (AsyncStorage),
+  asked once in both languages on first launch (`language-prompt.tsx`) and
+  changeable in Settings. Covered so far: tab bar, the whole election tab and
+  its screens, settings. Candidate statements are never machine-translated.
+  New user-facing strings on covered surfaces go through `t()` with a
+  matching `es.ts` entry.
+- Judges and district races: `judicial-retention`, `judicial-appellate`,
+  `judicial-circuit`, `judicial-subcircuit-N` and the district families
+  (`us-house-N`, `il-senate-N`, `il-house-N`, `cook-commissioner-N`,
+  `cook-board-of-review-N`) are races in `electionCandidates`; cards carry
+  optional `seat`, `court`, `ratings[]` (quoted verbatim from each rating
+  body, never paraphrased), `photoUrl`. `pdc-N` (police district councils)
+  belong to the 2027 municipal election. Injustice Watch is presented as the
+  primary judicial tool; the app supplements it with the list and ratings.
+  `raceInfo()` in constants/elections.ts resolves any race id to its
+  election, label, and detail (the race screen serves both elections).
+- Deadline reminders: `sendDeadlineReminders` (daily, 9am Chicago) writes a
+  `deadline` notification to every user the day before and the day of each
+  VOTING_MILESTONES date; the milestone list is duplicated in
+  functions/src/index.ts and must be kept in sync with constants/elections.ts.
+- Update nudge (same design as Brian's other apps): `config/app.latestVersion`
+  drives a root-mounted "Update available" modal
+  (`src/lib/app-update.ts` + `src/components/update-modal.tsx`), compared
+  against the running binary's own version, never the store listing's public
+  name (the two are different numbering schemes). After a release is confirmed
+  live in the store, flip it with `npm run set-latest-version -- <version>`.
+  The doc is world-readable, admin-write-only; a platform with no store URL
+  on the doc never nudges.
 - Security posture and accepted limitations are documented in `docs/AUDIT.md`;
   update it when the trust model changes.
 - Typecheck with `npm run typecheck` before finishing.

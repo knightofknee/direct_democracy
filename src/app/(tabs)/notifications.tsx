@@ -21,9 +21,11 @@ import type { AppNotification } from '@/lib/types';
 import { markAllNotificationsRead, markNotificationRead } from '@/services/notifications';
 
 /**
- * The inbox: answers to your questions, community verdicts, replies to your
- * comments, writing credits - and for officials and candidates, the
- * questions and comments waiting on them.
+ * The inbox: answers to your questions, replies to your comments, writing
+ * credits - and for officials and candidates, the questions and comments
+ * waiting on them. Things to respond to and people responding to you; vote
+ * outcomes (community verdicts) deliberately don't notify. The 'verdict'
+ * type still renders for notification docs from before that change.
  */
 export default function NotificationsScreen() {
   const router = useRouter();
@@ -51,7 +53,7 @@ export default function NotificationsScreen() {
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-          Answers, verdicts, replies, and credits, as they land.
+          Answers, replies, and credits, as they land.
         </ThemedText>
         <FlagAccent />
       </View>
@@ -109,6 +111,7 @@ export default function NotificationsScreen() {
 }
 
 const TYPE_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
+  deadline: 'calendar',
   question: 'help-circle',
   response: 'chatbox-ellipses',
   verdict: 'ribbon',

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { doc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -15,7 +15,10 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
 import { notifyError } from '@/lib/notify';
+import { useOptimistic } from '@/lib/optimistic';
+import { PRIORITY_WEIGHTS } from '@/lib/tally';
 import { CONCERN_PRIORITIES, type Concern, type ConcernPriority, type TallyLens, type VoteDoc } from '@/lib/types';
+import { tapHaptic } from '@/lib/haptics';
 import { voteConcernPriority } from '@/services/concerns';
 
 const QUICK_PRIORITIES: { key: ConcernPriority; label: string }[] = CONCERN_PRIORITIES.map(
@@ -37,7 +40,6 @@ export function ConcernCard({
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
-  const [voting, setVoting] = useState(false);
 
   const { data: myVote } = useLiveDoc<VoteDoc & { id: string }>(
     () => (profile ? doc(db, 'concerns', concern.id, 'votes', profile.uid) : null),
@@ -45,23 +47,41 @@ export function ConcernCard({
   );
   const myPriority = (myVote?.value as ConcernPriority | undefined) ?? null;
 
-  const score = lens === 'verified' ? concern.scoreVerified : concern.score;
-  const voters = lens === 'verified' ? concern.tallies.totalVerified : concern.tallies.totalAll;
+  // Assume success: the score and vote count bump the instant they tap,
+  // handed back to the server numbers when the tally trigger lands.
+  const stats = useOptimistic({
+    score: concern.score,
+    scoreVerified: concern.scoreVerified,
+    totalAll: concern.tallies.totalAll,
+    totalVerified: concern.tallies.totalVerified,
+  });
+  const score = lens === 'verified' ? stats.value.scoreVerified : stats.value.score;
+  const voters = lens === 'verified' ? stats.value.totalVerified : stats.value.totalAll;
 
-  const quickVote = async (priority: ConcernPriority) => {
+  const quickVote = (priority: ConcernPriority) => {
     if (!profile) {
       router.push('/sign-in');
       return;
     }
     if (myPriority === priority) return;
-    setVoting(true);
-    try {
-      await voteConcernPriority(profile, concern.id, priority);
-    } catch (e) {
+    tapHaptic();
+    // Mirror of the trigger's areaSlicesOf: the verified slice of a ward
+    // concern counts only verified residents of that ward.
+    const countsVerified =
+      !!profile.verified && (concern.scope !== 'ward' || profile.wardId === concern.wardId);
+    const weightDelta =
+      (PRIORITY_WEIGHTS[priority] ?? 0) - (myPriority ? (PRIORITY_WEIGHTS[myPriority] ?? 0) : 0);
+    const firstVote = myVote == null ? 1 : 0;
+    stats.predict({
+      score: concern.score + weightDelta,
+      scoreVerified: concern.scoreVerified + (countsVerified ? weightDelta : 0),
+      totalAll: concern.tallies.totalAll + firstVote,
+      totalVerified: concern.tallies.totalVerified + (countsVerified ? firstVote : 0),
+    });
+    voteConcernPriority(profile, concern.id, priority).catch((e) => {
+      stats.rollback();
       notifyError('Vote failed', e);
-    } finally {
-      setVoting(false);
-    }
+    });
   };
 
   return (
@@ -111,7 +131,6 @@ export function ConcernCard({
             return (
               <Pressable
                 key={p.key}
-                disabled={voting}
                 onPress={() => quickVote(p.key)}
                 hitSlop={4}
                 style={({ pressed }) => [

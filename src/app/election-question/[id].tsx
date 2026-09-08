@@ -15,8 +15,10 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
+import { tapHaptic } from '@/lib/haptics';
 import { notify, notifyError } from '@/lib/notify';
 import type { CommentVoteValue, ElectionAnswer, ElectionQuestion, UserProfile } from '@/lib/types';
+import { ElectionQuestionJoin } from '@/components/upvote-pill';
 import {
   answerElectionQuestion,
   deleteElectionQuestion,
@@ -94,6 +96,8 @@ export default function ElectionQuestionScreen() {
             Asked by {question.authorName} · {timeAgo(question.createdAt)}
           </ThemedText>
           {question.authorVerified && <VerifiedBadge compact />}
+          <View style={{ flex: 1 }} />
+          <ElectionQuestionJoin question={question} />
         </View>
         {isAsker && question.answerCount === 0 && (
           <View style={{ flexDirection: 'row' }}>
@@ -199,6 +203,7 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
     // still-loading doc would mark future milestones seen and skip them.
     const firstCast = !myVoteLoading && myVote == null;
     const next = myVote?.value === value ? null : value;
+    tapHaptic();
     try {
       await voteElectionAnswer(profile, questionId, answer.candidateUid, next);
       if (firstCast && next) anticipate('votes');

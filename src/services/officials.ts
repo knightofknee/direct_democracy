@@ -19,7 +19,9 @@ export { letterFor };
  *
  *  2. ANSWER SCORE - how well they actually answer their constituency.
  *     Community-judged AMA performance (see computeScore in services/ama.ts):
- *     answered questions earn credit, dodged and ignored ones cost it.
+ *     answered questions earn credit, dodged and ignored ones cost it, and
+ *     every question is weighted by the verified people who joined it, so
+ *     ignoring what the community actually cares about is what hurts most.
  *
  * Each axis needs a minimum sample before it grades (no F for an official
  * with one grumpy neighbor); until then the axis shows as ungraded and the
@@ -84,7 +86,7 @@ export function computeGrade(official: Official): OfficialGrade {
     official.claimed === true
       ? Math.min(unanswered, official.questionsPending ?? unanswered)
       : unanswered;
-  const answers = computeScore(official, pending);
+  const answers = computeScore(official, pending, official.claimed !== true);
 
   const axes: number[] = [];
   if (approval.constituentPct != null) axes.push(approval.constituentPct);
@@ -98,13 +100,20 @@ export function computeGrade(official: Official): OfficialGrade {
   return { overall, letter: letterFor(overall), approval, answers, answersGraded };
 }
 
-/** Set or change a standing approval ballot. */
+/**
+ * Set or change a standing approval ballot. Verified residents only - an
+ * approval rating anonymous accounts could stuff would be worthless, so the
+ * ballot itself is gated, not just the graded slice (rules enforce the same).
+ */
 export async function setApproval(
   profile: UserProfile,
   officialUid: string,
   value: ApprovalValue
 ): Promise<void> {
   if (profile.uid === officialUid) throw new Error('Officials cannot rate themselves.');
+  if (!profile.verified || profile.wardId == null) {
+    throw new Error('Verify your residency to grade officials.');
+  }
   await setDoc(doc(db, 'officials', officialUid, 'approvals', profile.uid), {
     value,
     verified: profile.verified,
@@ -124,15 +133,23 @@ export async function clearApproval(profile: UserProfile, officialUid: string): 
  */
 export async function updateOfficialCard(
   profile: UserProfile,
-  input: { bio: string; photoUrl: string }
+  input: { bio: string; photoUrl: string; upvoteAlertThreshold?: number }
 ): Promise<void> {
   if (profile.role !== 'official') throw new Error('Only officials can edit an official card.');
   const photoUrl = input.photoUrl.trim();
   if (photoUrl && !photoUrl.startsWith('https://')) {
     throw new Error('Photo link must be an https:// URL.');
   }
+  const threshold = input.upvoteAlertThreshold;
+  if (threshold != null && (!Number.isInteger(threshold) || threshold < 1 || threshold > 10000)) {
+    throw new Error('The question alert threshold must be a whole number of upvotes, 1 or more.');
+  }
   await updateDoc(doc(db, 'officials', profile.uid), {
     bio: input.bio.trim(),
     photoUrl: photoUrl || null,
+    ...(threshold != null ? { upvoteAlertThreshold: threshold } : {}),
   });
 }
+
+/** Default for officials who haven't set their own alert threshold. */
+export const DEFAULT_UPVOTE_ALERT_THRESHOLD = 10;

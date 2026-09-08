@@ -7,6 +7,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { ClaimGate } from '@/components/claim-gate';
+import { CopyLinkButton } from '@/components/copy-link';
 import { policyPreview } from '@/components/policy-body';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
@@ -80,12 +81,16 @@ export default function CandidateScreen() {
         </View>
         {candidate.bio ? <ThemedText type="small">{candidate.bio}</ThemedText> : null}
         {candidate.websiteUrl ? (
-          <Button
-            title="Campaign website"
-            variant="secondary"
-            icon={<Ionicons name="globe-outline" size={15} />}
-            onPress={() => void openLink(candidate.websiteUrl!)}
-          />
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+            <Button
+              title="Campaign website"
+              variant="secondary"
+              icon={<Ionicons name="globe-outline" size={15} />}
+              onPress={() => void openLink(candidate.websiteUrl!)}
+              style={{ flex: 1 }}
+            />
+            <CopyLinkButton url={candidate.websiteUrl} label="Copy campaign website link" />
+          </View>
         ) : null}
       </Card>
 
@@ -209,15 +214,18 @@ function PlatformNote({
 function ImportedNote({ sourceUrl }: { sourceUrl: string }) {
   const theme = useTheme();
   return (
-    <Pressable
-      onPress={() => void openLink(sourceUrl)}
-      accessibilityRole="link"
-      style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
-      <Ionicons name="globe-outline" size={14} color={theme.primary} />
-      <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
-        Imported from {host(sourceUrl)}
-      </ThemedText>
-    </Pressable>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+      <Pressable
+        onPress={() => void openLink(sourceUrl)}
+        accessibilityRole="link"
+        style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flex: 1 }}>
+        <Ionicons name="globe-outline" size={14} color={theme.primary} />
+        <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
+          Imported from {host(sourceUrl)}
+        </ThemedText>
+      </Pressable>
+      <CopyLinkButton url={sourceUrl} label="Copy platform source link" />
+    </View>
   );
 }
 

@@ -11,6 +11,7 @@ import { PollCard } from '@/components/poll-card';
 import { OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
+import { SortToggle, sortConcerns, type ConcernSort } from '@/components/sort-toggle';
 import { ThemedText } from '@/components/themed-text';
 import { WardMap } from '@/components/ward-map';
 import { Button, Card, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
@@ -132,6 +133,7 @@ function WardHome({
   const theme = useTheme();
   const { profile } = useAuth();
   const [lens, setLens] = useState<TallyLens>('verified');
+  const [sort, setSort] = useState<ConcernSort>('top');
   const ward = wardById(wardId);
 
   const rankField = lens === 'verified' ? 'scoreVerified' : 'score';
@@ -169,6 +171,10 @@ function WardHome({
   const closedPolls = polls.filter((p) => !p.open);
   const { isBlocked } = useBlocks();
   const visibleConcerns = concerns.filter((c) => !isBlocked(c.authorUid));
+  // Same contract as the big board: rank badges follow the score order even
+  // when the list is displayed by date.
+  const rankById = new Map(visibleConcerns.map((c, i) => [c.id, i + 1]));
+  const displayConcerns = sortConcerns(visibleConcerns, sort);
 
   return (
     <Screen tab>
@@ -200,6 +206,7 @@ function WardHome({
         subtitle="Anyone can weigh in. Verified counts are residents of this ward only."
       />
       <LensToggle value={lens} onChange={setLens} />
+      <SortToggle value={sort} onChange={setSort} />
       {isHomeWard && (profile?.verified || profile?.role === 'official') ? (
         <Button
           title="Raise a ward concern"
@@ -236,8 +243,14 @@ function WardHome({
           message={isHomeWard ? 'No ward concerns yet. Raise the first one.' : 'No concerns in this ward yet.'}
         />
       ) : (
-        visibleConcerns.map((concern, i) => (
-          <ConcernCard key={concern.id} concern={concern} rank={i + 1} lens={lens} index={i} />
+        displayConcerns.map((concern, i) => (
+          <ConcernCard
+            key={concern.id}
+            concern={concern}
+            rank={rankById.get(concern.id)}
+            lens={lens}
+            index={i}
+          />
         ))
       )}
 

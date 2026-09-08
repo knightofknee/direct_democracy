@@ -2,34 +2,49 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { collection, orderBy, query } from 'firebase/firestore';
 import React, { useRef, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { FlagAccent } from '@/components/flag-accent';
 import { CandidateRow } from '@/components/politician-row';
+import { DistrictsSection } from '@/components/districts-section';
+import { JudgesSection } from '@/components/judges-section';
+import { NovemberSection } from '@/components/november-section';
+import { SchoolBoardSection } from '@/components/school-board-section';
+import { ElectionQuestionJoin } from '@/components/upvote-pill';
+import { WardRaceSection } from '@/components/ward-race-section';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, ChicagoStar, EmptyState, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
+import { daysUntil, nextMilestone } from '@/constants/elections';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { plural, timeAgo } from '@/lib/format';
+import { timeAgo } from '@/lib/format';
 import { notify } from '@/lib/notify';
 import type { Candidate, ElectionQuestion } from '@/lib/types';
 import { askElectionQuestion } from '@/services/election';
+import { useLocale, usePlural, useT } from '@/lib/i18n';
 
 /**
- * The election tab: every candidate on the platform, each carrying their
- * more perfect platform - and below the field, the election AMA, where one
- * question goes to every candidate at once.
+ * The election tab: the voter's guide to the next two ballots. The race for
+ * mayor leads (every candidate's full platform), then the mayoral AMA, the
+ * school board, the rest of the November 3 ballot with how to vote, and the
+ * February 2027 ward races. A 2x2 jump grid under the header, framed by the
+ * flag's stripes, reaches each section.
  */
 export default function ElectionScreen() {
   const theme = useTheme();
+  const t = useT();
   const scrollRef = useRef<ScrollView>(null);
   const amaY = useRef(0);
+  const schoolBoardY = useRef(0);
+  const novemberY = useRef(0);
+  const judgesY = useRef(0);
+  const districtsY = useRef(0);
+  const wardRacesY = useRef(0);
 
   const { data: candidates, loading } = useLiveQuery<Candidate & { id: string }>(
     () => query(collection(db, 'candidates'), orderBy('name')),
@@ -42,38 +57,74 @@ export default function ElectionScreen() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
           <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
-            election
+            {t('election')}
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-          The more perfect platform: every candidate lays out their full platform, and the city
-          debates each policy, plank by plank.
+          {t('Your next two ballots: who is running, what they say, and when and where to vote.')}
         </ThemedText>
-        <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch' }}>
-          <View style={{ flex: 1 }} />
-          <FlagAccent />
-          <View style={{ flex: 1, alignItems: 'flex-start', paddingLeft: Spacing.three }}>
-            <Pressable
-              onPress={() =>
-                scrollRef.current?.scrollTo({ y: amaY.current, animated: true })
-              }
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="Jump to the election AMA"
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-              <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
-                see ama
-              </ThemedText>
-              <Ionicons name="chevron-down" size={13} color={theme.primary} />
-            </Pressable>
+        {/* The flag's stripes frame the jump grid; rows read as a timeline,
+            the November 3 ballot on top, the February 2027 races below. */}
+        <View style={{ alignSelf: 'stretch', gap: 8, marginTop: Spacing.one }}>
+          <View style={[styles.flagStripe, { backgroundColor: theme.primarySoft }]} />
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two + 2 }}>
+            <GridCell
+              label={t('nov 3 ballot')}
+              caption={t('state & county races')}
+              hint="the November 3 ballot"
+              target={novemberY}
+              scrollRef={scrollRef}
+            />
+            <GridCell
+              label={t('school board')}
+              caption={t('21 seats on nov 3')}
+              hint="the school board races"
+              target={schoolBoardY}
+              scrollRef={scrollRef}
+            />
+            <GridCell
+              label={t('judges')}
+              caption={t('retention & vacancies')}
+              hint="the judicial ballot"
+              target={judgesY}
+              scrollRef={scrollRef}
+            />
+            <GridCell
+              label={t('your districts')}
+              caption={t('congress & state')}
+              hint="the district races"
+              target={districtsY}
+              scrollRef={scrollRef}
+            />
+            <GridCell
+              label={t('mayoral ama')}
+              caption={t('ask every candidate')}
+              hint="the mayoral candidate AMA"
+              target={amaY}
+              scrollRef={scrollRef}
+            />
+            <GridCell
+              label={t('ward races')}
+              caption={t('aldermen & police')}
+              hint="the February 2027 ward races"
+              target={wardRacesY}
+              scrollRef={scrollRef}
+            />
           </View>
+          <View style={[styles.flagStripe, { backgroundColor: theme.primarySoft }]} />
         </View>
+        <NextDeadline onPress={() => scrollRef.current?.scrollTo({ y: novemberY.current, animated: true })} />
       </View>
+
+      <SectionHeader
+        title={t('race for mayor')}
+        subtitle={t("Every candidate's full platform, debated plank by plank.")}
+      />
 
       {loading ? (
         <SkeletonCards />
       ) : candidates.length === 0 ? (
-        <EmptyState icon="ribbon-outline" message="No candidates on the platform yet." />
+        <EmptyState icon="ribbon-outline" message={t('No candidates on the platform yet.')} />
       ) : (
         // Real candidates first (alphabetical), the declared-candidates
         // directory entry at the end.
@@ -98,14 +149,158 @@ export default function ElectionScreen() {
         }}>
         <ElectionAma />
       </View>
+
+      <View
+        onLayout={(e) => {
+          schoolBoardY.current = e.nativeEvent.layout.y + Spacing.three;
+        }}>
+        <SchoolBoardSection />
+      </View>
+
+      <View
+        onLayout={(e) => {
+          novemberY.current = e.nativeEvent.layout.y + Spacing.three;
+        }}>
+        <NovemberSection />
+      </View>
+
+      <View
+        onLayout={(e) => {
+          judgesY.current = e.nativeEvent.layout.y + Spacing.three;
+        }}>
+        <JudgesSection />
+      </View>
+
+      <View
+        onLayout={(e) => {
+          districtsY.current = e.nativeEvent.layout.y + Spacing.three;
+        }}>
+        <DistrictsSection />
+      </View>
+
+      <View
+        onLayout={(e) => {
+          wardRacesY.current = e.nativeEvent.layout.y + Spacing.three;
+        }}>
+        <WardRaceSection />
+      </View>
     </Screen>
   );
 }
+
+/**
+ * The next voting deadline, counted down from today, so the dates buried in
+ * the how-to-vote card have a one-line presence at the top of the tab.
+ * Tapping lands on that card. Renders nothing once every milestone is past.
+ */
+function NextDeadline({ onPress }: { onPress: () => void }) {
+  const theme = useTheme();
+  const t = useT();
+  const { locale } = useLocale();
+  const next = nextMilestone(new Date());
+  if (!next) return null;
+  const days = daysUntil(next.date, new Date());
+  const when =
+    days === 0 ? t('today') : days === 1 ? t('tomorrow') : locale === 'es' ? `en ${days} días` : `in ${days} days`;
+  return (
+    <Pressable
+      onPress={onPress}
+      hitSlop={6}
+      accessibilityRole="button"
+      accessibilityLabel={`${next.label} ${when}. Jump to voting dates and places.`}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 5,
+        marginTop: Spacing.one,
+        alignSelf: 'stretch',
+      }}>
+      <Ionicons name="time-outline" size={14} color={theme.primary} style={{ marginTop: 2 }} />
+      {/* One Text so the two parts wrap together on a long (Spanish) day. */}
+      <ThemedText
+        type="smallBold"
+        style={{ color: theme.primary, fontSize: 13, lineHeight: 18, flexShrink: 1, textAlign: 'center' }}>
+        {t(next.label)} {when}
+        {next.electionDays != null && next.electionDays !== days ? (
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 13, lineHeight: 18 }}>
+            {' '}· {t('election day in')} {next.electionDays}
+          </ThemedText>
+        ) : null}
+      </ThemedText>
+    </Pressable>
+  );
+}
+
+/** One cell of the 2x2 quick grid: where it goes, and one line of what's there. */
+function GridCell({
+  label,
+  caption,
+  hint,
+  target,
+  scrollRef,
+}: {
+  label: string;
+  caption: string;
+  hint: string;
+  target: React.MutableRefObject<number>;
+  scrollRef: React.RefObject<ScrollView | null>;
+}) {
+  const theme = useTheme();
+  return (
+    <Pressable
+      onPress={() => scrollRef.current?.scrollTo({ y: target.current, animated: true })}
+      accessibilityRole="button"
+      accessibilityLabel={`Jump to ${hint}`}
+      style={({ pressed }) => [
+        styles.gridCell,
+        {
+          backgroundColor: theme.backgroundElement,
+          borderColor: theme.border,
+          opacity: pressed ? 0.7 : 1,
+        },
+      ]}>
+      <Ionicons name="star" size={14} color={theme.accent} />
+      <View style={{ flex: 1, gap: 1 }}>
+        <ThemedText type="smallBold" numberOfLines={1} style={{ fontSize: 14, lineHeight: 18 }}>
+          {label}
+        </ThemedText>
+        <ThemedText
+          type="small"
+          themeColor="textSecondary"
+          numberOfLines={1}
+          style={{ fontSize: 11, lineHeight: 14 }}>
+          {caption}
+        </ThemedText>
+      </View>
+      <Ionicons name="chevron-forward" size={14} color={theme.textSecondary} />
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  flagStripe: {
+    height: 3,
+    borderRadius: 2,
+  },
+  gridCell: {
+    flexBasis: '47%',
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 9,
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingVertical: 11,
+    paddingHorizontal: Spacing.three,
+  },
+});
 
 /** One question, every candidate: propose questions, read answers side by side. */
 function ElectionAma() {
   const router = useRouter();
   const theme = useTheme();
+  const t = useT();
+  const pluralT = usePlural();
   const { profile, loading: authLoading } = useAuth();
   const [draft, setDraft] = useState('');
   const [saving, setSaving] = useState(false);
@@ -135,13 +330,13 @@ function ElectionAma() {
   return (
     <View style={{ gap: Spacing.three }}>
       <SectionHeader
-        title="election ama"
-        subtitle="One question, every candidate on the record. Answers land side by side, ranked by your votes."
+        title={t('mayoral candidate ama')}
+        subtitle={t('One question, every candidate on the record. Answers land side by side, ranked by your votes.')}
       />
 
       <Card>
         <Field
-          placeholder="Ask every candidate at once…"
+          placeholder={t('Ask every candidate at once…')}
           value={draft}
           onChangeText={setDraft}
           multiline
@@ -149,14 +344,14 @@ function ElectionAma() {
         />
         {profile || authLoading ? (
           <Button
-            title="Put it to the candidates"
+            title={t('Put it to the candidates')}
             onPress={ask}
             loading={saving}
             disabled={draft.trim().length < 10}
           />
         ) : (
           <Button
-            title="Sign in to ask"
+            title={t('Sign in to ask')}
             variant="secondary"
             onPress={() => router.push('/sign-in')}
           />
@@ -168,28 +363,41 @@ function ElectionAma() {
       ) : questions.length === 0 ? (
         <EmptyState
           icon="chatbubbles-outline"
-          message="No questions yet. Ask the first one and put the whole field on the record."
+          message={t('No questions yet. Ask the first one and put the whole field on the record.')}
         />
       ) : (
-        questions.map((q) => (
-          <Card key={q.id} onPress={() => router.push(`/election-question/${q.id}`)}>
-            <ThemedText type="smallBold" style={{ fontSize: 15 }}>
-              {q.body}
-            </ThemedText>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
-              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {q.authorName} · {timeAgo(q.createdAt)}
+        // The questions people join lead the list (recency breaks ties via
+        // the stable sort over the newest-first query): upvoting an existing
+        // question beats re-asking it.
+        [...questions]
+          .sort((a, b) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
+          .map((q) => (
+            <Card key={q.id} onPress={() => router.push(`/election-question/${q.id}`)}>
+              <ThemedText type="smallBold" style={{ fontSize: 15 }}>
+                {q.body}
               </ThemedText>
-              {q.authorVerified && <VerifiedBadge compact />}
-              <View style={{ flex: 1 }} />
+              {/* One guaranteed line: the name yields (truncates) so the
+                  badge and pill stay aligned; the answer count gets its own
+                  line below rather than fighting for this one. */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+                <ThemedText
+                  type="small"
+                  themeColor="textSecondary"
+                  numberOfLines={1}
+                  style={{ fontSize: 12, flexShrink: 1 }}>
+                  {q.authorName} · {timeAgo(q.createdAt)}
+                </ThemedText>
+                {q.authorVerified && <VerifiedBadge compact />}
+                <View style={{ flex: 1 }} />
+                <ElectionQuestionJoin question={q} />
+              </View>
               {q.answerCount > 0 && (
                 <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 12 }}>
-                  {plural(q.answerCount, 'candidate has answered', 'candidates have answered')}
+                  {pluralT(q.answerCount, 'candidate has answered', 'candidates have answered')}
                 </ThemedText>
               )}
-            </View>
-          </Card>
-        ))
+            </Card>
+          ))
       )}
     </View>
   );

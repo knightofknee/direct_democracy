@@ -2,7 +2,7 @@
   "expo": {
     "name": "direct democracy",
     "slug": "direct-democracy",
-    "version": "1.0.5",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "directdemocracy",
@@ -21,7 +21,7 @@
     },
     "android": {
       "package": "com.briancarlisle.directdemocracy",
-      "versionCode": 4,
+      "versionCode": 6,
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -72,7 +72,8 @@
       "@react-native-firebase/app",
       "@react-native-firebase/app-check",
       "expo-build-properties",
-      "./plugins/with-rnfirebase-no-spm.js"
+      "./plugins/with-rnfirebase-no-spm.js",
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true,

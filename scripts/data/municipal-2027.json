@@ -1,0 +1,170 @@
+{
+  "election": "2027-municipal",
+  "candidates": [
+    {
+      "name": "Anna Valencia",
+      "race": "clerk",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Launched her re-election bid in July 2026, citing her record since 2017 of modernizing government services, expanding civic engagement, and making City Hall work for every Chicagoan.",
+      "priorCareer": "Chicago city clerk since January 2017, re-elected unopposed in 2019 and 2023; ran for Illinois secretary of state in 2022.",
+      "sourceUrls": [
+        "http://www.lawndalenews.com/2026/07/anna-valencia-launches-re-election-bid-for-chicago-city-clerk/",
+        "https://ballotpedia.org/Anna_Valencia"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Chicago_City_Clerk_Anna_Valencia_2019.jpg/960px-Chicago_City_Clerk_Anna_Valencia_2019.jpg"
+    },
+    {
+      "name": "Raheem Uqdah",
+      "race": "ward-3",
+      "party": null,
+      "incumbent": false,
+      "website": "https://raheemfor3.com/",
+      "runningOn": "Challenging Ald. Pat Dowell with a democratic-socialist platform focused on quality of life and community investment, building connections across racial and socioeconomic divides, and direct engagement with constituents. Endorsed by Chicago DSA in August 2026.",
+      "priorCareer": "Community organizing and social-investment professional with a Master's in Public Administration.",
+      "sourceUrls": [
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse",
+        "https://raheemfor3.com/meet-raheem/"
+      ],
+      "photoUrl": "https://raheemfor3.com/wp-content/uploads/2026/06/uqdah_raheem-1024x1536.jpg"
+    },
+    {
+      "name": "Byron Sigcho-Lopez",
+      "race": "ward-25",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.sigchofor25.com/",
+      "runningOn": "Launched his re-election campaign in August 2026, pledging to keep pushing a statewide 3 percent millionaire tax, improve transit access in Pilsen, build affordable housing, and address helicopter noise, framing the race as fighting for working people.",
+      "priorCareer": "25th Ward alderman since 2019; former educator and Pilsen community organizer.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/08/19/byron-sigcho-lopez-launches-reelection-campaign-for-alderman/"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/22nd_Ward_Alderman_Michael_Rodriguez_Striking_Chicago_Teachers_Surround_City_Hall_10-23-19_4248_%2848954717797%29_%28cropped%29.jpg"
+    },
+    {
+      "name": "Aida Flores",
+      "race": "ward-25",
+      "party": null,
+      "incumbent": false,
+      "website": "https://aidafor25.com",
+      "runningOn": "Running a third campaign for the seat on building an inclusive, multigenerational ward, walking every block, and publishing quarterly public report cards on ward progress.",
+      "priorCareer": "Pilsen educator; lost the 2023 runoff to Sigcho-Lopez with about 47 percent of the vote.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/02/04/aida-flores-again-running-for-25th-ward-aldermanic-seat/",
+        "https://blockclubchicago.org/2026/07/29/5-candidates-crowd-race-for-25th-ward-alderperson-a-potentially-open-race/"
+      ],
+      "photoUrl": "https://assets.nationbuilder.com/aidafloresfor25thward/pages/267/attachments/original/1784255878/Screenshot_2026-07-16_at_9.37.47%E2%80%AFPM.png?1784255878"
+    },
+    {
+      "name": "Nubia Batista Willman",
+      "race": "ward-25",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Running on an action-oriented approach to immigration advocacy and legal aid, with a focus on creating opportunities for immigrants and domestic violence survivors.",
+      "priorCareer": "Immigration attorney; former director of the city's Office of New Americans.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/07/29/5-candidates-crowd-race-for-25th-ward-alderperson-a-potentially-open-race/"
+      ],
+      "photoUrl": "https://img1.wsimg.com/isteam/ip/5c3e5226-8c87-4234-9a1b-5806564f2201/blob-f6f8969.png/:/cr=t:0%25,l:16.68%25,w:66.64%25,h:100%25/rs=w:800,h:800,cg:true"
+    },
+    {
+      "name": "Miguel Chacon",
+      "race": "ward-25",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Running on better schools, better homes, more affordable housing, and family economic stability; a vocal critic of the incumbent who says he opposes empty rhetoric.",
+      "priorCareer": "Real estate agent and 20-year Pilsen resident.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/07/29/5-candidates-crowd-race-for-25th-ward-alderperson-a-potentially-open-race/"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/6a7128e49f03fe37a1223f0a/293b9ee3-082d-4324-98e9-997226b2a1e8/Chacon+copy.jpg"
+    },
+    {
+      "name": "Leonardo Quintero",
+      "race": "ward-25",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Running to give residents a stronger voice in ward decisions, saying neighbors have felt silenced, ignored, and thrown away.",
+      "priorCareer": "Pilsen organizer and elected member of the local police district council.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/07/29/5-candidates-crowd-race-for-25th-ward-alderperson-a-potentially-open-race/"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/6a4816926926633cfd92cb04/72a74ef7-6f9b-43b1-b8fa-3ce947433205/Photo+Apr+20+2025%2C+12+38+43+AM.jpg"
+    },
+    {
+      "name": "Ian Watkins",
+      "race": "ward-25",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Running to build a ward rooted in dignity, safety, opportunity, and compassion, and has pledged to donate 10 percent of the aldermanic salary to a ward trust funding legal aid and emergency support for undocumented families.",
+      "priorCareer": "Classically trained pianist and retired ballet dancer.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/07/29/5-candidates-crowd-race-for-25th-ward-alderperson-a-potentially-open-race/"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/69ebac2a6b67f014d5915c7a/eab94bbc-ef28-44e4-b28d-bbf08a3e9db5/IMG_9956.jpeg"
+    },
+    {
+      "name": "Bill Conway",
+      "race": "ward-34",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.newdayconway.com/",
+      "runningOn": "Launched a re-election bid in July 2026, ending speculation about a mayoral run. His stated priorities are keeping neighborhoods and public transit safe, expanding funding for mental health and homelessness services to address root causes of crime, and holding the line on property taxes.",
+      "priorCareer": "34th Ward alderman since 2023; Navy veteran and former Cook County prosecutor.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/07/30/ald-bill-conway-launches-reelection-bid-ending-speculation-about-mayoral-run/",
+        "https://www.newdayconway.com/"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Bill_Conway_at_May_2023_Chicago_City_Council_Meeting.jpg/960px-Bill_Conway_at_May_2023_Chicago_City_Council_Meeting.jpg"
+    },
+    {
+      "name": "Kalen Luciano",
+      "race": "ward-44",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.kalenfor44.com/",
+      "runningOn": "Challenging Ald. Bennett Lawson on increasing housing supply through upzoning, reducing traffic violence with safer street infrastructure, participatory budgeting and monthly ward nights, expanding mental health services, and rejecting corporate donations. Endorsed by Chicago DSA in August 2026.",
+      "priorCareer": "Community organizer; co-founded Lakeview Urbanists and worked for Illinois state lawmakers.",
+      "sourceUrls": [
+        "https://www.kalenfor44.com/",
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/6a4eb52040070f1acbea4798/068ef550-ef25-4863-b6e1-9a538e643891/Hero+with+Overlay.png"
+    },
+    {
+      "name": "S Gronkiewicz-Doran",
+      "race": "ward-45",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.sgdfor45.com/",
+      "runningOn": "First declared challenger to Ald. Jim Gardiner, running on responsive constituent services, infrastructure fixes for basement flooding, revitalizing struggling business districts, community safety, and protecting immigrant neighbors. Endorsed by the 45th Ward Democratic organization; would be Chicago's first transgender alderperson.",
+      "priorCareer": "Corporate attorney with 18 years of experience; founding member of Neighbors for Affordable Housing and a local school council member in Jefferson Park.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/02/25/chicago-could-have-its-1st-trans-alderperson-as-gronkiewicz-doran-challenges-gardiner/",
+        "https://www.sgdfor45.com/"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/698a0a4f3ea3c5559ed2457f/ea1645e1-e2fd-4d7a-8baa-4617e3076d0a/IMG_7348.JPG"
+    }
+  ],
+  "raceNotes": [
+    {
+      "race": "ward-13",
+      "note": "An open seat: Ald. Marty Quinn announced in July 2026 that he will not seek re-election after four terms. No candidates for the seat are on record yet.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/07/08/southwest-side-ald-marty-quinn-wont-seek-reelection-after-4-terms-in-city-council/"
+      ]
+    },
+    {
+      "race": "treasurer",
+      "note": "Incumbent Melissa Conyears-Ervin has not said whether she will seek a third term, and no candidate has declared for this office yet. This page fills in as the field forms.",
+      "sourceUrls": [
+        "https://ballotpedia.org/Melissa_Conyears-Ervin"
+      ]
+    }
+  ]
+}

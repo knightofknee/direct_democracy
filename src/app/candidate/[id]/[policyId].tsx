@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
+import { CopyLinkButton } from '@/components/copy-link';
 import { PolicyBody } from '@/components/policy-body';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
@@ -99,15 +100,18 @@ export default function PolicyScreen() {
         {policy.source === 'site' && candidate?.sourceUrl ? (
           // Imported wholesale from the campaign site; the label goes away
           // the moment the candidate edits the policy in the app (takeover).
-          <Pressable
-            onPress={() => void openLink(candidate.sourceUrl!)}
-            style={styles.linkRow}
-            accessibilityRole="link">
-            <Ionicons name="globe-outline" size={14} color={theme.primary} />
-            <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
-              Imported from {host(candidate.sourceUrl)}
-            </ThemedText>
-          </Pressable>
+          <View style={styles.linkRow}>
+            <Pressable
+              onPress={() => void openLink(candidate.sourceUrl!)}
+              style={[styles.linkRow, { flex: 1 }]}
+              accessibilityRole="link">
+              <Ionicons name="globe-outline" size={14} color={theme.primary} />
+              <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
+                Imported from {host(candidate.sourceUrl)}
+              </ThemedText>
+            </Pressable>
+            <CopyLinkButton url={candidate.sourceUrl} label="Copy platform source link" />
+          </View>
         ) : null}
         <PolicyBody body={policy.body} />
       </View>
@@ -158,15 +162,15 @@ function Receipts({ links, title }: { links: Policy['links']; title: string }) {
         {title}
       </ThemedText>
       {links.map((link, i) => (
-        <Pressable
-          key={`${link.url}-${i}`}
-          onPress={() => void openLink(link.url)}
-          style={styles.linkRow}>
-          <Ionicons name="link-outline" size={14} color={theme.primary} />
-          <ThemedText type="small" style={{ color: theme.primary, flex: 1 }} numberOfLines={2}>
-            {link.label}
-          </ThemedText>
-        </Pressable>
+        <View key={`${link.url}-${i}`} style={styles.linkRow}>
+          <Pressable onPress={() => void openLink(link.url)} style={[styles.linkRow, { flex: 1 }]}>
+            <Ionicons name="link-outline" size={14} color={theme.primary} />
+            <ThemedText type="small" style={{ color: theme.primary, flex: 1 }} numberOfLines={2}>
+              {link.label}
+            </ThemedText>
+          </Pressable>
+          <CopyLinkButton url={link.url} label={`Copy link: ${link.label}`} />
+        </View>
       ))}
     </Card>
   );

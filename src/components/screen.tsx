@@ -1,3 +1,5 @@
+import { LinearGradient } from 'expo-linear-gradient';
+import { useScrollToTop } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,31 +26,59 @@ export const Screen = React.forwardRef<
 >(function Screen({ children, tab, style }, ref) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+
+  // Re-tapping the focused tab scrolls its screen back to the top (the
+  // platform convention). No-op on screens without a tab ancestor.
+  const scrollRef = React.useRef<ScrollView>(null);
+  useScrollToTop(scrollRef);
+  const setRef = (node: ScrollView | null) => {
+    scrollRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
+
   return (
-    <ScrollView
-      ref={ref}
-      style={{ flex: 1, backgroundColor: theme.background }}
-      contentContainerStyle={[
-        styles.content,
-        {
-          paddingTop: tab ? insets.top + Spacing.three : Spacing.three,
-          paddingBottom: (tab ? BottomTabInset : 0) + insets.bottom + Spacing.five,
-        },
-        style,
-      ]}
-      keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="interactive"
-      automaticallyAdjustKeyboardInsets
-      bounces={false}
-      overScrollMode="never">
-      <View style={styles.inner}>{children}</View>
-    </ScrollView>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      <ScrollView
+        ref={setRef}
+        style={{ flex: 1 }}
+        contentContainerStyle={[
+          styles.content,
+          {
+            paddingTop: tab ? insets.top + Spacing.three : Spacing.three,
+            paddingBottom: (tab ? BottomTabInset : 0) + insets.bottom + Spacing.five,
+          },
+          style,
+        ]}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        automaticallyAdjustKeyboardInsets
+        bounces={false}
+        overScrollMode="never">
+        <View style={styles.inner}>{children}</View>
+      </ScrollView>
+      {tab && (
+        // Tab screens have no native header, so scrolled content would sit
+        // flush behind the clock; this fade keeps the status bar readable.
+        <LinearGradient
+          pointerEvents="none"
+          colors={[theme.background, `${theme.background}00`]}
+          style={[styles.statusBarFade, { height: insets.top + Spacing.two }]}
+        />
+      )}
+    </View>
   );
 });
 
 const styles = StyleSheet.create({
   content: {
     paddingHorizontal: Spacing.three,
+  },
+  statusBarFade: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
   },
   inner: {
     width: '100%',

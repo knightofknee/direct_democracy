@@ -13,6 +13,9 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
 
   return (
     <Text
+      // Dynamic Type scales freely up to 1.4x; past that the dense rows
+      // (tallies, chips, grade lines) wrap into soup. Callers can override.
+      maxFontSizeMultiplier={1.4}
       style={[
         { color: theme[themeColor ?? 'text'] },
         type === 'default' && styles.default,

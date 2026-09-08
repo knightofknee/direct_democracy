@@ -378,7 +378,8 @@ service cloud.firestore {
 
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly([
-          'authorUid', 'authorName', 'authorVerified', 'body', 'answerCount', 'createdAt'
+          'authorUid', 'authorName', 'authorVerified', 'body', 'answerCount',
+          'upvotes', 'upvotesVerified', 'createdAt'
         ])
         && request.resource.data.authorUid == request.auth.uid
         && request.resource.data.authorName == me().displayName
@@ -387,7 +388,24 @@ service cloud.firestore {
         && request.resource.data.body.size() >= 10
         && request.resource.data.body.size() <= 1000
         && request.resource.data.answerCount == 0
+        // get() with a default: binaries shipped before question upvotes
+        // existed omit the fields, and that must stay a legal ask.
+        && request.resource.data.get('upvotes', 0) == 0
+        && request.resource.data.get('upvotesVerified', 0) == 0
         && request.resource.data.createdAt == request.time;
+
+      // Question upvotes: "I want this answered too". Presence is the whole
+      // ballot, one per person, retractable; the counts order the AMA list.
+      match /votes/{voterUid} {
+        allow read: if signedIn() && request.auth.uid == voterUid;
+        allow create: if signedIn()
+          && request.auth.uid == voterUid
+          && request.resource.data.keys().hasOnly(['uid', 'verified', 'createdAt'])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.verified == me().verified
+          && request.resource.data.createdAt == request.time;
+        allow delete: if signedIn() && request.auth.uid == voterUid;
+      }
 
       // The asker may withdraw only while unanswered - an answered question
       // is part of the candidates' public record. Admin: takedowns.
@@ -459,13 +477,14 @@ service cloud.firestore {
     match /officials/{officialUid} {
       allow read: if true;
 
-      // Officials edit their own bio and portrait link. The portrait is an
-      // externally hosted https URL - we never take custody of the image.
-      // Name/title are provisioned by admins; all counters are trigger-only.
+      // Officials edit their own bio, portrait link, and question-alert
+      // threshold. The portrait is an externally hosted https URL - we never
+      // take custody of the image. Name/title are provisioned by admins; all
+      // counters are trigger-only.
       allow update: if signedIn()
         && request.auth.uid == officialUid
         && verifiedEmail()
-        && onlyChanges(['bio', 'photoUrl'])
+        && onlyChanges(['bio', 'photoUrl', 'upvoteAlertThreshold'])
         && (
           !('photoUrl' in request.resource.data)
           || request.resource.data.photoUrl == null
@@ -478,10 +497,26 @@ service cloud.firestore {
         && (
           !('bio' in request.resource.data)
           || (request.resource.data.bio is string && request.resource.data.bio.size() <= 1000)
+        )
+        && (
+          !('upvoteAlertThreshold' in request.resource.data)
+          || (
+            request.resource.data.upvoteAlertThreshold is int
+            && request.resource.data.upvoteAlertThreshold >= 1
+            && request.resource.data.upvoteAlertThreshold <= 10000
+          )
         );
 
       // Approval ballots - one standing approve/disapprove per person,
       // changeable or retractable any time. Aggregated by onApprovalWrite.
+      // VERIFIED residents only is the product rule (a rating anonymous
+      // accounts could stuff would be worthless) and the 1.0.8+ client
+      // enforces it with grayed buttons. The server-side gate
+      // (`me().verified == true && me().wardId != null`) is deliberately NOT
+      // enabled yet: the 1.0.7 binary in the store shows live buttons to
+      // everyone and a rules deny surfaces as a raw permissions error.
+      // Re-add those two clauses once 1.0.8 is the installed base (when
+      // set-latest-version flips).
       match /approvals/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
         allow create, update: if signedIn()
@@ -501,8 +536,13 @@ service cloud.firestore {
           && request.resource.data.keys().hasOnly([
             'officialUid', 'authorUid', 'authorName', 'authorVerified', 'body',
             'status', 'response', 'respondedAt', 'answeredYes', 'answeredNo',
-            'answeredYesVerified', 'answeredNoVerified', 'createdAt'
+            'answeredYesVerified', 'answeredNoVerified', 'upvotes',
+            'upvotesVerified', 'createdAt'
           ])
+          // get() with a default: binaries shipped before question upvotes
+          // existed omit the fields, and that must stay a legal ask.
+          && request.resource.data.get('upvotes', 0) == 0
+          && request.resource.data.get('upvotesVerified', 0) == 0
           && request.resource.data.authorUid == request.auth.uid
           && request.resource.data.authorName == me().displayName
           && request.resource.data.authorVerified == me().verified
@@ -556,7 +596,59 @@ service cloud.firestore {
             && get(/databases/$(database)/documents/officials/$(officialUid)/questions/$(questionId)).data.response != null;
           allow delete: if signedIn() && request.auth.uid == judgeUid;
         }
+
+        // Question upvotes: "I want this answered too". Presence is the
+        // whole ballot (no value field), one per person, retractable. The
+        // verified snapshot drives the weight in the official's answer
+        // grade, so it must match the voter's live profile. The official
+        // cannot join questions put to themselves.
+        match /votes/{voterUid} {
+          allow read: if signedIn() && request.auth.uid == voterUid;
+          allow create: if signedIn()
+            && request.auth.uid == voterUid
+            && request.auth.uid != officialUid
+            && request.resource.data.keys().hasOnly(['uid', 'verified', 'createdAt'])
+            && request.resource.data.uid == request.auth.uid
+            && request.resource.data.verified == me().verified
+            && request.resource.data.createdAt == request.time;
+          allow delete: if signedIn() && request.auth.uid == voterUid;
+        }
       }
+    }
+
+    // ── App config ───────────────────────────────────────────────────────
+    // App-level config, not user data. config/app.latestVersion drives the
+    // update nudge (src/lib/app-update.ts) and is compared against the
+    // running binary's own version, so it must be readable BEFORE sign-in
+    // (the check runs at cold start). World-readable is fine: it holds only
+    // the released version string and public store links. Writes happen
+    // exclusively via admin tooling (scripts/set-latest-version.ts), never
+    // from clients.
+    match /config/app {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ── School board voter directory ─────────────────────────────────────
+    // Read-only nominee cards for the 2026 school board election, seeded by
+    // the operator (scripts/seed-school-board.ts) from public sources. Not
+    // accounts; nothing on them is client-writable.
+    match /schoolBoardCandidates/{nomineeId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ── Election voter directory ─────────────────────────────────────────
+    // Same contract for every other upcoming race (November 2026 statewide
+    // and county, February 2027 municipal): read-only cards and race notes
+    // seeded by scripts/seed-election.ts from public sources.
+    match /electionCandidates/{cardId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /electionRaceNotes/{noteId} {
+      allow read: if true;
+      allow write: if false;
     }
 
     // ── Candidates & the more perfect platform ───────────────────────────

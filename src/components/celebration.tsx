@@ -26,6 +26,7 @@ import { Button } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
+import { successHaptic } from '@/lib/haptics';
 import { takeAnticipatedMilestone, takeNewMilestone, type Milestone } from '@/lib/milestones';
 import type { UserStats } from '@/lib/types';
 
@@ -144,6 +145,7 @@ function CelebrationOverlay({
   const progress = useSharedValue(0);
 
   useEffect(() => {
+    successHaptic();
     progress.value = 0;
     progress.value = withTiming(1, { duration: 2600, easing: Easing.out(Easing.quad) });
     const timer = setTimeout(onDismiss, 5000);
