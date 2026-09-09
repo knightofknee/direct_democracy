@@ -80,34 +80,32 @@ STATUS: done 2026-08-03. Actual values created: Services ID is
 identifier; unconventional but valid - use THIS as the Services ID anywhere
 one is asked for), key "direct democracy sso", Key ID `V57352YU8Y`.
 
-## 4. Email-link sign-in on NATIVE (code done 2026-08-03; works on web)
+## 4. Email-link sign-in on NATIVE - DONE 2026-09-09, no console step
 
-Code side is DONE: iOS universal links
-(`applinks:direct-democracy-e338a.firebaseapp.com`) and Android App Links
-intent filters are in app.json, and the app already completes sign-in links
-it receives. If a custom link domain was configured instead of the default,
-set `EXPO_PUBLIC_AUTH_LINK_DOMAIN=<that domain>` in `.env` and swap the
-domain in app.json to match. When the app is not installed, links land on
-`https://www.waldgrave.com/directdemocracy` (EXPO_PUBLIC_AUTH_CONTINUE_URL).
+How it works: the emailed link goes to Firebase's own handler on
+firebaseapp.com, which forwards mode/oobCode/apiKey/lang to the continue
+URL. The continue URL is `https://www.waldgrave.com/directdemocracy/auth`
+(`.env` EXPO_PUBLIC_AUTH_CONTINUE_URL, from the first build after 1.0.10);
+the landing page `/directdemocracy` (continue URL in older builds) forwards
+sign-in links there too. That page opens the app through
+`directdemocracy://sign-in?<same query>`, which the existing use-auth code
+redeems (Firebase's parser reads only the query string). Other modes
+(password reset, verification) never reach the page: the handler renders
+its own form for them.
 
-Remaining (operator):
+Verified 2026-09-09 with a generated link in a browser: handler ->
+waldgrave handoff page with the parameters intact.
 
-1. Firebase console → Authentication → Settings → **Authorized domains** →
-   add `waldgrave.com` (the continue URL must be on an authorized domain).
-2. Firebase console → Project settings (gear icon) → the iOS app card →
-   make sure **Team ID R3H7M2M4F5** and the **App Store ID** (once the
-   listing exists) are filled in - Firebase uses these to serve the
-   apple-app-site-association file that makes the links open the app.
-3. Rebuild the app (`rm -rf ios && npx expo run:ios`, and any EAS build) so
-   the Associated Domains entitlement lands in the provisioning profile.
-4. Android (in progress 2026-08-03): package name
-   `com.briancarlisle.directdemocracy`. Register it in Firebase, put
-   google-services.json in the repo root (app.json already points at it).
-   After the first `eas build -p android`, run `eas credentials -p android`,
-   copy the SHA-1 AND SHA-256 fingerprints, and add both in Firebase console
-   → Project settings → Your apps → Android app → "Add fingerprint".
-   SHA-1 makes Google sign-in work on Android; SHA-256 makes App Links
-   (email sign-in links) verify.
+Not possible, tried both ways: customizing the project's action URL
+(Authentication -> Templates -> "Customize action URL") fails in the
+console with a generic error and in the Identity Toolkit API with
+EMAIL_TEMPLATE_UPDATE_NOT_ALLOWED. The `linkDomain` option requires a
+Firebase Hosting domain (INVALID_HOSTING_LINK_DOMAIN otherwise), which we
+do not run. waldgrave.com still serves the app-site-association (scoped to
+mode=signIn) and assetlinks for `/directdemocracy/auth`, and app.json
+carries `applinks:www.waldgrave.com` plus the intent filter, so a link on
+that path opens the app directly if the action URL ever becomes editable.
+Authorized domains now include both `waldgrave.com` and `www.waldgrave.com`.
 
 ## 5. App Check (before public launch - this is the anti-bot layer)
 

@@ -13,12 +13,14 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
+import { useT } from '@/lib/i18n';
 import type { AmaQuestion, Concern } from '@/lib/types';
 
 /** Everything you've put on the record, in one place. */
 export default function MyActivityScreen() {
   const router = useRouter();
   const { profile, loading: authLoading } = useAuth();
+  const t = useT();
 
   const { data: concerns, loading: concernsLoading } = useLiveQuery<Concern>(
     () =>
@@ -53,7 +55,7 @@ export default function MyActivityScreen() {
   if (!profile) {
     return (
       <Screen>
-        <Button title="Sign in first" onPress={() => router.replace('/sign-in')} />
+        <Button title={t('Sign in first')} onPress={() => router.replace('/sign-in')} />
       </Screen>
     );
   }
@@ -67,11 +69,11 @@ export default function MyActivityScreen() {
 
   return (
     <Screen>
-      <SectionHeader title="My concerns" subtitle="Tap one to see votes and comments" />
+      <SectionHeader title={t('My concerns')} subtitle={t('Tap one to see votes and comments')} />
       {concernsLoading ? (
         <SkeletonCards count={2} />
       ) : concerns.length === 0 ? (
-        <EmptyState icon="megaphone-outline" message="You haven't raised a concern yet." />
+        <EmptyState icon="megaphone-outline" message={t("You haven't raised a concern yet.")} />
       ) : (
         concerns.map((c) => (
           <Card key={c.id} onPress={() => router.push(`/concern/${c.id}`)}>
@@ -87,11 +89,11 @@ export default function MyActivityScreen() {
         ))
       )}
 
-      <SectionHeader title="My AMA questions" subtitle="Tap one to see the official's page" />
+      <SectionHeader title={t('My AMA questions')} subtitle={t("Tap one to see the official's page")} />
       {questionsLoading ? (
         <SkeletonCards count={2} />
       ) : questions.length === 0 ? (
-        <EmptyState icon="help-circle-outline" message="You haven't asked an official anything yet." />
+        <EmptyState icon="help-circle-outline" message={t("You haven't asked an official anything yet.")} />
       ) : (
         questions.map((q) => (
           <Card key={q.id} onPress={() => router.push(`/official/${q.officialUid}`)}>
@@ -100,7 +102,7 @@ export default function MyActivityScreen() {
             </ThemedText>
             <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center', flexWrap: 'wrap' }}>
               <Chip
-                label={STATUS_LABELS[q.status]}
+                label={t(STATUS_LABELS[q.status])}
                 tone={q.status === 'answered' ? 'success' : q.status === 'dodged' ? 'danger' : 'neutral'}
               />
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>

@@ -20,6 +20,7 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { host, plural, timeAgo } from '@/lib/format';
+import { useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
 import { openLink } from '@/lib/open-link';
 import type { Candidate, Policy, Poll } from '@/lib/types';
@@ -31,6 +32,7 @@ export default function CandidateScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { profile } = useAuth();
+  const t = useT();
 
   const { data: candidate, loading } = useLiveDoc<Candidate>(
     () => (id ? doc(db, 'candidates', id) : null),
@@ -54,7 +56,7 @@ export default function CandidateScreen() {
         {loading ? (
           <SkeletonCards count={2} />
         ) : (
-          <EmptyState icon="alert-circle-outline" message="Candidate not found." />
+          <EmptyState icon="alert-circle-outline" message={t('Candidate not found.')} />
         )}
       </Screen>
     );
@@ -75,7 +77,7 @@ export default function CandidateScreen() {
               {candidate.name}
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {candidate.office}
+              {t(candidate.office)}
             </ThemedText>
           </View>
         </View>
@@ -83,13 +85,13 @@ export default function CandidateScreen() {
         {candidate.websiteUrl ? (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
             <Button
-              title="Campaign website"
+              title={t('Campaign website')}
               variant="secondary"
               icon={<Ionicons name="globe-outline" size={15} />}
               onPress={() => void openLink(candidate.websiteUrl!)}
               style={{ flex: 1 }}
             />
-            <CopyLinkButton url={candidate.websiteUrl} label="Copy campaign website link" />
+            <CopyLinkButton url={candidate.websiteUrl} label={t('Copy campaign website link')} />
           </View>
         ) : null}
       </Card>
@@ -101,7 +103,7 @@ export default function CandidateScreen() {
           <SyncCard candidate={candidate} />
           <View style={{ flexDirection: 'row', gap: Spacing.two }}>
             <Button
-              title="Add a policy"
+              title={t('Add a policy')}
               variant="secondary"
               style={{ flex: 1 }}
               onPress={() =>
@@ -109,7 +111,7 @@ export default function CandidateScreen() {
               }
             />
             <Button
-              title="New poll"
+              title={t('New poll')}
               variant="secondary"
               style={{ flex: 1 }}
               onPress={() => router.push('/new-poll')}
@@ -120,13 +122,13 @@ export default function CandidateScreen() {
 
       {candidate.directory ? (
         <SectionHeader
-          title="the rest of the field"
-          subtitle="Declared candidates who have published no platform to import"
+          title={t('the rest of the field')}
+          subtitle={t('Declared candidates who have published no platform to import')}
         />
       ) : (
         <SectionHeader
-          title="the more perfect platform"
-          subtitle="Every policy, open to your arguments"
+          title={t('the more perfect platform')}
+          subtitle={t('Every policy, open to your arguments')}
         />
       )}
       {candidate.platformNote ? (
@@ -144,7 +146,7 @@ export default function CandidateScreen() {
         <ImportedNote sourceUrl={candidate.sourceUrl} />
       ) : null}
       {visiblePolicies.length === 0 ? (
-        <EmptyState icon="document-text-outline" message="No policies published yet." />
+        <EmptyState icon="document-text-outline" message={t('No policies published yet.')} />
       ) : (
         <PlatformList
           candidateUid={candidate.uid}
@@ -156,8 +158,8 @@ export default function CandidateScreen() {
       {openPolls.length > 0 && (
         <>
           <SectionHeader
-            title={`Questions from ${candidate.name.split(' ')[0]}`}
-            subtitle="Polls this candidate has put to the city"
+            title={t('Questions from {name}').replace('{name}', candidate.name.split(' ')[0])}
+            subtitle={t('Polls this candidate has put to the city')}
           />
           {openPolls.map((poll) => (
             <PollCard key={poll.id} poll={poll} />
@@ -213,6 +215,7 @@ function PlatformNote({
  */
 function ImportedNote({ sourceUrl }: { sourceUrl: string }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
       <Pressable
@@ -221,10 +224,10 @@ function ImportedNote({ sourceUrl }: { sourceUrl: string }) {
         style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flex: 1 }}>
         <Ionicons name="globe-outline" size={14} color={theme.primary} />
         <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
-          Imported from {host(sourceUrl)}
+          {t('Imported from {host}').replace('{host}', host(sourceUrl))}
         </ThemedText>
       </Pressable>
-      <CopyLinkButton url={sourceUrl} label="Copy platform source link" />
+      <CopyLinkButton url={sourceUrl} label={t('Copy platform source link')} />
     </View>
   );
 }
@@ -242,6 +245,7 @@ function PlatformList({
 }) {
   const router = useRouter();
   const theme = useTheme();
+  const t = useT();
 
   let lastSection: string | null = null;
   const rows: React.ReactNode[] = [];
@@ -265,7 +269,7 @@ function PlatformList({
             <ThemedText type="smallBold" style={{ fontSize: 15, flex: 1 }}>
               {policy.title}
             </ThemedText>
-            {policy.archived && <Chip label="Hidden" tone="warning" icon="eye-off" />}
+            {policy.archived && <Chip label={t('Hidden')} tone="warning" icon="eye-off" />}
             <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
           </View>
           {/* Directory entries get a line more: the preview is most of their
@@ -288,6 +292,7 @@ function PlatformList({
 /** Candidates manage their own card: bio, portrait link, website link. */
 function EditCard({ candidate }: { candidate: Candidate }) {
   const { profile } = useAuth();
+  const t = useT();
   const [editing, setEditing] = useState(false);
   const [bio, setBio] = useState(candidate.bio ?? '');
   const [photoUrl, setPhotoUrl] = useState(candidate.photoUrl ?? '');
@@ -302,21 +307,21 @@ function EditCard({ candidate }: { candidate: Candidate }) {
       await updateCandidateCard(profile, { bio, photoUrl, websiteUrl });
       setEditing(false);
     } catch (e) {
-      notifyError('Could not save', e);
+      notifyError(t('Could not save'), e);
     } finally {
       setSaving(false);
     }
   };
 
   if (!editing) {
-    return <Button title="Edit my card" variant="secondary" onPress={() => setEditing(true)} />;
+    return <Button title={t('Edit my card')} variant="secondary" onPress={() => setEditing(true)} />;
   }
 
   return (
     <Card>
-      <Field label="Bio" value={bio} onChangeText={setBio} multiline maxLength={1000} />
+      <Field label={t('Bio')} value={bio} onChangeText={setBio} multiline maxLength={1000} />
       <Field
-        label="Portrait link (https)"
+        label={t('Portrait link (https)')}
         placeholder="https://your-site.org/portrait.jpg"
         value={photoUrl}
         onChangeText={setPhotoUrl}
@@ -324,7 +329,7 @@ function EditCard({ candidate }: { candidate: Candidate }) {
         keyboardType="url"
       />
       <Field
-        label="Campaign website (https)"
+        label={t('Campaign website (https)')}
         placeholder="https://your-campaign.org"
         value={websiteUrl}
         onChangeText={setWebsiteUrl}
@@ -332,12 +337,11 @@ function EditCard({ candidate }: { candidate: Candidate }) {
         keyboardType="url"
       />
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        Link a photo hosted on your own site or campaign page - direct democracy displays it but
-        never stores the image.
+        {t('Link a photo hosted on your own site or campaign page - direct democracy displays it but never stores the image.')}
       </ThemedText>
       <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-        <Button title="Cancel" variant="ghost" onPress={() => setEditing(false)} style={{ flex: 1 }} />
-        <Button title="Save" onPress={save} loading={saving} style={{ flex: 1 }} />
+        <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(false)} style={{ flex: 1 }} />
+        <Button title={t('Save')} onPress={save} loading={saving} style={{ flex: 1 }} />
       </View>
     </Card>
   );
@@ -348,6 +352,7 @@ function EditCard({ candidate }: { candidate: Candidate }) {
  * the site is the source of truth, this button pulls it in on demand.
  */
 function SyncCard({ candidate }: { candidate: Candidate }) {
+  const t = useT();
   const [syncing, setSyncing] = useState(false);
 
   if (!candidate.sourceUrl) return null;
@@ -357,12 +362,12 @@ function SyncCard({ candidate }: { candidate: Candidate }) {
     try {
       const result = await syncMyPlatform();
       notify(
-        'Platform synced',
-        `${plural(result.synced, 'policy', 'policies')} pulled from your site` +
-          (result.archived > 0 ? `, ${result.archived} no longer on it (hidden).` : '.')
+        t('Platform synced'),
+        t('{count} pulled from your site').replace('{count}', plural(result.synced, 'policy', 'policies')) +
+          (result.archived > 0 ? t(', {n} no longer on it (hidden).').replace('{n}', String(result.archived)) : '.')
       );
     } catch (e) {
-      notifyError('Sync failed', e);
+      notifyError(t('Sync failed'), e);
     } finally {
       setSyncing(false);
     }
@@ -371,11 +376,11 @@ function SyncCard({ candidate }: { candidate: Candidate }) {
   return (
     <Card>
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        Your platform syncs from your campaign site (nightly, or right now with the button).
-        {candidate.lastSyncedAt ? ` Last synced ${timeAgo(candidate.lastSyncedAt)}.` : ''}
+        {t('Your platform syncs from your campaign site (nightly, or right now with the button).')}
+        {candidate.lastSyncedAt ? ` ${t('Last synced')} ${timeAgo(candidate.lastSyncedAt)}.` : ''}
       </ThemedText>
       <Button
-        title="Sync from my site"
+        title={t('Sync from my site')}
         variant="secondary"
         icon={<Ionicons name="refresh" size={15} />}
         onPress={sync}

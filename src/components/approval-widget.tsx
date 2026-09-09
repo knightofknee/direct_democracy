@@ -11,6 +11,7 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { tapHaptic } from '@/lib/haptics';
+import { useT } from '@/lib/i18n';
 import { notifyError } from '@/lib/notify';
 import { useOptimistic } from '@/lib/optimistic';
 import { emptyTally, withBallotDelta } from '@/lib/tally';
@@ -28,6 +29,7 @@ import { APPROVAL_MIN_BALLOTS, computeApproval, setApproval } from '@/services/o
 export function ApprovalWidget({ official }: { official: Official }) {
   const theme = useTheme();
   const router = useRouter();
+  const t = useT();
   const { profile } = useAuth();
 
   const { data: mine } = useLiveDoc<{ value: ApprovalValue }>(
@@ -78,7 +80,7 @@ export function ApprovalWidget({ official }: { official: Official }) {
     });
     setApproval(profile, official.uid, value).catch((e) => {
       agg.rollback();
-      notifyError('Could not record approval', e);
+      notifyError(t('Could not record approval'), e);
     });
   };
 
@@ -88,7 +90,7 @@ export function ApprovalWidget({ official }: { official: Official }) {
         <>
           <View style={[styles.buttonRow, unverified && { opacity: 0.45 }]}>
             <ApprovalButton
-              label="Approve"
+              label={t('Approve')}
               icon="thumbs-up"
               selected={mine?.value === 'approve'}
               color={theme.verified}
@@ -97,7 +99,7 @@ export function ApprovalWidget({ official }: { official: Official }) {
               onPress={() => cast('approve')}
             />
             <ApprovalButton
-              label="Disapprove"
+              label={t('Disapprove')}
               icon="thumbs-down"
               selected={mine?.value === 'disapprove'}
               color={theme.danger}
@@ -114,7 +116,7 @@ export function ApprovalWidget({ official }: { official: Official }) {
               style={styles.verifyRow}>
               <Ionicons name="shield-checkmark-outline" size={14} color={theme.primary} />
               <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
-                Approval votes are for verified residents - verify to grade your officials
+                {t('Approval votes are for verified residents - verify to grade your officials')}
               </ThemedText>
             </Pressable>
           )}
@@ -123,12 +125,14 @@ export function ApprovalWidget({ official }: { official: Official }) {
       {/* Only the graded number: with the ballot verified-only, an all-users
           line would differ from this one by pre-gate ballots alone. */}
       <RatingLine
-        label="Constituents"
+        label={t('Constituents')}
         pctValue={rating.constituentPct}
         detail={
           rating.constituentPct == null
-            ? `${rating.constituentBallots} of ${APPROVAL_MIN_BALLOTS} verified ward votes needed`
-            : `${rating.constituentBallots} verified ward vote${rating.constituentBallots === 1 ? '' : 's'}`
+            ? t('{n} of {min} verified ward votes needed')
+                .replace('{n}', String(rating.constituentBallots))
+                .replace('{min}', String(APPROVAL_MIN_BALLOTS))
+            : `${rating.constituentBallots} ${rating.constituentBallots === 1 ? t('verified ward vote') : t('verified ward votes')}`
         }
         emphasized
       />
@@ -188,6 +192,7 @@ function RatingLine({
   emphasized?: boolean;
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <View style={{ gap: 3 }}>
       <View style={styles.ratingRow}>
@@ -198,7 +203,7 @@ function RatingLine({
           type={emphasized ? 'smallBold' : 'small'}
           style={{ fontSize: 13 }}
           themeColor={pctValue == null ? 'textSecondary' : undefined}>
-          {pctValue == null ? '-' : `${pctValue}% approve`}
+          {pctValue == null ? '-' : `${pctValue}% ${t('approve')}`}
         </ThemedText>
       </View>
       <View style={[styles.track, { backgroundColor: theme.backgroundSelected }]}>

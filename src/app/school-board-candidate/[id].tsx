@@ -16,6 +16,7 @@ import { db } from '@/lib/firebase';
 import { host } from '@/lib/format';
 import { openLink } from '@/lib/open-link';
 import type { SchoolBoardCandidate } from '@/lib/types';
+import { useLocalized, useT } from '@/lib/i18n';
 
 /**
  * A school board nominee's voter-info card: what they say they are running
@@ -24,6 +25,8 @@ import type { SchoolBoardCandidate } from '@/lib/types';
  */
 export default function SchoolBoardCandidateScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const loc = useLocalized();
+  const t = useT();
 
   const { data: candidate, loading } = useLiveDoc<SchoolBoardCandidate>(
     () => (id ? doc(db, 'schoolBoardCandidates', id) : null),
@@ -36,7 +39,7 @@ export default function SchoolBoardCandidateScreen() {
         {loading ? (
           <SkeletonCards count={2} />
         ) : (
-          <EmptyState icon="alert-circle-outline" message="Candidate not found." />
+          <EmptyState icon="alert-circle-outline" message={t('Candidate not found.')} />
         )}
       </Screen>
     );
@@ -53,36 +56,36 @@ export default function SchoolBoardCandidateScreen() {
             </ThemedText>
             <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap' }}>
               <Chip label={schoolBoardRaceLabel(candidate.race)} />
-              {candidate.incumbent && <Chip label="Incumbent" tone="primary" />}
+              {candidate.incumbent && <Chip label={t('Incumbent')} tone="primary" />}
             </View>
           </View>
         </View>
         {candidate.website ? (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
             <Button
-              title={`Campaign site (${host(candidate.website)})`}
+              title={`${t('Campaign site')} (${host(candidate.website)})`}
               variant="secondary"
               onPress={() => openLink(candidate.website!)}
               style={{ flex: 1 }}
             />
-            <CopyLinkButton url={candidate.website} label="Copy campaign site link" />
+            <CopyLinkButton url={candidate.website} label={t('Copy campaign site link')} />
           </View>
         ) : null}
       </Card>
 
-      <SectionHeader title="Running on" />
+      <SectionHeader title={t('Running on')} />
       <Card>
         <ThemedText type="small" style={{ fontSize: 15, lineHeight: 22 }}>
-          {candidate.runningOn}
+          {loc(candidate.runningOn, candidate.runningOnEs)}
         </ThemedText>
       </Card>
 
       {candidate.priorCareer ? (
         <>
-          <SectionHeader title="Background" />
+          <SectionHeader title={t('Background')} />
           <Card>
             <ThemedText type="small" style={{ fontSize: 15, lineHeight: 22 }}>
-              {candidate.priorCareer}
+              {loc(candidate.priorCareer, candidate.priorCareerEs)}
             </ThemedText>
           </Card>
         </>
@@ -91,7 +94,7 @@ export default function SchoolBoardCandidateScreen() {
       {candidate.sourceUrls.length > 0 && (
         <View style={{ gap: Spacing.one }}>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            Compiled from public sources:
+            {t('Compiled from public sources:')}
           </ThemedText>
           {candidate.sourceUrls.map((url) => (
             <ThemedText

@@ -55,14 +55,16 @@ export const HOW_TO_VOTE_2026 = {
  * 2026-09-07); the municipal date closes the list so the countdown keeps
  * working after November. Local midnight, Chicago.
  */
+// Labels are verb phrases so they read as one sentence with the countdown
+// appended: "Early voting starts in 22 days", "Election day is today".
 export const VOTING_MILESTONES: { date: string; label: string; election: string }[] = [
-  { date: '2026-10-01', label: 'Early voting starts downtown', election: '2026-11-03' },
-  { date: '2026-10-06', label: 'Last day to register by mail', election: '2026-11-03' },
-  { date: '2026-10-18', label: 'Last day to register online', election: '2026-11-03' },
+  { date: '2026-10-01', label: 'Early voting starts', election: '2026-11-03' },
+  { date: '2026-10-06', label: 'Mail registration closes', election: '2026-11-03' },
+  { date: '2026-10-18', label: 'Online registration closes', election: '2026-11-03' },
   { date: '2026-10-19', label: 'Early voting opens in every ward', election: '2026-11-03' },
-  { date: '2026-10-29', label: 'Last day to apply for a mail ballot', election: '2026-11-03' },
-  { date: '2026-11-03', label: 'Election day', election: '2026-11-03' },
-  { date: '2027-02-23', label: 'Municipal election day', election: '2027-02-23' },
+  { date: '2026-10-29', label: 'Mail ballot applications close', election: '2026-11-03' },
+  { date: '2026-11-03', label: 'General election day is', election: '2026-11-03' },
+  { date: '2027-02-23', label: 'Municipal election day is', election: '2027-02-23' },
 ];
 
 function localDate(iso: string): Date {
@@ -79,11 +81,16 @@ export function daysUntil(iso: string, now: Date): number {
 /** The first milestone that is today or later, with days to its election. */
 export function nextMilestone(
   now: Date
-): { date: string; label: string; electionDays: number | null } | null {
+): { date: string; label: string; election: string; electionDays: number | null } | null {
   const next = VOTING_MILESTONES.find((m) => daysUntil(m.date, now) >= 0);
   if (!next) return null;
   const electionDays = daysUntil(next.election, now);
-  return { date: next.date, label: next.label, electionDays: electionDays > 0 ? electionDays : null };
+  return {
+    date: next.date,
+    label: next.label,
+    election: next.election,
+    electionDays: electionDays > 0 ? electionDays : null,
+  };
 }
 
 export interface RaceInfo {

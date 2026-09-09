@@ -25,7 +25,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { openLink } from '@/lib/open-link';
 import type { ElectionCandidateCard, ElectionRaceNote } from '@/lib/types';
-import { useT } from '@/lib/i18n';
+import { useT, useLocalized } from '@/lib/i18n';
 
 /**
  * One race on either upcoming ballot: the candidates a voter picks between,
@@ -38,6 +38,7 @@ export default function ElectionRaceScreen() {
   const router = useRouter();
   const theme = useTheme();
   const t = useT();
+  const loc = useLocalized();
   const info = race ? raceInfo(race) : null;
   const known = race ? isKnownRace(race) : false;
   const retention = race === 'judicial-retention';
@@ -101,7 +102,7 @@ export default function ElectionRaceScreen() {
       {raceNote ? (
         <Card>
           <ThemedText type="small" style={{ fontSize: 13, lineHeight: 19 }}>
-            {raceNote.note}
+            {loc(raceNote.note, raceNote.noteEs)}
           </ThemedText>
         </Card>
       ) : null}
@@ -134,16 +135,16 @@ export default function ElectionRaceScreen() {
                       <ThemedText type="smallBold" style={{ fontSize: 15 }}>
                         {candidate.name}
                       </ThemedText>
-                      {candidate.party && <Chip label={candidate.party} />}
+                      {candidate.party && <Chip label={t(candidate.party)} />}
                       {candidate.incumbent && !retention && <Chip label={t('Incumbent')} tone="primary" />}
                     </View>
                     {candidate.seat || candidate.court ? (
                       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }} numberOfLines={1}>
-                        {[candidate.seat, candidate.court].filter(Boolean).join(' · ')}
+                        {[candidate.seat, candidate.court && t(candidate.court)].filter(Boolean).join(' · ')}
                       </ThemedText>
                     ) : candidate.priorCareer ? (
                       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }} numberOfLines={1}>
-                        {candidate.priorCareer}
+                        {loc(candidate.priorCareer, candidate.priorCareerEs)}
                       </ThemedText>
                     ) : null}
                   </View>
@@ -155,7 +156,7 @@ export default function ElectionRaceScreen() {
                 {/* The comparison happens here, not one tap deeper. */}
                 {!retention && (
                   <ThemedText type="small" style={{ fontSize: 13, lineHeight: 19 }} numberOfLines={3}>
-                    {candidate.runningOn}
+                    {loc(candidate.runningOn, candidate.runningOnEs)}
                   </ThemedText>
                 )}
               </Card>

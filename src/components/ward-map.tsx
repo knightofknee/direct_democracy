@@ -15,6 +15,7 @@ import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 import { Spacing } from '@/constants/theme';
 import { WARD_MAP_VIEW, WARD_SHAPES } from '@/constants/ward-map';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 
 /**
  * The city, ward by ward: every boundary a tappable shape. Pinch (or the
@@ -186,13 +187,14 @@ function MapButton({
   label: string;
   onPress: () => void;
 }) {
+  const t = useT();
   const theme = useTheme();
   return (
     <Pressable
       onPress={onPress}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={t(label)}
       style={({ pressed }) => [
         styles.mapButton,
         { backgroundColor: theme.background, borderColor: theme.border },

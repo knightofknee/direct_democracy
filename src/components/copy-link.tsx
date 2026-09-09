@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Pressable } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 
 /**
  * The standard copy affordance next to an external link: tap copies the URL,
@@ -12,6 +13,7 @@ import { useTheme } from '@/hooks/use-theme';
  */
 export function CopyLinkButton({ url, label }: { url: string; label?: string }) {
   const theme = useTheme();
+  const t = useT();
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -38,7 +40,7 @@ export function CopyLinkButton({ url, label }: { url: string; label?: string }) 
       onPress={copy}
       hitSlop={10}
       accessibilityRole="button"
-      accessibilityLabel={label ?? 'Copy link'}
+      accessibilityLabel={label ?? t('Copy link')}
       style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1, padding: 4 })}>
       <Ionicons
         name={copied ? 'checkmark' : 'copy-outline'}

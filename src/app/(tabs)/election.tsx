@@ -190,7 +190,9 @@ export default function ElectionScreen() {
 
 /**
  * The next voting deadline, counted down from today, so the dates buried in
- * the how-to-vote card have a one-line presence at the top of the tab.
+ * the how-to-vote card have a presence at the top of the tab. Two centered
+ * lines, each a complete sentence with units ("Early voting starts in 22
+ * days" over "55 days until election day") - never a wrapping fragment.
  * Tapping lands on that card. Renders nothing once every milestone is past.
  */
 function NextDeadline({ onPress }: { onPress: () => void }) {
@@ -202,31 +204,45 @@ function NextDeadline({ onPress }: { onPress: () => void }) {
   const days = daysUntil(next.date, new Date());
   const when =
     days === 0 ? t('today') : days === 1 ? t('tomorrow') : locale === 'es' ? `en ${days} días` : `in ${days} days`;
+  const headline = `${t(next.label)} ${when}`;
+  // The second line only exists when the milestone isn't election day
+  // itself, and names which election it counts to.
+  const municipal = next.election === '2027-02-23';
+  const electionLine =
+    next.electionDays != null && next.electionDays !== days
+      ? `${next.electionDays} ${t(
+          next.electionDays === 1
+            ? municipal
+              ? 'day until the municipal election'
+              : 'day until the general election'
+            : municipal
+              ? 'days until the municipal election'
+              : 'days until the general election'
+        )}`
+      : null;
   return (
     <Pressable
       onPress={onPress}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel={`${next.label} ${when}. Jump to voting dates and places.`}
-      style={{
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        gap: 5,
-        marginTop: Spacing.one,
-        alignSelf: 'stretch',
-      }}>
-      <Ionicons name="time-outline" size={14} color={theme.primary} style={{ marginTop: 2 }} />
-      {/* One Text so the two parts wrap together on a long (Spanish) day. */}
-      <ThemedText
-        type="smallBold"
-        style={{ color: theme.primary, fontSize: 13, lineHeight: 18, flexShrink: 1, textAlign: 'center' }}>
-        {t(next.label)} {when}
-        {next.electionDays != null && next.electionDays !== days ? (
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 13, lineHeight: 18 }}>
-            {' '}· {t('election day in')} {next.electionDays}
-          </ThemedText>
-        ) : null}
-      </ThemedText>
+      accessibilityLabel={`${headline}. ${electionLine ?? ''}`}
+      style={{ alignSelf: 'stretch', alignItems: 'center', gap: 2, marginTop: Spacing.one }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+        <Ionicons name="time-outline" size={14} color={theme.primary} />
+        <ThemedText
+          type="smallBold"
+          style={{ color: theme.primary, fontSize: 13, lineHeight: 18, textAlign: 'center' }}>
+          {headline}
+        </ThemedText>
+      </View>
+      {electionLine && (
+        <ThemedText
+          type="small"
+          themeColor="textSecondary"
+          style={{ fontSize: 12, lineHeight: 16, textAlign: 'center' }}>
+          {electionLine}
+        </ThemedText>
+      )}
     </Pressable>
   );
 }

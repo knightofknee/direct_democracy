@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
 import { blockUser, REPORT_REASONS, reportContent } from '@/services/moderation';
 
@@ -31,6 +32,7 @@ export function ContentActions({
 }) {
   const theme = useTheme();
   const router = useRouter();
+  const t = useT();
   const { profile } = useAuth();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -52,9 +54,9 @@ export function ContentActions({
     try {
       await reportContent(me, { contentPath, contentType, reason, excerpt, authorUid });
       setOpen(false);
-      notify('Report sent', 'Thank you - the operators will review it.');
+      notify(t('Report sent'), t('Thank you - the operators will review it.'));
     } catch (e) {
-      notifyError('Could not send report', e);
+      notifyError(t('Could not send report'), e);
     } finally {
       setBusy(false);
     }
@@ -68,11 +70,11 @@ export function ContentActions({
       await blockUser(me, authorUid, authorName);
       setOpen(false);
       notify(
-        `Blocked ${authorName}`,
-        'Their content is hidden for you. Manage blocked users from your profile.'
+        t('Blocked {name}').replace('{name}', authorName),
+        t('Their content is hidden for you. Manage blocked users from your profile.')
       );
     } catch (e) {
-      notifyError('Could not block', e);
+      notifyError(t('Could not block'), e);
     } finally {
       setBusy(false);
     }
@@ -89,7 +91,7 @@ export function ContentActions({
   return (
     <View style={[styles.sheet, { borderColor: theme.border, backgroundColor: theme.background }]}>
       <ThemedText type="smallBold" style={{ fontSize: 12 }}>
-        Report this {contentType}
+        {t('Report this {type}').replace('{type}', t(contentType))}
       </ThemedText>
       <View style={styles.reasonRow}>
         {REPORT_REASONS.map((r) => (
@@ -99,7 +101,7 @@ export function ContentActions({
             onPress={() => report(r.key)}
             style={[styles.chip, { borderColor: theme.border, backgroundColor: theme.backgroundElement }]}>
             <ThemedText type="small" style={{ fontSize: 12 }}>
-              {r.label}
+              {t(r.label)}
             </ThemedText>
           </Pressable>
         ))}
@@ -110,12 +112,12 @@ export function ContentActions({
           onPress={block}
           style={[styles.chip, { borderColor: theme.danger, backgroundColor: theme.dangerSoft }]}>
           <ThemedText type="small" style={{ fontSize: 12, color: theme.danger }}>
-            Block {authorName}
+            {t('Block {name}').replace('{name}', authorName)}
           </ThemedText>
         </Pressable>
         <Pressable disabled={busy} onPress={() => setOpen(false)} style={styles.chip} hitSlop={4}>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            Cancel
+            {t('Cancel')}
           </ThemedText>
         </Pressable>
       </View>

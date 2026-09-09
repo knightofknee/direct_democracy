@@ -49,7 +49,7 @@ export default function SettingsScreen() {
     return (
       <Screen>
         {language}
-        <Button title="Sign in first" onPress={() => router.replace('/sign-in')} />
+        <Button title={t('Sign in first')} onPress={() => router.replace('/sign-in')} />
       </Screen>
     );
   }
@@ -62,17 +62,15 @@ export default function SettingsScreen() {
       {profile.role === 'citizen' && (
         <Card>
           <ThemedText type="smallBold" style={{ fontSize: 13, color: theme.danger }}>
-            Delete account
+            {t('Delete account')}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            Permanently removes your sign-in, profile, verification status, and standing approvals
-            of officials. Anything you posted stays on the record but is re-attributed to
-            [deleted], and votes you cast remain counted. This cannot be undone.
+            {t('Permanently removes your sign-in, profile, verification status, and standing approvals of officials. Anything you posted stays on the record but is re-attributed to [deleted], and votes you cast remain counted. This cannot be undone.')}
           </ThemedText>
           {confirmDelete ? (
             <View style={{ flexDirection: 'row', gap: Spacing.two }}>
               <Button
-                title="Yes, delete forever"
+                title={t('Yes, delete forever')}
                 variant="danger"
                 loading={deleting}
                 style={{ flex: 1 }}
@@ -80,9 +78,9 @@ export default function SettingsScreen() {
                   // Third gate: the most destructive action in the app gets a
                   // system alert on top of the inline two-step.
                   const sure = await confirmDestructive(
-                    'Delete your account?',
-                    'This permanently removes your sign-in, profile, verification, and standing approvals. Posts stay on the record as [deleted] and cast ballots remain counted. It cannot be undone.',
-                    'Delete forever'
+                    t('Delete your account?'),
+                    t('This permanently removes your sign-in, profile, verification, and standing approvals. Posts stay on the record as [deleted] and cast ballots remain counted. It cannot be undone.'),
+                    t('Delete forever')
                   );
                   if (!sure) return;
                   setDeleting(true);
@@ -92,9 +90,9 @@ export default function SettingsScreen() {
                   try {
                     await deleteAccount();
                     await signOut();
-                    notify('Account deleted', 'Your account and identity data are gone.');
+                    notify(t('Account deleted'), t('Your account and identity data are gone.'));
                   } catch (e) {
-                    notifyError('Could not delete account', e);
+                    notifyError(t('Could not delete account'), e);
                     setDeleting(false);
                   } finally {
                     setDeletingAccount(false);
@@ -102,7 +100,7 @@ export default function SettingsScreen() {
                 }}
               />
               <Button
-                title="Keep my account"
+                title={t('Keep my account')}
                 variant="ghost"
                 style={{ flex: 1 }}
                 onPress={() => setConfirmDelete(false)}
@@ -110,7 +108,7 @@ export default function SettingsScreen() {
             </View>
           ) : (
             <Button
-              title="Delete my account…"
+              title={t('Delete my account…')}
               variant="ghost"
               onPress={() => setConfirmDelete(true)}
             />

@@ -10,6 +10,7 @@ import {
   DISTRICT_LOOKUP_URL,
   SCHOOL_BOARD_ELECTION_DATE,
   SCHOOL_BOARD_RACES,
+  schoolBoardRaceLabel,
 } from '@/constants/school-board';
 import { Spacing } from '@/constants/theme';
 import { useLiveQuery } from '@/hooks/use-firestore';
@@ -53,10 +54,10 @@ export function SchoolBoardSection() {
         <View style={styles.row}>
           <View style={{ flex: 1, gap: 3 }}>
             <ThemedText type="smallBold" style={{ fontSize: 15 }}>
-              {president.label}
+              {schoolBoardRaceLabel(president.id)}
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {president.detail}
+              {t(president.detail)}
               {countByRace.has(president.id)
                 ? ` · ${pluralT(countByRace.get(president.id)!, 'candidate')}`
                 : ''}
@@ -76,7 +77,7 @@ export function SchoolBoardSection() {
               key={race.id}
               onPress={() => router.push(`/school-board/${race.id}`)}
               accessibilityRole="button"
-              accessibilityLabel={`School board ${race.label}`}
+              accessibilityLabel={`${t('school board')} ${schoolBoardRaceLabel(race.id)}`}
               style={({ pressed }) => [
                 styles.districtButton,
                 {

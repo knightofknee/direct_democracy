@@ -12,11 +12,13 @@ import { useAuth } from '@/hooks/use-auth';
 import { notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import { usingEmulators } from '@/lib/firebase';
+import { useT } from '@/lib/i18n';
 import { startVerification } from '@/services/users';
 
 export default function VerifyScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const t = useT();
   const { profile } = useAuth();
   const [wardId, setWardId] = useState<number | null>(profile?.wardId ?? null);
   const [busy, setBusy] = useState(false);
@@ -24,7 +26,7 @@ export default function VerifyScreen() {
   if (!profile) {
     return (
       <Screen>
-        <Button title="Sign in first" onPress={() => router.replace('/sign-in')} />
+        <Button title={t('Sign in first')} onPress={() => router.replace('/sign-in')} />
       </Screen>
     );
   }
@@ -35,9 +37,9 @@ export default function VerifyScreen() {
         <Card>
           <View style={{ alignItems: 'center', gap: Spacing.two, paddingVertical: Spacing.three }}>
             <Ionicons name="shield-checkmark" size={40} color={theme.verified} />
-            <ThemedText type="smallBold">You’re verified</ThemedText>
+            <ThemedText type="smallBold">{t('You’re verified')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              {profile.wardId != null ? `Resident of the ${wardLabel(profile.wardId)}.` : 'Verified Chicago resident.'}
+              {profile.wardId != null ? t('Resident of the {ward}.').replace('{ward}', wardLabel(profile.wardId)) : t('Verified Chicago resident.')}
             </ThemedText>
           </View>
         </Card>
@@ -61,7 +63,7 @@ export default function VerifyScreen() {
       // In the real Didit flow the webhook flips the profile; the app reacts
       // to the live profile listener, so there's nothing to do here.
     } catch (e) {
-      notify('Verification failed', e instanceof Error ? e.message : 'Something went wrong.');
+      notify(t('Verification failed'), e instanceof Error ? e.message : t('Something went wrong.'));
     } finally {
       setBusy(false);
     }
@@ -70,10 +72,10 @@ export default function VerifyScreen() {
   return (
     <Screen>
       <Card>
-        <ThemedText type="smallBold">How verification works</ThemedText>
-        <Step n={1} text="You verify your ID and Chicago address with Didit, a third-party identity service. Your documents go to them, never to us." />
-        <Step n={2} text="All we ever save: a verified yes/no, the ward you live in, and a unique identifier that stops one person from verifying twice." />
-        <Step n={3} text="No name, no address, no document. Your display name stays anonymous, even once verified." />
+        <ThemedText type="smallBold">{t('How verification works')}</ThemedText>
+        <Step n={1} text={t('You verify your ID and Chicago address with Didit, a third-party identity service. Your documents go to them, never to us.')} />
+        <Step n={2} text={t('All we ever save: a verified yes/no, the ward you live in, and a unique identifier that stops one person from verifying twice.')} />
+        <Step n={3} text={t('No name, no address, no document. Your display name stays anonymous, even once verified.')} />
       </Card>
 
       {usingEmulators && (
@@ -118,7 +120,7 @@ export default function VerifyScreen() {
       )}
 
       <Button
-        title={usingEmulators ? 'Simulate verification' : 'Start verification with Didit'}
+        title={usingEmulators ? 'Simulate verification' : t('Start verification with Didit')}
         onPress={begin}
         loading={busy}
       />

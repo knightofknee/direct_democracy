@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 import type { TallyLens } from '@/lib/types';
 
 const LENSES: { key: TallyLens; label: string }[] = [
@@ -22,6 +23,7 @@ export function LensToggle({
   onChange: (lens: TallyLens) => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <View style={[styles.track, { backgroundColor: theme.backgroundElement }]}>
       {LENSES.map((lens) => {
@@ -39,7 +41,7 @@ export function LensToggle({
                 fontWeight: selected ? '700' : '500',
                 color: selected ? theme.primary : theme.textSecondary,
               }}>
-              {lens.label}
+              {t(lens.label)}
             </ThemedText>
           </Pressable>
         );

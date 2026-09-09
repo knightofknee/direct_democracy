@@ -11,7 +11,7 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import type { Candidate, Official } from '@/lib/types';
 import { computeGrade } from '@/services/officials';
-import { usePlural } from '@/lib/i18n';
+import { usePlural, useT } from '@/lib/i18n';
 
 /**
  * An official's public row card - portrait, claim status, grade - as shown on
@@ -20,6 +20,7 @@ import { usePlural } from '@/lib/i18n';
 export function OfficialRow({ official }: { official: Official }) {
   const router = useRouter();
   const theme = useTheme();
+  const t = useT();
   const grade = computeGrade(official);
   return (
     <Card onPress={() => router.push(`/official/${official.uid}`)}>
@@ -28,10 +29,10 @@ export function OfficialRow({ official }: { official: Official }) {
         <View style={{ flex: 1, gap: 2 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
             <ThemedText type="smallBold">{official.name}</ThemedText>
-            {official.claimed && <Chip label="on the platform" tone="success" />}
+            {official.claimed && <Chip label={t('on the platform')} tone="success" />}
           </View>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {official.title} · ask them anything
+            {official.title} · {t('ask them anything')}
           </ThemedText>
         </View>
         <GradeBadge letter={grade.letter} score={grade.overall} />
@@ -45,6 +46,7 @@ export function OfficialRow({ official }: { official: Official }) {
 export function CandidateRow({ candidate }: { candidate: Candidate }) {
   const router = useRouter();
   const theme = useTheme();
+  const t = useT();
   const pluralT = usePlural();
   return (
     <Card onPress={() => router.push(`/candidate/${candidate.uid}`)}>
@@ -55,7 +57,7 @@ export function CandidateRow({ candidate }: { candidate: Candidate }) {
             {candidate.name}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {candidate.office}
+            {t(candidate.office)}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {candidate.directory

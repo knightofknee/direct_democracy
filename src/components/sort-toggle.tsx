@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 
 export type ConcernSort = 'top' | 'newest';
 
@@ -26,6 +27,7 @@ export function SortToggle({
   onChange: (sort: ConcernSort) => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <View style={[styles.track, { backgroundColor: theme.backgroundElement }]}>
       {SORTS.map((sort) => {
@@ -45,7 +47,7 @@ export function SortToggle({
                 fontWeight: selected ? '700' : '500',
                 color: selected ? theme.primary : theme.textSecondary,
               }}>
-              {sort.label}
+              {t(sort.label)}
             </ThemedText>
           </Pressable>
         );

@@ -17,6 +17,19 @@ export type Locale = 'en' | 'es';
 const LOCALE_KEY = 'locale';
 const PROMPTED_KEY = 'locale.prompted';
 
+// Mirror of the active locale for code that runs outside React (time
+// formatting, notify fallbacks). The provider keeps it in sync.
+let activeLocale: Locale = 'en';
+
+export function getLocale(): Locale {
+  return activeLocale;
+}
+
+/** Non-hook `t` for code outside components (formatters, notify). */
+export function tr(source: string): string {
+  return activeLocale === 'es' ? (ES[source] ?? source) : source;
+}
+
 interface LocaleState {
   locale: Locale;
   /** Null until storage has been read; the prompt waits for it. */
@@ -40,7 +53,10 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     Promise.all([AsyncStorage.getItem(LOCALE_KEY), AsyncStorage.getItem(PROMPTED_KEY)])
       .then(([saved, wasPrompted]) => {
-        if (saved === 'es' || saved === 'en') setLocaleState(saved);
+        if (saved === 'es' || saved === 'en') {
+          activeLocale = saved;
+          setLocaleState(saved);
+        }
         setPrompted(wasPrompted === '1');
       })
       .catch(() => {})
@@ -48,6 +64,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setLocale = useCallback((next: Locale) => {
+    activeLocale = next;
     setLocaleState(next);
     setPrompted(true);
     AsyncStorage.multiSet([
@@ -69,6 +86,19 @@ export function useT(): (source: string) => string {
   const { locale } = useLocale();
   return useCallback(
     (source: string) => (locale === 'es' ? (ES[source] ?? source) : source),
+    [locale]
+  );
+}
+
+/**
+ * Pick the Spanish rendition of an operator-authored data field when the
+ * locale is Spanish and a translation exists; the English is the fallback,
+ * so untranslated data reads as English, never blank.
+ */
+export function useLocalized(): (en: string | null, es?: string | null) => string | null {
+  const { locale } = useLocale();
+  return useCallback(
+    (en: string | null, es?: string | null) => (locale === 'es' && es ? es : en),
     [locale]
   );
 }

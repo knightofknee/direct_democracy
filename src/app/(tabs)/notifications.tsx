@@ -19,6 +19,7 @@ import { timeAgo } from '@/lib/format';
 import { notifyError } from '@/lib/notify';
 import type { AppNotification } from '@/lib/types';
 import { markAllNotificationsRead, markNotificationRead } from '@/services/notifications';
+import { useT } from '@/lib/i18n';
 
 /**
  * The inbox: answers to your questions, replies to your comments, writing
@@ -30,6 +31,7 @@ import { markAllNotificationsRead, markNotificationRead } from '@/services/notif
 export default function NotificationsScreen() {
   const router = useRouter();
   const { profile, loading: authLoading } = useAuth();
+  const t = useT();
 
   const { data: notifications, loading } = useLiveQuery<AppNotification>(
     () =>
@@ -49,11 +51,11 @@ export default function NotificationsScreen() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
           <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
-            notifications
+            {t('notifications')}
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-          Answers, replies, and credits, as they land.
+          {t('Answers, replies, and credits, as they land.')}
         </ThemedText>
         <FlagAccent />
       </View>
@@ -64,26 +66,26 @@ export default function NotificationsScreen() {
         <>
           <EmptyState
             icon="notifications-outline"
-            message="Sign in and this is where responses to your questions and comments arrive."
+            message={t('Sign in and this is where responses to your questions and comments arrive.')}
           />
-          <Button title="Sign in" onPress={() => router.push('/sign-in')} />
+          <Button title={t('Sign in')} onPress={() => router.push('/sign-in')} />
         </>
       ) : loading ? (
         <SkeletonCards />
       ) : notifications.length === 0 ? (
         <EmptyState
           icon="notifications-outline"
-          message="Nothing yet. Ask a question or join an argument and the responses land here."
+          message={t('Nothing yet. Ask a question or join an argument and the responses land here.')}
         />
       ) : (
         <>
           {unread > 0 && (
             <Button
-              title={`Mark all ${unread} read`}
+              title={t('Mark all {n} read').replace('{n}', String(unread))}
               variant="ghost"
               onPress={() =>
                 markAllNotificationsRead(profile.uid, notifications).catch((e) =>
-                  notifyError('Could not update', e)
+                  notifyError(t('Could not update'), e)
                 )
               }
             />

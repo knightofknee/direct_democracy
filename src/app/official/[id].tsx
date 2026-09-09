@@ -24,6 +24,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { host, timeAgo } from '@/lib/format';
 import { tapHaptic } from '@/lib/haptics';
+import { useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
 import { useOptimistic } from '@/lib/optimistic';
 import { openLink } from '@/lib/open-link';
@@ -51,6 +52,7 @@ export default function OfficialAmaScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { profile } = useAuth();
+  const t = useT();
   const [questionText, setQuestionText] = useState('');
   const [asking, setAsking] = useState(false);
 
@@ -71,7 +73,7 @@ export default function OfficialAmaScreen() {
         {loading ? (
           <SkeletonCards count={2} />
         ) : (
-          <EmptyState icon="alert-circle-outline" message="Official not found." />
+          <EmptyState icon="alert-circle-outline" message={t('Official not found.')} />
         )}
       </Screen>
     );
@@ -87,7 +89,7 @@ export default function OfficialAmaScreen() {
     }
     const body = questionText.trim();
     if (body.length < 10) {
-      notify('Almost there', 'Ask a question of at least 10 characters.');
+      notify(t('Almost there'), t('Ask a question of at least 10 characters.'));
       return;
     }
     setAsking(true);
@@ -95,7 +97,7 @@ export default function OfficialAmaScreen() {
       await askQuestion(profile, official.uid, body);
       setQuestionText('');
     } catch (e) {
-      notifyError('Could not ask', e);
+      notifyError(t('Could not ask'), e);
     } finally {
       setAsking(false);
     }
@@ -110,14 +112,14 @@ export default function OfficialAmaScreen() {
           <ClaimGate claimed={official.claimed} name={official.name} />
           <EditCard official={official} />
           <Button
-            title={official.wardId != null ? 'Put a question to your ward or the city' : 'Put a question to the city'}
+            title={official.wardId != null ? t('Put a question to your ward or the city') : t('Put a question to the city')}
             onPress={() => router.push('/new-poll')}
           />
         </>
       ) : (
         <Card>
           <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-            Do you approve of the job {official.name.split(' ')[0]} is doing?
+            {t('Do you approve of the job {name} is doing?').replace('{name}', official.name.split(' ')[0])}
           </ThemedText>
           <ApprovalWidget official={official} />
         </Card>
@@ -125,23 +127,23 @@ export default function OfficialAmaScreen() {
 
       <SectionHeader
         title="AMA"
-        subtitle="Ask anything. The community judges whether the question was answered sufficiently."
+        subtitle={t('Ask anything. The community judges whether the question was answered sufficiently.')}
       />
       {!isThisOfficial && (
         <Card>
           <Field
-            placeholder={`Ask ${official.name} anything…`}
+            placeholder={t('Ask {name} anything…').replace('{name}', official.name)}
             value={questionText}
             onChangeText={setQuestionText}
             multiline
           />
-          <Button title="Ask" onPress={ask} disabled={!questionText.trim()} loading={asking} />
+          <Button title={t('Ask')} onPress={ask} disabled={!questionText.trim()} loading={asking} />
         </Card>
       )}
 
-      <SectionHeader title={`Questions (${grade.answers.asked})`} />
+      <SectionHeader title={`${t('Questions')} (${grade.answers.asked})`} />
       {questions.length === 0 ? (
-        <EmptyState icon="help-circle-outline" message="No questions yet. Ask the first one." />
+        <EmptyState icon="help-circle-outline" message={t('No questions yet. Ask the first one.')} />
       ) : (
         // The questions people join lead the list (recency breaks ties via
         // the stable sort over the newest-first query) - upvoting an
@@ -190,6 +192,7 @@ function GradeCard({
   grade: ReturnType<typeof computeGrade>;
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <Card>
       <View style={styles.headerRow}>
@@ -205,7 +208,7 @@ function GradeCard({
         <View style={{ alignItems: 'center', gap: 3 }}>
           <GradeBadge letter={grade.letter} score={grade.overall} size={54} />
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 10, lineHeight: 12 }}>
-            OVERALL
+            {t('OVERALL')}
           </ThemedText>
         </View>
       </View>
@@ -216,13 +219,12 @@ function GradeCard({
         <View style={styles.contactRow}>
           <Ionicons name="checkmark-circle" size={14} color={theme.verified} />
           <ThemedText type="small" style={{ color: theme.verified, fontSize: 12 }}>
-            On the platform - this official answers here
+            {t('On the platform - this official answers here')}
           </ThemedText>
         </View>
       ) : (
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          Not on the platform yet. This profile is public record; {official.name.split(' ')[0]} can
-          claim it any time, and unanswered questions stay pending until they do.
+          {t('Not on the platform yet. This profile is public record; {name} can claim it any time, and unanswered questions stay pending until they do.').replace('{name}', official.name.split(' ')[0])}
         </ThemedText>
       )}
 
@@ -254,8 +256,8 @@ function GradeCard({
 
       <View style={styles.axesRow}>
         <AxisSummary
-          title="Approval"
-          subtitle="how well liked"
+          title={t('Approval')}
+          subtitle={t('how well liked')}
           value={
             grade.approval.constituentPct == null
               ? '-'
@@ -265,22 +267,21 @@ function GradeCard({
         />
         <View style={[styles.axisDivider, { backgroundColor: theme.border }]} />
         <AxisSummary
-          title="Answers"
-          subtitle="straight answers given"
+          title={t('Answers')}
+          subtitle={t('straight answers given')}
           value={!grade.answersGraded || grade.answers.score == null ? '-' : `${grade.answers.score}`}
           score={grade.answersGraded ? grade.answers.score : null}
           onInfo={() =>
             notify(
-              'How answers are graded',
-              'Every response counts as answered until the community judges it a dodge. Each question is weighted by the verified people who joined it, so ignoring a question fifty people want answered costs far more than ignoring one nobody backed. Unanswered questions get a week of grace before they count as ignored.'
+              t('How answers are graded'),
+              t('Every response counts as answered until the community judges it a dodge. Each question is weighted by the verified people who joined it, so ignoring a question fifty people want answered costs far more than ignoring one nobody backed. Unanswered questions get a week of grace before they count as ignored.')
             )
           }
         />
       </View>
 
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {grade.answers.answered} answered · {grade.answers.dodged} dodged ·{' '}
-        {grade.answers.ignored} ignored · {grade.answers.pending} pending
+        {`${grade.answers.answered} ${t('answered')} · ${grade.answers.dodged} ${t('dodged')} · ${grade.answers.ignored} ${t('ignored')} · ${grade.answers.pending} ${t('pending')}`}
       </ThemedText>
     </Card>
   );
@@ -301,6 +302,7 @@ function AxisSummary({
   onInfo?: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const color = gradeColor(score, theme);
   return (
     <View style={{ flex: 1, gap: 2, alignItems: 'center' }}>
@@ -316,7 +318,7 @@ function AxisSummary({
             onPress={onInfo}
             hitSlop={8}
             accessibilityRole="button"
-            accessibilityLabel={`How ${title.toLowerCase()} are graded`}>
+            accessibilityLabel={t('How {axis} are graded').replace('{axis}', title.toLowerCase())}>
             <Ionicons name="information-circle-outline" size={14} color={theme.textSecondary} />
           </Pressable>
         )}
@@ -331,6 +333,7 @@ function AxisSummary({
 /** Officials manage their own card: bio + externally hosted portrait link. */
 function EditCard({ official }: { official: Official }) {
   const { profile } = useAuth();
+  const t = useT();
   const [editing, setEditing] = useState(false);
   const [bio, setBio] = useState(official.bio ?? '');
   const [photoUrl, setPhotoUrl] = useState(official.photoUrl ?? '');
@@ -344,7 +347,7 @@ function EditCard({ official }: { official: Official }) {
   const save = async () => {
     const parsed = Number(threshold.trim());
     if (!Number.isInteger(parsed) || parsed < 1) {
-      notify('Almost there', 'The question alert threshold must be a whole number, 1 or more.');
+      notify(t('Almost there'), t('The question alert threshold must be a whole number, 1 or more.'));
       return;
     }
     setSaving(true);
@@ -352,7 +355,7 @@ function EditCard({ official }: { official: Official }) {
       await updateOfficialCard(profile, { bio, photoUrl, upvoteAlertThreshold: parsed });
       setEditing(false);
     } catch (e) {
-      notifyError('Could not save', e);
+      notifyError(t('Could not save'), e);
     } finally {
       setSaving(false);
     }
@@ -360,15 +363,15 @@ function EditCard({ official }: { official: Official }) {
 
   if (!editing) {
     return (
-      <Button title="Edit my card" variant="secondary" onPress={() => setEditing(true)} />
+      <Button title={t('Edit my card')} variant="secondary" onPress={() => setEditing(true)} />
     );
   }
 
   return (
     <Card>
-      <Field label="Bio" value={bio} onChangeText={setBio} multiline maxLength={1000} />
+      <Field label={t('Bio')} value={bio} onChangeText={setBio} multiline maxLength={1000} />
       <Field
-        label="Portrait link (https)"
+        label={t('Portrait link (https)')}
         placeholder="https://your-site.org/portrait.jpg"
         value={photoUrl}
         onChangeText={setPhotoUrl}
@@ -376,22 +379,21 @@ function EditCard({ official }: { official: Official }) {
         keyboardType="url"
       />
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        Link a photo hosted on your own site or campaign page - direct democracy displays it but
-        never stores the image.
+        {t('Link a photo hosted on your own site or campaign page - direct democracy displays it but never stores the image.')}
       </ThemedText>
       <Field
-        label="Question alert threshold"
+        label={t('Question alert threshold')}
         value={threshold}
         onChangeText={setThreshold}
         keyboardType="number-pad"
         maxLength={5}
       />
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {"You'll get a notification when a question in your AMA reaches this many upvotes."}
+        {t("You'll get a notification when a question in your AMA reaches this many upvotes.")}
       </ThemedText>
       <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-        <Button title="Cancel" variant="ghost" onPress={() => setEditing(false)} style={{ flex: 1 }} />
-        <Button title="Save" onPress={save} loading={saving} style={{ flex: 1 }} />
+        <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(false)} style={{ flex: 1 }} />
+        <Button title={t('Save')} onPress={save} loading={saving} style={{ flex: 1 }} />
       </View>
     </Card>
   );
@@ -409,6 +411,7 @@ function QuestionCard({
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
+  const t = useT();
   const [responseText, setResponseText] = useState('');
   const [busy, setBusy] = useState(false);
   const [confirmWithdraw, setConfirmWithdraw] = useState(false);
@@ -422,7 +425,7 @@ function QuestionCard({
     try {
       await deleteQuestion(profile, question);
     } catch (e) {
-      notifyError('Could not withdraw', e);
+      notifyError(t('Could not withdraw'), e);
     } finally {
       setBusy(false);
     }
@@ -459,7 +462,7 @@ function QuestionCard({
       await setQuestionUpvote(profile, question, up);
     } catch (e) {
       settle();
-      notifyError('Your voice was not recorded', e);
+      notifyError(t('Your voice was not recorded'), e);
     }
   };
 
@@ -498,7 +501,7 @@ function QuestionCard({
       await respondToQuestion(profile, question, responseText);
       setResponseText('');
     } catch (e) {
-      notifyError('Could not respond', e);
+      notifyError(t('Could not respond'), e);
     } finally {
       setBusy(false);
     }
@@ -528,14 +531,14 @@ function QuestionCard({
     });
     judgeResponse(profile, question, answered).catch((e) => {
       verdictCounts.rollback();
-      notifyError('Could not record judgment', e);
+      notifyError(t('Could not record judgment'), e);
     });
   };
 
   return (
     <Card>
       <View style={styles.metaRow}>
-        <Chip label={statusChip.label} tone={statusChip.tone} />
+        <Chip label={t(statusChip.label)} tone={statusChip.tone} />
         {question.authorVerified && <VerifiedBadge compact />}
         {/* One guaranteed line: the name yields (truncates) so the status
             chip, checkmark, and upvote pill always stay aligned. */}
@@ -571,12 +574,12 @@ function QuestionCard({
         question.status === 'awaitingResponse' &&
         (confirmWithdraw ? (
           <View style={styles.judgeRow}>
-            <Button title="Yes, withdraw" variant="danger" onPress={withdraw} disabled={busy} />
-            <Button title="Keep it" variant="ghost" onPress={() => setConfirmWithdraw(false)} />
+            <Button title={t('Yes, withdraw')} variant="danger" onPress={withdraw} disabled={busy} />
+            <Button title={t('Keep it')} variant="ghost" onPress={() => setConfirmWithdraw(false)} />
           </View>
         ) : (
           <Button
-            title="Withdraw my question"
+            title={t('Withdraw my question')}
             variant="ghost"
             onPress={() => setConfirmWithdraw(true)}
           />
@@ -587,7 +590,7 @@ function QuestionCard({
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Ionicons name="mic" size={13} color={theme.primary} />
             <ThemedText type="smallBold" style={{ fontSize: 12, color: theme.primary }}>
-              Official response · {timeAgo(question.respondedAt)}
+              {t('Official response')} · {timeAgo(question.respondedAt)}
             </ThemedText>
             <View style={{ flex: 1 }} />
             <ContentActions
@@ -605,18 +608,18 @@ function QuestionCard({
       {question.response && !isThisOfficial && (
         <View style={{ gap: Spacing.two }}>
           <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-            Did this answer the question?
+            {t('Did this answer the question?')}
           </ThemedText>
           <View style={styles.judgeRow}>
             <Button
-              title={`Answered${myJudgment?.answered === true ? ' ✓' : ''}`}
+              title={`${t('Answered')}${myJudgment?.answered === true ? ' ✓' : ''}`}
               variant={myJudgment?.answered === true ? 'primary' : 'secondary'}
               onPress={() => judge(true)}
               disabled={busy}
               style={{ flex: 1 }}
             />
             <Button
-              title={`Dodged${myJudgment?.answered === false ? ' ✓' : ''}`}
+              title={`${t('Dodged')}${myJudgment?.answered === false ? ' ✓' : ''}`}
               variant={myJudgment?.answered === false ? 'danger' : 'secondary'}
               onPress={() => judge(false)}
               disabled={busy}
@@ -626,7 +629,7 @@ function QuestionCard({
           {verdictTally.totalAll > 0 && (
             <TallyResults
               tally={verdictTally}
-              options={VERDICT_OPTIONS}
+              options={VERDICT_OPTIONS.map((o) => ({ ...o, label: t(o.label) }))}
               highlightKeys={
                 myJudgment ? [myJudgment.answered ? 'answered' : 'dodged'] : undefined
               }
@@ -639,13 +642,13 @@ function QuestionCard({
       {isThisOfficial && !question.response && (
         <View style={{ gap: Spacing.two }}>
           <Field
-            placeholder="Write your response…"
+            placeholder={t('Write your response…')}
             value={responseText}
             onChangeText={setResponseText}
             multiline
           />
           <Button
-            title="Post response"
+            title={t('Post response')}
             onPress={respond}
             disabled={!responseText.trim()}
             loading={busy}

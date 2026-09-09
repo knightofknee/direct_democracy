@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Button } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 import {
   checkForAppUpdate,
   isSnoozed,
@@ -35,6 +36,7 @@ const CHECK_INTERVAL_MS = 30 * 60 * 1000;
  */
 export function UpdateModal() {
   const theme = useTheme();
+  const t = useT();
   const [info, setInfo] = useState<AppUpdateInfo | null>(null);
   const lastCheckRef = useRef(0);
 
@@ -81,21 +83,20 @@ export function UpdateModal() {
         <View style={[styles.card, { backgroundColor: theme.background }]}>
           <ThemedText style={styles.emoji}>⬆️</ThemedText>
           <ThemedText type="smallBold" style={styles.title}>
-            Update available
+            {t('Update available')}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={styles.body}>
-            A newer version of direct democracy is on the store. Update now for
-            the latest fixes and features.
+            {t('A newer version of direct democracy is on the store. Update now for the latest fixes and features.')}
           </ThemedText>
-          <Button title="Update" onPress={openStore} style={styles.updateButton} />
+          <Button title={t('Update')} onPress={openStore} style={styles.updateButton} />
           <Pressable
             onPress={dismiss}
             accessibilityRole="button"
-            accessibilityLabel="Close"
+            accessibilityLabel={t('Close')}
             hitSlop={8}
             style={styles.closeButton}>
             <ThemedText type="small" themeColor="textSecondary">
-              Close
+              {t('Close')}
             </ThemedText>
           </Pressable>
         </View>

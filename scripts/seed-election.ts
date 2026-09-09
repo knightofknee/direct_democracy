@@ -48,6 +48,8 @@ interface Entry {
   photoUrl?: string | null;
   runningOn: string;
   priorCareer: string | null;
+  runningOnEs?: string | null;
+  priorCareerEs?: string | null;
   seat?: string | null;
   court?: string | null;
   ratings?: { source: string; rating: string; url?: string | null }[];
@@ -57,6 +59,7 @@ interface Entry {
 interface RaceNote {
   race: string;
   note: string;
+  noteEs?: string | null;
   sourceUrls?: string[];
 }
 
@@ -138,14 +141,14 @@ function validate(file: ElectionFile): void {
       problems.push(`${e.name}: photoUrl must be https`);
     if (!Array.isArray(e.sourceUrls) || e.sourceUrls.length === 0)
       problems.push(`${e.name}: needs at least one source URL`);
-    for (const text of [e.runningOn, e.priorCareer ?? '']) {
+    for (const text of [e.runningOn, e.priorCareer ?? '', e.runningOnEs ?? '', e.priorCareerEs ?? '']) {
       if (/[–—]/.test(text)) problems.push(`${e.name}: em/en dash in copy`);
     }
   }
   for (const n of file.raceNotes ?? []) {
     if (!validRace(n.race)) problems.push(`race note: bad race "${n.race}"`);
     if (!n.note?.trim()) problems.push(`race note ${n.race}: empty note`);
-    if (/[–—]/.test(n.note)) problems.push(`race note ${n.race}: em/en dash in copy`);
+    if (/[–—]/.test(n.note + (n.noteEs ?? ''))) problems.push(`race note ${n.race}: em/en dash in copy`);
   }
   if (problems.length) {
     console.error(`Seed data problems in ${file.election}:`);
@@ -189,6 +192,8 @@ async function seedElection(file: ElectionFile): Promise<void> {
       photoUrl: e.photoUrl ?? null,
       runningOn: e.runningOn.trim(),
       priorCareer: e.priorCareer?.trim() || null,
+      runningOnEs: e.runningOnEs?.trim() || null,
+      priorCareerEs: e.priorCareerEs?.trim() || null,
       seat: e.seat?.trim() || null,
       court: e.court?.trim() || null,
       ratings: (e.ratings ?? []).map((r) => ({
@@ -220,6 +225,7 @@ async function seedElection(file: ElectionFile): Promise<void> {
         election: file.election,
         race: n.race,
         note: n.note.trim(),
+        noteEs: n.noteEs?.trim() || null,
         sourceUrls: n.sourceUrls ?? [],
       },
       { merge: false }

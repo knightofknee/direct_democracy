@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { pct, plural } from '@/lib/format';
+import { useT } from '@/lib/i18n';
 import { tallyFor } from '@/lib/tally';
 import type { DualTally } from '@/lib/types';
 
@@ -26,6 +27,7 @@ export function TallyResults({
   noun?: string;
 }) {
   const theme = useTheme();
+  const t = useT();
   const { counts, total } = tallyFor(tally, 'all');
   const verified = tallyFor(tally, 'verified');
 
@@ -44,7 +46,7 @@ export function TallyResults({
                 {mine ? '  ✓' : ''}
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {`${percent}% · verified ${verifiedPercent}%`}
+                {`${percent}% · ${t('verified')} ${verifiedPercent}%`}
               </ThemedText>
             </View>
             <View style={[styles.barTrack, { backgroundColor: theme.backgroundSelected }]}>

@@ -22,6 +22,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useTheme } from '@/hooks/use-theme';
 import { auth } from '@/lib/firebase';
+import { useT } from '@/lib/i18n';
 import { notify } from '@/lib/notify';
 
 export default function SignInScreen() {
@@ -29,6 +30,7 @@ export default function SignInScreen() {
   const theme = useTheme();
   const isDark = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
+  const t = useT();
   const { user, signIn, signUp, signInWithGoogle, signInWithApple, sendMagicLink } = useAuth();
 
   const [mode, setMode] = useState<'signIn' | 'signUp'>('signIn');
@@ -106,7 +108,7 @@ export default function SignInScreen() {
     setSendingEmail(true);
     try {
       await sendMagicLink(email);
-      notify('Link sent', 'Check your email on this device. The link signs you in with no password.');
+      notify(t('Link sent'), t('Check your email on this device. The link signs you in with no password.'));
     } catch (e) {
       setError(e instanceof Error ? friendlyAuthError(e.message) : 'Something went wrong.');
     } finally {
@@ -120,7 +122,7 @@ export default function SignInScreen() {
     setSendingEmail(true);
     try {
       await sendPasswordResetEmail(auth, email.trim());
-      notify('Reset email sent', 'Check your inbox for a link to set a new password.');
+      notify(t('Reset email sent'), t('Check your inbox for a link to set a new password.'));
     } catch (e) {
       setError(e instanceof Error ? friendlyAuthError(e.message) : 'Something went wrong.');
     } finally {
@@ -156,12 +158,12 @@ export default function SignInScreen() {
               />
             </View>
             <ThemedText type="subtitle" style={styles.title}>
-              {mode === 'signIn' ? 'Welcome back' : 'Create account'}
+              {mode === 'signIn' ? t('Welcome back') : t('Create account')}
             </ThemedText>
             <ThemedText themeColor="textSecondary">
               {mode === 'signIn'
-                ? 'Sign in to direct democracy'
-                : 'Get started with direct democracy'}
+                ? t('Sign in to direct democracy')
+                : t('Get started with direct democracy')}
             </ThemedText>
           </View>
 
@@ -174,7 +176,7 @@ export default function SignInScreen() {
             {/* Toggle mode */}
             <View style={styles.topRow}>
               <ThemedText type="small" themeColor="textSecondary">
-                {mode === 'signIn' ? 'New here?' : 'Already have an account?'}
+                {mode === 'signIn' ? t('New here?') : t('Already have an account?')}
               </ThemedText>
               <Pressable
                 onPress={() => {
@@ -183,7 +185,7 @@ export default function SignInScreen() {
                 }}
                 hitSlop={8}>
                 <ThemedText type="smallBold" style={{ color: theme.primary }}>
-                  {mode === 'signIn' ? 'Create an account' : 'Sign in'}
+                  {mode === 'signIn' ? t('Create an account') : t('Sign in')}
                 </ThemedText>
               </Pressable>
             </View>
@@ -192,12 +194,12 @@ export default function SignInScreen() {
             <ThemedText
               type="small"
               style={[styles.error, { color: theme.danger, opacity: error ? 1 : 0 }]}>
-              {error || ' '}
+              {error ? t(error) : ' '}
             </ThemedText>
 
             {/* Email */}
             <View style={styles.inputGroup}>
-              <ThemedText type="smallBold">Email</ThemedText>
+              <ThemedText type="smallBold">{t('Email')}</ThemedText>
               <TextInput
                 style={[
                   styles.input,
@@ -225,7 +227,7 @@ export default function SignInScreen() {
 
             {/* Password */}
             <View style={styles.inputGroup}>
-              <ThemedText type="smallBold">Password</ThemedText>
+              <ThemedText type="smallBold">{t('Password')}</ThemedText>
               <View
                 style={[
                   styles.input,
@@ -237,7 +239,7 @@ export default function SignInScreen() {
                 ]}>
                 <TextInput
                   style={{ flex: 1, color: theme.text, padding: 0 }}
-                  placeholder={mode === 'signUp' ? 'At least 6 characters' : '••••••••'}
+                  placeholder={mode === 'signUp' ? t('At least 6 characters') : '••••••••'}
                   placeholderTextColor={theme.textSecondary}
                   secureTextEntry={!showPassword}
                   value={password}
@@ -252,7 +254,7 @@ export default function SignInScreen() {
                 />
                 <Pressable onPress={() => setShowPassword((s) => !s)} hitSlop={10}>
                   <ThemedText type="smallBold" style={{ color: theme.primary }}>
-                    {showPassword ? 'Hide' : 'Show'}
+                    {showPassword ? t('Hide') : t('Show')}
                   </ThemedText>
                 </Pressable>
               </View>
@@ -269,12 +271,12 @@ export default function SignInScreen() {
                 (anyLoading || !email.trim() || !password) && { opacity: 0.7 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel={mode === 'signIn' ? 'Sign in' : 'Create account'}>
+              accessibilityLabel={mode === 'signIn' ? t('Sign in') : t('Create account')}>
               {submitting ? (
                 <ActivityIndicator color="#FFFFFF" />
               ) : (
                 <ThemedText type="smallBold" style={styles.primaryBtnText}>
-                  Enter
+                  {t('Enter')}
                 </ThemedText>
               )}
             </Pressable>
@@ -284,12 +286,12 @@ export default function SignInScreen() {
               <View style={styles.linkRow}>
                 <Pressable onPress={magicLink} disabled={anyLoading} hitSlop={8}>
                   <ThemedText type="smallBold" style={{ color: theme.primary }}>
-                    Email me a sign-in link
+                    {t('Email me a sign-in link')}
                   </ThemedText>
                 </Pressable>
                 <Pressable onPress={forgotPassword} disabled={anyLoading} hitSlop={8}>
                   <ThemedText type="smallBold" style={{ color: theme.primary }}>
-                    Forgot password?
+                    {t('Forgot password?')}
                   </ThemedText>
                 </Pressable>
               </View>
@@ -299,7 +301,7 @@ export default function SignInScreen() {
             <View style={styles.dividerRow}>
               <View style={[styles.dividerLine, { backgroundColor: theme.border }]} />
               <ThemedText type="small" themeColor="textSecondary" style={styles.dividerText}>
-                {mode === 'signIn' ? 'or sign in with' : 'or sign up with'}
+                {mode === 'signIn' ? t('or sign in with') : t('or sign up with')}
               </ThemedText>
               <View style={[styles.dividerLine, { backgroundColor: theme.border }]} />
             </View>
@@ -320,7 +322,7 @@ export default function SignInScreen() {
                   anyLoading && { opacity: 0.7 },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel="Sign in with Google">
+                accessibilityLabel={t('Sign in with Google')}>
                 {ssoLoading === 'google' ? (
                   <ActivityIndicator color={theme.text} />
                 ) : (
@@ -342,7 +344,7 @@ export default function SignInScreen() {
                     anyLoading && { opacity: 0.7 },
                   ]}
                   accessibilityRole="button"
-                  accessibilityLabel="Sign in with Apple">
+                  accessibilityLabel={t('Sign in with Apple')}>
                   {ssoLoading === 'apple' ? (
                     <ActivityIndicator color={isDark ? '#000000' : '#FFFFFF'} />
                   ) : (
@@ -366,11 +368,11 @@ export default function SignInScreen() {
             {/* Privacy notice */}
             <View style={styles.privacyRow}>
               <ThemedText type="small" themeColor="textSecondary" style={styles.privacyText}>
-                By continuing you agree to our{' '}
+                {t('By continuing you agree to our')}{' '}
               </ThemedText>
               <Pressable onPress={() => router.push('/privacy')} hitSlop={8}>
                 <ThemedText type="small" style={[styles.privacyText, { color: theme.primary, fontWeight: '700' }]}>
-                  privacy policy
+                  {t('privacy policy')}
                 </ThemedText>
               </Pressable>
               <ThemedText type="small" themeColor="textSecondary" style={styles.privacyText}>
@@ -391,7 +393,7 @@ export default function SignInScreen() {
           pointerEvents="auto">
           <ActivityIndicator size="large" color={theme.primary} />
           <ThemedText type="small" themeColor="textSecondary" style={{ marginTop: Spacing.two }}>
-            {ssoLoading === 'google' ? 'Signing in with Google…' : 'Signing in with Apple…'}
+            {ssoLoading === 'google' ? t('Signing in with Google…') : t('Signing in with Apple…')}
           </ThemedText>
         </View>
       )}

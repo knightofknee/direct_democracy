@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { Alert, Platform } from 'react-native';
 
 /**
@@ -13,7 +14,7 @@ export function notify(title: string, message?: string): void {
 }
 
 export function notifyError(title: string, error: unknown): void {
-  notify(title, error instanceof Error ? error.message : 'Something went wrong.');
+  notify(title, error instanceof Error ? error.message : tr('Something went wrong.'));
 }
 
 /**

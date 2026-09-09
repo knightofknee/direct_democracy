@@ -15,6 +15,7 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { tapHaptic } from '@/lib/haptics';
+import { useT } from '@/lib/i18n';
 import { notify } from '@/lib/notify';
 import { withBallotDelta, type BallotDelta } from '@/lib/tally';
 import type { Poll, VoteDoc } from '@/lib/types';
@@ -30,6 +31,7 @@ const TYPE_LABELS: Record<Poll['type'], string> = {
 export function PollCard({ poll }: { poll: Poll }) {
   const theme = useTheme();
   const router = useRouter();
+  const t = useT();
   const { profile, loading: authLoading } = useAuth();
   const { anticipate } = useCelebration();
   const [draft, setDraft] = useState<{ from: string; keys: string[] } | null>(null);
@@ -63,6 +65,13 @@ export function PollCard({ poll }: { poll: Poll }) {
   const hasVoted = myKeys.length > 0;
   const myKeysJson = JSON.stringify(myKeys);
   const shownTallies = optimistic ? withBallotDelta(poll.tallies, optimistic.delta) : poll.tallies;
+  // Built-in option labels (yes/no, the 5-point scale) are the app's own
+  // words to translate; multiple-choice and approval options are the
+  // author's words and stay as written.
+  const builtinLabels = poll.type === 'yesNo' || poll.type === 'scale5';
+  const shownOptions = builtinLabels
+    ? poll.options.map((o) => ({ ...o, label: t(o.label) }))
+    : poll.options;
 
   // Approval polls collect selections before casting. The draft remembers the
   // ballot it started from, so it falls back to the recorded ballot whenever
@@ -94,7 +103,7 @@ export function PollCard({ poll }: { poll: Poll }) {
     setDraft(null); // fall back to the ballot now on record
     votePoll(profile, poll, value).catch((e) => {
       setOptimistic(null);
-      notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
+      notify(t('Vote failed'), e instanceof Error ? e.message : t('Something went wrong.'));
     });
   };
 
@@ -109,7 +118,7 @@ export function PollCard({ poll }: { poll: Poll }) {
     <Card>
       <View style={styles.headerRow}>
         <Chip label={wardLabel(poll.wardId)} tone={poll.scope === 'city' ? 'primary' : 'neutral'} />
-        <Chip label={poll.open ? TYPE_LABELS[poll.type] : 'Closed'} tone={poll.open ? 'neutral' : 'warning'} />
+        <Chip label={poll.open ? t(TYPE_LABELS[poll.type]) : t('Closed')} tone={poll.open ? 'neutral' : 'warning'} />
       </View>
       <ThemedText type="smallBold" style={{ fontSize: 16, lineHeight: 22 }}>
         {poll.question}
@@ -120,15 +129,15 @@ export function PollCard({ poll }: { poll: Poll }) {
         </ThemedText>
       ) : null}
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        Asked by {poll.authorName}
+        {t('Asked by {name}').replace('{name}', poll.authorName)}
       </ThemedText>
 
       {hasVoted || !canVote ? (
         <View style={{ gap: Spacing.two }}>
-          <TallyResults tally={shownTallies} options={poll.options} highlightKeys={myKeys} />
+          <TallyResults tally={shownTallies} options={shownOptions} highlightKeys={myKeys} />
           {hasVoted && poll.open && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              You voted - tap an option below to change it.
+              {t('You voted - tap an option below to change it.')}
             </ThemedText>
           )}
         </View>
@@ -136,7 +145,7 @@ export function PollCard({ poll }: { poll: Poll }) {
 
       {canVote ? (
         <View style={{ gap: Spacing.two }}>
-          {poll.options.map((option) => {
+          {shownOptions.map((option) => {
             const selected =
               poll.type === 'approval' ? pending.includes(option.key) : myKeys.includes(option.key);
             return (
@@ -161,7 +170,7 @@ export function PollCard({ poll }: { poll: Poll }) {
           })}
           {poll.type === 'approval' && (
             <Button
-              title={hasVoted ? 'Update votes' : 'Cast votes'}
+              title={hasVoted ? t('Update votes') : t('Cast votes')}
               onPress={() => cast(pending)}
               disabled={pending.length === 0}
               loading={saving}
@@ -172,7 +181,7 @@ export function PollCard({ poll }: { poll: Poll }) {
 
       {profile?.uid === poll.authorUid && poll.open && (
         <Button
-          title="Close voting"
+          title={t('Close voting')}
           variant="secondary"
           loading={saving}
           onPress={async () => {
@@ -180,7 +189,7 @@ export function PollCard({ poll }: { poll: Poll }) {
             try {
               await closePoll(profile, poll);
             } catch (e) {
-              notify('Could not close poll', e instanceof Error ? e.message : 'Something went wrong.');
+              notify(t('Could not close poll'), e instanceof Error ? e.message : t('Something went wrong.'));
             } finally {
               setSaving(false);
             }
@@ -191,15 +200,15 @@ export function PollCard({ poll }: { poll: Poll }) {
       {wardLocked && (
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
           {profile?.verified
-            ? 'Only residents of this ward can vote on this poll.'
-            : 'Verify your identity to vote on ward polls.'}
+            ? t('Only residents of this ward can vote on this poll.')
+            : t('Verify your identity to vote on ward polls.')}
         </ThemedText>
       )}
       {!profile &&
         (authLoading ? (
           <SkeletonButton />
         ) : (
-          <Button title="Sign in to vote" variant="secondary" onPress={() => router.push('/sign-in')} />
+          <Button title={t('Sign in to vote')} variant="secondary" onPress={() => router.push('/sign-in')} />
         ))}
     </Card>
   );

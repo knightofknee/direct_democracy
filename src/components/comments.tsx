@@ -17,6 +17,7 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { timeAgo } from '@/lib/format';
+import { useT } from '@/lib/i18n';
 import { notifyError } from '@/lib/notify';
 import type { Comment, CommentReply, CommentSort, CommentVoteValue } from '@/lib/types';
 
@@ -58,6 +59,7 @@ export function CommentsSection({
 }) {
   const router = useRouter();
   const theme = useTheme();
+  const t = useT();
   const { profile, loading: authLoading } = useAuth();
   const { isBlocked } = useBlocks();
   const [text, setText] = useState('');
@@ -150,7 +152,7 @@ export function CommentsSection({
       setShowExtras(false);
       setReplyTo(null);
     } catch (e) {
-      notifyError('Comment failed', e);
+      notifyError(t('Comment failed'), e);
     } finally {
       setSaving(false);
     }
@@ -165,15 +167,15 @@ export function CommentsSection({
         <View style={styles.replyBanner}>
           <Ionicons name="return-down-forward" size={14} color={theme.primary} />
           <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
-            Replying to {replyTo.name}
+            {t('Replying to {name}').replace('{name}', replyTo.name)}
           </ThemedText>
-          <Pressable onPress={() => setReplyTo(null)} hitSlop={8} accessibilityLabel="Cancel reply">
+          <Pressable onPress={() => setReplyTo(null)} hitSlop={8} accessibilityLabel={t('Cancel reply')}>
             <Ionicons name="close" size={16} color={theme.textSecondary} />
           </Pressable>
         </View>
       )}
       <Field
-        placeholder={replyTo ? `Answer ${replyTo.name}…` : 'Add to the discussion…'}
+        placeholder={replyTo ? t('Answer {name}…').replace('{name}', replyTo.name) : t('Add to the discussion…')}
         value={text}
         onChangeText={setText}
         autoFocus={replyTo != null}
@@ -191,7 +193,7 @@ export function CommentsSection({
       )}
       <View style={styles.composerRow}>
         <Button
-          title={replyTo ? 'Post reply' : 'Post comment'}
+          title={replyTo ? t('Post reply') : t('Post comment')}
           onPress={submit}
           disabled={!text.trim()}
           loading={saving}
@@ -200,7 +202,7 @@ export function CommentsSection({
         <Pressable
           onPress={() => setShowExtras((v) => !v)}
           hitSlop={8}
-          accessibilityLabel="More options"
+          accessibilityLabel={t('More options')}
           style={[styles.extrasButton, { borderColor: theme.border }]}>
           <Ionicons
             name="ellipsis-horizontal"
@@ -213,7 +215,7 @@ export function CommentsSection({
   ) : authLoading ? (
     <SkeletonButton />
   ) : (
-    <Button title="Sign in to comment" variant="secondary" onPress={() => router.push('/sign-in')} />
+    <Button title={t('Sign in to comment')} variant="secondary" onPress={() => router.push('/sign-in')} />
   );
 
   return (
@@ -243,7 +245,7 @@ export function CommentsSection({
                     color: selected ? theme.primary : theme.textSecondary,
                     fontWeight: selected ? '700' : '500',
                   }}>
-                  {s.label}
+                  {t(s.label)}
                 </ThemedText>
               </Pressable>
             );
@@ -252,7 +254,7 @@ export function CommentsSection({
       )}
 
       {threads.length === 0 ? (
-        <EmptyState icon="chatbubble-ellipses-outline" message="No comments yet." />
+        <EmptyState icon="chatbubble-ellipses-outline" message={t('No comments yet.')} />
       ) : (
         threads.map(({ root, replies }) => (
           <View key={root?.id ?? replies[0].threadId ?? replies[0].id} style={{ gap: Spacing.two }}>
@@ -271,7 +273,7 @@ export function CommentsSection({
             ) : (
               <Card>
                 <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                  Comment removed
+                  {t('Comment removed')}
                 </ThemedText>
               </Card>
             )}
@@ -331,6 +333,7 @@ function CommentRow({
 }) {
   const theme = useTheme();
   const router = useRouter();
+  const t = useT();
   const { profile } = useAuth();
   const [confirmRemove, setConfirmRemove] = useState(false);
   const [crediting, setCrediting] = useState(false);
@@ -355,7 +358,7 @@ function CommentRow({
       // Tapping the active arrow retracts the rating.
       await onVote(comment, myVote?.value === value ? null : value);
     } catch (e) {
-      notifyError('Vote failed', e);
+      notifyError(t('Vote failed'), e);
     } finally {
       setVoting(false);
     }
@@ -367,7 +370,7 @@ function CommentRow({
     try {
       await onCredit(comment, !comment.credited);
     } catch (e) {
-      notifyError('Could not update credit', e);
+      notifyError(t('Could not update credit'), e);
     } finally {
       setCrediting(false);
     }
@@ -380,7 +383,7 @@ function CommentRow({
     try {
       await onDelete(comment);
     } catch (e) {
-      notifyError('Could not delete comment', e);
+      notifyError(t('Could not delete comment'), e);
     }
   };
 
@@ -395,8 +398,8 @@ function CommentRow({
       }>
       <View style={styles.metaRow}>
         <ThemedText type="smallBold">{comment.authorName}</ThemedText>
-        {isOp && <Chip label={opChipLabel ?? 'candidate'} tone="primary" icon="ribbon" />}
-        {comment.credited && <Chip label="writing credit" tone="success" icon="pencil" />}
+        {isOp && <Chip label={t(opChipLabel ?? 'candidate')} tone="primary" icon="ribbon" />}
+        {comment.credited && <Chip label={t('writing credit')} tone="success" icon="pencil" />}
         {comment.authorVerified && <VerifiedBadge compact />}
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
           {timeAgo(comment.createdAt)}
@@ -414,7 +417,7 @@ function CommentRow({
         <View style={styles.replyContext}>
           <Ionicons name="return-down-forward" size={12} color={theme.textSecondary} />
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 11 }}>
-            replying to {replyContext}
+            {t('replying to {name}').replace('{name}', replyContext)}
           </ThemedText>
         </View>
       )}
@@ -427,13 +430,13 @@ function CommentRow({
         {isMine &&
           (confirmRemove ? (
             <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center' }}>
-              <Button title="Yes, remove" variant="danger" onPress={remove} />
-              <Button title="Keep" variant="ghost" onPress={() => setConfirmRemove(false)} />
+              <Button title={t('Yes, remove')} variant="danger" onPress={remove} />
+              <Button title={t('Keep')} variant="ghost" onPress={() => setConfirmRemove(false)} />
             </View>
           ) : (
             <Pressable onPress={() => setConfirmRemove(true)} hitSlop={8} style={styles.action}>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                Remove
+                {t('Remove')}
               </ThemedText>
             </Pressable>
           ))}
@@ -442,14 +445,14 @@ function CommentRow({
           <Pressable onPress={credit} hitSlop={4} disabled={crediting} style={styles.action}>
             <Ionicons name="pencil" size={14} color={theme.verified} />
             <ThemedText type="small" style={{ fontSize: 12, color: theme.verified, fontWeight: '600' }}>
-              {comment.credited ? 'Retract credit' : 'Credit'}
+              {comment.credited ? t('Retract credit') : t('Credit')}
             </ThemedText>
           </Pressable>
         )}
         <Pressable onPress={() => onReply(comment)} hitSlop={4} style={styles.action}>
           <Ionicons name="arrow-undo-outline" size={14} color={theme.primary} />
           <ThemedText type="small" style={{ fontSize: 12, color: theme.primary, fontWeight: '600' }}>
-            Reply
+            {t('Reply')}
           </ThemedText>
         </Pressable>
         {/* Ratings are placement-only: arrows, no counts. */}
@@ -457,7 +460,7 @@ function CommentRow({
           onPress={() => vote('up')}
           disabled={voting}
           hitSlop={4}
-          accessibilityLabel="Rate up"
+          accessibilityLabel={t('Rate up')}
           style={styles.action}>
           <Ionicons
             name={myVote?.value === 'up' ? 'arrow-up-circle' : 'arrow-up-circle-outline'}
@@ -469,7 +472,7 @@ function CommentRow({
           onPress={() => vote('down')}
           disabled={voting}
           hitSlop={4}
-          accessibilityLabel="Rate down"
+          accessibilityLabel={t('Rate down')}
           style={styles.action}>
           <Ionicons
             name={myVote?.value === 'down' ? 'arrow-down-circle' : 'arrow-down-circle-outline'}

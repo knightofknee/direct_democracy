@@ -22,7 +22,7 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { ElectionCandidateCard, ElectionRaceNote, Official } from '@/lib/types';
-import { useT } from '@/lib/i18n';
+import { useT, useLocalized } from '@/lib/i18n';
 
 /**
  * One ward's February 2027 aldermanic race: the incumbent's report card
@@ -36,6 +36,7 @@ export default function WardRaceScreen() {
   const router = useRouter();
   const theme = useTheme();
   const t = useT();
+  const loc = useLocalized();
   const wardId = Number(ward);
   const valid = Number.isInteger(wardId) && wardId >= 1 && wardId <= 50;
   const race = `ward-${wardId}`;
@@ -109,7 +110,7 @@ export default function WardRaceScreen() {
                     themeColor="textSecondary"
                     style={{ fontSize: 12 }}
                     numberOfLines={3}>
-                    {incumbentCard.runningOn}
+                    {loc(incumbentCard.runningOn, incumbentCard.runningOnEs)}
                   </ThemedText>
                 </View>
                 <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
@@ -122,7 +123,7 @@ export default function WardRaceScreen() {
       {raceNote ? (
         <Card>
           <ThemedText type="small" style={{ fontSize: 13, lineHeight: 19 }}>
-            {raceNote.note}
+            {loc(raceNote.note, raceNote.noteEs)}
           </ThemedText>
         </Card>
       ) : null}
@@ -152,7 +153,7 @@ export default function WardRaceScreen() {
                       themeColor="textSecondary"
                       style={{ fontSize: 12 }}
                       numberOfLines={1}>
-                      {candidate.priorCareer}
+                      {loc(candidate.priorCareer, candidate.priorCareerEs)}
                     </ThemedText>
                   ) : null}
                 </View>
@@ -160,7 +161,7 @@ export default function WardRaceScreen() {
               </View>
               {/* The comparison happens here, not one tap deeper. */}
               <ThemedText type="small" style={{ fontSize: 13, lineHeight: 19 }} numberOfLines={3}>
-                {candidate.runningOn}
+                {loc(candidate.runningOn, candidate.runningOnEs)}
               </ThemedText>
             </Card>
           </Animated.View>

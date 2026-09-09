@@ -129,6 +129,9 @@ export interface ElectionCandidateCard {
   /** What the candidate says they are running on, in neutral summary. */
   runningOn: string;
   priorCareer: string | null;
+  /** Operator-authored Spanish of the two fields above; English fallback. */
+  runningOnEs?: string | null;
+  priorCareerEs?: string | null;
   /** Judicial races: the vacancy being filled ("Vacancy of Hon. ..."). */
   seat?: string | null;
   /** Judicial: the court ("Circuit Court of Cook County"). */
@@ -152,6 +155,8 @@ export interface ElectionRaceNote {
   election: string;
   race: string;
   note: string;
+  /** Operator-authored Spanish of the note; English fallback. */
+  noteEs?: string | null;
   sourceUrls?: string[];
 }
 
@@ -170,6 +175,9 @@ export interface SchoolBoardCandidate {
   runningOn: string;
   /** Factual professional background, when public record has it. */
   priorCareer: string | null;
+  /** Operator-authored Spanish of the two fields above; English fallback. */
+  runningOnEs?: string | null;
+  priorCareerEs?: string | null;
   /** Public sources the summary was compiled from. */
   sourceUrls: string[];
 }

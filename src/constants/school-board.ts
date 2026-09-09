@@ -7,6 +7,8 @@
  * the district lookup link is how they find theirs.
  */
 
+import { getLocale } from '@/lib/i18n';
+
 export const SCHOOL_BOARD_ELECTION_DATE = 'November 3, 2026';
 
 /** Chicago Board of Elections lookup: registration, districts, sample ballot. */
@@ -31,5 +33,8 @@ export const SCHOOL_BOARD_RACES: SchoolBoardRace[] = [
 ];
 
 export function schoolBoardRaceLabel(id: string): string {
+  if (getLocale() === 'es') {
+    return id === 'president' ? 'Presidente del Consejo' : `Distrito ${id}`;
+  }
   return SCHOOL_BOARD_RACES.find((r) => r.id === id)?.label ?? `District ${id}`;
 }

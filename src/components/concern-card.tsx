@@ -14,6 +14,7 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
+import { useT } from '@/lib/i18n';
 import { notifyError } from '@/lib/notify';
 import { useOptimistic } from '@/lib/optimistic';
 import { PRIORITY_WEIGHTS } from '@/lib/tally';
@@ -39,6 +40,7 @@ export function ConcernCard({
 }) {
   const theme = useTheme();
   const router = useRouter();
+  const t = useT();
   const { profile } = useAuth();
 
   const { data: myVote } = useLiveDoc<VoteDoc & { id: string }>(
@@ -80,7 +82,7 @@ export function ConcernCard({
     });
     voteConcernPriority(profile, concern.id, priority).catch((e) => {
       stats.rollback();
-      notifyError('Vote failed', e);
+      notifyError(t('Vote failed'), e);
     });
   };
 

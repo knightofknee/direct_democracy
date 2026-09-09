@@ -9,12 +9,13 @@ import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Card, Chip, EmptyState } from '@/components/ui';
-import { SCHOOL_BOARD_ELECTION_DATE, SCHOOL_BOARD_RACES } from '@/constants/school-board';
+import { SCHOOL_BOARD_ELECTION_DATE, SCHOOL_BOARD_RACES, schoolBoardRaceLabel } from '@/constants/school-board';
 import { Spacing } from '@/constants/theme';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { SchoolBoardCandidate } from '@/lib/types';
+import { useLocalized, useT } from '@/lib/i18n';
 import { collection, query, where } from 'firebase/firestore';
 
 /** One school board race: the nominees a voter picks between on the ballot. */
@@ -22,6 +23,8 @@ export default function SchoolBoardRaceScreen() {
   const { race } = useLocalSearchParams<{ race: string }>();
   const router = useRouter();
   const theme = useTheme();
+  const loc = useLocalized();
+  const t = useT();
   const info = SCHOOL_BOARD_RACES.find((r) => r.id === race);
 
   const { data: candidates, loading } = useLiveQuery<SchoolBoardCandidate & { id: string }>(
@@ -33,7 +36,7 @@ export default function SchoolBoardRaceScreen() {
   if (!info) {
     return (
       <Screen>
-        <EmptyState icon="alert-circle-outline" message="Race not found." />
+        <EmptyState icon="alert-circle-outline" message={t('Race not found.')} />
       </Screen>
     );
   }
@@ -44,22 +47,22 @@ export default function SchoolBoardRaceScreen() {
     <Screen>
       <View style={{ gap: Spacing.one }}>
         <ThemedText type="subtitle" style={{ fontSize: 24, lineHeight: 30 }}>
-          {info.label}
+          {schoolBoardRaceLabel(info.id)}
         </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {info.detail} · on the ballot {SCHOOL_BOARD_ELECTION_DATE}.
+          {t(info.detail)} · {t('on the ballot')} {t(SCHOOL_BOARD_ELECTION_DATE)}.
         </ThemedText>
       </View>
 
       {loading ? (
         <SkeletonCards count={2} />
       ) : sorted.length === 0 ? (
-        <EmptyState icon="ribbon-outline" message="No candidates listed for this race yet." />
+        <EmptyState icon="ribbon-outline" message={t('No candidates listed for this race yet.')} />
       ) : (
         <>
           {sorted.length === 1 && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {sorted[0].name} is running unopposed.
+              {sorted[0].name} {t('is running unopposed.')}
             </ThemedText>
           )}
           {sorted.map((candidate, i) => (
@@ -74,7 +77,7 @@ export default function SchoolBoardRaceScreen() {
                       <ThemedText type="smallBold" style={{ fontSize: 15 }}>
                         {candidate.name}
                       </ThemedText>
-                      {candidate.incumbent && <Chip label="Incumbent" tone="primary" />}
+                      {candidate.incumbent && <Chip label={t('Incumbent')} tone="primary" />}
                     </View>
                     {candidate.priorCareer ? (
                       <ThemedText
@@ -82,7 +85,7 @@ export default function SchoolBoardRaceScreen() {
                         themeColor="textSecondary"
                         style={{ fontSize: 12 }}
                         numberOfLines={1}>
-                        {candidate.priorCareer}
+                        {loc(candidate.priorCareer, candidate.priorCareerEs)}
                       </ThemedText>
                     ) : null}
                   </View>
@@ -90,7 +93,7 @@ export default function SchoolBoardRaceScreen() {
                 </View>
                 {/* The comparison happens here, not one tap deeper. */}
                 <ThemedText type="small" style={{ fontSize: 13, lineHeight: 19 }} numberOfLines={3}>
-                  {candidate.runningOn}
+                  {loc(candidate.runningOn, candidate.runningOnEs)}
                 </ThemedText>
               </Card>
             </Animated.View>

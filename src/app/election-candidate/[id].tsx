@@ -17,7 +17,7 @@ import { db } from '@/lib/firebase';
 import { host } from '@/lib/format';
 import { openLink } from '@/lib/open-link';
 import type { ElectionCandidateCard } from '@/lib/types';
-import { useT } from '@/lib/i18n';
+import { useT, useLocalized } from '@/lib/i18n';
 
 /**
  * A ballot candidate's voter-info card: what they say they are running on,
@@ -28,6 +28,7 @@ import { useT } from '@/lib/i18n';
 export default function ElectionCandidateScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const t = useT();
+  const loc = useLocalized();
 
   const { data: candidate, loading } = useLiveDoc<ElectionCandidateCard>(
     () => (id ? doc(db, 'electionCandidates', id) : null),
@@ -62,7 +63,7 @@ export default function ElectionCandidateScreen() {
             </ThemedText>
             <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap' }}>
               <Chip label={t(raceLabel)} />
-              {candidate.party && <Chip label={candidate.party} />}
+              {candidate.party && <Chip label={t(candidate.party)} />}
               {candidate.incumbent && <Chip label={t('Incumbent')} tone="primary" />}
             </View>
           </View>
@@ -83,7 +84,7 @@ export default function ElectionCandidateScreen() {
       {(candidate.seat || candidate.court) && (
         <Card>
           <ThemedText type="small" style={{ fontSize: 14, lineHeight: 20 }}>
-            {[candidate.seat, candidate.court].filter(Boolean).join(' · ')}
+            {[candidate.seat, candidate.court && t(candidate.court)].filter(Boolean).join(' · ')}
           </ThemedText>
         </Card>
       )}
@@ -100,7 +101,7 @@ export default function ElectionCandidateScreen() {
       <SectionHeader title={t(candidate.race === 'judicial-retention' ? 'Record' : 'Running on')} />
       <Card>
         <ThemedText type="small" style={{ fontSize: 15, lineHeight: 22 }}>
-          {candidate.runningOn}
+          {loc(candidate.runningOn, candidate.runningOnEs)}
         </ThemedText>
       </Card>
 
@@ -109,7 +110,7 @@ export default function ElectionCandidateScreen() {
           <SectionHeader title={t('Background')} />
           <Card>
             <ThemedText type="small" style={{ fontSize: 15, lineHeight: 22 }}>
-              {candidate.priorCareer}
+              {loc(candidate.priorCareer, candidate.priorCareerEs)}
             </ThemedText>
           </Card>
         </>

@@ -7,6 +7,7 @@ import { Button, Card } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { auth } from '@/lib/firebase';
+import { useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
 import { refreshClaim } from '@/services/notifications';
 
@@ -21,6 +22,7 @@ import { refreshClaim } from '@/services/notifications';
  */
 export function ClaimGate({ claimed, name }: { claimed?: boolean; name: string }) {
   const theme = useTheme();
+  const t = useT();
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   // auth.currentUser mutates in place; bump to re-read after a recheck.
@@ -42,7 +44,7 @@ export function ClaimGate({ claimed, name }: { claimed?: boolean; name: string }
       await sendEmailVerification(user);
       setSent(true);
     } catch (e) {
-      notifyError('Could not send', e);
+      notifyError(t('Could not send'), e);
     } finally {
       setSending(false);
     }
@@ -57,7 +59,7 @@ export function ClaimGate({ claimed, name }: { claimed?: boolean; name: string }
       if (auth.currentUser?.emailVerified) {
         await refreshClaim().catch(() => {});
       } else {
-        notify('Not confirmed yet', 'Open the confirmation email first, then tap this again.');
+        notify(t('Not confirmed yet'), t('Open the confirmation email first, then tap this again.'));
       }
       bump((n) => n + 1);
     } finally {
@@ -68,15 +70,14 @@ export function ClaimGate({ claimed, name }: { claimed?: boolean; name: string }
   return (
     <Card style={{ borderColor: theme.warning, borderWidth: 1 }}>
       <ThemedText type="smallBold" style={{ fontSize: 14 }}>
-        Confirm your email to act as {name}
+        {t('Confirm your email to act as {name}').replace('{name}', name)}
       </ThemedText>
       <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        Until the address is confirmed, this account can read but not respond, post, or edit.
-        The confirmation proves the inbox is really yours.
+        {t('Until the address is confirmed, this account can read but not respond, post, or edit. The confirmation proves the inbox is really yours.')}
       </ThemedText>
       <View style={{ flexDirection: 'row', gap: Spacing.two }}>
         <Button
-          title={sent ? 'Sent - check your inbox' : 'Send confirmation email'}
+          title={sent ? t('Sent - check your inbox') : t('Send confirmation email')}
           variant="secondary"
           onPress={send}
           loading={sending && !sent}
@@ -84,7 +85,7 @@ export function ClaimGate({ claimed, name }: { claimed?: boolean; name: string }
           style={{ flex: 1 }}
         />
         {sent && (
-          <Button title="I confirmed it" onPress={recheck} loading={sending} style={{ flex: 1 }} />
+          <Button title={t('I confirmed it')} onPress={recheck} loading={sending} style={{ flex: 1 }} />
         )}
       </View>
     </Card>

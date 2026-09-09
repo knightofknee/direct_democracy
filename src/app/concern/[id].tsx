@@ -18,6 +18,7 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { tapHaptic } from '@/lib/haptics';
+import { useT } from '@/lib/i18n';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { withBallotDelta, type BallotDelta } from '@/lib/tally';
 import { timeAgo } from '@/lib/format';
@@ -45,6 +46,7 @@ export default function ConcernScreen() {
   const router = useRouter();
   const { profile } = useAuth();
   const { anticipate } = useCelebration();
+  const t = useT();
   const [optimistic, setOptimistic] = useState<{
     delta: BallotDelta;
     /** The server tally at cast time - any change to it means the trigger landed. */
@@ -83,7 +85,7 @@ export default function ConcernScreen() {
   if (!concern) {
     return (
       <Screen>
-        {loading ? null : <EmptyState icon="alert-circle-outline" message="Concern not found." />}
+        {loading ? null : <EmptyState icon="alert-circle-outline" message={t('Concern not found.')} />}
       </Screen>
     );
   }
@@ -101,7 +103,7 @@ export default function ConcernScreen() {
   const saveEdit = async () => {
     if (!profile || !editing) return;
     if (editing.title.trim().length < 4) {
-      notify('Almost there', 'Give your concern a title of at least 4 characters.');
+      notify(t('Almost there'), t('Give your concern a title of at least 4 characters.'));
       return;
     }
     setSavingEdit(true);
@@ -109,7 +111,7 @@ export default function ConcernScreen() {
       await updateConcern(profile, concern, editing);
       setEditing(null);
     } catch (e) {
-      notifyError('Could not save', e);
+      notifyError(t('Could not save'), e);
     } finally {
       setSavingEdit(false);
     }
@@ -120,18 +122,18 @@ export default function ConcernScreen() {
     // Third gate on top of the inline two-step: a system alert, so a stray
     // double-tap can never withdraw a concern.
     const sure = await confirmDestructive(
-      'Withdraw this concern?',
-      'This permanently removes the concern, everyone’s votes on it, and its comments. It cannot be undone.',
-      'Withdraw forever'
+      t('Withdraw this concern?'),
+      t('This permanently removes the concern, everyone’s votes on it, and its comments. It cannot be undone.'),
+      t('Withdraw forever')
     );
     if (!sure) return;
     try {
       await deleteConcern(profile, concern);
-      notify('Concern withdrawn', 'Your concern and its votes were removed.');
+      notify(t('Concern withdrawn'), t('Your concern and its votes were removed.'));
       if (router.canGoBack()) router.back();
       else router.replace('/');
     } catch (e) {
-      notifyError('Could not delete', e);
+      notifyError(t('Could not delete'), e);
     }
   };
 
@@ -163,7 +165,7 @@ export default function ConcernScreen() {
     });
     voteConcernPriority(profile, concern.id, priority).catch((e) => {
       setOptimistic(null);
-      notify('Vote failed', e instanceof Error ? e.message : 'Something went wrong.');
+      notify(t('Vote failed'), e instanceof Error ? e.message : t('Something went wrong.'));
     });
   };
 
@@ -184,9 +186,9 @@ export default function ConcernScreen() {
         </View>
         {editing ? (
           <>
-            <Field label="Title" value={editing.title} onChangeText={(t) => setEditing({ ...editing, title: t })} />
+            <Field label={t('Title')} value={editing.title} onChangeText={(t) => setEditing({ ...editing, title: t })} />
             <Field
-              label="What’s going on?"
+              label={t('What’s going on?')}
               value={editing.body}
               onChangeText={(t) => setEditing({ ...editing, body: t })}
               multiline
@@ -197,8 +199,8 @@ export default function ConcernScreen() {
               onChange={(references) => setEditing({ ...editing, references })}
             />
             <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-              <Button title="Cancel" variant="ghost" onPress={() => setEditing(null)} style={{ flex: 1 }} />
-              <Button title="Save" onPress={saveEdit} loading={savingEdit} style={{ flex: 1 }} />
+              <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(null)} style={{ flex: 1 }} />
+              <Button title={t('Save')} onPress={saveEdit} loading={savingEdit} style={{ flex: 1 }} />
             </View>
           </>
         ) : (
@@ -217,7 +219,7 @@ export default function ConcernScreen() {
           <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap' }}>
             {canEdit && (
               <Button
-                title="Edit"
+                title={t('Edit')}
                 variant="secondary"
                 onPress={() =>
                   setEditing({
@@ -230,17 +232,17 @@ export default function ConcernScreen() {
             )}
             {confirmDelete ? (
               <>
-                <Button title="Yes, withdraw it" variant="danger" onPress={removeConcern} />
-                <Button title="Keep it" variant="secondary" onPress={() => setConfirmDelete(false)} />
+                <Button title={t('Yes, withdraw it')} variant="danger" onPress={removeConcern} />
+                <Button title={t('Keep it')} variant="secondary" onPress={() => setConfirmDelete(false)} />
               </>
             ) : (
-              <Button title="Withdraw concern" variant="secondary" onPress={() => setConfirmDelete(true)} />
+              <Button title={t('Withdraw concern')} variant="secondary" onPress={() => setConfirmDelete(true)} />
             )}
           </View>
         )}
       </View>
 
-      <SectionHeader title="How much does this matter?" />
+      <SectionHeader title={t('How much does this matter?')} />
       <View style={styles.priorityRow}>
         {PRIORITY_OPTIONS.map((option) => {
           const selected = myPriority === option.key;
@@ -265,14 +267,14 @@ export default function ConcernScreen() {
         })}
       </View>
 
-      <SectionHeader title="Results" />
+      <SectionHeader title={t('Results')} />
       <TallyResults
         tally={shownTallies}
         options={PRIORITY_OPTIONS}
         highlightKeys={myPriority ? [myPriority] : undefined}
       />
 
-      <SectionHeader title={`Comments (${concern.commentCount})`} />
+      <SectionHeader title={`${t('Comments')} (${concern.commentCount})`} />
       <CommentsSection
         comments={comments}
         contentPathFor={(comment) => `concerns/${concern.id}/comments/${comment.id}`}

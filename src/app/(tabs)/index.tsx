@@ -21,9 +21,11 @@ import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { Concern, Poll, TallyLens } from '@/lib/types';
+import { useT } from '@/lib/i18n';
 
 export default function BigBoardScreen() {
   const router = useRouter();
+  const t = useT();
   const { profile, loading: authLoading } = useAuth();
   const [lens, setLens] = useState<TallyLens>('all');
   const [sort, setSort] = useState<ConcernSort>('top');
@@ -66,11 +68,11 @@ export default function BigBoardScreen() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
           <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
-            big board
+            {t('big board')}
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-          {CITY.name}’s top concerns, ranked by the people.
+          {t('{city}’s top concerns, ranked by the people.').replace('{city}', CITY.name)}
         </ThemedText>
         <FlagAccent />
       </View>
@@ -81,9 +83,9 @@ export default function BigBoardScreen() {
       {authLoading ? (
         <SkeletonButton />
       ) : profile ? (
-        <Button title="Raise a concern" onPress={() => router.push('/new-concern')} />
+        <Button title={t('Raise a concern')} onPress={() => router.push('/new-concern')} />
       ) : (
-        <Button title="Sign in to raise a concern" variant="secondary" onPress={() => router.push('/sign-in')} />
+        <Button title={t('Sign in to raise a concern')} variant="secondary" onPress={() => router.push('/sign-in')} />
       )}
 
       {loading ? (
@@ -91,7 +93,7 @@ export default function BigBoardScreen() {
       ) : visibleConcerns.length === 0 ? (
         <EmptyState
           icon="megaphone-outline"
-          message="No citywide concerns yet. Be the first to raise one."
+          message={t('No citywide concerns yet. Be the first to raise one.')}
         />
       ) : (
         displayConcerns.map((concern, i) => (
@@ -108,8 +110,8 @@ export default function BigBoardScreen() {
       {cityPolls.length > 0 && (
         <>
           <SectionHeader
-            title="Citywide votes"
-            subtitle="Questions put to the whole city by elected officials"
+            title={t('Citywide votes')}
+            subtitle={t('Questions put to the whole city by elected officials')}
           />
           {cityPolls.map((poll) => (
             <PollCard key={poll.id} poll={poll} />
@@ -128,6 +130,7 @@ export default function BigBoardScreen() {
  */
 function VerifiedInfo() {
   const theme = useTheme();
+  const t = useT();
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -138,15 +141,12 @@ function VerifiedInfo() {
         style={styles.footer}>
         <Ionicons name="information-circle-outline" size={20} color={theme.textSecondary} />
       </Pressable>
-      <InfoModal visible={open} onClose={() => setOpen(false)} title="Verified votes">
+      <InfoModal visible={open} onClose={() => setOpen(false)} title={t('Verified votes')}>
         <ThemedText type="small">
-          Every tally counts two ways: all users, and verified users. Verified means an adult
-          Chicago resident of a ward - nothing about party or voter registration. Use the toggle
-          to switch views.
+          {t('Every tally counts two ways: all users, and verified users. Verified means an adult Chicago resident of a ward - nothing about party or voter registration. Use the toggle to switch views.')}
         </ThemedText>
         <ThemedText type="small">
-          Verification is handled by Didit, an independent identity service. Your documents go to
-          Didit, never to us - all we ever receive is a yes/no and your ward.
+          {t('Verification is handled by Didit, an independent identity service. Your documents go to Didit, never to us - all we ever receive is a yes/no and your ward.')}
         </ThemedText>
       </InfoModal>
     </>

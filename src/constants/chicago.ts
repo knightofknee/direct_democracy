@@ -1,3 +1,5 @@
+import { getLocale } from '@/lib/i18n';
+
 /**
  * Chicago-only for launch, and we lean into it: the city, its 50 wards, and
  * its aldermen are first-class concepts. When the app opens to other cities,
@@ -100,6 +102,6 @@ export function ordinal(n: number): string {
 export const TEST_WARD = 51;
 
 export function wardLabel(id: number | null | undefined): string {
-  if (id == null) return 'Citywide';
-  return `${ordinal(id)} Ward`;
+  if (id == null) return getLocale() === 'es' ? 'Toda la ciudad' : 'Citywide';
+  return getLocale() === 'es' ? `Distrito ${id}` : `${ordinal(id)} Ward`;
 }

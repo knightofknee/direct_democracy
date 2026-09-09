@@ -10,6 +10,7 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { tapHaptic } from '@/lib/haptics';
+import { useT } from '@/lib/i18n';
 import { useOptimistic } from '@/lib/optimistic';
 import { notifyError } from '@/lib/notify';
 import type { ElectionQuestion } from '@/lib/types';
@@ -33,6 +34,7 @@ export function UpvotePill({
   disabled?: boolean;
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <Pressable
       onPress={onPress}
@@ -41,7 +43,7 @@ export function UpvotePill({
       accessibilityRole="button"
       accessibilityState={{ selected: active }}
       accessibilityLabel={
-        active ? 'Leave this question' : 'Join this question, I want it answered too'
+        active ? t('Leave this question') : t('Join this question, I want it answered too')
       }
       style={[
         styles.pill,
@@ -86,6 +88,7 @@ export function useOptimisticUpvotes(serverCount: number) {
  */
 export function ElectionQuestionJoin({ question }: { question: ElectionQuestion }) {
   const router = useRouter();
+  const t = useT();
   const { profile } = useAuth();
   const { count, bump, settle } = useOptimisticUpvotes(question.upvotes ?? 0);
 
@@ -106,7 +109,7 @@ export function ElectionQuestionJoin({ question }: { question: ElectionQuestion 
       await setElectionQuestionUpvote(profile, question.id, up);
     } catch (e) {
       settle();
-      notifyError('Your voice was not recorded', e);
+      notifyError(t('Your voice was not recorded'), e);
     }
   };
 

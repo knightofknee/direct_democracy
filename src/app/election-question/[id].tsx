@@ -16,6 +16,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
 import { tapHaptic } from '@/lib/haptics';
+import { useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
 import type { CommentVoteValue, ElectionAnswer, ElectionQuestion, UserProfile } from '@/lib/types';
 import { ElectionQuestionJoin } from '@/components/upvote-pill';
@@ -38,6 +39,7 @@ export default function ElectionQuestionScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { profile } = useAuth();
+  const t = useT();
 
   const { data: question, loading } = useLiveDoc<ElectionQuestion>(
     () => (id ? doc(db, 'electionQuestions', id) : null),
@@ -55,7 +57,7 @@ export default function ElectionQuestionScreen() {
         {loading ? (
           <SkeletonCards count={2} />
         ) : (
-          <EmptyState icon="alert-circle-outline" message="Question not found." />
+          <EmptyState icon="alert-circle-outline" message={t('Question not found.')} />
         )}
       </Screen>
     );
@@ -77,11 +79,11 @@ export default function ElectionQuestionScreen() {
   const withdraw = async () => {
     try {
       await deleteElectionQuestion(profile!, question);
-      notify('Question withdrawn', 'Your question was removed.');
+      notify(t('Question withdrawn'), t('Your question was removed.'));
       if (router.canGoBack()) router.back();
       else router.replace('/election');
     } catch (e) {
-      notifyError('Could not withdraw', e);
+      notifyError(t('Could not withdraw'), e);
     }
   };
 
@@ -93,7 +95,7 @@ export default function ElectionQuestionScreen() {
         </ThemedText>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            Asked by {question.authorName} · {timeAgo(question.createdAt)}
+            {t('Asked by {name}').replace('{name}', question.authorName)} · {timeAgo(question.createdAt)}
           </ThemedText>
           {question.authorVerified && <VerifiedBadge compact />}
           <View style={{ flex: 1 }} />
@@ -101,7 +103,7 @@ export default function ElectionQuestionScreen() {
         </View>
         {isAsker && question.answerCount === 0 && (
           <View style={{ flexDirection: 'row' }}>
-            <Button title="Withdraw question" variant="ghost" onPress={withdraw} />
+            <Button title={t('Withdraw question')} variant="ghost" onPress={withdraw} />
           </View>
         )}
       </View>
@@ -112,12 +114,12 @@ export default function ElectionQuestionScreen() {
 
       <SectionHeader
         title={plural(question.answerCount, 'answer')}
-        subtitle="Every candidate's answer, side by side. Your votes set the order; no numbers are shown."
+        subtitle={t("Every candidate's answer, side by side. Your votes set the order; no numbers are shown.")}
       />
       {ranked.length === 0 ? (
         <EmptyState
           icon="hourglass-outline"
-          message="No candidate has answered yet. Answers appear here the moment they do."
+          message={t('No candidate has answered yet. Answers appear here the moment they do.')}
         />
       ) : (
         ranked.map((answer) => (
@@ -130,6 +132,7 @@ export default function ElectionQuestionScreen() {
 
 /** The candidate's one answer: post it once, revise it any time. */
 function AnswerComposer({ profile, questionId }: { profile: UserProfile; questionId: string }) {
+  const t = useT();
   const { data: mine } = useLiveDoc<ElectionAnswer>(
     () => doc(db, 'electionQuestions', questionId, 'answers', profile.uid),
     [questionId, profile.uid]
@@ -143,9 +146,9 @@ function AnswerComposer({ profile, questionId }: { profile: UserProfile; questio
     try {
       await answerElectionQuestion(profile, questionId, text, mine != null);
       setDraft(null);
-      notify(mine ? 'Answer updated' : 'Answer posted', 'Voters see every answer side by side.');
+      notify(t(mine ? 'Answer updated' : 'Answer posted'), t('Voters see every answer side by side.'));
     } catch (e) {
-      notifyError('Could not save your answer', e);
+      notifyError(t('Could not save your answer'), e);
     } finally {
       setSaving(false);
     }
@@ -154,24 +157,24 @@ function AnswerComposer({ profile, questionId }: { profile: UserProfile; questio
   return (
     <Card>
       <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-        {mine ? 'Your answer (one per candidate - edits replace it)' : 'Your answer'}
+        {mine ? t('Your answer (one per candidate - edits replace it)') : t('Your answer')}
       </ThemedText>
       <Field
-        placeholder="Answer the city yourself, on the record…"
+        placeholder={t('Answer the city yourself, on the record…')}
         value={text}
         onChangeText={setDraft}
         multiline
         maxLength={4000}
       />
       <Button
-        title={mine ? 'Update answer' : 'Post answer'}
+        title={mine ? t('Update answer') : t('Post answer')}
         onPress={save}
         loading={saving}
         disabled={!text.trim() || (mine != null && text.trim() === mine.body)}
       />
       {mine && (
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          Answers are part of the public record; revise the text, but it cannot be taken down.
+          {t('Answers are part of the public record; revise the text, but it cannot be taken down.')}
         </ThemedText>
       )}
     </Card>
@@ -184,6 +187,7 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
   const theme = useTheme();
   const { profile } = useAuth();
   const { anticipate } = useCelebration();
+  const t = useT();
   const [expanded, setExpanded] = useState(false);
 
   const { data: myVote, loading: myVoteLoading } = useLiveDoc<{ value: CommentVoteValue }>(
@@ -208,7 +212,7 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
       await voteElectionAnswer(profile, questionId, answer.candidateUid, next);
       if (firstCast && next) anticipate('votes');
     } catch (e) {
-      notifyError('Could not record your vote', e);
+      notifyError(t('Could not record your vote'), e);
     }
   };
 
@@ -238,7 +242,7 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
         {collapsible ? (
           <Pressable onPress={() => setExpanded((v) => !v)} hitSlop={8}>
             <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
-              {expanded ? 'Show less' : 'Read the rest'}
+              {expanded ? t('Show less') : t('Read the rest')}
             </ThemedText>
           </Pressable>
         ) : (
@@ -248,13 +252,13 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
           <RateButton
             icon="arrow-up"
             active={myVote?.value === 'up'}
-            label="This answers it"
+            label={t('This answers it')}
             onPress={() => rate('up')}
           />
           <RateButton
             icon="arrow-down"
             active={myVote?.value === 'down'}
-            label="This dodges it"
+            label={t('This dodges it')}
             onPress={() => rate('down')}
           />
         </View>

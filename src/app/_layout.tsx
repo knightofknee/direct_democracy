@@ -12,7 +12,7 @@ import { UpdateModal } from '@/components/update-modal';
 import { Colors } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
-import { LocaleProvider } from '@/lib/i18n';
+import { LocaleProvider, useT } from '@/lib/i18n';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -89,33 +89,7 @@ export default function RootLayout() {
         <AuthProvider>
           <SplashGate />
           <CelebrationProvider>
-            <Stack
-              screenOptions={{
-                headerShadowVisible: false,
-                headerBackButtonDisplayMode: 'minimal',
-              }}>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="concern/[id]" options={{ title: 'Concern' }} />
-              <Stack.Screen name="official/[id]" options={{ title: 'Official' }} />
-              <Stack.Screen name="officials" options={{ title: 'Officials' }} />
-              <Stack.Screen name="candidate/[id]/index" options={{ title: 'Candidate' }} />
-              <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: 'Policy' }} />
-              <Stack.Screen name="election-question/[id]" options={{ title: 'Election AMA' }} />
-              <Stack.Screen name="school-board/[race]" options={{ title: 'School board' }} />
-              <Stack.Screen name="school-board-candidate/[id]" options={{ title: 'Candidate' }} />
-              <Stack.Screen name="election-race/[race]" options={{ title: 'On your ballot' }} />
-              <Stack.Screen name="election-candidate/[id]" options={{ title: 'Candidate' }} />
-              <Stack.Screen name="ward-race/[ward]" options={{ title: 'Ward race' }} />
-              <Stack.Screen name="sign-in" options={{ title: 'Sign in', ...MODAL }} />
-              <Stack.Screen name="new-concern" options={{ title: 'Raise a concern', ...MODAL }} />
-              <Stack.Screen name="new-poll" options={{ title: 'New poll', ...MODAL }} />
-              <Stack.Screen name="edit-policy" options={{ title: 'Platform policy', ...MODAL }} />
-              <Stack.Screen name="verify" options={{ title: 'Verify identity', ...MODAL }} />
-              <Stack.Screen name="my-activity" options={{ title: 'My activity' }} />
-              <Stack.Screen name="privacy" options={{ title: 'Privacy & data' }} />
-              <Stack.Screen name="settings" options={{ title: 'Settings' }} />
-              <Stack.Screen name="admin" options={{ title: 'Reports' }} />
-            </Stack>
+            <RootStack />
             <LanguagePrompt />
             <UpdateModal />
           </CelebrationProvider>
@@ -123,5 +97,40 @@ export default function RootLayout() {
         </LocaleProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
+  );
+}
+
+
+/** The stack lives below LocaleProvider so its titles can translate. */
+function RootStack() {
+  const t = useT();
+  return (
+      <Stack
+        screenOptions={{
+          headerShadowVisible: false,
+          headerBackButtonDisplayMode: 'minimal',
+        }}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="concern/[id]" options={{ title: t('Concern') }} />
+        <Stack.Screen name="official/[id]" options={{ title: t('Official') }} />
+        <Stack.Screen name="officials" options={{ title: t('Officials') }} />
+        <Stack.Screen name="candidate/[id]/index" options={{ title: t('Candidate') }} />
+        <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: t('Policy') }} />
+        <Stack.Screen name="election-question/[id]" options={{ title: t('Election AMA') }} />
+        <Stack.Screen name="school-board/[race]" options={{ title: t('School board') }} />
+        <Stack.Screen name="school-board-candidate/[id]" options={{ title: t('Candidate') }} />
+        <Stack.Screen name="election-race/[race]" options={{ title: t('On your ballot') }} />
+        <Stack.Screen name="election-candidate/[id]" options={{ title: t('Candidate') }} />
+        <Stack.Screen name="ward-race/[ward]" options={{ title: t('Ward race') }} />
+        <Stack.Screen name="sign-in" options={{ title: t('Sign in'), ...MODAL }} />
+        <Stack.Screen name="new-concern" options={{ title: t('Raise a concern'), ...MODAL }} />
+        <Stack.Screen name="new-poll" options={{ title: t('New poll'), ...MODAL }} />
+        <Stack.Screen name="edit-policy" options={{ title: t('Platform policy'), ...MODAL }} />
+        <Stack.Screen name="verify" options={{ title: t('Verify identity'), ...MODAL }} />
+        <Stack.Screen name="my-activity" options={{ title: t('My activity') }} />
+        <Stack.Screen name="privacy" options={{ title: t('Privacy & data') }} />
+        <Stack.Screen name="settings" options={{ title: t('Settings') }} />
+        <Stack.Screen name="admin" options={{ title: 'Reports' }} />
+      </Stack>
   );
 }

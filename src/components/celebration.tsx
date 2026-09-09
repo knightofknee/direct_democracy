@@ -27,6 +27,7 @@ import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
 import { successHaptic } from '@/lib/haptics';
+import { tr, useT } from '@/lib/i18n';
 import { takeAnticipatedMilestone, takeNewMilestone, type Milestone } from '@/lib/milestones';
 import type { UserStats } from '@/lib/types';
 
@@ -107,9 +108,10 @@ export function CelebrationProvider({ children }: { children: React.ReactNode })
       AsyncStorage.setItem(key, '1');
       celebrate({
         key: 'welcome',
-        title: 'Welcome to direct democracy',
-        message:
-          'Your city, your voice. Raise concerns, vote your priorities, and hold officials to real answers.',
+        title: tr('Welcome to direct democracy'),
+        message: tr(
+          'Your city, your voice. Raise concerns, vote your priorities, and hold officials to real answers.'
+        ),
       });
     });
   }, [uid, createdMs, celebrate]);
@@ -142,6 +144,7 @@ function CelebrationOverlay({
   onDismiss: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -197,7 +200,7 @@ function CelebrationOverlay({
           style={{ textAlign: 'center', fontSize: 15, lineHeight: 21 }}>
           {milestone.message}
         </ThemedText>
-        <Button title="Keep going" onPress={onDismiss} style={{ alignSelf: 'stretch' }} />
+        <Button title={t('Keep going')} onPress={onDismiss} style={{ alignSelf: 'stretch' }} />
       </Animated.View>
     </Animated.View>
   );

@@ -24,11 +24,14 @@ import { notify } from '@/lib/notify';
 import type { Candidate, Official } from '@/lib/types';
 import { unblockUser } from '@/services/moderation';
 import { updateDisplayName } from '@/services/users';
+import { usePlural, useT } from '@/lib/i18n';
 
 export default function ProfileScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { user, profile, loading, signOut } = useAuth();
+  const t = useT();
+  const pluralT = usePlural();
   const { blocks } = useBlocks();
   const [editingName, setEditingName] = useState<string | null>(null);
   const [savingName, setSavingName] = useState(false);
@@ -58,7 +61,7 @@ export default function ProfileScreen() {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
             <ChicagoStar size={18} />
             <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
-              profile
+              {t('profile')}
             </ThemedText>
           </View>
           <FlagAccent />
@@ -67,9 +70,9 @@ export default function ProfileScreen() {
           <View style={{ alignItems: 'center', gap: Spacing.three, paddingVertical: Spacing.three }}>
             <Ionicons name="person-circle-outline" size={44} color={theme.primary} />
             <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-              Sign in to vote on concerns, join ward votes, and hold officials to account.
+              {t('Sign in to vote on concerns, join ward votes, and hold officials to account.')}
             </ThemedText>
-            <Button title="Sign in or create account" onPress={() => router.push('/sign-in')} />
+            <Button title={t('Sign in or create account')} onPress={() => router.push('/sign-in')} />
           </View>
         </Card>
       </Screen>
@@ -82,7 +85,7 @@ export default function ProfileScreen() {
       await updateDisplayName(profile.uid, name);
       setEditingName(null);
     } catch (e) {
-      notify('Could not update name', e instanceof Error ? e.message : 'Something went wrong.');
+      notify(t('Could not update name'), e instanceof Error ? e.message : t('Something went wrong.'));
     } finally {
       setSavingName(false);
     }
@@ -91,7 +94,7 @@ export default function ProfileScreen() {
   return (
     <Screen tab>
       <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34, textAlign: 'center' }}>
-        profile
+        {t('profile')}
       </ThemedText>
 
       <Card>
@@ -104,96 +107,92 @@ export default function ProfileScreen() {
               {profile.verified ? (
                 <VerifiedBadge />
               ) : (
-                <Chip label="Unverified" tone="neutral" icon="shield-outline" />
+                <Chip label={t('Unverified')} tone="neutral" icon="shield-outline" />
               )}
-              {profile.role === 'official' && <Chip label="Elected official" tone="primary" icon="ribbon" />}
-              {profile.role === 'candidate' && <Chip label="Candidate" tone="primary" icon="ribbon" />}
+              {profile.role === 'official' && <Chip label={t('Elected official')} tone="primary" icon="ribbon" />}
+              {profile.role === 'candidate' && <Chip label={t('Candidate')} tone="primary" icon="ribbon" />}
               {profile.wardId != null && <Chip label={wardLabel(profile.wardId)} />}
             </View>
           </View>
         </View>
 
         {editingName === null ? (
-          <Button title="Edit display name" variant="secondary" onPress={() => setEditingName(profile.displayName)} />
+          <Button title={t('Edit display name')} variant="secondary" onPress={() => setEditingName(profile.displayName)} />
         ) : (
           <View style={{ gap: Spacing.two }}>
             <Field value={editingName} onChangeText={setEditingName} autoFocus maxLength={30} />
             <View style={styles.buttonRow}>
               <Button
-                title="Shuffle"
+                title={t('Shuffle')}
                 variant="secondary"
                 onPress={() => setEditingName(randomDisplayName())}
                 style={{ flex: 1 }}
               />
               <Button
-                title="Save"
+                title={t('Save')}
                 onPress={() => saveName(editingName)}
                 loading={savingName}
                 style={{ flex: 1 }}
               />
             </View>
-            <Button title="Cancel" variant="ghost" onPress={() => setEditingName(null)} />
+            <Button title={t('Cancel')} variant="ghost" onPress={() => setEditingName(null)} />
           </View>
         )}
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          Display names are whatever you want them to be - your real identity is never shown, even
-          when verified.
+          {t('Display names are whatever you want them to be - your real identity is never shown, even when verified.')}
         </ThemedText>
       </Card>
 
       {(officialCard || candidateCard) && (
         <>
           <SectionHeader
-            title="Your public card"
-            subtitle="How voters see you - tap to open your page"
+            title={t('Your public card')}
+            subtitle={t('How voters see you - tap to open your page')}
           />
           {officialCard && <OfficialRow official={officialCard} />}
           {candidateCard && <CandidateRow candidate={candidateCard} />}
         </>
       )}
 
-      <SectionHeader title="Civic record" />
+      <SectionHeader title={t('Civic record')} />
       <Card>
         <View style={styles.statsGrid}>
-          <StatTile label="Concerns" value={profile.stats?.concerns ?? 0} icon="megaphone" />
-          <StatTile label="Comments" value={profile.stats?.comments ?? 0} icon="chatbubble" />
-          <StatTile label="Votes" value={profile.stats?.votes ?? 0} icon="checkbox" />
-          <StatTile label="Judgments" value={profile.stats?.judgments ?? 0} icon="scale" />
+          <StatTile label={t('Concerns')} value={profile.stats?.concerns ?? 0} icon="megaphone" />
+          <StatTile label={t('Comments')} value={profile.stats?.comments ?? 0} icon="chatbubble" />
+          <StatTile label={t('Votes')} value={profile.stats?.votes ?? 0} icon="checkbox" />
+          <StatTile label={t('Judgments')} value={profile.stats?.judgments ?? 0} icon="scale" />
         </View>
         {(profile.stats?.credits ?? 0) > 0 && (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Ionicons name="pencil" size={13} color={theme.verified} />
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, flex: 1 }}>
-              {plural(profile.stats!.credits!, 'writing credit')} - candidates changed a policy
-              because of your comments.
+              {pluralT(profile.stats!.credits!, 'writing credit')} - {t('candidates changed a policy because of your comments.')}
             </ThemedText>
           </View>
         )}
       </Card>
 
-      <Button title="My activity" variant="secondary" onPress={() => router.push('/my-activity')} />
+      <Button title={t('My activity')} variant="secondary" onPress={() => router.push('/my-activity')} />
       {isAdminUser(user) && (
         <Button title="Review reports (admin)" variant="secondary" onPress={() => router.push('/admin')} />
       )}
 
-      <SectionHeader title="Identity verification" />
+      <SectionHeader title={t('Identity verification')} />
       <Card>
         {profile.verified ? (
           <>
             <ThemedText type="small">
-              You’re verified as a{' '}
-              {profile.wardId != null ? `resident of the ${wardLabel(profile.wardId)}` : 'Chicago resident'}
-              . Your votes count in the verified tallies.
+              {profile.wardId != null
+                ? t('You’re verified as a resident of the {ward}. Your votes count in the verified tallies.').replace('{ward}', wardLabel(profile.wardId))
+                : t('You’re verified as a Chicago resident. Your votes count in the verified tallies.')}
             </ThemedText>
           </>
         ) : (
           <>
             <ThemedText type="small">
-              Verify once to unlock your ward tab and make your votes count in the verified tallies.
-              A third-party service (Didit) checks your ID. We only ever receive a yes/no and
-              your ward. No documents, no address, nothing else.
+              {t('Verify once to unlock your ward tab and make your votes count in the verified tallies. A third-party service (Didit) checks your ID. We only ever receive a yes/no and your ward. No documents, no address, nothing else.')}
             </ThemedText>
-            <Button title="Verify my identity" onPress={() => router.push('/verify')} />
+            <Button title={t('Verify my identity')} onPress={() => router.push('/verify')} />
           </>
         )}
       </Card>
@@ -201,8 +200,8 @@ export default function ProfileScreen() {
       {blocks.length > 0 && (
         <>
           <SectionHeader
-            title="Blocked users"
-            subtitle="Their content is hidden for you - unblock any time"
+            title={t('Blocked users')}
+            subtitle={t('Their content is hidden for you - unblock any time')}
           />
           <Card>
             {blocks.map((b) => (
@@ -213,13 +212,13 @@ export default function ProfileScreen() {
                   {b.displayName}
                 </ThemedText>
                 <Button
-                  title="Unblock"
+                  title={t('Unblock')}
                   variant="ghost"
                   onPress={() =>
                     profile &&
                     unblockUser(profile, b.id).catch((e) => notify(
-                      'Could not unblock',
-                      e instanceof Error ? e.message : 'Something went wrong.'
+                      t('Could not unblock'),
+                      e instanceof Error ? e.message : t('Something went wrong.')
                     ))
                   }
                 />
@@ -229,8 +228,8 @@ export default function ProfileScreen() {
         </>
       )}
 
-      <Button title="Settings" variant="ghost" onPress={() => router.push('/settings')} />
-      <Button title="Sign out" variant="ghost" onPress={() => void signOut()} />
+      <Button title={t('Settings')} variant="ghost" onPress={() => router.push('/settings')} />
+      <Button title={t('Sign out')} variant="ghost" onPress={() => void signOut()} />
     </Screen>
   );
 }

@@ -8,6 +8,7 @@ import { Button, EmptyState, Field } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useT } from '@/lib/i18n';
 import { notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import type { PollType, Scope } from '@/lib/types';
@@ -24,6 +25,7 @@ export default function NewPollScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
+  const t = useT();
   const [question, setQuestion] = useState('');
   const [detail, setDetail] = useState('');
   const [type, setType] = useState<PollType>('yesNo');
@@ -37,7 +39,7 @@ export default function NewPollScreen() {
       <Screen>
         <EmptyState
           icon="lock-closed-outline"
-          message="Only elected officials and candidates can create polls."
+          message={t('Only elected officials and candidates can create polls.')}
         />
       </Screen>
     );
@@ -47,7 +49,7 @@ export default function NewPollScreen() {
 
   const submit = async () => {
     if (question.trim().length < 10) {
-      notify('Almost there', 'Write a question of at least 10 characters.');
+      notify(t('Almost there'), t('Write a question of at least 10 characters.'));
       return;
     }
     const options = optionsText
@@ -56,7 +58,7 @@ export default function NewPollScreen() {
       .filter(Boolean)
       .map((label, i) => ({ key: `opt${i}`, label }));
     if (needsOptions && options.length < 2) {
-      notify('Almost there', 'List at least two options, one per line.');
+      notify(t('Almost there'), t('List at least two options, one per line.'));
       return;
     }
     setSaving(true);
@@ -73,7 +75,7 @@ export default function NewPollScreen() {
       if (router.canGoBack()) router.back();
       else router.replace('/ward');
     } catch (e) {
-      notify('Could not create poll', e instanceof Error ? e.message : 'Something went wrong.');
+      notify(t('Could not create poll'), e instanceof Error ? e.message : t('Something went wrong.'));
       setSaving(false);
     }
   };
@@ -86,14 +88,13 @@ export default function NewPollScreen() {
   return (
     <Screen>
       <ThemedText type="small" themeColor="textSecondary">
-        Put a question directly to your constituents. Ward polls are votable only by verified
-        residents of your ward; citywide polls are open to everyone, with verified results alongside.
+        {t('Put a question directly to your constituents. Ward polls are votable only by verified residents of your ward; citywide polls are open to everyone, with verified results alongside.')}
       </ThemedText>
 
-      <Field label="Question" placeholder="Should the ward…" value={question} onChangeText={setQuestion} />
+      <Field label={t('Question')} placeholder={t('Should the ward…')} value={question} onChangeText={setQuestion} />
       <Field
-        label="Context (optional)"
-        placeholder="Background, tradeoffs, links…"
+        label={t('Context (optional)')}
+        placeholder={t('Background, tradeoffs, links…')}
         value={detail}
         onChangeText={setDetail}
         multiline
@@ -102,26 +103,26 @@ export default function NewPollScreen() {
 
       <View style={{ gap: Spacing.one }}>
         <ThemedText type="smallBold" themeColor="textSecondary">
-          Vote format
+          {t('Vote format')}
         </ThemedText>
         <View style={styles.wrapRow}>
-          {TYPES.map((t) => (
-            <Pressable key={t.key} onPress={() => setType(t.key)} style={[styles.choice, choice(type === t.key)]}>
-              <ThemedText type="small" style={type === t.key ? { color: theme.primary, fontWeight: '700' } : undefined}>
-                {t.label}
+          {TYPES.map((ty) => (
+            <Pressable key={ty.key} onPress={() => setType(ty.key)} style={[styles.choice, choice(type === ty.key)]}>
+              <ThemedText type="small" style={type === ty.key ? { color: theme.primary, fontWeight: '700' } : undefined}>
+                {t(ty.label)}
               </ThemedText>
             </Pressable>
           ))}
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          {TYPES.find((t) => t.key === type)?.hint}
+          {t(TYPES.find((ty) => ty.key === type)?.hint ?? '')}
         </ThemedText>
       </View>
 
       {needsOptions && (
         <Field
-          label="Options (one per line)"
-          placeholder={'Option A\nOption B\nOption C'}
+          label={t('Options (one per line)')}
+          placeholder={t('Option A\nOption B\nOption C')}
           value={optionsText}
           onChangeText={setOptionsText}
           multiline
@@ -131,25 +132,25 @@ export default function NewPollScreen() {
 
       <View style={{ gap: Spacing.one }}>
         <ThemedText type="smallBold" themeColor="textSecondary">
-          Audience
+          {t('Audience')}
         </ThemedText>
         <View style={styles.wrapRow}>
           {profile.wardId != null && (
             <Pressable onPress={() => setScope('ward')} style={[styles.choice, choice(scope === 'ward')]}>
               <ThemedText type="small" style={scope === 'ward' ? { color: theme.primary, fontWeight: '700' } : undefined}>
-                {wardLabel(profile.wardId)} (verified residents)
+                {wardLabel(profile.wardId)} ({t('verified residents')})
               </ThemedText>
             </Pressable>
           )}
           <Pressable onPress={() => setScope('city')} style={[styles.choice, choice(scope === 'city')]}>
             <ThemedText type="small" style={scope === 'city' ? { color: theme.primary, fontWeight: '700' } : undefined}>
-              Citywide (everyone)
+              {t('Citywide (everyone)')}
             </ThemedText>
           </Pressable>
         </View>
       </View>
 
-      <Button title="Open the vote" onPress={submit} loading={saving} />
+      <Button title={t('Open the vote')} onPress={submit} loading={saving} />
     </Screen>
   );
 }

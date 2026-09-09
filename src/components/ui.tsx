@@ -15,6 +15,7 @@ import {
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { tr } from '@/lib/i18n';
 
 export function Card({
   children,
@@ -137,7 +138,7 @@ export function VerifiedBadge({ compact }: { compact?: boolean }) {
       <Ionicons name="shield-checkmark" size={12} color={theme.verified} />
       {!compact && (
         <ThemedText type="small" style={{ color: theme.verified, fontSize: 12, lineHeight: 16 }}>
-          Verified
+          {tr('Verified')}
         </ThemedText>
       )}
     </View>
@@ -234,7 +235,7 @@ export function InfoModal({
             <ThemedText type="smallBold" style={{ fontSize: 17, flex: 1 }}>
               {title}
             </ThemedText>
-            <Pressable onPress={onClose} hitSlop={10} accessibilityLabel="Close">
+            <Pressable onPress={onClose} hitSlop={10} accessibilityLabel={tr('Close')}>
               <Ionicons name="close" size={20} color={theme.textSecondary} />
             </Pressable>
           </View>

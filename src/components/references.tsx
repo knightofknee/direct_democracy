@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Button, Field } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 import { openLink } from '@/lib/open-link';
 import { MAX_REFERENCES } from '@/services/concerns';
 
@@ -60,12 +61,13 @@ export function ReferencedBody({
 /** The numbered source list at the bottom of the content. */
 export function ReferenceList({ references }: { references?: string[] }) {
   const theme = useTheme();
+  const t = useT();
   const refs = safeReferences(references);
   if (!refs.some(Boolean)) return null;
   return (
     <View style={[styles.list, { borderTopColor: theme.border }]}>
       <ThemedText type="smallBold" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        References
+        {t('References')}
       </ThemedText>
       {refs.map((url, i) =>
         url ? (
@@ -113,13 +115,14 @@ export function ReferenceEditor({
   hint?: string | null;
 }) {
   const theme = useTheme();
+  const t = useT();
   const hasBlank = references.some((r) => !r.trim());
   const canAdd = !hasBlank && references.length < MAX_REFERENCES;
   return (
     <View style={{ gap: Spacing.two }}>
       {references.length > 0 && (
         <ThemedText type="smallBold" themeColor="textSecondary">
-          {title}
+          {t(title)}
         </ThemedText>
       )}
       {references.map((url, i) => (
@@ -140,19 +143,19 @@ export function ReferenceEditor({
           <Pressable
             onPress={() => onChange(references.filter((_, j) => j !== i))}
             hitSlop={8}
-            accessibilityLabel={`Remove reference ${i + 1}`}>
+            accessibilityLabel={t('Remove reference {n}').replace('{n}', String(i + 1))}>
             <Ionicons name="close-circle" size={20} color={theme.textSecondary} />
           </Pressable>
         </View>
       ))}
       {references.length > 0 && hint != null && (
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          {hint}
+          {t(hint)}
         </ThemedText>
       )}
       {canAdd && (
         <Button
-          title={references.length === 0 ? addFirstLabel : addAnotherLabel}
+          title={t(references.length === 0 ? addFirstLabel : addAnotherLabel)}
           variant="ghost"
           onPress={() => onChange([...references, ''])}
         />
@@ -168,6 +171,7 @@ export function ReferenceEditor({
  */
 export function SourcesButton({ references }: { references?: string[] }) {
   const theme = useTheme();
+  const t = useT();
   const [open, setOpen] = useState(false);
   const refs = safeReferences(references).filter(Boolean);
   if (refs.length === 0) return null;
@@ -176,7 +180,7 @@ export function SourcesButton({ references }: { references?: string[] }) {
       <Pressable onPress={() => setOpen(true)} hitSlop={4} style={styles.sourcesButton}>
         <Ionicons name="link-outline" size={14} color={theme.textSecondary} />
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, fontWeight: '600' }}>
-          {refs.length === 1 ? 'source' : 'sources'}
+          {refs.length === 1 ? t('source') : t('sources')}
         </ThemedText>
       </Pressable>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
@@ -185,7 +189,7 @@ export function SourcesButton({ references }: { references?: string[] }) {
             style={[styles.sheet, { backgroundColor: theme.background, borderColor: theme.border }]}
             onPress={(e) => e.stopPropagation()}>
             <ThemedText type="smallBold">
-              {refs.length === 1 ? 'Source' : 'Sources'}
+              {refs.length === 1 ? t('Source') : t('Sources')}
             </ThemedText>
             {refs.map((url, i) => (
               <Pressable
@@ -205,7 +209,7 @@ export function SourcesButton({ references }: { references?: string[] }) {
                 <Ionicons name="open-outline" size={13} color={theme.textSecondary} />
               </Pressable>
             ))}
-            <Button title="Close" variant="ghost" onPress={() => setOpen(false)} />
+            <Button title={t('Close')} variant="ghost" onPress={() => setOpen(false)} />
           </Pressable>
         </Pressable>
       </Modal>

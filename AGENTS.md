@@ -109,6 +109,17 @@ Conventions:
   `email_verified` on the auth token for every act-as-politician write.
   Unclaimed officials' unanswered questions stay pending, never "ignored" -
   the ignore clock starts at claim.
+- Email sign-in links: the continue URL is
+  `https://www.waldgrave.com/directdemocracy/auth` (`.env`). Firebase's
+  handler forwards the link's query there and the page opens the app as
+  `directdemocracy://sign-in?<query>`; `src/app/+native-intent.ts` routes
+  the URL to the sign-in screen and `use-auth.tsx` redeems it. The project's
+  action URL cannot be customized (console and API both refuse) and
+  `linkDomain` needs Firebase Hosting, which we do not run. waldgrave.com
+  also serves the app-site-association / assetlinks for that path and
+  app.json carries the matching entitlement and intent filter. Never point
+  links at firebaseapp.com universal links: Firebase stopped serving the
+  association file there when Dynamic Links shut down.
 - Use `notify()` from `src/lib/notify.ts` for user-facing errors - RN's
   Alert is a silent no-op on web.
 - Assume success on a user's own vote/action: every displayed aggregate a
@@ -126,10 +137,18 @@ Conventions:
   strings keyed by their English source text in `src/i18n/es.ts`; a missing
   key renders the English. The locale lives on the device (AsyncStorage),
   asked once in both languages on first launch (`language-prompt.tsx`) and
-  changeable in Settings. Covered so far: tab bar, the whole election tab and
-  its screens, settings. Candidate statements are never machine-translated.
-  New user-facing strings on covered surfaces go through `t()` with a
-  matching `es.ts` entry.
+  changeable in Settings. The ENTIRE app UI is covered (every screen and
+  component; only the operator-only admin screen and emulator-only dev
+  strings are exempt), so every new user-facing string goes through `t()`
+  with a matching `es.ts` entry - no exceptions. Non-hook code paths
+  (formatters, notify fallbacks, milestones, wardLabel) use `tr()` /
+  `getLocale()` from the same module. Candidate statements are never
+  machine-translated. Operator-authored SEEDED copy is bilingual: cards
+  and race notes carry `runningOnEs` / `priorCareerEs` / `noteEs`
+  (operator-translated, validated by the seeds, picked at render by
+  `useLocalized()` with English fallback) - every new or edited card in the
+  data files gets its Spanish fields in the same change. Candidates' own
+  quoted words inside a summary stay in their original language.
 - Judges and district races: `judicial-retention`, `judicial-appellate`,
   `judicial-circuit`, `judicial-subcircuit-N` and the district families
   (`us-house-N`, `il-senate-N`, `il-house-N`, `cook-commissioner-N`,

@@ -42,6 +42,8 @@ interface Entry {
   photoUrl?: string | null;
   runningOn: string;
   priorCareer: string | null;
+  runningOnEs?: string | null;
+  priorCareerEs?: string | null;
   sourceUrls: string[];
 }
 
@@ -74,7 +76,7 @@ function validate(entries: Entry[]): void {
       problems.push(`${e.name}: photoUrl must be https`);
     if (!Array.isArray(e.sourceUrls) || e.sourceUrls.length === 0)
       problems.push(`${e.name}: needs at least one source URL`);
-    for (const text of [e.runningOn, e.priorCareer ?? '']) {
+    for (const text of [e.runningOn, e.priorCareer ?? '', e.runningOnEs ?? '', e.priorCareerEs ?? '']) {
       if (/[–—]/.test(text)) problems.push(`${e.name}: em/en dash in copy`);
     }
   }
@@ -113,6 +115,8 @@ async function main() {
         photoUrl: e.photoUrl ?? null,
         runningOn: e.runningOn.trim(),
         priorCareer: e.priorCareer?.trim() || null,
+        runningOnEs: e.runningOnEs?.trim() || null,
+        priorCareerEs: e.priorCareerEs?.trim() || null,
         sourceUrls: e.sourceUrls,
       },
       { merge: false }

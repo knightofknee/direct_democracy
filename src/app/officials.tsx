@@ -18,11 +18,13 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
+import { useT } from '@/lib/i18n';
 import type { Official } from '@/lib/types';
 import { computeGrade } from '@/services/officials';
 
 export default function AmaScreen() {
   const { profile } = useAuth();
+  const t = useT();
   const { data: officials, loading } = useLiveQuery<Official & { id: string }>(
     () => query(collection(db, 'officials'), orderBy('name')),
     []
@@ -43,12 +45,11 @@ export default function AmaScreen() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
           <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
-            ama
+            {t('ama')}
           </ThemedText>
         </View>
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-          Ongoing ask-me-anythings with Chicago’s elected officials, each graded two ways: approval
-          from their constituents, and whether they actually answer questions.
+          {t('Ongoing ask-me-anythings with Chicago’s elected officials, each graded two ways: approval from their constituents, and whether they actually answer questions.')}
         </ThemedText>
         <FlagAccent />
       </View>
@@ -56,16 +57,16 @@ export default function AmaScreen() {
       {loading ? (
         <SkeletonCards />
       ) : sorted.length === 0 ? (
-        <EmptyState icon="people-outline" message="No officials on the platform yet." />
+        <EmptyState icon="people-outline" message={t('No officials on the platform yet.')} />
       ) : (
         <>
           {mine && (
             <>
-              <SectionHeader title="your alderman" />
+              <SectionHeader title={t('your alderman')} />
               <OfficialRow official={mine} highlighted />
             </>
           )}
-          {mine && <SectionHeader title="every ward" />}
+          {mine && <SectionHeader title={t('every ward')} />}
           {sorted.map((official, i) => (
             <Animated.View
               key={official.uid}
@@ -82,6 +83,7 @@ export default function AmaScreen() {
 function OfficialRow({ official, highlighted }: { official: Official; highlighted?: boolean }) {
   const router = useRouter();
   const theme = useTheme();
+  const t = useT();
   const grade = computeGrade(official);
   return (
     <Card
@@ -94,7 +96,7 @@ function OfficialRow({ official, highlighted }: { official: Official; highlighte
             <ThemedText type="smallBold" style={{ fontSize: 15 }}>
               {official.name}
             </ThemedText>
-            {official.claimed && <Chip label="on the platform" tone="success" />}
+            {official.claimed && <Chip label={t('on the platform')} tone="success" />}
           </View>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {official.title}
@@ -104,13 +106,13 @@ function OfficialRow({ official, highlighted }: { official: Official; highlighte
               icon="thumbs-up"
               label={
                 grade.approval.constituentPct == null
-                  ? 'Approval -'
-                  : `${grade.approval.constituentPct}% approval`
+                  ? t('Approval -')
+                  : t('{pct}% approval').replace('{pct}', String(grade.approval.constituentPct))
               }
             />
             <AxisPill
               icon="chatbox-ellipses"
-              label={grade.answersGraded ? `Answers ${grade.answers.grade}` : 'Answers -'}
+              label={grade.answersGraded ? `${t('Answers')} ${grade.answers.grade}` : t('Answers -')}
             />
           </View>
         </View>

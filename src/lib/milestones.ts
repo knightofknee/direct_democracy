@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { tr } from '@/lib/i18n';
 import type { UserStats } from '@/lib/types';
 
 /**
@@ -26,29 +27,29 @@ const TRACKS: MilestoneTrack[] = [
     stat: 'concerns',
     thresholds: [1, 10, 50],
     title: (n) =>
-      n === 1 ? 'First concern raised!' : `${n} concerns raised!`,
+      n === 1 ? tr('First concern raised!') : tr('{n} concerns raised!').replace('{n}', String(n)),
     message: (n) =>
       n === 1
-        ? 'Your voice is officially on the board. This is how change starts.'
-        : 'You keep putting real issues in front of the city. Keep them coming.',
+        ? tr('Your voice is officially on the board. This is how change starts.')
+        : tr('You keep putting real issues in front of the city. Keep them coming.'),
   },
   {
     stat: 'votes',
     thresholds: [1, 10, 100, 500],
-    title: (n) => (n === 1 ? 'First vote cast!' : `${n} votes cast!`),
+    title: (n) => (n === 1 ? tr('First vote cast!') : tr('{n} votes cast!').replace('{n}', String(n))),
     message: (n) =>
       n === 1
-        ? 'Every tally in this app is made of moments like that one.'
+        ? tr('Every tally in this app is made of moments like that one.')
         : n >= 100
-          ? 'That is a serious voting record. Chicago hears you.'
-          : 'Your priorities are shaping the board.',
+          ? tr('That is a serious voting record. Chicago hears you.')
+          : tr('Your priorities are shaping the board.'),
   },
   {
     stat: 'judgments',
     thresholds: [1, 25, 100],
-    title: (n) => (n === 1 ? 'First answer judged!' : `${n} answers judged!`),
+    title: (n) => (n === 1 ? tr('First answer judged!') : tr('{n} answers judged!').replace('{n}', String(n))),
     message: () =>
-      'Holding officials to straight answers is the whole point. Thank you.',
+      tr('Holding officials to straight answers is the whole point. Thank you.'),
   },
 ];
 

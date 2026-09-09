@@ -26,6 +26,8 @@ import type { UserProfile } from '@/lib/types';
 
 /** Where the device remembers which address a sign-in link was sent to. */
 const EMAIL_LINK_KEY = 'dd:emailForSignIn';
+/** Path of the app's Firebase action URL on waldgrave.com (see +native-intent.ts). */
+const AUTH_LINK_PATH = '/directdemocracy/auth';
 const BUNDLE_ID = 'com.briancarlisle.directdemocracy';
 
 /**
@@ -96,10 +98,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Complete email-link (passwordless) sign-in when the app is opened via a
   // sign-in link - the URL arrives as location.href on web and as a deep
-  // link on native (universal links / app links must point at the app).
+  // link on native. Firebase's handler forwards the link to the continue
+  // URL, https://www.waldgrave.com/directdemocracy/auth, which hands the
+  // same parameters to the app as directdemocracy://sign-in?... (a JS
+  // redirect never triggers a universal link, so the scheme is the working
+  // path; the universal link / app link on that path is there for any link
+  // tapped directly). Either form parses: Firebase reads only the query.
   useEffect(() => {
     const complete = async (url: string | null) => {
-      if (!url || !isSignInWithEmailLink(auth, url)) return;
+      if (!url) return;
+      if (!isSignInWithEmailLink(auth, url)) {
+        // Every Firebase auth email lands on the same waldgrave path, and
+        // Android app links cannot filter by query, so a password reset or
+        // email-verification link opens the app too (iOS only opens for
+        // mode=signIn). The app has no UI for those: hand them to Firebase's
+        // own handler page in the browser.
+        if (Platform.OS !== 'web' && url.includes(AUTH_LINK_PATH) && url.includes('oobCode=')) {
+          const q = url.indexOf('?');
+          const authDomain = auth.config.authDomain ?? 'direct-democracy-e338a.firebaseapp.com';
+          await Linking.openURL(`https://${authDomain}/__/auth/action${q >= 0 ? url.slice(q) : ''}`);
+        }
+        return;
+      }
       let email = await AsyncStorage.getItem(EMAIL_LINK_KEY);
       if (!email && Platform.OS === 'web') {
         // Link opened on a different device than the one that requested it.
@@ -185,15 +205,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
       sendMagicLink: async (email) => {
         // The continue URL must be on an authorized domain (Firebase console →
-        // Authentication → Settings). On phones the emailed link opens the
-        // app via universal links; the continue URL is only where the link
-        // lands when the app is NOT installed, so it points at the public
-        // app page rather than a web app we do not have.
+        // Authentication → Settings). The emailed link goes to Firebase's own
+        // handler, which forwards mode/oobCode/apiKey to the continue URL:
+        // the waldgrave handoff page, which opens the app through the
+        // directdemocracy:// scheme (verified 2026-09-09). The project's
+        // action URL cannot be customized (the console and the API both
+        // refuse), so the handler hop is the path.
         const continueUrl =
           Platform.OS === 'web'
             ? `${window.location.origin}/sign-in`
             : (process.env.EXPO_PUBLIC_AUTH_CONTINUE_URL ??
-              'https://www.waldgrave.com/directdemocracy');
+              'https://www.waldgrave.com/directdemocracy/auth');
         await sendSignInLinkToEmail(auth, email.trim(), {
           url: continueUrl,
           handleCodeInApp: true,

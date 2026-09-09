@@ -17,6 +17,7 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { host } from '@/lib/format';
+import { useT } from '@/lib/i18n';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { openLink } from '@/lib/open-link';
 import type { Candidate, Comment, Policy } from '@/lib/types';
@@ -35,6 +36,7 @@ export default function PolicyScreen() {
   const router = useRouter();
   const theme = useTheme();
   const { profile } = useAuth();
+  const t = useT();
 
   const { data: candidate } = useLiveDoc<Candidate>(
     () => (id ? doc(db, 'candidates', id) : null),
@@ -58,7 +60,7 @@ export default function PolicyScreen() {
   if (!policy) {
     return (
       <Screen>
-        {loading ? null : <EmptyState icon="alert-circle-outline" message="Policy not found." />}
+        {loading ? null : <EmptyState icon="alert-circle-outline" message={t('Policy not found.')} />}
       </Screen>
     );
   }
@@ -73,7 +75,7 @@ export default function PolicyScreen() {
       <View style={{ gap: Spacing.two }}>
         <View style={styles.metaRow}>
           {policy.section ? <Chip label={policy.section} /> : null}
-          {policy.archived && <Chip label="Hidden" tone="warning" icon="eye-off" />}
+          {policy.archived && <Chip label={t('Hidden')} tone="warning" icon="eye-off" />}
           <View style={{ flex: 1 }} />
           {candidate && !isDirectory && (
             <ContentActions
@@ -92,8 +94,8 @@ export default function PolicyScreen() {
           <Pressable onPress={() => router.push(`/candidate/${policy.candidateUid}`)}>
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
               {isDirectory
-                ? 'Declared candidate · no platform published to import'
-                : `From the platform of ${candidate.name} · ${candidate.office}`}
+                ? t('Declared candidate · no platform published to import')
+                : `${t('From the platform of {name}').replace('{name}', candidate.name)} · ${t(candidate.office)}`}
             </ThemedText>
           </Pressable>
         )}
@@ -107,17 +109,17 @@ export default function PolicyScreen() {
               accessibilityRole="link">
               <Ionicons name="globe-outline" size={14} color={theme.primary} />
               <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
-                Imported from {host(candidate.sourceUrl)}
+                {t('Imported from {host}').replace('{host}', host(candidate.sourceUrl))}
               </ThemedText>
             </Pressable>
-            <CopyLinkButton url={candidate.sourceUrl} label="Copy platform source link" />
+            <CopyLinkButton url={candidate.sourceUrl} label={t('Copy platform source link')} />
           </View>
         ) : null}
         <PolicyBody body={policy.body} />
       </View>
 
       {policy.links.length > 0 && (
-        <Receipts links={policy.links} title={isDirectory ? 'Links' : 'Receipts'} />
+        <Receipts links={policy.links} title={isDirectory ? t('Links') : t('Receipts')} />
       )}
 
       {isThisCandidate && <CandidateTools policy={policy} />}
@@ -126,7 +128,7 @@ export default function PolicyScreen() {
           directory entry - render no comment surface rather than risk one. */}
       {!candidate || isDirectory ? null : (
         <>
-          <SectionHeader title={`Comments (${policy.commentCount})`} />
+          <SectionHeader title={`${t('Comments')} (${policy.commentCount})`} />
           <CommentsSection
         comments={comments}
         opUid={policy.candidateUid}
@@ -155,6 +157,7 @@ export default function PolicyScreen() {
 /** The cited sources backing the policy (or the plain links, for directory entries). */
 function Receipts({ links, title }: { links: Policy['links']; title: string }) {
   const theme = useTheme();
+  const t = useT();
 
   return (
     <Card>
@@ -169,7 +172,7 @@ function Receipts({ links, title }: { links: Policy['links']; title: string }) {
               {link.label}
             </ThemedText>
           </Pressable>
-          <CopyLinkButton url={link.url} label={`Copy link: ${link.label}`} />
+          <CopyLinkButton url={link.url} label={`${t('Copy link:')} ${link.label}`} />
         </View>
       ))}
     </Card>
@@ -180,6 +183,7 @@ function Receipts({ links, title }: { links: Policy['links']; title: string }) {
 function CandidateTools({ policy }: { policy: Policy }) {
   const router = useRouter();
   const { profile } = useAuth();
+  const t = useT();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -189,12 +193,11 @@ function CandidateTools({ policy }: { policy: Policy }) {
     return (
       <View style={{ gap: Spacing.two }}>
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          This policy syncs from your campaign site. Edit it there and it updates on the next
-          sync - or edit it here to take it over, after which the site no longer updates it.
+          {t('This policy syncs from your campaign site. Edit it there and it updates on the next sync - or edit it here to take it over, after which the site no longer updates it.')}
         </ThemedText>
         <View style={{ flexDirection: 'row' }}>
           <Button
-            title="Edit here and take over"
+            title={t('Edit here and take over')}
             variant="secondary"
             onPress={() =>
               router.push({
@@ -213,7 +216,7 @@ function CandidateTools({ policy }: { policy: Policy }) {
     try {
       await setPolicyArchived(profile, policy, !policy.archived);
     } catch (e) {
-      notifyError('Could not update', e);
+      notifyError(t('Could not update'), e);
     } finally {
       setBusy(false);
     }
@@ -223,19 +226,19 @@ function CandidateTools({ policy }: { policy: Policy }) {
     // Third gate on top of the inline two-step - deleting a plank takes the
     // whole debate with it, so it must be hard to do by accident.
     const sure = await confirmDestructive(
-      'Delete this policy?',
-      'This permanently removes the policy, everyone’s votes on it, and its comments. It cannot be undone.',
-      'Delete forever'
+      t('Delete this policy?'),
+      t('This permanently removes the policy, everyone’s votes on it, and its comments. It cannot be undone.'),
+      t('Delete forever')
     );
     if (!sure) return;
     setBusy(true);
     try {
       await deletePolicy(profile, policy);
-      notify('Policy withdrawn', 'The policy and its votes were removed.');
+      notify(t('Policy withdrawn'), t('The policy and its votes were removed.'));
       if (router.canGoBack()) router.back();
       else router.replace(`/candidate/${policy.candidateUid}`);
     } catch (e) {
-      notifyError('Could not delete', e);
+      notifyError(t('Could not delete'), e);
       setBusy(false);
     }
   };
@@ -243,7 +246,7 @@ function CandidateTools({ policy }: { policy: Policy }) {
   return (
     <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap' }}>
       <Button
-        title="Edit"
+        title={t('Edit')}
         variant="secondary"
         disabled={busy}
         onPress={() =>
@@ -254,18 +257,18 @@ function CandidateTools({ policy }: { policy: Policy }) {
         }
       />
       <Button
-        title={policy.archived ? 'Unhide' : 'Hide'}
+        title={policy.archived ? t('Unhide') : t('Hide')}
         variant="secondary"
         disabled={busy}
         onPress={toggleArchived}
       />
       {confirmDelete ? (
         <>
-          <Button title="Yes, delete" variant="danger" onPress={remove} disabled={busy} />
-          <Button title="Keep it" variant="ghost" onPress={() => setConfirmDelete(false)} />
+          <Button title={t('Yes, delete')} variant="danger" onPress={remove} disabled={busy} />
+          <Button title={t('Keep it')} variant="ghost" onPress={() => setConfirmDelete(false)} />
         </>
       ) : (
-        <Button title="Delete" variant="ghost" onPress={() => setConfirmDelete(true)} />
+        <Button title={t('Delete')} variant="ghost" onPress={() => setConfirmDelete(true)} />
       )}
     </View>
   );

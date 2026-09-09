@@ -1083,7 +1083,7 @@ exports.sweepPendingQuestions = (0, scheduler_1.onSchedule)({ schedule: '15 6 * 
 const VOTING_MILESTONES = [
     {
         date: '2026-10-01',
-        title: 'Early voting opens downtown',
+        title: 'Early voting starts',
         body: 'Any Chicago voter can vote early at 137 S. State St. starting today. Ward sites open October 19.',
     },
     {
@@ -1108,7 +1108,7 @@ const VOTING_MILESTONES = [
     },
     {
         date: '2026-11-03',
-        title: 'Election day',
+        title: 'General election day',
         body: 'Polls are open 6 am to 7 pm at your precinct or any vote center in the city. Same-day registration is available with two forms of ID.',
     },
     {

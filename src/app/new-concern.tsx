@@ -10,6 +10,7 @@ import { Button, Field } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useT } from '@/lib/i18n';
 import { notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import type { Scope } from '@/lib/types';
@@ -20,6 +21,7 @@ export default function NewConcernScreen() {
   const router = useRouter();
   const { profile } = useAuth();
   const { anticipate } = useCelebration();
+  const t = useT();
   const params = useLocalSearchParams<{ scope?: string }>();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -37,11 +39,11 @@ export default function NewConcernScreen() {
       return;
     }
     if (title.trim().length < 4) {
-      notify('Almost there', 'Give your concern a title of at least 4 characters.');
+      notify(t('Almost there'), t('Give your concern a title of at least 4 characters.'));
       return;
     }
     if (body.trim().length < 20) {
-      notify('Almost there', 'Describe the concern in at least 20 characters.');
+      notify(t('Almost there'), t('Describe the concern in at least 20 characters.'));
       return;
     }
     setSaving(true);
@@ -54,7 +56,7 @@ export default function NewConcernScreen() {
       if (router.canDismiss()) router.dismiss();
       router.push(`/concern/${id}`);
     } catch (e) {
-      notify('Could not post', e instanceof Error ? e.message : 'Something went wrong.');
+      notify(t('Could not post'), e instanceof Error ? e.message : t('Something went wrong.'));
       setSaving(false);
     }
   };
@@ -62,13 +64,13 @@ export default function NewConcernScreen() {
   return (
     <Screen>
       <ThemedText type="small" themeColor="textSecondary">
-        Raise a concern for your neighbors to prioritize. Clear, specific concerns climb the board.
+        {t('Raise a concern for your neighbors to prioritize. Clear, specific concerns climb the board.')}
       </ThemedText>
 
-      <Field label="Title" placeholder="e.g. Fix the potholes on Western Ave" value={title} onChangeText={setTitle} />
+      <Field label={t('Title')} placeholder={t('e.g. Fix the potholes on Western Ave')} value={title} onChangeText={setTitle} />
       <Field
-        label="What’s going on?"
-        placeholder="Describe the issue, where it happens, and who it affects…"
+        label={t('What’s going on?')}
+        placeholder={t('Describe the issue, where it happens, and who it affects…')}
         value={body}
         onChangeText={setBody}
         multiline
@@ -79,7 +81,7 @@ export default function NewConcernScreen() {
 
       <View style={{ gap: Spacing.one }}>
         <ThemedText type="smallBold" themeColor="textSecondary">
-          Where does this belong?
+          {t('Where does this belong?')}
         </ThemedText>
         <View style={styles.scopeRow}>
           <Pressable
@@ -92,7 +94,7 @@ export default function NewConcernScreen() {
               },
             ]}>
             <ThemedText type="small" style={scope === 'city' ? { color: theme.primary, fontWeight: '700' } : undefined}>
-              Citywide
+              {t('Citywide')}
             </ThemedText>
           </Pressable>
           <Pressable
@@ -107,13 +109,13 @@ export default function NewConcernScreen() {
               },
             ]}>
             <ThemedText type="small" style={scope === 'ward' ? { color: theme.primary, fontWeight: '700' } : undefined}>
-              {canPostToWard ? `My ward (${wardLabel(profile!.wardId)})` : 'My ward (verify first)'}
+              {canPostToWard ? `${t('My ward')} (${wardLabel(profile!.wardId)})` : t('My ward (verify first)')}
             </ThemedText>
           </Pressable>
         </View>
       </View>
 
-      <Button title="Post concern" onPress={submit} loading={saving} />
+      <Button title={t('Post concern')} onPress={submit} loading={saving} />
     </Screen>
   );
 }

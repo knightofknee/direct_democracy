@@ -2,21 +2,21 @@
   "expo": {
     "name": "direct democracy",
     "slug": "direct-democracy",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "directdemocracy",
     "userInterfaceStyle": "automatic",
     "ios": {
       "bundleIdentifier": "com.briancarlisle.directdemocracy",
-      "buildNumber": "2",
+      "buildNumber": "3",
       "googleServicesFile": "./GoogleService-Info.plist",
       "usesAppleSignIn": true,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
       "associatedDomains": [
-        "applinks:direct-democracy-e338a.firebaseapp.com"
+        "applinks:www.waldgrave.com"
       ]
     },
     "android": {
@@ -36,8 +36,8 @@
           "data": [
             {
               "scheme": "https",
-              "host": "direct-democracy-e338a.firebaseapp.com",
-              "pathPrefix": "/__/auth"
+              "host": "www.waldgrave.com",
+              "pathPrefix": "/directdemocracy/auth"
             }
           ],
           "category": [
