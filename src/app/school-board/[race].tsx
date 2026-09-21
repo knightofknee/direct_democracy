@@ -9,6 +9,7 @@ import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Card, Chip, EmptyState } from '@/components/ui';
+import { WriteInChip, WriteInHeader } from '@/components/write-in';
 import { SCHOOL_BOARD_ELECTION_DATE, SCHOOL_BOARD_RACES, schoolBoardRaceLabel } from '@/constants/school-board';
 import { Spacing } from '@/constants/theme';
 import { useLiveQuery } from '@/hooks/use-firestore';
@@ -41,7 +42,12 @@ export default function SchoolBoardRaceScreen() {
     );
   }
 
-  const sorted = [...candidates].sort((a, b) => a.name.localeCompare(b.name));
+  // Ballot names first, declared write-ins after them.
+  const sorted = [...candidates].sort(
+    (a, b) => Number(!!a.writeIn) - Number(!!b.writeIn) || a.name.localeCompare(b.name)
+  );
+  const onBallot = sorted.filter((c) => !c.writeIn);
+  const firstWriteIn = sorted.find((c) => c.writeIn)?.id;
 
   return (
     <Screen>
@@ -60,31 +66,40 @@ export default function SchoolBoardRaceScreen() {
         <EmptyState icon="ribbon-outline" message={t('No candidates listed for this race yet.')} />
       ) : (
         <>
-          {sorted.length === 1 && (
+          {onBallot.length === 1 && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {sorted[0].name} {t('is running unopposed.')}
+              {onBallot[0].name}{' '}
+              {t(sorted.length === 1 ? 'is running unopposed.' : 'is the only name printed on the ballot.')}
             </ThemedText>
           )}
           {sorted.map((candidate, i) => (
             <Animated.View
               key={candidate.id}
-              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
+              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}
+              style={{ gap: Spacing.three }}>
+              {candidate.id === firstWriteIn && <WriteInHeader />}
               <Card onPress={() => router.push(`/school-board-candidate/${candidate.id}`)}>
                 <View style={styles.row}>
-                  <OfficialAvatar name={candidate.name} photoUrl={candidate.photoUrl ?? null} size={48} />
+                  <OfficialAvatar
+                    name={candidate.name}
+                    photoUrl={candidate.photoUrl ?? null}
+                    frame={candidate.photoFrame}
+                    size={48}
+                  />
                   <View style={{ flex: 1, gap: 3 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
                       <ThemedText type="smallBold" style={{ fontSize: 15 }}>
                         {candidate.name}
                       </ThemedText>
                       {candidate.incumbent && <Chip label={t('Incumbent')} tone="primary" />}
+                      {candidate.writeIn && <WriteInChip />}
                     </View>
                     {candidate.priorCareer ? (
                       <ThemedText
                         type="small"
                         themeColor="textSecondary"
                         style={{ fontSize: 12 }}
-                        numberOfLines={1}>
+                        numberOfLines={2}>
                         {loc(candidate.priorCareer, candidate.priorCareerEs)}
                       </ThemedText>
                     ) : null}

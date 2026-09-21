@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { collection, doc, orderBy, query, where } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { ClaimGate } from '@/components/claim-gate';
@@ -20,10 +20,10 @@ import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { host, plural, timeAgo } from '@/lib/format';
-import { useT } from '@/lib/i18n';
+import { useLocale, useLocalized, useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
 import { openLink } from '@/lib/open-link';
-import type { Candidate, Policy, Poll } from '@/lib/types';
+import type { Candidate, PlatformSummary, Policy, Poll } from '@/lib/types';
 import { syncMyPlatform, updateCandidateCard } from '@/services/candidates';
 
 
@@ -33,6 +33,7 @@ export default function CandidateScreen() {
   const router = useRouter();
   const { profile } = useAuth();
   const t = useT();
+  const loc = useLocalized();
 
   const { data: candidate, loading } = useLiveDoc<Candidate>(
     () => (id ? doc(db, 'candidates', id) : null),
@@ -71,9 +72,15 @@ export default function CandidateScreen() {
     <Screen>
       <Card>
         <View style={styles.headerRow}>
-          <OfficialAvatar name={candidate.name} photoUrl={candidate.photoUrl} size={64} />
+          {/* A portrait earns the space; an initials tile does not. With no
+              photo linked the name simply runs larger. */}
+          {candidate.photoUrl ? (
+            <OfficialAvatar name={candidate.name} photoUrl={candidate.photoUrl} size={64} />
+          ) : null}
           <View style={{ flex: 1, gap: 2 }}>
-            <ThemedText type="smallBold" style={{ fontSize: 19, lineHeight: 25 }}>
+            <ThemedText
+              type="smallBold"
+              style={candidate.photoUrl ? { fontSize: 20, lineHeight: 26 } : { fontSize: 26, lineHeight: 32 }}>
               {candidate.name}
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
@@ -120,20 +127,9 @@ export default function CandidateScreen() {
         </>
       )}
 
-      {candidate.directory ? (
-        <SectionHeader
-          title={t('the rest of the field')}
-          subtitle={t('Declared candidates who have published no platform to import')}
-        />
-      ) : (
-        <SectionHeader
-          title={t('the more perfect platform')}
-          subtitle={t('Every policy, open to your arguments')}
-        />
-      )}
       {candidate.platformNote ? (
         <PlatformNote
-          note={candidate.platformNote}
+          note={loc(candidate.platformNote, candidate.platformNoteEs) ?? candidate.platformNote}
           tone={candidate.platformNoteTone}
           onPress={
             candidate.platformNoteTone === 'success' && candidate.sourceUrl
@@ -142,6 +138,22 @@ export default function CandidateScreen() {
           }
         />
       ) : null}
+      {candidate.aiSummary ? <AiSummary summary={candidate.aiSummary} /> : null}
+      {/* The header sits directly on the list it titles: notes above it,
+          provenance and the policies people comment on below. */}
+      {candidate.directory ? (
+        <SectionHeader
+          centered
+          title={t('the rest of the field')}
+          subtitle={t('Declared candidates who have published no platform to import')}
+        />
+      ) : (
+        <SectionHeader
+          centered
+          title={t('the more perfect platform')}
+          subtitle={t('Every policy, open to your arguments')}
+        />
+      )}
       {candidate.sourceUrl && visiblePolicies.some((p) => p.source === 'site') ? (
         <ImportedNote sourceUrl={candidate.sourceUrl} />
       ) : null}
@@ -171,10 +183,11 @@ export default function CandidateScreen() {
 }
 
 /**
- * Operator-written editorial callout above the platform - loud on purpose,
- * for what a voter should not scroll past: amber calls out a gap (a
- * candidate with no real platform for the office), green credits good work
- * and taps through to the campaign's own page.
+ * Operator-written note above the platform. Amber calls out a gap a voter
+ * should not scroll past (no platform for the office, an unclaimable
+ * account); green is a plain description of what the campaign published and
+ * taps through to its own page. Notes describe, they never rate: no praise
+ * words, no superlatives (scripts/data/platform-summaries.json holds them).
  */
 function PlatformNote({
   note,
@@ -206,6 +219,85 @@ function PlatformNote({
         {onPress ? <Ionicons name="open-outline" size={16} color={colors.icon} /> : null}
       </View>
     </Card>
+  );
+}
+
+/**
+ * The AI reading of the platform, collapsed until asked for: what the listed
+ * policies say, then how that compares with the field, each in a few chunks.
+ * Same prompt for every candidate; descriptive only, the policies stay the
+ * source.
+ */
+function AiSummary({ summary }: { summary: PlatformSummary }) {
+  const theme = useTheme();
+  const t = useT();
+  const loc = useLocalized();
+  const { locale } = useLocale();
+  const [open, setOpen] = useState(false);
+  const written = summary.generatedAt
+    ?.toDate()
+    .toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  return (
+    // A solid orange bar, not another quiet card: this is the tap the page
+    // most wants, the fast way into a platform nobody has time to read.
+    <View style={[styles.summary, { borderColor: theme.highlight, backgroundColor: theme.backgroundElement }]}>
+      <Pressable
+        onPress={() => setOpen((v) => !v)}
+        accessibilityRole="button"
+        accessibilityState={{ expanded: open }}
+        style={({ pressed }) => [
+          styles.summaryBar,
+          { backgroundColor: theme.highlight, opacity: pressed ? 0.88 : 1 },
+        ]}>
+        <Ionicons name="sparkles" size={17} color="#FFFFFF" />
+        <ThemedText type="smallBold" style={{ flex: 1, fontSize: 16, lineHeight: 22, color: '#FFFFFF' }}>
+          {t('AI summary')}
+        </ThemedText>
+        <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color="#FFFFFF" />
+      </Pressable>
+      {open ? (
+        <Animated.View entering={FadeIn.duration(180)} style={{ gap: Spacing.three, padding: Spacing.three }}>
+          <SummaryChunks label={t('The platform')} text={loc(summary.summary, summary.summaryEs) ?? ''} />
+          <SummaryChunks
+            label={t('Next to the other candidates')}
+            text={loc(summary.comparison, summary.comparisonEs) ?? ''}
+          />
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+            {t('Written by AI on {date} from the policies listed below, with the same prompt for every candidate. It can miss things. The policies are the source.').replace(
+              '{date}',
+              written ?? ''
+            )}
+          </ThemedText>
+        </Animated.View>
+      ) : null}
+    </View>
+  );
+}
+
+/**
+ * One half of the summary as short chunks at body reading size, never a
+ * block of small print. Chunks are separated by blank lines in the data and
+ * open with a short "Topic: " lead, set bold so the eye can jump by subject.
+ */
+function SummaryChunks({ label, text }: { label: string; text: string }) {
+  return (
+    <View style={{ gap: Spacing.two }}>
+      <ThemedText
+        type="smallBold"
+        themeColor="textSecondary"
+        style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
+        {label}
+      </ThemedText>
+      {text.split(/\n{2,}/).map((chunk, i) => {
+        const lead = /^([^:.\n]{2,32}): /.exec(chunk);
+        return (
+          <ThemedText key={i}>
+            {lead ? <ThemedText style={{ fontWeight: '700' }}>{lead[1]}. </ThemedText> : null}
+            {lead ? chunk.slice(lead[0].length) : chunk}
+          </ThemedText>
+        );
+      })}
+    </View>
   );
 }
 
@@ -391,6 +483,18 @@ function SyncCard({ candidate }: { candidate: Candidate }) {
 }
 
 const styles = StyleSheet.create({
+  summary: {
+    borderRadius: 16,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  summaryBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: 14,
+  },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',

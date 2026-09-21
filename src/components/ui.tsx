@@ -172,14 +172,24 @@ export function Chip({
   );
 }
 
-export function SectionHeader({ title, subtitle }: { title: string; subtitle?: string }) {
+export function SectionHeader({
+  title,
+  subtitle,
+  centered,
+}: {
+  title: string;
+  subtitle?: string;
+  /** Center both lines, for a header that titles the whole list under it. */
+  centered?: boolean;
+}) {
+  const align = centered ? ({ textAlign: 'center' } as const) : null;
   return (
     <View style={{ gap: 2, marginTop: Spacing.three }}>
-      <ThemedText type="smallBold" style={{ textTransform: 'uppercase', letterSpacing: 1 }}>
+      <ThemedText type="smallBold" style={[{ textTransform: 'uppercase', letterSpacing: 1 }, align]}>
         {title}
       </ThemedText>
       {subtitle ? (
-        <ThemedText type="small" themeColor="textSecondary">
+        <ThemedText type="small" themeColor="textSecondary" style={align}>
           {subtitle}
         </ThemedText>
       ) : null}

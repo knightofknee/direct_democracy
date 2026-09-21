@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
-import { useState } from 'react';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { Linking, Pressable, ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { ApprovalWidget } from '@/components/approval-widget';
@@ -20,6 +20,7 @@ import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
+import { useScreenRoom } from '@/hooks/use-screen-room';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { host, timeAgo } from '@/lib/format';
@@ -49,10 +50,24 @@ const VERDICT_OPTIONS = [
 ];
 
 export default function OfficialAmaScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  // `q` arrives from a notification: the one question (and its response) the
+  // tap was about. The screen opens scrolled to it, not at the grade card.
+  const { id, q: focusId } = useLocalSearchParams<{ id: string; q?: string }>();
   const router = useRouter();
+  const theme = useTheme();
   const { profile } = useAuth();
   const t = useT();
+  const scrollRef = useRef<ScrollView>(null);
+  const focusUntil = useRef<number | null>(null);
+  // The cards above settle over a few frames (grade, approval, the list
+  // itself), so follow the target's position for a moment after it first
+  // lays out, then let go so the reader's own scrolling is never fought.
+  const onFocusLayout = useCallback((e: LayoutChangeEvent) => {
+    const now = Date.now();
+    focusUntil.current ??= now + 1500;
+    if (now > focusUntil.current) return;
+    scrollRef.current?.scrollTo({ y: Math.max(0, e.nativeEvent.layout.y - Spacing.two), animated: false });
+  }, []);
   const [questionText, setQuestionText] = useState('');
   const [asking, setAsking] = useState(false);
 
@@ -104,7 +119,7 @@ export default function OfficialAmaScreen() {
   };
 
   return (
-    <Screen>
+    <Screen ref={scrollRef}>
       <GradeCard official={official} grade={grade} />
 
       {isThisOfficial ? (
@@ -153,9 +168,20 @@ export default function OfficialAmaScreen() {
           .sort((a, b) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
           .filter((q) => !isBlocked(q.authorUid))
           .map((q, i) => (
-            <Animated.View key={q.id} entering={FadeInDown.duration(260).delay(Math.min(i, 8) * 40)}>
-              <QuestionCard question={q} isThisOfficial={isThisOfficial} officialName={official.name} />
-            </Animated.View>
+            // Layout is read off a plain View: an entering animation's
+            // wrapper does not report onLayout reliably on every platform.
+            <View
+              key={q.id}
+              onLayout={q.id === focusId ? onFocusLayout : undefined}
+              style={
+                q.id === focusId
+                  ? { borderRadius: 18, borderWidth: 2, borderColor: theme.primary }
+                  : undefined
+              }>
+              <Animated.View entering={FadeInDown.duration(260).delay(Math.min(i, 8) * 40)}>
+                <QuestionCard question={q} isThisOfficial={isThisOfficial} officialName={official.name} />
+              </Animated.View>
+            </View>
           ))
       )}
     </Screen>
@@ -193,6 +219,18 @@ function GradeCard({
 }) {
   const theme = useTheme();
   const t = useT();
+  // Portrait, name, and the overall mark side by side leave a long name
+  // ("Byron Sigcho-Lopez") about 100pt on a small phone with large text,
+  // which breaks it mid-word. There the mark moves to its own row.
+  const { tight } = useScreenRoom();
+  const overall = (
+    <View style={{ alignItems: 'center', gap: 3, flexDirection: tight ? 'row' : 'column' }}>
+      <GradeBadge letter={grade.letter} score={grade.overall} size={tight ? 44 : 54} />
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 10, lineHeight: 12 }}>
+        {t('OVERALL')}
+      </ThemedText>
+    </View>
+  );
   return (
     <Card>
       <View style={styles.headerRow}>
@@ -205,13 +243,9 @@ function GradeCard({
             {official.title}
           </ThemedText>
         </View>
-        <View style={{ alignItems: 'center', gap: 3 }}>
-          <GradeBadge letter={grade.letter} score={grade.overall} size={54} />
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 10, lineHeight: 12 }}>
-            {t('OVERALL')}
-          </ThemedText>
-        </View>
+        {tight ? null : overall}
       </View>
+      {tight ? overall : null}
 
       {official.bio ? <ThemedText type="small">{official.bio}</ThemedText> : null}
 
@@ -540,16 +574,12 @@ function QuestionCard({
       <View style={styles.metaRow}>
         <Chip label={t(statusChip.label)} tone={statusChip.tone} />
         {question.authorVerified && <VerifiedBadge compact />}
-        {/* One guaranteed line: the name yields (truncates) so the status
-            chip, checkmark, and upvote pill always stay aligned. */}
-        <ThemedText
-          type="small"
-          themeColor="textSecondary"
-          numberOfLines={1}
-          style={{ fontSize: 12, flexShrink: 1 }}>
+        {/* The row wraps on a narrow screen: the asker's name and the time
+            are never cut off, the upvote pill just drops to the next line. */}
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, flexShrink: 1 }}>
           {question.authorName} · {timeAgo(question.createdAt)}
         </ThemedText>
-        <View style={{ flex: 1 }} />
+        <View style={{ flexGrow: 1 }} />
         {/* The official sees the count too (it is their priority signal),
             they just cannot join questions put to themselves. */}
         <UpvotePill
@@ -682,6 +712,7 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: Spacing.two,
   },
   response: {

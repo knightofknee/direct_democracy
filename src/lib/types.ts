@@ -106,6 +106,17 @@ export type ApprovalValue = 'approve' | 'disapprove';
  * candidate account; these docs stay the directory either way.
  */
 /**
+ * Crop for a directory headshot that isn't already a centered head-and-
+ * shoulders shot: the point to center on, as fractions of the image's width
+ * and height (0-1), and a zoom past the plain cover fit (1 = none).
+ */
+export interface PhotoFrame {
+  x: number;
+  y: number;
+  zoom: number;
+}
+
+/**
  * A nominee in an upcoming election - the general-purpose voter directory
  * (November 2026 statewide/county races, February 2027 municipal races).
  * Not an account: a read-only card seeded by the operator
@@ -123,9 +134,15 @@ export interface ElectionCandidateCard {
   /** Ballot party; null for Chicago's nonpartisan municipal races. */
   party: string | null;
   incumbent: boolean;
+  /**
+   * A declared write-in: filed to have write-in votes counted, but the name
+   * is not printed on the ballot. Absent/false for ballot candidates.
+   */
+  writeIn?: boolean;
   website: string | null;
   /** Externally hosted headshot (https), rendered by link, never stored. */
   photoUrl?: string | null;
+  photoFrame?: PhotoFrame | null;
   /** What the candidate says they are running on, in neutral summary. */
   runningOn: string;
   priorCareer: string | null;
@@ -167,10 +184,13 @@ export interface SchoolBoardCandidate {
   race: string;
   /** Sitting board member. */
   incumbent: boolean;
+  /** A declared write-in: votes count, but the name is not on the ballot. */
+  writeIn?: boolean;
   /** Official campaign site (https), if the campaign has one. */
   website: string | null;
   /** Externally hosted headshot (https), rendered by link, never stored. */
   photoUrl?: string | null;
+  photoFrame?: PhotoFrame | null;
   /** What the candidate has said they are running on, in neutral summary. */
   runningOn: string;
   /** Factual professional background, when public record has it. */
@@ -180,6 +200,19 @@ export interface SchoolBoardCandidate {
   priorCareerEs?: string | null;
   /** Public sources the summary was compiled from. */
   sourceUrls: string[];
+}
+
+/** See Candidate.aiSummary. Each paragraph stands on its own. */
+export interface PlatformSummary {
+  /** What this candidate's listed policies say. */
+  summary: string;
+  summaryEs?: string | null;
+  /** How that compares with the other candidates' listed policies. */
+  comparison: string;
+  comparisonEs?: string | null;
+  generatedAt: Timestamp;
+  /** Fingerprint of the policy text it was written from, to spot a stale one. */
+  policiesHash: string;
 }
 
 export interface Candidate {
@@ -214,10 +247,19 @@ export interface Candidate {
   platformNote?: string | null;
   /**
    * How the note reads: 'warning' (amber, calling out a gap) or 'success'
-   * (green, crediting good work; tapping it opens the campaign's platform
-   * page). Defaults to warning.
+   * (green, a plain description of what the campaign published; tapping it
+   * opens the campaign's platform page). Defaults to warning.
    */
   platformNoteTone?: 'warning' | 'success' | null;
+  /** Operator-translated Spanish rendition of platformNote (English fallback). */
+  platformNoteEs?: string | null;
+  /**
+   * AI-written reading of the platform, operator-generated with one fixed
+   * prompt for every candidate (scripts/data/platform-summary-prompt.md) and
+   * written by `npm run set-platform-summaries`. Describes only what the
+   * listed policies say; never a verdict.
+   */
+  aiSummary?: PlatformSummary | null;
   /** Same claim signal as Official.claimed (refreshClaim / sweepClaims). */
   claimed?: boolean;
   /** Live (unarchived) policy count, maintained by Cloud Functions triggers. */

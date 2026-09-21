@@ -25,6 +25,9 @@ export const Colors = {
     warningSoft: '#FDEFD9',
     danger: '#C8102E',
     dangerSoft: '#FBE2E6',
+    // The one call to action that should out-shout everything near it (the
+    // AI summary). Dark enough for white bold text in both themes.
+    highlight: '#C8570A',
   },
   dark: {
     text: '#F2F6FA',
@@ -42,6 +45,7 @@ export const Colors = {
     warningSoft: '#3A2A12',
     danger: '#FF4D66',
     dangerSoft: '#3D1620',
+    highlight: '#C8570A',
   },
 } as const;
 

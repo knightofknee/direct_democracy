@@ -59,6 +59,11 @@
       "https://nadignewspapers.com/nw-side-chicago-school-board-member-ed-bannon-holds-education-budget-related-meeting/"
     ],
     "photoUrl": "https://edbannon.com/wp-content/uploads/2026/08/About-Ed-Header-Headshot-.png",
+    "photoFrame": {
+      "x": 0.31,
+      "y": 0.316,
+      "zoom": 1.55
+    },
     "runningOnEs": "Bannon dice que pone a los estudiantes primero, preguntándose si cada decisión de política es lo mejor para los niños de Chicago, y hace campaña por la rendición de cuentas presupuestaria y la transparencia en el financiamiento escolar. Pide maestros calificados, consejeros y recursos para los salones de clase en las escuelas del noroeste de la ciudad. En una asamblea comunitaria de 2026 dijo que encontrar maneras de aumentar el financiamiento de la educación pública sin subir los impuestos a la propiedad es una meta prioritaria.",
     "priorCareerEs": "Su experiencia profesional incluye haber sido director ejecutivo de la Six Corners Association. Sirvió unos diez años en el Local School Council de la escuela primaria Dever y fue nombrado al asiento del Distrito 1A del consejo en enero de 2025."
   },
@@ -74,6 +79,11 @@
       "https://www.chalkbeat.org/chicago/2026/05/27/51-candidates-running-for-the-2026-chicago-school-board-election/"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/F84A3563-2_1__20260825_130052_33136_1.jpg",
+    "photoFrame": {
+      "x": 0.471,
+      "y": 0.28,
+      "zoom": 1.29
+    },
     "runningOnEs": "No ha publicado un sitio web de campaña ni declaraciones de plataforma que pudiéramos encontrar hasta septiembre de 2026.",
     "priorCareerEs": null
   },
@@ -90,6 +100,11 @@
       "https://board-rule.ghost.io/school-board-candidates-filed/"
     ],
     "photoUrl": "https://static.wixstatic.com/media/c1aad4_83f5f482303141c8b7ec43c6f6995ab0~mv2.jpg",
+    "photoFrame": {
+      "x": 0.518,
+      "y": 0.319,
+      "zoom": 1.23
+    },
     "runningOnEs": "Peralta dice que cada familia merece acceso a una escuela pública de vecindario de alta calidad y plenamente financiada, sin importar el vecindario, el idioma o las capacidades de sus hijos. Dice que quiere llevar al consejo un enfoque centrado en la comunidad y orientado a resolver problemas, y ser defensora y voz de las familias de todo el distrito, construyendo un sistema escolar que responda a las necesidades de cada estudiante.",
     "priorCareerEs": "Se desempeña como directora de distrito de la congresista federal Delia Ramirez y anteriormente fue jefa de gabinete de la representante estatal Lindsey LaPointe. Es madre de estudiantes de CPS, egresada de CPS y exmiembro de un Local School Council."
   },
@@ -106,6 +121,11 @@
       "https://board-rule.ghost.io/school-board-candidates-filed/"
     ],
     "photoUrl": "https://images.squarespace-cdn.com/content/v1/6646b403421c1357e7e38036/58e31308-39db-4d24-9770-379161bd062c/_DSC3344+Large.jpeg",
+    "photoFrame": {
+      "x": 0.588,
+      "y": 0.316,
+      "zoom": 2.1
+    },
     "runningOnEs": "Pierre dice que se postula para fortalecer las escuelas mediante un liderazgo con experiencia, empoderar a las familias con opciones reales e información clara, y asegurar que las políticas reflejen las necesidades de cada niño, no solo de unos cuantos en los vecindarios correctos. Describe su campaña como impulsada por la gente, no por intereses especiales, y arraigada en la experiencia, la integridad y el conocimiento de las comunidades del distrito.",
     "priorCareerEs": "Profesional de la educación con aproximadamente 20 a 30 años en la educación pública; la cobertura local la ha descrito como exlíder de una red de escuelas chárter y exdirectora académica del Cleveland Metropolitan School District. Se postuló para el asiento del Distrito 1B en 2024 y perdió ante Jennifer Custer."
   },
@@ -176,14 +196,20 @@
     "race": "2b",
     "incumbent": false,
     "website": null,
-    "runningOn": "Has not published a campaign website or platform statements that we could find as of September 2026.",
+    "runningOn": "Lenhof has committed to the Illinois Families for Public Schools Pledge to Protect Human-Centered Education, which calls for a three-year moratorium on generative AI use in CPS, a district chief privacy officer, limits on screen time in all grades, and a ban on collecting biometric data. Beyond that pledge, she has not published a campaign website or platform statements that we could find as of September 2026.",
     "priorCareer": "Lenhof is a former CPS educator and serves as treasurer of the 40th Ward Democratic Ward Committee.",
     "sourceUrls": [
+      "https://www.ilfps.org/media_release_pledge_human_centered_ed_cps",
       "https://ballotpedia.org/Kyna_Lenhof",
       "https://ridgeknapp.substack.com/p/chicagos-elected-school-board-district"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Kyna-Lenhof_20260823_230611_33070_1.jpg",
-    "runningOnEs": "No ha publicado un sitio web de campaña ni declaraciones de plataforma que pudiéramos encontrar hasta septiembre de 2026.",
+    "photoFrame": {
+      "x": 0.517,
+      "y": 0.356,
+      "zoom": 1.73
+    },
+    "runningOnEs": "Lenhof se ha comprometido con el Pledge to Protect Human-Centered Education de Illinois Families for Public Schools, que pide una moratoria de tres años al uso de inteligencia artificial generativa en CPS, un director de privacidad para el distrito, límites al tiempo frente a pantallas en todos los grados y una prohibición de recolectar datos biométricos. Más allá de ese compromiso, no ha publicado un sitio web de campaña ni declaraciones de plataforma que pudiéramos encontrar hasta septiembre de 2026.",
     "priorCareerEs": "Lenhof es exeducadora de CPS y se desempeña como tesorera del Comité Demócrata del Distrito 40."
   },
   {
@@ -214,6 +240,11 @@
       "https://ballotpedia.org/Peter_Gonzales"
     ],
     "photoUrl": "https://petefor3a.com/wp-content/uploads/PeteGonzales_2.webp",
+    "photoFrame": {
+      "x": 0.498,
+      "y": 0.3,
+      "zoom": 2.45
+    },
     "runningOnEs": "Gonzales dice que se postula por presupuestos que de verdad se puedan leer antes de que alguien pida otro dólar, por grupos de tamaño manejable y un respaldo real para los maestros, y por escuelas con recursos completos en todo el Distrito 3A, no solo las que tienen la voz más fuerte. Dice que la educación de un niño no debería depender de si su familia habla inglés, puede pagar costos adicionales o tiene tiempo para descifrar papeleo confuso, y que los niños necesitan a alguien en la mesa que les responda a ellos, no a City Hall.",
     "priorCareerEs": "Gonzales describe una carrera en trabajo de defensoría, incluyendo ayudar a veteranos a quienes se les negaron beneficios, asistir a inmigrantes con trámites complejos y apoyar a sobrevivientes de violencia doméstica."
   },
@@ -231,6 +262,11 @@
       "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)"
     ],
     "photoUrl": "https://images.squarespace-cdn.com/content/v1/6983ef9a0506372e04f8aeb6/987ebaff-7a72-436d-b12a-7a85cff50db4/CR-landing.png?format=1000w",
+    "photoFrame": {
+      "x": 0.509,
+      "y": 0.247,
+      "zoom": 1.4
+    },
     "runningOnEs": "Rivas dice que su campaña se basa en escuelas de vecindario fuertes en comunidades como Humboldt Park, Logan Square y Hermosa, en expandir el modelo de escuelas comunitarias con servicios integrales como apoyo de salud mental y programas después de clases, y en proteger a los estudiantes LGBTQ+ e inmigrantes. También enfatiza la transparencia, el manejo responsable del presupuesto y dar una participación significativa a los padres, los educadores y los Local School Councils, y ha dicho que el consejo debe luchar por recursos adecuados en todo el distrito, a la vez que apoya la opción escolar y el acceso a programas especializados.",
     "priorCareerEs": "Rivas dirige asuntos públicos en la Civilian Office of Police Accountability de Chicago y anteriormente trabajó para Chicago Public Schools. Fue electo al asiento del Distrito 3b del consejo en noviembre de 2024."
   },
@@ -279,6 +315,11 @@
       "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)"
     ],
     "photoUrl": "https://static.wixstatic.com/media/267e42_be07a032f4644fdfa9df2bf57677ad97~mv2.jpeg/v1/crop/x_2800,y_0,w_2600,h_2600/fill/w_900,h_900,al_c,q_85/267e42_be07a032f4644fdfa9df2bf57677ad97~mv2.jpeg",
+    "photoFrame": {
+      "x": 0.584,
+      "y": 0.687,
+      "zoom": 1.07
+    },
     "runningOnEs": "Sherratt dice que el aprendizaje de los estudiantes es lo primero, señalando las bajas tasas de dominio en matemáticas y lectura y pidiendo un currículo sólido, alfabetización temprana, líderes escolares capaces y maestros bien preparados. Su campaña se basa en presupuestos honestos y responsables basados en los fondos que CPS realmente tiene, en atacar el ausentismo crónico mediante la dotación de trabajadores sociales, consejeros y enfermeras, y en tarjetas públicas de resultados que obliguen al liderazgo del distrito a rendir cuentas.",
     "priorCareerEs": "Sherratt es investigadora y consultora en educación enfocada en el salario y la calidad de los maestros. Anteriormente fue subdirectora del Center on Great Teachers and Leaders federal en los American Institutes for Research y vicepresidenta de políticas e investigación en el National Board for Professional Teaching Standards."
   },
@@ -345,7 +386,13 @@
       "https://ballotpedia.org/LaPamela_Williams"
     ],
     "runningOnEs": "Williams, candidata por primera vez, dice que quiere ver un sistema escolar administrado de otra manera, especialmente en su distrito del West Side, para que las familias no tengan que mandar a sus hijos fuera de su vecindario para recibir una educación de calidad, como lo hizo su madre con ella. Sus prioridades declaradas incluyen aumentar la enseñanza de educación financiera y encontrar maneras de evitar que los estudiantes falten demasiado a la escuela, y dice que buscaría soluciones prácticas para la comunidad.",
-    "priorCareerEs": "Williams es agente de bienes raíces. Esta es su primera candidatura a un cargo público."
+    "priorCareerEs": "Williams es agente de bienes raíces. Esta es su primera candidatura a un cargo público.",
+    "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/973805/973805.jpg",
+    "photoFrame": {
+      "x": 0.46,
+      "y": 0.652,
+      "zoom": 1.0
+    }
   },
   {
     "name": "Anthony Hargrove",
@@ -360,7 +407,13 @@
       "https://www.chalkbeat.org/chicago/2026/05/27/51-candidates-running-for-the-2026-chicago-school-board-election/"
     ],
     "runningOnEs": "Hargrove ha dicho que está enfocado en volver a involucrar a los estudiantes que han dejado CPS, regresándolos a la escuela, a programas de GED o a los oficios, y en conectar a los estudiantes con los sindicatos de oficios y las rutas de aprendices. También ha dicho que revisaría los datos de gastos del distrito para encontrar gastos excesivos sin interrumpir la calidad de la enseñanza, y que si resulta electo realizaría asambleas comunitarias semanales y mensuales y visitaría las escuelas. Estas declaraciones son de su candidatura de 2024; no se pudo verificar una declaración de plataforma específica para 2026.",
-    "priorCareerEs": "Hargrove ha trabajado en Chicago Public Schools durante unos 20 años, incluyendo como instructor de artes culinarias en Orr Academy, decano en la preparatoria Wendell Phillips, decano en jefe en la preparatoria Marshall y gerente de operaciones en Fenger Academy. Es director asociado de Breakthrough Beyond, un programa que vuelve a involucrar a estudiantes que han dejado de asistir a CPS."
+    "priorCareerEs": "Hargrove ha trabajado en Chicago Public Schools durante unos 20 años, incluyendo como instructor de artes culinarias en Orr Academy, decano en la preparatoria Wendell Phillips, decano en jefe en la preparatoria Marshall y gerente de operaciones en Fenger Academy. Es director asociado de Breakthrough Beyond, un programa que vuelve a involucrar a estudiantes que han dejado de asistir a CPS.",
+    "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/832607/832607.jpg",
+    "photoFrame": {
+      "x": 0.52,
+      "y": 0.637,
+      "zoom": 1.0
+    }
   },
   {
     "name": "Michilla \"Kyla\" Blaise",
@@ -376,6 +429,11 @@
       "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)"
     ],
     "photoUrl": "https://static1.squarespace.com/static/6671eb734a05eb4ddf042841/t/668b519e39b73f5402b9af4b/1720406430298/michilla_blaise_by_oliphant_72DPI-3.jpg",
+    "photoFrame": {
+      "x": 0.606,
+      "y": 0.415,
+      "zoom": 1.0
+    },
     "runningOnEs": "Blaise dice que se postula para asegurar una educación de calidad y enriquecedora para todos los estudiantes, con base en su experiencia navegando CPS como madre de dos estudiantes de CPS. Enfatiza la equidad y el acceso, la representación comunitaria por encima de los intereses del gran dinero en el primer consejo totalmente electo, y enfoques basados en datos para los presupuestos y las políticas, citando sus recientes estudios de posgrado en políticas públicas.",
     "priorCareerEs": "Blaise es consultora política que fundó Blaise and Associates y se desempeña como jefa de gabinete del comisionado del Condado de Cook Frank Aguilar; comenzó su carrera en el equipo de la concejal del Distrito 46 Helen Shiller. Fue nombrada al asiento del Distrito 5b del consejo en el otoño de 2024 después de que el consejo anterior renunció."
   },
@@ -439,6 +497,11 @@
       "https://www.hpherald.com/evening_digest/bronzeville-pastor-michael-neal-seeks-biggs-school-board-seat/article_87b28b09-c0e9-4a20-a9d7-7d8616969b56.html"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Brittany-Kimble-Headshot-Web_20260711_011709_45170_1.jpeg",
+    "photoFrame": {
+      "x": 0.534,
+      "y": 0.281,
+      "zoom": 1.04
+    },
     "runningOnEs": "Kimble ha hecho de la disciplina presupuestaria de CPS el centro de su campaña, oponiéndose a los préstamos de corto plazo con altos intereses para tapar déficits. También enfatiza mejorar el dominio de la lectura y las matemáticas y asegurar que los estudiantes con IEP y planes 504 reciban los servicios de educación especial a los que tienen derecho, y argumenta que su experiencia legal manejando contratos y disputas de personal la preparó para supervisar el distrito.",
     "priorCareerEs": "Abogada que dirige su propio despacho desde 2010, llevando casos de defensa penal, derecho familiar y bienes raíces; nombrada presidenta del Illinois Employment Security Board of Review por el gobernador Pritzker en 2023. Es madre de estudiantes de CPS."
   },
@@ -454,7 +517,13 @@
       "https://www.chalkbeat.org/chicago/2026/05/27/51-candidates-running-for-the-2026-chicago-school-board-election/"
     ],
     "runningOnEs": "Neal dice que se postula para mantener una voz comunitaria en la mesa del consejo, citando años de voluntariado en salones de CPS, la dirección de un programa de lectura para hombres y su servicio en un local school council. Dice que su máxima prioridad sería un mayor énfasis en la alfabetización en la primera infancia, y ha expresado su apoyo a la directora ejecutiva de CPS, Macquline King.",
-    "priorCareerEs": "Pastor principal de Glorious Light Church en Bronzeville, que fundó en 2008, y fundador y director general de la Timothy Community Corporation, una organización sin fines de lucro enfocada en salud, liderazgo y alfabetización; se desempeña como representante de los padres en el local school council de Kenwood Academy."
+    "priorCareerEs": "Pastor principal de Glorious Light Church en Bronzeville, que fundó en 2008, y fundador y director general de la Timothy Community Corporation, una organización sin fines de lucro enfocada en salud, liderazgo y alfabetización; se desempeña como representante de los padres en el local school council de Kenwood Academy.",
+    "photoUrl": "https://www.glorious-light.org/uploads/2/3/5/3/23530860/img-4522_orig.jpg",
+    "photoFrame": {
+      "x": 0.551,
+      "y": 0.328,
+      "zoom": 1.54
+    }
   },
   {
     "name": "Emma Lozano",
@@ -485,6 +554,11 @@
       "https://www.chalkbeat.org/chicago/2026/05/27/51-candidates-running-for-the-2026-chicago-school-board-election/"
     ],
     "photoUrl": "https://lamaco-medusa.s3.eu-west-3.amazonaws.com/Ayala20Jr2C20Jesus-7d684c1c-6e12-450d-a5af-13e40f139377-1777863988467.jpg",
+    "photoFrame": {
+      "x": 0.51,
+      "y": 0.339,
+      "zoom": 1.99
+    },
     "runningOnEs": "Los materiales de campaña de Ayala lo describen como egresado de CPS, hijo de inmigrantes mexicanos, primera generación de su familia en graduarse de la universidad y líder de una organización educativa sin fines de lucro que se postula para representar al Distrito 7A. No se pudo verificar una plataforma detallada de temas en las páginas de campaña disponibles hasta septiembre de 2026; su página principal solo presenta estos datos biográficos.",
     "priorCareerEs": "Líder de una organización educativa sin fines de lucro; Neubauer Civic Scholar y candidato a MBA en la University of Chicago Booth School of Business."
   },
@@ -500,7 +574,8 @@
       "https://www.chalkbeat.org/chicago/2026/05/27/51-candidates-running-for-the-2026-chicago-school-board-election/"
     ],
     "runningOnEs": "Diaz-Chavez dice que se postula para representar a los estudiantes, las familias, los educadores y los contribuyentes bajo el mensaje 'Student Success Is Our City's Success'. Los puntos declarados de su plataforma incluyen mejorar los resultados académicos de los estudiantes, ampliar la participación de los padres, preservar opciones escolares de calidad para las familias, transparencia y rendición de cuentas financieras, y políticas basadas en evidencia en lugar de política partidista.",
-    "priorCareerEs": null
+    "priorCareerEs": null,
+    "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/973809/973809.jpg"
   },
   {
     "name": "Yesenia Lopez",
@@ -547,7 +622,13 @@
       "https://www.gcrealtyinc.com/podcasts/back-of-the-yards-community-with-ignacio-gonzalez"
     ],
     "runningOnEs": "Gonzalez ha dicho que se postula en el Distrito 8b para llevar más rendición de cuentas y representación comunitaria al consejo. Ha dicho que las escuelas afectan el valor de las propiedades, la demanda de los inquilinos y si las familias se quedan en Chicago, y describe su candidatura como resultado de reuniones escolares y comunitarias vinculadas a su café en Back of the Yards.",
-    "priorCareerEs": "Detective de la policía de Chicago, veterano de los Marines y dueño del DreamCatcher Cafe en la calle 47 en Back of the Yards."
+    "priorCareerEs": "Detective de la policía de Chicago, veterano de los Marines y dueño del DreamCatcher Cafe en la calle 47 en Back of the Yards.",
+    "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/973810/973810.jpg",
+    "photoFrame": {
+      "x": 0.461,
+      "y": 0.601,
+      "zoom": 1.0
+    }
   },
   {
     "name": "Brittany R. Bailey Preston",
@@ -562,7 +643,8 @@
       "https://www.chalkbeat.org/chicago/2026/05/27/51-candidates-running-for-the-2026-chicago-school-board-election/"
     ],
     "runningOnEs": "No ha publicado un sitio web de campaña ni declaraciones de plataforma que pudiéramos encontrar hasta septiembre de 2026.",
-    "priorCareerEs": null
+    "priorCareerEs": null,
+    "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/832621/832621.jpg"
   },
   {
     "name": "Katherine S. Dunneback",
@@ -576,7 +658,8 @@
       "https://www.chalkbeat.org/chicago/2026/06/04/chicago-school-board-candidates-face-petition-challenges/"
     ],
     "runningOnEs": "Dunneback ha dicho que se postula como candidata progresista enfocada en los servicios estudiantiles, en particular en asegurar que los servicios para estudiantes con IEP estén plenamente financiados. También ha señalado la sobrepoblación en las escuelas locales, diciendo que las escuelas de alto rendimiento pero con pocos recursos necesitan soluciones de largo plazo en lugar de anexos temporales que se vuelven permanentes.",
-    "priorCareerEs": "Patóloga del habla y el lenguaje con 22 años de experiencia en escuelas públicas y privadas, actualmente supervisora clínica adjunta en St. Xavier University; es madre de dos exalumnos de la primaria Clissold de CPS."
+    "priorCareerEs": "Patóloga del habla y el lenguaje con 22 años de experiencia en escuelas públicas y privadas, actualmente supervisora clínica adjunta en St. Xavier University; es madre de dos exalumnos de la primaria Clissold de CPS.",
+    "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/973811/973811.jpg"
   },
   {
     "name": "Therese Boyle",
@@ -603,7 +686,8 @@
     "sourceUrls": [
       "https://hilarioforcps.com/",
       "https://www.wbez.org/education/2026/05/22/meet-the-candidates-for-chicagos-first-ever-elected-school-board-president",
-      "https://wgntv.com/news/ctu-backed-candidate-for-chicago-school-board-hilario-dominguez-talks-campaign/"
+      "https://wgntv.com/news/ctu-backed-candidate-for-chicago-school-board-hilario-dominguez-talks-campaign/",
+      "https://news.wttw.com/2026/09/15/chicago-school-board-president-candidates-talk-budgets-closures-and-why-election-matters"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/hd-face_20260623_034242_30311_1.png",
     "runningOnEs": "Dominguez hace campaña por pre-K gratuito de día completo para cada familia de Chicago a partir de los 3 años, una renovación de las comidas escolares, y nuevos programas de empleos juveniles y de rutas de carrera. Apoya las escuelas comunitarias sostenibles y dice que el distrito debería presionar a los legisladores estatales por aproximadamente 2 mil millones de dólares en financiamiento adicional en lugar de hacer recortes, argumentando que CPS batalla porque el estado no ha cumplido su obligación de financiamiento. También pide prevenir cierres de escuelas, ampliar el personal de apoyo como bibliotecarios, enfermeras y trabajadores sociales, y reducir el tamaño de los grupos.",
@@ -614,15 +698,16 @@
     "race": "president",
     "incumbent": false,
     "website": "https://www.biggs4chicago.com",
-    "runningOn": "Biggs says her top priorities as board president would be stabilizing the district's finances and helping the new 21-member board work together effectively after what she calls years of political infighting. She wants the board to set clear academic goals and measure progress, particularly on reading proficiency, and to hold district leadership accountable for results. She has also said she wants to address enrollment inequities by evaluating how families access kindergarten and high school programs.",
+    "runningOn": "Biggs says her top priorities as board president would be stabilizing the district's finances and helping the new 21-member board work together effectively after what she calls years of political infighting. She wants the board to set clear academic goals and measure progress, particularly on reading proficiency, and to hold district leadership accountable for results. She has also said she wants to address enrollment inequities by evaluating how families access kindergarten and high school programs. At a WTTW forum in September 2026 she called for a \"five-year financial recovery plan\" and said decisions about school closures should follow \"deep conversations\" with communities, while opposing a \"top down, mass closure\" like the one in 2013.",
     "priorCareer": "Former Chicago Public Schools principal at Burke Elementary and a community organizer who directs Healthy Southwest, a health equity initiative of the Southwest Organizing Project. She was elected to the school board in 2024 representing parts of downtown and the South Side.",
     "sourceUrls": [
       "https://www.wbez.org/education/2026/05/22/meet-the-candidates-for-chicagos-first-ever-elected-school-board-president",
       "https://www.biggs4chicago.com/priorities",
-      "https://www.hpherald.com/evening_digest/jessica-biggs-launches-bid-for-school-board-president/article_5e013439-d7a6-46dd-9ae5-f4ecb99fe800.html"
+      "https://www.hpherald.com/evening_digest/jessica-biggs-launches-bid-for-school-board-president/article_5e013439-d7a6-46dd-9ae5-f4ecb99fe800.html",
+      "https://news.wttw.com/2026/09/15/chicago-school-board-president-candidates-talk-budgets-closures-and-why-election-matters"
     ],
     "photoUrl": "https://images.squarespace-cdn.com/content/v1/665f0be57b5c612b544dc7ed/65023fc4-dc57-48b4-8095-43a678ecacf7/Jessica+BIggs.jpg",
-    "runningOnEs": "Biggs dice que sus máximas prioridades como presidenta del consejo serían estabilizar las finanzas del distrito y ayudar a que el nuevo consejo de 21 miembros trabaje unido de manera efectiva después de lo que ella llama años de pleitos políticos internos. Quiere que el consejo fije metas académicas claras y mida el progreso, en particular en el dominio de la lectura, y que obligue al liderazgo del distrito a rendir cuentas por los resultados. También ha dicho que quiere atender las desigualdades de matrícula evaluando cómo las familias acceden a los programas de kínder y de preparatoria.",
+    "runningOnEs": "Biggs dice que sus máximas prioridades como presidenta del consejo serían estabilizar las finanzas del distrito y ayudar a que el nuevo consejo de 21 miembros trabaje unido de manera efectiva después de lo que ella llama años de pleitos políticos internos. Quiere que el consejo fije metas académicas claras y mida el progreso, en particular en el dominio de la lectura, y que obligue al liderazgo del distrito a rendir cuentas por los resultados. También ha dicho que quiere atender las desigualdades de matrícula evaluando cómo las familias acceden a los programas de kínder y de preparatoria. En un foro de WTTW en septiembre de 2026 pidió un \"five-year financial recovery plan\" y dijo que las decisiones sobre cierres de escuelas deben seguir a \"deep conversations\" con las comunidades, aunque se opone a un \"top down, mass closure\" como el de 2013.",
     "priorCareerEs": "Exdirectora de Chicago Public Schools en la primaria Burke y organizadora comunitaria que dirige Healthy Southwest, una iniciativa de equidad en salud del Southwest Organizing Project. Fue electa al consejo escolar en 2024 en representación de partes del centro de la ciudad y del South Side."
   },
   {
@@ -630,15 +715,16 @@
     "race": "president",
     "incumbent": false,
     "website": "https://www.sendhilforcps.com",
-    "runningOn": "Revuluri says he is running to put students at the center of every board decision, pointing to declining enrollment, record chronic absenteeism, and two-thirds of students not reading at grade level as the problems to fix. He says the board needs to clarify its role and goals, practice student-centered governance, and focus spending on learning outcomes. He has said the board must be willing to make hard budgeting calls and has criticized what he describes as a slogan-driven approach to district funding.",
+    "runningOn": "Revuluri says he is running to put students at the center of every board decision, pointing to declining enrollment, record chronic absenteeism, and two-thirds of students not reading at grade level as the problems to fix. He says the board needs to clarify its role and goals, practice student-centered governance, and focus spending on learning outcomes. He has said the board must be willing to make hard budgeting calls and has criticized what he describes as a slogan-driven approach to district funding. At a WTTW forum in September 2026 he said there are \"too many schools that are too empty to give kids a quality educational experience.\"",
     "priorCareer": "A former public school math teacher in the Bronx who later worked in the CPS Office of High School Teaching and Learning and on a University of Illinois Chicago math initiative. He served as an appointed member and vice president of the Chicago Board of Education under Mayor Lori Lightfoot from 2019 to 2022 and now works as a consultant and school governance coach.",
     "sourceUrls": [
       "https://www.sendhilforcps.com/",
       "https://www.wbez.org/education/2026/05/22/meet-the-candidates-for-chicagos-first-ever-elected-school-board-president",
-      "https://www.chalkbeat.org/chicago/2025/10/15/sendhil-revuluri-running-for-chicago-school-board-president/"
+      "https://www.chalkbeat.org/chicago/2025/10/15/sendhil-revuluri-running-for-chicago-school-board-president/",
+      "https://news.wttw.com/2026/09/15/chicago-school-board-president-candidates-talk-budgets-closures-and-why-election-matters"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/RevuluriGuptaFamily2015-0064-Square_20260610_232427_29733_1.jpg",
-    "runningOnEs": "Revuluri dice que se postula para poner a los estudiantes al centro de cada decisión del consejo, señalando la matrícula en descenso, el ausentismo crónico récord y que dos terceras partes de los estudiantes no leen al nivel de su grado como los problemas a resolver. Dice que el consejo necesita aclarar su rol y sus metas, practicar una gobernanza centrada en los estudiantes y enfocar el gasto en los resultados de aprendizaje. Ha dicho que el consejo debe estar dispuesto a tomar decisiones presupuestarias difíciles y ha criticado lo que describe como un enfoque de puros lemas hacia el financiamiento del distrito.",
+    "runningOnEs": "Revuluri dice que se postula para poner a los estudiantes al centro de cada decisión del consejo, señalando la matrícula en descenso, el ausentismo crónico récord y que dos terceras partes de los estudiantes no leen al nivel de su grado como los problemas a resolver. Dice que el consejo necesita aclarar su rol y sus metas, practicar una gobernanza centrada en los estudiantes y enfocar el gasto en los resultados de aprendizaje. Ha dicho que el consejo debe estar dispuesto a tomar decisiones presupuestarias difíciles y ha criticado lo que describe como un enfoque de puros lemas hacia el financiamiento del distrito. En un foro de WTTW en septiembre de 2026 dijo que hay \"too many schools that are too empty to give kids a quality educational experience.\"",
     "priorCareerEs": "Exmaestro de matemáticas de escuelas públicas en el Bronx que después trabajó en la Office of High School Teaching and Learning de CPS y en una iniciativa de matemáticas de la University of Illinois Chicago. Sirvió como miembro nombrado y vicepresidente del Chicago Board of Education bajo la alcaldesa Lori Lightfoot de 2019 a 2022 y ahora trabaja como consultor y asesor de gobernanza escolar."
   },
   {
@@ -646,15 +732,55 @@
     "race": "president",
     "incumbent": false,
     "website": "https://victorforthefuture.org",
-    "runningOn": "Henderson says he is running to refocus the board on classroom outcomes, improving math and reading performance and raising graduation rates, with more budget transparency. He has said the board should spend more attention on what happens in schools and less on City Hall politics. His campaign's stated theme is putting family and education first so every CPS student has the opportunity to succeed.",
+    "runningOn": "Henderson says he is running to refocus the board on classroom outcomes, improving math and reading performance and raising graduation rates, with more budget transparency. He has said the board should spend more attention on what happens in schools and less on City Hall politics. His campaign's stated theme is putting family and education first so every CPS student has the opportunity to succeed. At a WTTW forum in September 2026 he said he is neither for nor against school closures and that the district should first hear from communities about the best course.",
     "priorCareer": "A commercial litigation trial attorney and law firm founder, former president of the Chicago Bar Association, and a former certified public accountant. He has served on the board of directors of Urban Prep Academies charter schools, and his campaign site also lists roles as outside ethics officer for the Chicago Housing Authority and counsel to the U.S. House Ethics Committee.",
     "sourceUrls": [
       "https://www.wbez.org/education/2026/05/22/meet-the-candidates-for-chicagos-first-ever-elected-school-board-president",
       "https://victorforthefuture.org/",
-      "https://wgntv.com/news/politics/wgn-the-point-politics-chicago-illinois/victor-henderson-enters-race-for-chicago-school-board-president/"
+      "https://wgntv.com/news/politics/wgn-the-point-politics-chicago-illinois/victor-henderson-enters-race-for-chicago-school-board-president/",
+      "https://news.wttw.com/2026/09/15/chicago-school-board-president-candidates-talk-budgets-closures-and-why-election-matters"
     ],
     "photoUrl": "https://images.squarespace-cdn.com/content/v1/69ee9d4a77e44149ce58a5b9/1777245515745-RHPTRGWWSP2I5NXUQFCQ/Victor+P.+Henderson_0384+-+Current+Headshot.jpg",
-    "runningOnEs": "Henderson dice que se postula para reenfocar al consejo en los resultados del salón de clases, mejorando el desempeño en matemáticas y lectura y elevando las tasas de graduación, con más transparencia presupuestaria. Ha dicho que el consejo debería dedicar más atención a lo que pasa en las escuelas y menos a la política de City Hall. El tema declarado de su campaña es poner a la familia y la educación primero para que cada estudiante de CPS tenga la oportunidad de triunfar.",
+    "runningOnEs": "Henderson dice que se postula para reenfocar al consejo en los resultados del salón de clases, mejorando el desempeño en matemáticas y lectura y elevando las tasas de graduación, con más transparencia presupuestaria. Ha dicho que el consejo debería dedicar más atención a lo que pasa en las escuelas y menos a la política de City Hall. El tema declarado de su campaña es poner a la familia y la educación primero para que cada estudiante de CPS tenga la oportunidad de triunfar. En un foro de WTTW en septiembre de 2026 dijo que no está ni a favor ni en contra de los cierres de escuelas y que el distrito primero debe escuchar a las comunidades sobre el mejor camino.",
     "priorCareerEs": "Abogado litigante en materia comercial y fundador de un despacho jurídico, expresidente de la Chicago Bar Association y excontador público certificado. Ha servido en la junta directiva de las escuelas chárter Urban Prep Academies, y su sitio de campaña también enumera roles como oficial de ética externo de la Chicago Housing Authority y asesor jurídico del U.S. House Ethics Committee."
+  },
+  {
+    "name": "Tameka Walton",
+    "race": "10a",
+    "incumbent": false,
+    "writeIn": true,
+    "website": null,
+    "runningOn": "Declared write-in candidate; the name is not printed on the ballot. She says her priorities are equity between schools, supporting student mental health, and giving Local School Councils a stronger voice in board decisions. She was removed from the ballot in July after some of her petition signatures were ruled ineligible, leaving her below the 500-signature requirement. The Chicago Teachers Union endorsed her as a write-in candidate.",
+    "priorCareer": "Founder and executive director of Restored Hope, a Chicago nonprofit that supports women and girls who have experienced violence and trauma; longtime Local School Council member and state-appointed member of the Illinois Torture Inquiry and Relief Commission.",
+    "sourceUrls": [
+      "https://www.hpherald.com/evening_digest/nonprofit-leader-tameka-walton-challenges-rhymefest-for-10a-seat/article_8170457e-cd47-40cc-89f8-031a603f60c8.html",
+      "https://www.chalkbeat.org/chicago/2026/07/29/electoral-board-removes-tameka-walton-from-ballot/",
+      "https://www.ctulocal1.org/posts/chicago-teachers-union-endorses-candidates-running-as-public-school-champions-in-school-board-race-says-students-educational-experience-to-be-decided-in-november/",
+      "https://gov-pritzker-newsroom.prezly.com/gov-pritzker-announces-five-appointments-to-boards-and-commissions-y8hc5d",
+      "https://restoredhopechicago.org/meet-our-founder"
+    ],
+    "photoUrl": "https://goldininstitute.org/wp-content/uploads/2022/09/Walton-Tameka-PP.jpg",
+    "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Dice que sus prioridades son la equidad entre escuelas, el apoyo a la salud mental de los estudiantes y dar a los Local School Councils una voz más fuerte en las decisiones del consejo. Fue retirada de la boleta en julio después de que algunas de sus firmas fueron declaradas inválidas, lo que la dejó por debajo del requisito de 500 firmas. El Chicago Teachers Union la respaldó como candidata por escrito.",
+    "priorCareerEs": "Fundadora y directora ejecutiva de Restored Hope, una organización sin fines de lucro de Chicago que apoya a mujeres y niñas que han vivido violencia y trauma; integrante de larga trayectoria de un Local School Council y miembro designada por el estado de la Illinois Torture Inquiry and Relief Commission."
+  },
+  {
+    "name": "Rosita Chatonda",
+    "race": "10b",
+    "incumbent": false,
+    "writeIn": true,
+    "website": null,
+    "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No 2026 platform or campaign website found. In her 2024 write-in run for District 10 she called for equity for historically underserved neighborhood schools, an independent forensic audit of the CPS budget, and expanded special education services. She was removed from the 2026 ballot in July after the elections board upheld a challenge to her nominating petitions.",
+    "priorCareer": "Chicago Public Schools math and science coach and founder of the Coalition and Alliance of Urban School Educators; she was a write-in candidate for the District 10 seat in 2024.",
+    "sourceUrls": [
+      "https://www.chalkbeat.org/chicago/2026/07/29/electoral-board-removes-tameka-walton-from-ballot/",
+      "https://www.chalkbeat.org/chicago/2026/07/14/five-school-board-candidates-removed-from-ballot/",
+      "https://www.wbez.org/education/chicago-school-board/2026/07/14/five-chicago-school-board-candidates-removed-from-ballot-including-angel-velez-cydney-wallace",
+      "https://votecps.org/rosita-chatonda/",
+      "https://www.thedailyline.com/chicago-board-education-district-10-candidates-campaign-finance-reports-charter-schools-teachers-union",
+      "https://ballotpedia.org/Rosita_Chatonda"
+    ],
+    "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/832629/832629.jpg",
+    "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma para 2026 ni un sitio web de campaña. En su campaña por escrito de 2024 para el Distrito 10 pidió equidad para las escuelas de barrio históricamente desatendidas, una auditoría forense independiente del presupuesto de CPS y más servicios de educación especial. Fue retirada de la boleta de 2026 en julio después de que la junta electoral aceptó una impugnación a sus peticiones de candidatura.",
+    "priorCareerEs": "Coach de matemáticas y ciencias de las Escuelas Públicas de Chicago y fundadora de la Coalition and Alliance of Urban School Educators; fue candidata por escrito para el escaño del Distrito 10 en 2024."
   }
 ]

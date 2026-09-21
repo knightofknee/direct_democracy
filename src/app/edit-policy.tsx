@@ -159,7 +159,7 @@ function PolicyForm({
         value={body}
         onChangeText={setBody}
         multiline
-        maxLength={8000}
+        maxLength={20000}
         style={{ minHeight: 200 }}
       />
       <Field

@@ -6,16 +6,118 @@
       "race": "clerk",
       "party": null,
       "incumbent": true,
-      "website": null,
+      "website": "https://www.voteannavalencia.com/",
       "runningOn": "Launched her re-election bid in July 2026, citing her record since 2017 of modernizing government services, expanding civic engagement, and making City Hall work for every Chicagoan.",
       "priorCareer": "Chicago city clerk since January 2017, re-elected unopposed in 2019 and 2023; ran for Illinois secretary of state in 2022.",
       "sourceUrls": [
+        "https://www.voteannavalencia.com/",
         "http://www.lawndalenews.com/2026/07/anna-valencia-launches-re-election-bid-for-chicago-city-clerk/",
         "https://ballotpedia.org/Anna_Valencia"
       ],
       "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Chicago_City_Clerk_Anna_Valencia_2019.jpg/960px-Chicago_City_Clerk_Anna_Valencia_2019.jpg",
+      "photoFrame": {
+        "x": 0.313,
+        "y": 0.349,
+        "zoom": 1.05
+      },
       "runningOnEs": "Lanzó su campaña de reelección en julio de 2026, citando su historial desde 2017 de modernizar los servicios de gobierno, ampliar la participación cívica y hacer que City Hall funcione para todos los habitantes de Chicago.",
       "priorCareerEs": "Secretaria municipal (city clerk) de Chicago desde enero de 2017, reelecta sin oposición en 2019 y 2023; se postuló para secretaria de estado de Illinois en 2022."
+    },
+    {
+      "name": "Jacob Schulz",
+      "race": "clerk",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.jacobforcityclerk.com/",
+      "runningOn": "His campaign says city government should be easier to understand and use. It lists four goals: helping residents find the right city department, publishing regular reports on resident experiences and service gaps, simplifying Clerk services such as City Stickers, parking permits, and CityKey, and making city information clearer and more accessible. The campaign says it is collecting petition signatures to get on the ballot.",
+      "priorCareer": "Public administrator and workforce development professional who worked in higher education at the University of Illinois Chicago, including managing its Commuter Student Resource Center; holds a bachelor's in urban and public affairs and a master of public administration from UIC, where he was student government president. Also performs as blues artist \"Brother Jacob\" and served on the Chicago Blues Festival programming committee.",
+      "sourceUrls": [
+        "https://www.jacobforcityclerk.com/",
+        "https://www.jacobforcityclerk.com/about"
+      ],
+      "photoUrl": "https://www.jacobforcityclerk.com/airo-assets/images/pages/about/jacob-portrait",
+      "runningOnEs": "Su campaña dice que el gobierno de la ciudad debe ser más fácil de entender y de usar. Enumera cuatro metas: ayudar a los residentes a encontrar el departamento municipal correcto, publicar informes periódicos sobre las experiencias de los residentes y las fallas en los servicios, simplificar los servicios de la Secretaría como los City Stickers, los permisos de estacionamiento y CityKey, y hacer que la información municipal sea más clara y accesible. La campaña dice que está recolectando firmas de petición para aparecer en la boleta.",
+      "priorCareerEs": "Administrador público y profesional de desarrollo laboral que trabajó en educación superior en la Universidad de Illinois en Chicago, incluida la dirección de su Commuter Student Resource Center; tiene una licenciatura en asuntos urbanos y públicos y una maestría en administración pública de UIC, donde fue presidente del gobierno estudiantil. También se presenta como músico de blues bajo el nombre \"Brother Jacob\" y formó parte del comité de programación del Chicago Blues Festival."
+    },
+    {
+      "name": "Melissa Conyears-Ervin",
+      "race": "treasurer",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Politico's Illinois Playbook reported in August 2026 that she is running for a third term as treasurer after her unsuccessful 2026 congressional bid. No campaign website or detailed platform for the treasurer race found yet. In August 2026 she urged the City Council to dissolve the Chicago Community Catalyst Fund and move its more than $57 million into the city's corporate fund, saying the money should help avoid police and firefighter layoffs.",
+      "priorCareer": "Chicago City Treasurer since 2019; Illinois state representative for the 10th District from 2017 to 2019; earlier spent 15 years as an executive at Allstate Insurance.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/08/10/the-democratic-crystal-ball-01030324",
+        "https://chicago.suntimes.com/city-hall/2026/08/10/city-treasurer-melissa-conyears-ervin-proposal-abolish-chicago-catalyst-fund",
+        "https://chicagocitytreasurer.com/meet-treasurer-conyears-ervin/",
+        "https://en.wikipedia.org/wiki/Melissa_Conyears_Ervin"
+      ],
+      "photoUrl": "https://chicagocitytreasurer.com/wp-content/uploads/2024/07/MCE-Portrait-2024-683x1024.webp",
+      "runningOnEs": "Illinois Playbook de Politico informó en agosto de 2026 que se postula para un tercer periodo como tesorera, tras su intento fallido de llegar al Congreso en 2026. Aún no se encontró un sitio web de campaña ni una plataforma detallada para la contienda de tesorería. En agosto de 2026 pidió al Concejo Municipal disolver el Chicago Community Catalyst Fund y trasladar sus más de $57 millones al fondo general de la ciudad, argumentando que ese dinero debe ayudar a evitar despidos de policías y bomberos.",
+      "priorCareerEs": "Tesorera de la Ciudad de Chicago desde 2019; representante estatal de Illinois por el Distrito 10 de 2017 a 2019; antes trabajó 15 años como ejecutiva en Allstate Insurance."
+    },
+    {
+      "name": "Daniel La Spata",
+      "race": "ward-1",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.daniellaspata.com/",
+      "runningOn": "Is seeking a third term, WTTW reported in August 2026. His campaign site lists housing, transportation, public safety, good governance, education and the environment as key issues. He says he will keep building more homes by reforming the ADU ordinance and barring alders from opting their wards out, allow three-flats by right across the 1st Ward, and work with the Here to Stay Land Trust on long-term homeownership.",
+      "priorCareer": "1st Ward alderman since 2019; urban planner, former community organizer with the Logan Square Neighborhood Association and the Jane Addams Senior Caucus, and former policy and planning associate at Friends of the Parks.",
+      "sourceUrls": [
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse",
+        "https://www.daniellaspata.com/",
+        "https://www.daniellaspata.com/issues",
+        "https://en.wikipedia.org/wiki/Daniel_La_Spata"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Daniel_LaSpata_at_Cumulative_Impacts_Ordinance_Rally_Cropped.jpg",
+      "photoFrame": {
+        "x": 0.43,
+        "y": 0.424,
+        "zoom": 1.0
+      },
+      "runningOnEs": "Busca un tercer periodo, según informó WTTW en agosto de 2026. Su sitio de campaña señala como temas clave la vivienda, el transporte, la seguridad pública, el buen gobierno, la educación y el medio ambiente. Dice que seguirá impulsando la construcción de más viviendas reformando la ordenanza de unidades de vivienda adicionales (ADU) y prohibiendo que los concejales excluyan a sus distritos, permitirá edificios de tres departamentos por derecho en todo el Distrito 1 y trabajará con el fideicomiso de tierras Here to Stay Land Trust para ampliar la propiedad de vivienda a largo plazo.",
+      "priorCareerEs": "Concejal del Distrito 1 desde 2019; urbanista, ex organizador comunitario con la Logan Square Neighborhood Association y el Jane Addams Senior Caucus, y ex asociado de políticas y planeación en Friends of the Parks."
+    },
+    {
+      "name": "Laura Yepez",
+      "race": "ward-1",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.yepezforchicago.com/",
+      "runningOn": "Launched her campaign in May 2026 to challenge Ald. Daniel La Spata. Her campaign describes her as a pro-labor progressive committed to protecting the rights of women, immigrants, workers, and LGBTQIA+ Chicagoans, and says lasting progress requires fiscally responsible leadership. Her site's issues page asks residents to share their priorities rather than listing a detailed platform.",
+      "priorCareer": "1st Ward Democratic Committeeperson since 2024 and longtime owner of the Wicker Park Inn; president of the Chicago Bed and Breakfast Association and vice president of people operations at an adtech startup. Former Illinois House legislative aide and former chair of the Lincoln Park High School local school council; Brown University urban studies graduate.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/05/07/johnson-blitzes-capitol-for-bears-funds-00909550",
+        "https://www.yepezforchicago.com/meet",
+        "https://www.cookcountydems.com/ward_commttee_people/1st-ward/"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Lanzó su campaña en mayo de 2026 para desafiar al concejal Daniel La Spata. Su campaña la describe como una progresista a favor de los sindicatos, comprometida con proteger los derechos de las mujeres, los inmigrantes, los trabajadores y los chicagoenses LGBTQIA+, y dice que el progreso duradero requiere un liderazgo fiscalmente responsable. La página de temas de su sitio pide a los residentes que compartan sus prioridades en lugar de presentar una plataforma detallada.",
+      "priorCareerEs": "Committeeperson demócrata del Distrito 1 desde 2024 y propietaria desde hace años del Wicker Park Inn; presidenta de la Chicago Bed and Breakfast Association y vicepresidenta de operaciones de personal en una startup de tecnología publicitaria. Ex asistente legislativa en la Cámara de Representantes de Illinois y ex presidenta del consejo escolar local de Lincoln Park High School; egresada de estudios urbanos de Brown University."
+    },
+    {
+      "name": "Bill Thanoukos",
+      "race": "ward-1",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.billfor1st.com/",
+      "runningOn": "Kicked off his campaign in September 2026. He says he is running to keep 1st Ward neighborhoods affordable and within reach for families, support small businesses, strengthen support for families, and bring responsive leadership to City Hall, under the slogan #FixTheFirst.",
+      "priorCareer": "Small business owner who runs Greek Kitchen and helps operate his family's restaurant, Hub's; former chief of staff to City Treasurer Stephanie Neely and former Chicago Housing Authority board member. Law degree from Loyola University Chicago.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/09/09/pritzkers-one-two-punch-01068302",
+        "https://www.billfor1st.com/about",
+        "https://secure.actblue.com/donate/n4b-kickoff"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/6a70968f6c455812f7224b4f/0c3e022e-02c2-449e-a20e-851634adb4f6/IMG_1796.jpg",
+      "photoFrame": {
+        "x": 0.499,
+        "y": 0.287,
+        "zoom": 1.35
+      },
+      "runningOnEs": "Lanzó su campaña en septiembre de 2026. Dice que se postula para que los vecindarios del Distrito 1 sigan siendo asequibles y al alcance de las familias, apoyar a los pequeños negocios, fortalecer el apoyo a las familias y llevar un liderazgo receptivo al Ayuntamiento, bajo el lema #FixTheFirst.",
+      "priorCareerEs": "Dueño de pequeño negocio que dirige Greek Kitchen y ayuda a operar el restaurante de su familia, Hub's; ex jefe de gabinete de la tesorera municipal Stephanie Neely y ex miembro de la junta de la Chicago Housing Authority. Título de abogado de Loyola University Chicago."
     },
     {
       "name": "Raheem Uqdah",
@@ -34,6 +136,223 @@
       "priorCareerEs": "Profesional de la organización comunitaria y la inversión social con una maestría en administración pública."
     },
     {
+      "name": "Lamont Robinson",
+      "race": "ward-4",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Kicked off his reelection campaign in August 2026 at a Bronzeville restaurant, joined by Cook County Board President Toni Preckwinkle, state Sen. Robert Peters, lieutenant governor candidate Christian Mitchell and SEIU Healthcare President Greg Kelly, among others. No campaign website or detailed platform found yet.",
+      "priorCareer": "4th Ward alderman since 2023; state representative for the 5th District from 2019 to 2023, owner of two Allstate insurance agencies and adjunct professor at City Colleges of Chicago.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/08/14/bears-keep-indiana-on-hold-01037042",
+        "https://en.wikipedia.org/wiki/Lamont_Robinson"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/0/08/Lamont_Robinson_at_May_2023_Chicago_City_Council_Meeting.jpg",
+      "runningOnEs": "Lanzó su campaña de reelección en agosto de 2026 en un restaurante de Bronzeville, acompañado por la presidenta de la Junta del Condado de Cook, Toni Preckwinkle, el senador estatal Robert Peters, el candidato a vicegobernador Christian Mitchell y el presidente de SEIU Healthcare, Greg Kelly, entre otros. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "priorCareerEs": "Concejal del Distrito 4 desde 2023; representante estatal por el Distrito 5 de 2019 a 2023, dueño de dos agencias de seguros Allstate y profesor adjunto en los City Colleges of Chicago."
+    },
+    {
+      "name": "Allyson Scrutchens",
+      "race": "ward-6",
+      "party": null,
+      "incumbent": false,
+      "website": "https://voteforallyson.com/",
+      "runningOn": "Kicked off her campaign in July 2026 to challenge Ald. William Hall. She says her focus is strengthening neighborhoods, supporting local businesses, improving public safety, and delivering responsive leadership. Her campaign lists six priorities: community development, economic investment, quality of life, education, public safety, and housing and neighborhood preservation.",
+      "priorCareer": "Founder and CEO of Forward Planning, a strategic planning and fundraising firm, since 2014; former executive director of the Chicago Aldermanic Black Caucus Foundation. 6th Ward resident since 2013 with a master of public administration from the University of Illinois Chicago.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/22/data-boom-meets-boundaries-01007090",
+        "https://voteforallyson.com/",
+        "https://voteforallyson.com/meet-allyson"
+      ],
+      "photoUrl": "https://media.base44.com/images/public/6a56625b6586accc66d75b1e/864f9ac8c_AllysonScrutchens_DSC6567_scaled.jpg",
+      "photoFrame": {
+        "x": 0.489,
+        "y": 0.302,
+        "zoom": 1.87
+      },
+      "runningOnEs": "Lanzó su campaña en julio de 2026 para desafiar al concejal William Hall. Dice que su enfoque es fortalecer los vecindarios, apoyar a los negocios locales, mejorar la seguridad pública y ofrecer un liderazgo receptivo. Su campaña enumera seis prioridades: desarrollo comunitario, inversión económica, calidad de vida, educación, seguridad pública, y vivienda y preservación de los vecindarios.",
+      "priorCareerEs": "Fundadora y directora ejecutiva de Forward Planning, una firma de planeación estratégica y recaudación de fondos, desde 2014; ex directora ejecutiva de la Chicago Aldermanic Black Caucus Foundation. Residente del Distrito 6 desde 2013, con una maestría en administración pública de la Universidad de Illinois en Chicago."
+    },
+    {
+      "name": "Nate Pendleton",
+      "race": "ward-7",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.votenatependleton.com/",
+      "runningOn": "Kicked off his campaign in July 2026 to challenge Ald. Greg Mitchell. His platform centers on economic growth through entrepreneurship and job programs for youth and adults, education from elementary school through trade schools and certification training, and safety through daily work with the 4th District police alongside resources to prevent re-incarceration. His campaign says that after his 15-year-old daughter Hadiya was killed by gun violence in 2013, he spent more than a decade advocating for safer neighborhoods and opportunities for young people.",
+      "priorCareer": "Chef and businessman who has lived in the 7th Ward for more than 55 years; community advocate on gun violence and youth opportunity.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/23/schakowskys-aipac-pivot-01009020",
+        "https://www.votenatependleton.com/about-nate-pendleton",
+        "https://www.votenatependleton.com/campaign-platform"
+      ],
+      "photoUrl": "https://primary.jwwb.nl/public/o/a/j/temp-jchnrlvjhtgnqlpfsltl/light_grey_pinstripe_suit-high.webp",
+      "photoFrame": {
+        "x": 0.498,
+        "y": 0.242,
+        "zoom": 1.54
+      },
+      "runningOnEs": "Lanzó su campaña en julio de 2026 para desafiar al concejal Greg Mitchell. Su plataforma se centra en el crecimiento económico mediante el emprendimiento y programas de empleo para jóvenes y adultos, la educación desde la primaria hasta escuelas de oficios y capacitación para certificaciones, y la seguridad mediante el trabajo diario con la policía del Distrito Policial 4 junto con recursos para evitar la reincidencia. Su campaña dice que, después de que su hija Hadiya, de 15 años, murió por violencia armada en 2013, dedicó más de una década a abogar por vecindarios más seguros y oportunidades para los jóvenes.",
+      "priorCareerEs": "Chef y empresario que ha vivido en el Distrito 7 por más de 55 años; defensor comunitario contra la violencia armada y a favor de oportunidades para los jóvenes."
+    },
+    {
+      "name": "Claudia Zuno",
+      "race": "ward-12",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.claudiafor12thward.com/",
+      "runningOn": "Challenging Ald. Julia Ramirez. Her top pledge is removing the concrete barriers and protected bike lanes on Archer and Kedzie avenues and finding alternatives that keep pedestrian routes safe while accommodating truck routes. She also wants to restore gunshot detection technology such as ShotSpotter, support law enforcement, and help small businesses with a chamber of commerce and access to grants and training.",
+      "priorCareer": "Second-generation owner of Zuno Photographic, a family photography business founded in 1969; lifelong Brighton Park resident who has served with the Mexican Civic Society of Illinois, the Mexican-American Women's Auxiliary, and the National Museum of Mexican Art.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/02/18/fight-over-bike-lanes-in-brighton-park-propels-claudia-zuno-to-run-for-12th-ward-alderperson/",
+        "https://www.claudiafor12thward.com/about"
+      ],
+      "photoUrl": "https://static.wixstatic.com/media/5a7241_0608adb5a024460aa778a367a707ee4c~mv2.jpg",
+      "runningOnEs": "Desafía a la concejal Julia Ramirez. Su principal promesa es retirar las barreras de concreto y los carriles protegidos para bicicletas de las avenidas Archer y Kedzie, y buscar alternativas que mantengan seguras las rutas peatonales y a la vez den cabida a las rutas de camiones. También quiere restablecer la tecnología de detección de disparos como ShotSpotter, apoyar a las fuerzas del orden y ayudar a los pequeños negocios con una cámara de comercio y acceso a subvenciones y capacitación.",
+      "priorCareerEs": "Propietaria de segunda generación de Zuno Photographic, un negocio familiar de fotografía fundado en 1969; residente de Brighton Park de toda la vida que ha colaborado con la Mexican Civic Society of Illinois, el Mexican-American Women's Auxiliary y el National Museum of Mexican Art."
+    },
+    {
+      "name": "Al Cacciottolo",
+      "race": "ward-13",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Running for the open seat with the endorsement of retiring Ald. Marty Quinn. His stated priorities are continuing the push for a Southwest Side police district, supporting local business growth, safe streets and parks, and quality constituent services. No campaign website found.",
+      "priorCareer": "President of the Garfield Ridge Neighborhood Watch, board member of the Midway Chamber of Commerce, and member of the 8th Police District Council; City of Chicago employee and former head baseball coach at Kennedy High School.",
+      "sourceUrls": [
+        "https://suburbanchicagoland.com/2026/08/20/al-cacciottolo-to-run-for-13th-ward-alderman-to-succeed-ald-marty-quinn/",
+        "https://ccpsa.chicago.gov/member/al-cacciottolo/"
+      ],
+      "photoUrl": "https://www.midwaychamber.org/wp-content/uploads/sites/89/2023/09/Al-Cacciotolo.jpeg",
+      "runningOnEs": "Se postula por el escaño abierto con el respaldo del concejal saliente Marty Quinn. Sus prioridades declaradas son continuar el impulso por un distrito policial para el Southwest Side, apoyar el crecimiento de los negocios locales, calles y parques seguros, y servicios de calidad para los representados. No se encontró un sitio web de campaña.",
+      "priorCareerEs": "Presidente de la Garfield Ridge Neighborhood Watch, miembro de la junta directiva de la Midway Chamber of Commerce y miembro del consejo del 8.º distrito policial; empleado de la Ciudad de Chicago y ex entrenador principal de béisbol en Kennedy High School."
+    },
+    {
+      "name": "Raymond Lopez",
+      "race": "ward-15",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.raymondalopez.com/",
+      "runningOn": "Announced in May 2026 that he is seeking reelection to a fourth consecutive term. His campaign site describes him as a \"true-blue, common-sense\" Democrat and highlights ordinances he says he fought for and passed, including One Fair Wage for tipped workers, the $15 minimum wage and paid sick leave. No detailed platform for a new term found yet.",
+      "priorCareer": "15th Ward alderman since 2015; first elected 15th Ward Democratic committeeman in 2012; former Southwest Airlines skycap at Midway Airport.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/05/18/illinois-black-leaders-and-the-redistricting-divide-00925683",
+        "https://www.raymondalopez.com/meet-raymond",
+        "https://en.wikipedia.org/wiki/Raymond_Lopez"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/20/Ray_Lopez_in_Chicago_City_Council_Chambers_2023.jpg",
+      "photoFrame": {
+        "x": 0.325,
+        "y": 0.352,
+        "zoom": 1.39
+      },
+      "runningOnEs": "Anunció en mayo de 2026 que busca la reelección para un cuarto periodo consecutivo. Su sitio de campaña lo describe como un demócrata \"true-blue, common-sense\" y destaca ordenanzas que dice haber impulsado y aprobado, entre ellas One Fair Wage para trabajadores que reciben propinas, el salario mínimo de 15 dólares y la licencia pagada por enfermedad. Aún no se encontró una plataforma detallada para un nuevo periodo.",
+      "priorCareerEs": "Concejal del Distrito 15 desde 2015; elegido por primera vez como comisionado demócrata del Distrito 15 en 2012; ex maletero de Southwest Airlines en el aeropuerto Midway."
+    },
+    {
+      "name": "Erin Ross",
+      "race": "ward-19",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Running for the open seat with the endorsement of retiring Ald. Matt O'Shea, who announced in September 2026 that he will not seek a fifth term. She says she wants to work more closely with community groups, create more opportunities for community engagement and gatherings, and support first responders at a time of reduced police staffing. No campaign website or detailed platform found yet.",
+      "priorCareer": "Chief of staff in the 19th Ward office since 2024; previously executive director of the 95th Street Business Association for more than a decade. Lifelong Beverly resident.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/09/10/matt-oshea-wont-run-for-19th-ward-alderman-again-after-4-terms/",
+        "https://abc7chicago.com/post/chicago-alderman-michael-rodriguez-not-running-election-22nd-ward/19814542/"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Se postula por el escaño abierto con el respaldo del concejal saliente Matt O'Shea, quien anunció en septiembre de 2026 que no buscará un quinto periodo. Dice que quiere trabajar más de cerca con los grupos comunitarios, crear más oportunidades de participación y encuentros comunitarios, y apoyar al personal de primeros auxilios y emergencias en un momento de menos policías. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "priorCareerEs": "Jefa de gabinete de la oficina del Distrito 19 desde 2024; antes fue directora ejecutiva de la 95th Street Business Association por más de una década. Residente de Beverly de toda la vida."
+    },
+    {
+      "name": "Jeanette Taylor",
+      "race": "ward-20",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Is running for what she said will be her final term on the City Council, WTTW reported in August 2026. No campaign website or detailed platform found yet.",
+      "priorCareer": "20th Ward alderwoman since 2019; community organizer with the Kenwood Oakland Community Organization and longtime Mollison Elementary local school council member who led the 2015 hunger strike against the proposed closure of Dyett High School.",
+      "sourceUrls": [
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse",
+        "https://en.wikipedia.org/wiki/Jeanette_Taylor"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3e/6-30-20_We_Walk_for_Her_Jeanette_Taylor_%28cropped%29.jpg",
+      "runningOnEs": "Se postula para lo que, según dijo, será su último periodo en el Concejo Municipal, informó WTTW en agosto de 2026. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "priorCareerEs": "Concejala del Distrito 20 desde 2019; organizadora comunitaria con la Kenwood Oakland Community Organization y por muchos años integrante del consejo escolar local de la primaria Mollison, quien encabezó en 2015 la huelga de hambre contra el cierre propuesto de la preparatoria Dyett."
+    },
+    {
+      "name": "Elianne Bahena",
+      "race": "ward-22",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Running for the open seat with the endorsement of retiring Ald. Michael Rodriguez, and would be the ward's first alderwoman. She says she wants a City Council that gets things done for working-class residents by being willing to speak with everyone. No campaign website or detailed platform found yet.",
+      "priorCareer": "Chief of staff to Ald. Michael Rodriguez; elected member of the 10th Police District Council; vice president of the 22nd Ward Independent Political Organization and a board member of Mujeres Latinas en Acción. Little Village resident and daughter of immigrants.",
+      "sourceUrls": [
+        "https://abc7chicago.com/post/chicago-alderman-michael-rodriguez-not-running-election-22nd-ward/19814542/",
+        "https://blockclubchicago.org/2026/09/09/little-village-ald-michael-rodriguez-wont-seek-reelection/",
+        "https://www.22ndward.org/team-2/elianne-bahena-"
+      ],
+      "photoUrl": "https://static.wixstatic.com/media/7c5ff2_d35f4f4b1b8b49b2a0c33789e55c36c2~mv2.png/v1/fill/w_864,h_1152,al_c/elianne-bahena.png",
+      "runningOnEs": "Se postula por el escaño abierto con el respaldo del concejal saliente Michael Rodriguez, y sería la primera mujer concejal del distrito. Dice que quiere un Concejo Municipal que dé resultados para los residentes de clase trabajadora estando dispuesto a hablar con todos. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "priorCareerEs": "Jefa de gabinete del concejal Michael Rodriguez; miembro electa del consejo del 10.º distrito policial; vicepresidenta de la 22nd Ward Independent Political Organization y miembro de la junta directiva de Mujeres Latinas en Acción. Residente de La Villita e hija de inmigrantes."
+    },
+    {
+      "name": "Kristian Armendariz",
+      "race": "ward-22",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Announced at the end of July 2026 that he will run again for the seat. No 2027 platform found. In his 2023 run he named public safety, education, and environmental justice as the ward's biggest issues and proposed mental health clinics, more funding for trade programs, financial literacy workshops, and resources for people experiencing homelessness.",
+      "priorCareer": "Little Village youth organizer, most recently with the Little Village Community Council as of 2023; finished behind Ald. Michael Rodriguez in the 2023 election.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/09/09/little-village-ald-michael-rodriguez-wont-seek-reelection/",
+        "https://blockclubchicago.org/2023/01/31/little-village-ald-michael-rodriguez-faces-2-challengers-for-22nd-ward-seat/",
+        "https://ballotpedia.org/Kristian_Armendariz"
+      ],
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/721360/kristian-r-armendariz.png",
+      "photoFrame": {
+        "x": 0.5,
+        "y": 0.54,
+        "zoom": 1.45
+      },
+      "runningOnEs": "Anunció a finales de julio de 2026 que volverá a postularse por el escaño. No se encontró una plataforma para 2027. En su campaña de 2023 señaló la seguridad pública, la educación y la justicia ambiental como los mayores problemas del distrito, y propuso clínicas de salud mental, más fondos para programas de oficios, talleres de educación financiera y recursos para personas sin vivienda.",
+      "priorCareerEs": "Organizador juvenil de La Villita, más recientemente con el Little Village Community Council hasta 2023; quedó detrás del concejal Michael Rodriguez en la elección de 2023."
+    },
+    {
+      "name": "Silvana Tabares",
+      "race": "ward-23",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Is seeking reelection and in September 2026 contributed $100,000 of her own money to her campaign, lifting contribution limits in the race. She says she is ready to keep providing essential services and bringing economic growth and new opportunities to the city, and points to her record on immigrant protections, constituent services from two ward offices, school improvements and public safety.",
+      "priorCareer": "23rd Ward alderwoman since 2018 (appointed, then elected in 2019); state representative for the 21st District from 2013 to 2018.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/09/16/on-the-official-campaign-trail-01078576",
+        "https://southwestregionalpublishing.com/2026/08/28/meet-the-28-year-old-lawyer-running-to-represent-the-23rd-ward/",
+        "https://en.wikipedia.org/wiki/Silvana_Tabares"
+      ],
+      "photoUrl": "https://www.chicago.gov/content/dam/city/about/wards/23/silvana-tabares.png",
+      "runningOnEs": "Busca la reelección y en septiembre de 2026 aportó 100,000 dólares de su propio dinero a su campaña, lo que levantó los límites de contribución en la contienda. Dice que está lista para seguir brindando servicios esenciales y atrayendo crecimiento económico y nuevas oportunidades a la ciudad, y destaca su historial en protección a inmigrantes, atención a residentes desde dos oficinas del distrito, mejoras escolares y seguridad pública.",
+      "priorCareerEs": "Concejala del Distrito 23 desde 2018 (designada y luego elegida en 2019); representante estatal por el Distrito 21 de 2013 a 2018."
+    },
+    {
+      "name": "Leonardo Rojas-Banda",
+      "race": "ward-23",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Kicked off his campaign in August 2026 to challenge Ald. Silvana Tabares. He says he wants a more responsive ward office, support for immigrants including know-your-rights information and coordination with immigration lawyers during ICE enforcement, repairs for flooding, sidewalks, and other infrastructure, and public safety through police district expansion and the CARE program for non-emergency calls. No campaign website found yet.",
+      "priorCareer": "Attorney and community organizer raised in West Lawn; former Freedom of Information Act officer and assistant general counsel in the Illinois governor's office. Earlier helped residents enroll in SNAP and Medicaid at the Greater Chicago Food Depository; chairs the Civic Empowerment pillar at Southwest Action Network.",
+      "sourceUrls": [
+        "https://southwestregionalpublishing.com/2026/08/28/meet-the-28-year-old-lawyer-running-to-represent-the-23rd-ward/"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Lanzó su campaña en agosto de 2026 para desafiar a la concejala Silvana Tabares. Dice que quiere una oficina de distrito más receptiva, apoyo a los inmigrantes que incluya información sobre sus derechos y coordinación con abogados de inmigración durante operativos de ICE, reparaciones de inundaciones, banquetas y otra infraestructura, y seguridad pública mediante la ampliación de los distritos policiales y el programa CARE para llamadas que no son de emergencia. Aún no se encontró un sitio web de campaña.",
+      "priorCareerEs": "Abogado y organizador comunitario criado en West Lawn; ex funcionario de la Ley de Libertad de Información (FOIA) y ex asesor jurídico adjunto en la oficina del gobernador de Illinois. Antes ayudó a residentes a inscribirse en SNAP y Medicaid en el Greater Chicago Food Depository; preside el área de Civic Empowerment de Southwest Action Network."
+    },
+    {
       "name": "Byron Sigcho-Lopez",
       "race": "ward-25",
       "party": null,
@@ -45,6 +364,11 @@
         "https://blockclubchicago.org/2026/08/19/byron-sigcho-lopez-launches-reelection-campaign-for-alderman/"
       ],
       "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/22nd_Ward_Alderman_Michael_Rodriguez_Striking_Chicago_Teachers_Surround_City_Hall_10-23-19_4248_%2848954717797%29_%28cropped%29.jpg",
+      "photoFrame": {
+        "x": 0.577,
+        "y": 0.467,
+        "zoom": 1.0
+      },
       "runningOnEs": "Lanzó su campaña de reelección en agosto de 2026, comprometiéndose a seguir impulsando un impuesto estatal del 3 por ciento a los millonarios, mejorar el acceso al transporte público en Pilsen, construir vivienda asequible y atender el ruido de los helicópteros, planteando la contienda como una lucha por la gente trabajadora.",
       "priorCareerEs": "Concejal del Distrito 25 desde 2019; ex educador y organizador comunitario de Pilsen."
     },
@@ -61,6 +385,11 @@
         "https://blockclubchicago.org/2026/07/29/5-candidates-crowd-race-for-25th-ward-alderperson-a-potentially-open-race/"
       ],
       "photoUrl": "https://assets.nationbuilder.com/aidafloresfor25thward/pages/267/attachments/original/1784255878/Screenshot_2026-07-16_at_9.37.47%E2%80%AFPM.png?1784255878",
+      "photoFrame": {
+        "x": 0.421,
+        "y": 0.399,
+        "zoom": 1.94
+      },
       "runningOnEs": "Hace su tercera campaña por el escaño con la propuesta de construir un distrito incluyente y multigeneracional, recorrer cada cuadra a pie y publicar boletas de calificaciones públicas trimestrales sobre el avance del distrito.",
       "priorCareerEs": "Educadora de Pilsen; perdió la segunda vuelta de 2023 ante Sigcho-Lopez con cerca del 47 por ciento de los votos."
     },
@@ -121,8 +450,86 @@
         "https://blockclubchicago.org/2026/07/29/5-candidates-crowd-race-for-25th-ward-alderperson-a-potentially-open-race/"
       ],
       "photoUrl": "https://images.squarespace-cdn.com/content/v1/69ebac2a6b67f014d5915c7a/eab94bbc-ef28-44e4-b28d-bbf08a3e9db5/IMG_9956.jpeg",
+      "photoFrame": {
+        "x": 0.466,
+        "y": 0.218,
+        "zoom": 2.96
+      },
       "runningOnEs": "Se postula para construir un distrito basado en la dignidad, la seguridad, la oportunidad y la compasión, y se ha comprometido a donar el 10 por ciento del salario de concejal a un fideicomiso del distrito que financie asistencia legal y apoyo de emergencia para familias indocumentadas.",
       "priorCareerEs": "Pianista de formación clásica y bailarín de ballet retirado."
+    },
+    {
+      "name": "Walter \"Red\" Burnett",
+      "race": "ward-27",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Appointed in 2025, he is seeking his first full term and was gathering campaign petition signatures in the ward in July 2026. His official city biography says he is committed to expanding affordable housing, supporting local entrepreneurs and fostering safe, vibrant communities. No campaign website or detailed platform found yet.",
+      "priorCareer": "27th Ward alderman since 2025 (appointed to succeed his father, Walter Burnett Jr.); former investment banker who later advised local businesses, developers and artists.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/29/petition-season-fuels-mayoral-suspense-01014573",
+        "https://www.chicago.gov/city/en/about/wards/27/alderman_burnett_bio.html",
+        "https://en.wikipedia.org/wiki/Walter_Burnett_Jr."
+      ],
+      "photoUrl": "https://www.chicago.gov/content/dam/city/about/wards/27/Burnett-Redmond-Walter-Portrait.jpg",
+      "runningOnEs": "Designado en 2025, busca su primer periodo completo y en julio de 2026 recolectaba firmas de petición de campaña en el distrito. Su biografía oficial de la ciudad dice que está comprometido con ampliar la vivienda asequible, apoyar a los emprendedores locales y fomentar comunidades seguras y vibrantes. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "priorCareerEs": "Concejal del Distrito 27 desde 2025 (designado para suceder a su padre, Walter Burnett Jr.); ex banquero de inversión que después asesoró a negocios locales, desarrolladores y artistas."
+    },
+    {
+      "name": "Dan Olas",
+      "race": "ward-27",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.danolas.com/",
+      "runningOn": "Challenging Ald. Walter Burnett III, son of the former alderman, and says the Burnett family has mismanaged the ward. His top-10 issues list includes public safety with more police cameras and stricter sentencing, lower property and sales taxes and CTA fares, new grocery stores, new CTA and Metra stations in the ward, and 8-year term limits for city elected officials.",
+      "priorCareer": "Owner of Grand Ideas Staffing and a 30-year 27th Ward resident; stage-4 cancer survivor who volunteers on the University of Illinois Chicago Hospital Cancer Center community board and with Catholic Charities.",
+      "sourceUrls": [
+        "https://www.danolas.com/",
+        "https://www.danolas.com/meet-dan/",
+        "https://www.danolas.com/27th-ward-issues/"
+      ],
+      "photoUrl": "https://www.danolas.com/wp-content/uploads/2026/02/Dan-Olas-for-27th-Ward-Alderman-1.jpg",
+      "runningOnEs": "Desafía al concejal Walter Burnett III, hijo del concejal anterior, y dice que la familia Burnett ha administrado mal el distrito. Su lista de los 10 temas principales incluye seguridad pública con más cámaras policiales y sentencias más estrictas, impuestos a la propiedad y a las ventas más bajos y tarifas de la CTA más bajas, nuevas tiendas de comestibles, nuevas estaciones de la CTA y de Metra en el distrito, y límites de 8 años en el cargo para los funcionarios electos de la ciudad.",
+      "priorCareerEs": "Dueño de Grand Ideas Staffing y residente del Distrito 27 desde hace 30 años; sobreviviente de cáncer en etapa 4 que es voluntario en la junta comunitaria del Cancer Center del hospital de la Universidad de Illinois en Chicago y con Catholic Charities."
+    },
+    {
+      "name": "Patrick Gilsenan",
+      "race": "ward-32",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.patrickfor32.com/",
+      "runningOn": "Hosted his campaign kickoff in July 2026 for the seat now held by Ald. Scott Waguespack, under the theme \"Building Bridges, Delivering Change.\" His platform leads with more housing through zoning changes and transit-oriented development, and also lists mental health crisis response and violence prevention, ethics reforms such as participatory budgeting and public campaign financing, and better CTA service and protected bike lanes.",
+      "priorCareer": "Attorney and housing policy advocate whose career spans financial regulation, compliance investigations, and immigration law; volunteer with the Chicago Coalition to End Homelessness since 2018. First-generation college graduate with undergraduate and law degrees from Loyola University Chicago.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/07/pritzker-draws-the-ai-line-00988435",
+        "https://www.patrickfor32.com/"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/69fb20d0556ed61fdf510edc/bf6f2a14-166d-4796-ab0d-b61c89128eae/IMG_6225.jpg",
+      "photoFrame": {
+        "x": 0.531,
+        "y": 0.401,
+        "zoom": 3.38
+      },
+      "runningOnEs": "Realizó el lanzamiento de su campaña en julio de 2026 por el escaño que hoy ocupa el concejal Scott Waguespack, con el lema \"Building Bridges, Delivering Change.\" Su plataforma comienza con más vivienda mediante cambios de zonificación y desarrollo orientado al transporte público, e incluye también respuesta a crisis de salud mental y prevención de la violencia, reformas de ética como el presupuesto participativo y el financiamiento público de campañas, y un mejor servicio de la CTA y ciclovías protegidas.",
+      "priorCareerEs": "Abogado y defensor de políticas de vivienda cuya carrera abarca regulación financiera, investigaciones de cumplimiento y derecho migratorio; voluntario de la Chicago Coalition to End Homelessness desde 2018. Primero de su familia en graduarse de la universidad, con licenciatura y título de abogado de Loyola University Chicago."
+    },
+    {
+      "name": "Rossana Rodriguez Sanchez",
+      "race": "ward-33",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.rossanafor33.org/",
+      "runningOn": "Is running for a third term with Chicago DSA's endorsement, WTTW reported in August 2026, and her campaign is collecting petition signatures to get her on the ballot. Her campaign site points to her record: the CARE Program, Treatment Not Trauma, the Bodily Autonomy and Welcoming City ordinances, the ceasefire ordinance, participatory budgeting and community-driven zoning decisions.",
+      "priorCareer": "33rd Ward alderwoman since 2019 and 33rd Ward Democratic committeeperson; former drama teacher in Puerto Rico and resident director of the Albany Park Theater Project.",
+      "sourceUrls": [
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse",
+        "https://www.rossanafor33.org/",
+        "https://www.rossanafor33.org/our-vision",
+        "https://en.wikipedia.org/wiki/Rossana_Rodriguez-Sanchez"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Rossana_Rodriguez-Sanchez_%2803-20-2025%29_%28cropped%29.jpg",
+      "runningOnEs": "Se postula para un tercer periodo con el respaldo de Chicago DSA, informó WTTW en agosto de 2026, y su campaña recolecta firmas de petición para aparecer en la boleta. Su sitio de campaña destaca su historial: el programa CARE, Treatment Not Trauma, las ordenanzas de Autonomía Corporal y de Ciudad Acogedora (Welcoming City), la ordenanza de alto al fuego, el presupuesto participativo y las decisiones de zonificación impulsadas por la comunidad.",
+      "priorCareerEs": "Concejala del Distrito 33 desde 2019 y comisionada demócrata del Distrito 33; ex maestra de teatro en Puerto Rico y directora residente del Albany Park Theater Project."
     },
     {
       "name": "Bill Conway",
@@ -141,6 +548,115 @@
       "priorCareerEs": "Concejal del Distrito 34 desde 2023; veterano de la Marina y ex fiscal del Condado de Cook."
     },
     {
+      "name": "Nathan Bean",
+      "race": "ward-34",
+      "party": null,
+      "incumbent": false,
+      "website": null,
+      "runningOn": "Kicked off his campaign in September 2026 against Ald. Bill Conway. According to 34thward.com, he supports \"thousands of new homes\" near transit and commercial corridors, public safety that pairs targeted enforcement with mental health and violence prevention, and expanded bike lanes and better CTA service, and plans a door-knocking, volunteer-driven campaign. No campaign website found yet.",
+      "priorCareer": "Paralegal with the Cook County Public Defender's Office; formerly worked in retail management. Ran for 44th Ward alderman in 2023, was removed from the ballot, and ran as a write-in.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/09/10/underwood-ready-for-the-next-rung-01070068",
+        "https://34thward.com/nathan-bean-34th-ward-race.html"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Lanzó su campaña en septiembre de 2026 contra el concejal Bill Conway. Según 34thward.com, apoya \"thousands of new homes\" (miles de viviendas nuevas) cerca del transporte público y de los corredores comerciales, una seguridad pública que combine la aplicación focalizada de la ley con salud mental y prevención de la violencia, y más ciclovías y un mejor servicio de la CTA, y planea una campaña de tocar puertas impulsada por voluntarios. Aún no se encontró un sitio web de campaña.",
+      "priorCareerEs": "Asistente legal (paralegal) en la Oficina del Defensor Público del Condado de Cook; antes trabajó en gerencia de tiendas minoristas. Se postuló para concejal del Distrito 44 en 2023, fue retirado de la boleta y compitió como candidato por escrito (write-in)."
+    },
+    {
+      "name": "Anthony Quezada",
+      "race": "ward-35",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Appointed in 2025, he is seeking his first full term with Chicago DSA's endorsement, WTTW reported in August 2026. No campaign website or detailed platform found yet.",
+      "priorCareer": "35th Ward alderman since 2025 (appointed to succeed Carlos Ramirez-Rosa); Cook County commissioner for the 8th District from 2022 to 2025; former community organizer and constituent services director for Ald. Ramirez-Rosa.",
+      "sourceUrls": [
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse",
+        "https://www.politico.com/newsletters/illinois-playbook/2026/08/04/illinois-dems-michigan-mission-01023014",
+        "https://en.wikipedia.org/wiki/Anthony_Quezada"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Designado en 2025, busca su primer periodo completo con el respaldo de Chicago DSA, informó WTTW en agosto de 2026. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "priorCareerEs": "Concejal del Distrito 35 desde 2025 (designado para suceder a Carlos Ramirez-Rosa); comisionado del Condado de Cook por el Distrito 8 de 2022 a 2025; ex organizador comunitario y director de atención a residentes del concejal Ramirez-Rosa."
+    },
+    {
+      "name": "Omari Bektemba",
+      "race": "ward-35",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.omarifor35.com/",
+      "runningOn": "Challenging Ald. Anthony Quezada, saying the ward needs leadership that pairs progressive values with the discipline to deliver. He says he would collaborate across the City Council on transportation, infrastructure planning, budgeting, and housing, and focus on long-term issues like the city's debt and pension costs, economic development, and climate change, including safer, more walkable streets such as Fullerton Avenue.",
+      "priorCareer": "Senior project manager at a local affordable housing nonprofit; previously taught in Chicago Public Schools and worked in community planning. Logan Square resident.",
+      "sourceUrls": [
+        "https://chi.streetsblog.org/2026/08/13/how-omari-bektembas-campaign-for-a-more-people-friendly-fullerton-inspired-him-to-run-for-35th-ward-alderperson",
+        "https://www.omarifor35.com/"
+      ],
+      "photoUrl": "https://run.imgix.net/178d2199-bd69-4981-b543-52455e4841c5/df1df483-05b7-45bb-91d4-85502ce6ee8f/187bdf74-4cb1-4e3f-959c-4b92faee217c.webp?fm=jpg&w=1000",
+      "photoFrame": {
+        "x": 0.529,
+        "y": 0.297,
+        "zoom": 4.63
+      },
+      "runningOnEs": "Desafía al concejal Anthony Quezada; dice que el distrito necesita un liderazgo que combine valores progresistas con la disciplina para dar resultados. Dice que colaboraría con todo el Concejo Municipal en transporte, planeación de infraestructura, presupuesto y vivienda, y que se enfocaría en temas de largo plazo como la deuda y las pensiones de la ciudad, el desarrollo económico y el cambio climático, incluidas calles más seguras y caminables como la avenida Fullerton.",
+      "priorCareerEs": "Gerente sénior de proyectos en una organización local sin fines de lucro de vivienda asequible; antes fue maestro en las Escuelas Públicas de Chicago y trabajó en planeación comunitaria. Residente de Logan Square."
+    },
+    {
+      "name": "Andre Vasquez",
+      "race": "ward-40",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.andrefor40th.com/",
+      "runningOn": "Said in June 2026 that he would seek reelection to the City Council rather than run for mayor, and planned a July 16 kickoff for his bid for a third term. His campaign site presents him as an on-the-ground consensus-builder focused on basic services, funding public schools and community safety, citing his work on the ECPS civilian police oversight ordinance and license plate reader cameras in the ward.",
+      "priorCareer": "40th Ward alderman since 2019; co-chair of the City Council Progressive Caucus since 2023; former community organizer with Reclaim Chicago, AT&T account manager and hip-hop artist.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/06/29/reunited-and-it-feel-so-good-in-texas-00979409",
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse",
+        "https://www.andrefor40th.com/",
+        "https://www.andrefor40th.com/community-safety",
+        "https://en.wikipedia.org/wiki/Andre_Vasquez"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/6/61/%286-4-25%29_Andre_Vasquez_%28cropped%29.jpg",
+      "runningOnEs": "Dijo en junio de 2026 que buscaría la reelección al Concejo Municipal en lugar de postularse para alcalde, y programó para el 16 de julio el arranque de su campaña por un tercer periodo. Su sitio de campaña lo presenta como un constructor de consensos presente en el terreno, enfocado en los servicios básicos, el financiamiento de las escuelas públicas y la seguridad comunitaria, y cita su trabajo en la ordenanza ECPS de supervisión civil de la policía y en cámaras lectoras de placas en el distrito.",
+      "priorCareerEs": "Concejal del Distrito 40 desde 2019; copresidente del Caucus Progresista del Concejo Municipal desde 2023; ex organizador comunitario con Reclaim Chicago, ejecutivo de cuentas en AT&T y artista de hip-hop."
+    },
+    {
+      "name": "Timmy Knudsen",
+      "race": "ward-43",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.knudsenfor43.com/",
+      "runningOn": "Began collecting petition signatures for reelection in July 2026 and announced his reelection bid in a video in August 2026. His campaign site has not been updated for 2027; its earlier platform emphasized public safety investments such as security cameras and community policing, blocking property tax hikes, and protecting fundamental rights.",
+      "priorCareer": "43rd Ward alderman since 2022 (appointed, then elected in 2023); former attorney and law firm partner working with start-ups, and chair of the Chicago Zoning Board of Appeals.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/28/governors-unlikely-group-chat-01013209",
+        "https://www.politico.com/newsletters/illinois-playbook/2026/08/13/bustos-puts-her-network-to-work-01035668",
+        "https://www.knudsenfor43.com/",
+        "https://en.wikipedia.org/wiki/Timmy_Knudsen"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Timmy_Knudsen_at_May_2023_Chicago_City_Council_Meeting.jpg",
+      "runningOnEs": "Comenzó a recolectar firmas de petición para su reelección en julio de 2026 y anunció su campaña de reelección con un video en agosto de 2026. Su sitio de campaña no se ha actualizado para 2027; su plataforma anterior destacaba inversiones en seguridad pública como cámaras de vigilancia y policía comunitaria, frenar aumentos al impuesto predial y proteger los derechos fundamentales.",
+      "priorCareerEs": "Concejal del Distrito 43 desde 2022 (designado y luego elegido en 2023); ex abogado y socio de un bufete que trabajaba con empresas emergentes, y presidente de la Junta de Apelaciones de Zonificación de Chicago."
+    },
+    {
+      "name": "Bennett Lawson",
+      "race": "ward-44",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.bennettfor44.com/",
+      "runningOn": "Launched his campaign for a second term in July 2026. His campaign site lists public safety, transportation, accountability, business development, affordability and planning Lakeview's future. He says he will keep backing transit-oriented development, cut red tape and permit waits for small businesses, and require affordable units in every new development at the developer's expense.",
+      "priorCareer": "44th Ward alderman since 2023; chief of staff to former Ald. Tom Tunney for nearly 15 years.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/27/states-take-center-stage-in-chicago-01012350",
+        "https://www.bennettfor44.com/",
+        "https://www.bennettfor44.com/priorities",
+        "https://en.wikipedia.org/wiki/Bennett_Lawson"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/8/82/Alderman_Bennett_Lawson_at_2024_DNC_%28cropped%29.jpg",
+      "runningOnEs": "Lanzó su campaña por un segundo periodo en julio de 2026. Su sitio de campaña señala la seguridad pública, el transporte, la rendición de cuentas, el desarrollo de negocios, la asequibilidad y la planeación del futuro de Lakeview. Dice que seguirá apoyando el desarrollo orientado al transporte público, reduciendo trámites y tiempos de espera de permisos para pequeños negocios, y exigiendo unidades asequibles en cada nuevo desarrollo a costa del desarrollador.",
+      "priorCareerEs": "Concejal del Distrito 44 desde 2023; jefe de gabinete del ex concejal Tom Tunney durante casi 15 años."
+    },
+    {
       "name": "Kalen Luciano",
       "race": "ward-44",
       "party": null,
@@ -153,8 +669,47 @@
         "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse"
       ],
       "photoUrl": "https://images.squarespace-cdn.com/content/v1/6a4eb52040070f1acbea4798/068ef550-ef25-4863-b6e1-9a538e643891/Hero+with+Overlay.png",
+      "photoFrame": {
+        "x": 0.626,
+        "y": 0.389,
+        "zoom": 3.91
+      },
       "runningOnEs": "Desafía al concejal Bennett Lawson con propuestas de aumentar la oferta de vivienda mediante cambios de zonificación para mayor densidad (upzoning), reducir la violencia vial con infraestructura de calles más seguras, presupuesto participativo y noches de distrito mensuales, ampliar los servicios de salud mental y rechazar las donaciones corporativas. Respaldado por Chicago DSA en agosto de 2026.",
       "priorCareerEs": "Organizador comunitario; cofundó Lakeview Urbanists y trabajó para legisladores estatales de Illinois."
+    },
+    {
+      "name": "Dennis \"DJ\" Doran",
+      "race": "ward-44",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.djdoran.com/",
+      "runningOn": "Announced in May 2026 a run for the seat held by Ald. Bennett Lawson. His campaign lists public safety, including fewer thefts and faster police response; development that favors local small businesses over national chains on corridors like Broadway and Belmont; and transit fixes including cleaner CTA stations, more bike lanes, and more reliable service.",
+      "priorCareer": "Owner of Aequalitas Media, an LGBTQ+-focused media company; Air Force veteran and pilot; former executive director of the nonprofit Chicago Deserves Better, which works toward a Chicago city charter. Ran for mayor in 2023.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/05/19/pritzker-returns-swinging-at-city-hall-00927376",
+        "https://www.djdoran.com/",
+        "https://www.djdoran.com/issues",
+        "https://www.djdoran.com/news/dj-doran-campaign-announces-team-ahead-of-signature-gathering-effort"
+      ],
+      "photoUrl": "https://run.imgix.net/aea27c9b-41c1-4f70-8f2d-0baa7eb0e2cf/d9f58508-39c5-4ee6-88bd-2701908dda0d/d9f58508-39c5-4ee6-88bd-2701908dda0d.jpg",
+      "runningOnEs": "Anunció en mayo de 2026 su candidatura por el escaño que ocupa el concejal Bennett Lawson. Su campaña enumera la seguridad pública, incluidos menos robos y una respuesta policial más rápida; un desarrollo que favorezca a los pequeños negocios locales sobre las cadenas nacionales en corredores como Broadway y Belmont; y mejoras al transporte, como estaciones de la CTA más limpias, más ciclovías y un servicio más confiable.",
+      "priorCareerEs": "Dueño de Aequalitas Media, una empresa de medios enfocada en la comunidad LGBTQ+; veterano de la Fuerza Aérea y piloto; ex director ejecutivo de la organización sin fines de lucro Chicago Deserves Better, que impulsa una carta constitucional para Chicago. Se postuló para alcalde en 2023."
+    },
+    {
+      "name": "Jim Gardiner",
+      "race": "ward-45",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Is seeking a third term, Nadig Newspapers reported in August 2026. He has pointed to about $500 million in redevelopment investment at Six Corners during his time in office and has said public safety is a top priority. No campaign website found.",
+      "priorCareer": "45th Ward alderman since 2019; Chicago firefighter on leave while serving; 45th Ward Democratic committeeperson from 2020 to 2024.",
+      "sourceUrls": [
+        "https://nadignewspapers.com/45th-ward-dems-endorse-s-gronkiewicz-doran-for-alderperson/",
+        "https://en.wikipedia.org/wiki/Jim_Gardiner_(Chicago_politician)"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Busca un tercer periodo, informó Nadig Newspapers en agosto de 2026. Ha destacado unos 500 millones de dólares en inversión de reurbanización en Six Corners durante su gestión y ha dicho que la seguridad pública es una prioridad. No se encontró un sitio web de campaña.",
+      "priorCareerEs": "Concejal del Distrito 45 desde 2019; bombero de Chicago con licencia mientras ejerce el cargo; comisionado demócrata del Distrito 45 de 2020 a 2024."
     },
     {
       "name": "S Gronkiewicz-Doran",
@@ -171,24 +726,187 @@
       "photoUrl": "https://images.squarespace-cdn.com/content/v1/698a0a4f3ea3c5559ed2457f/ea1645e1-e2fd-4d7a-8baa-4617e3076d0a/IMG_7348.JPG",
       "runningOnEs": "Primera contendiente declarada frente al concejal Jim Gardiner, con una campaña centrada en servicios receptivos a los representados, arreglos de infraestructura para las inundaciones de sótanos, la revitalización de corredores comerciales en dificultades, la seguridad comunitaria y la protección de los vecinos inmigrantes. Respaldada por la organización demócrata del Distrito 45; sería la primera persona transgénero en servir como concejal en Chicago.",
       "priorCareerEs": "Abogada corporativa con 18 años de experiencia; miembro fundadora de Neighbors for Affordable Housing y miembro de un consejo escolar local en Jefferson Park."
+    },
+    {
+      "name": "Leah Cunningham Pouw",
+      "race": "ward-45",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.leah45.com/",
+      "runningOn": "Second declared challenger to Ald. Jim Gardiner, saying she sees a disconnect between the ward's communities. She is running on revitalizing business corridors, easing traffic congestion and making roads safe for all users, reducing flooding and fixing potholes faster, an open and responsive ward office, and a city budget that does not balance the books on the backs of everyday Chicagoans.",
+      "priorCareer": "Policy researcher at the University of Illinois School of Social Work with a Master of Public Policy from the University of Chicago; two terms as secretary of both the Wildwood Local School Council and the Wildwood Park Advisory Council.",
+      "sourceUrls": [
+        "https://nadignewspapers.com/wildwood-resident-leah-cunningham-pouw-announces-candidacy-for-45th-ward-aldermanic-seat/",
+        "https://www.leah45.com/"
+      ],
+      "photoUrl": "https://run.imgix.net/f75a6445-ae9b-43d0-9418-d52940a04c78/6fb01352-d143-46f8-99d0-d890cfc6e7fe/6fb01352-d143-46f8-99d0-d890cfc6e7fe.jpg?rect=1700%2C100%2C1800%2C1800&w=600",
+      "photoFrame": {
+        "x": 0.454,
+        "y": 0.306,
+        "zoom": 1.98
+      },
+      "runningOnEs": "Segunda contendiente declarada frente al concejal Jim Gardiner; dice que ve una desconexión entre las comunidades del distrito. Se postula para revitalizar los corredores comerciales, aliviar la congestión vial y hacer las calles seguras para todos, reducir las inundaciones y reparar baches más rápido, tener una oficina de distrito abierta y receptiva, y un presupuesto municipal que no se equilibre a costa de los habitantes comunes de Chicago.",
+      "priorCareerEs": "Investigadora de políticas públicas en la Escuela de Trabajo Social de la Universidad de Illinois, con una maestría en políticas públicas de la Universidad de Chicago; dos periodos como secretaria del consejo escolar local de Wildwood y del consejo asesor del parque Wildwood."
+    },
+    {
+      "name": "Angela Clay",
+      "race": "ward-46",
+      "party": null,
+      "incumbent": true,
+      "website": null,
+      "runningOn": "Is running for a second term with Chicago DSA's endorsement, WTTW reported in August 2026. No campaign website or detailed platform found yet.",
+      "priorCareer": "46th Ward alderwoman since 2023; former community organizer with Northside Action for Justice and board president of the affordable housing nonprofit Voice of the People.",
+      "sourceUrls": [
+        "https://news.wttw.com/2026/08/21/chicago-s-democratic-socialists-back-2-city-council-challengers-while-declining-endorse",
+        "https://en.wikipedia.org/wiki/Angela_Clay"
+      ],
+      "photoUrl": "https://www.chicago.gov/content/dam/city/about/wards/46/aldward46.png",
+      "runningOnEs": "Se postula para un segundo periodo con el respaldo de Chicago DSA, informó WTTW en agosto de 2026. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "priorCareerEs": "Concejala del Distrito 46 desde 2023; ex organizadora comunitaria con Northside Action for Justice y presidenta de la junta directiva de Voice of the People, organización sin fines de lucro de vivienda asequible."
+    },
+    {
+      "name": "Leni Manaa-Hoppenworth",
+      "race": "ward-48",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.lenifor48th.com/",
+      "runningOn": "Kicked off her reelection campaign in July 2026 by collecting petition signatures, and her campaign reported more than 650 signatures two days later. Her campaign says health, housing and safety are human rights, and lists education, environment, public safety, housing, LGBTQ+ and reproductive rights, small business and transportation as priorities. She cites the Green Social Housing ordinance and more than $2 million for pedestrian safety around ward schools.",
+      "priorCareer": "48th Ward alderwoman since 2023 and 48th Ward Democratic committeewoman; small-business owner since 2003 and co-founder of Indivisible Illinois.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/28/governors-unlikely-group-chat-01013209",
+        "https://www.politico.com/newsletters/illinois-playbook/2026/07/30/hanah-jubehs-political-pivot-01015959",
+        "https://www.lenifor48th.com/",
+        "https://en.wikipedia.org/wiki/Leni_Manaa-Hoppenworth"
+      ],
+      "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Leni_Manaa_Hoppenworth_in_Chicago_City_Council_Chambers_2023.jpg",
+      "runningOnEs": "Arrancó su campaña de reelección en julio de 2026 recolectando firmas de petición, y dos días después su campaña reportó más de 650 firmas. Su campaña afirma que la salud, la vivienda y la seguridad son derechos humanos, y señala como prioridades la educación, el medio ambiente, la seguridad pública, la vivienda, los derechos LGBTQ+ y reproductivos, los pequeños negocios y el transporte. Cita la ordenanza de Vivienda Social Verde (Green Social Housing) y más de 2 millones de dólares para seguridad peatonal alrededor de las escuelas del distrito.",
+      "priorCareerEs": "Concejala del Distrito 48 desde 2023 y comisionada demócrata del Distrito 48; dueña de un pequeño negocio desde 2003 y cofundadora de Indivisible Illinois."
+    },
+    {
+      "name": "Justin Carmien",
+      "race": "ward-48",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.just48.org/",
+      "runningOn": "Running against Ald. Leni Manaa-Hoppenworth on what he calls \"progressivism 2.0,\" pursuing progressive goals through better-functioning government. His priorities include transit-oriented development around the new Red Line stations, housing stability through anti-displacement tools and an urban wealth fund approach to public assets, revitalized CAPS police meetings, and a Chicago city charter.",
+      "priorCareer": "Communications designer at the Government Finance Officers Association; president of the Edgewater Beach Neighborhood Association since 2024. Moved to the 48th Ward in 2021.",
+      "sourceUrls": [
+        "https://www.illinoisrecord.com/p/government-expert-justin-carmien",
+        "https://www.just48.org/",
+        "https://www.just48.org/campaign-priorities"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Compite contra la concejala Leni Manaa-Hoppenworth con lo que llama \"progressivism 2.0\" (progresismo 2.0), que busca metas progresistas mediante un gobierno que funcione mejor. Sus prioridades incluyen desarrollo orientado al transporte público alrededor de las nuevas estaciones de la Línea Roja, estabilidad de vivienda con herramientas contra el desplazamiento y un fondo de riqueza urbana basado en los bienes públicos, reuniones policiales CAPS revitalizadas y una carta constitucional para Chicago.",
+      "priorCareerEs": "Diseñador de comunicaciones en la Government Finance Officers Association; presidente de la Edgewater Beach Neighborhood Association desde 2024. Se mudó al Distrito 48 en 2021."
+    },
+    {
+      "name": "Debra Silverstein",
+      "race": "ward-50",
+      "party": null,
+      "incumbent": true,
+      "website": "https://debrafor50.com/",
+      "runningOn": "Launched her reelection campaign in August 2026 at a West Rogers Park restaurant, joined by more than 100 community members and faith leaders. Her campaign site lists public safety, constituent services, economic development and school improvements as her issues, and says she strictly opposes any property tax hikes.",
+      "priorCareer": "50th Ward alderman since 2011; founded a small tax consultancy before entering politics and co-founded the Libenu Foundation, which creates supervised housing for adults with developmental disabilities.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/08/04/illinois-dems-michigan-mission-01023014",
+        "https://debrafor50.com/issues/",
+        "https://en.wikipedia.org/wiki/Debra_Silverstein"
+      ],
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/thumbs/200/300/DebSilverstein1.jpg",
+      "runningOnEs": "Lanzó su campaña de reelección en agosto de 2026 en un restaurante de West Rogers Park, acompañada por más de 100 vecinos y líderes religiosos. Su sitio de campaña señala como sus temas la seguridad pública, la atención a residentes, el desarrollo económico y las mejoras escolares, y dice que se opone firmemente a cualquier aumento al impuesto predial.",
+      "priorCareerEs": "Concejala del Distrito 50 desde 2011; fundó una pequeña consultoría fiscal antes de entrar a la política y cofundó la Libenu Foundation, que crea viviendas supervisadas para adultos con discapacidades del desarrollo."
+    },
+    {
+      "name": "Jenny Schaffer",
+      "race": "pdc-19",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.19thtogether.com/",
+      "runningOn": "Launched her reelection campaign in September 2026 on a slate with fellow council member Sam Schoenburg and newcomer Ridge Knapp. The slate's stated goals are modernizing the approach to public safety, improving police transparency and accountability, promoting responsible, fair and effective policing, elevating the community's voice, and supporting a strong Community Commission for Public Safety and Accountability.",
+      "priorCareer": "19th District Council member since 2023; former special education teacher and North Center parent of three CPS students; co-leads her synagogue's Public Safety Justice Team.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/09/15/trump-im-all-for-bailey-01076202",
+        "https://www.19thtogether.com/",
+        "https://www.19thtogether.com/jenny-schaffer",
+        "https://ballotpedia.org/Jennifer_Schaffer"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/632f2fade168262ba8279346/e46eaae9-cd2b-49d0-a66e-94195ce5cb9d/jenny.jpg",
+      "photoFrame": {
+        "x": 0.411,
+        "y": 0.276,
+        "zoom": 1.26
+      },
+      "runningOnEs": "Lanzó su campaña de reelección en septiembre de 2026 en una planilla con su compañero del consejo Sam Schoenburg y el recién llegado Ridge Knapp. Los objetivos declarados de la planilla son modernizar el enfoque de la seguridad pública, mejorar la transparencia y la rendición de cuentas de la policía, promover una labor policial responsable, justa y eficaz, elevar la voz de la comunidad y apoyar una Comisión Comunitaria de Seguridad Pública y Rendición de Cuentas sólida.",
+      "priorCareerEs": "Integrante del Consejo del Distrito Policial 19 desde 2023; ex maestra de educación especial y madre de tres estudiantes de CPS en North Center; codirige el equipo de Justicia en Seguridad Pública de su sinagoga."
+    },
+    {
+      "name": "Sam Schoenburg",
+      "race": "pdc-19",
+      "party": null,
+      "incumbent": true,
+      "website": "https://www.19thtogether.com/",
+      "runningOn": "Launched his reelection campaign in September 2026 on a slate with fellow council member Jenny Schaffer and newcomer Ridge Knapp. The slate's stated goals are modernizing the approach to public safety, improving police transparency and accountability, promoting responsible, fair and effective policing, elevating the community's voice, and supporting a strong Community Commission for Public Safety and Accountability.",
+      "priorCareer": "19th District Council member since 2023; attorney in private practice who clerked for a federal district judge and was a field organizer on Barack Obama's 2008 campaign.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/09/15/trump-im-all-for-bailey-01076202",
+        "https://www.19thtogether.com/",
+        "https://www.19thtogether.com/sam-schoenburg",
+        "https://www.19thdistrictcouncil.com/councilmembers",
+        "https://ballotpedia.org/Jennifer_Schaffer"
+      ],
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/632f2fade168262ba8279346/7a800bb1-1b6d-475b-b887-8bbf6b165df0/sam1.jpg",
+      "photoFrame": {
+        "x": 0.481,
+        "y": 0.265,
+        "zoom": 1.25
+      },
+      "runningOnEs": "Lanzó su campaña de reelección en septiembre de 2026 en una planilla con su compañera del consejo Jenny Schaffer y el recién llegado Ridge Knapp. Los objetivos declarados de la planilla son modernizar el enfoque de la seguridad pública, mejorar la transparencia y la rendición de cuentas de la policía, promover una labor policial responsable, justa y eficaz, elevar la voz de la comunidad y apoyar una Comisión Comunitaria de Seguridad Pública y Rendición de Cuentas sólida.",
+      "priorCareerEs": "Integrante del Consejo del Distrito Policial 19 desde 2023; abogado en práctica privada que fue asistente de un juez federal de distrito y organizador de campo en la campaña de Barack Obama de 2008."
+    },
+    {
+      "name": "Ridge Knapp",
+      "race": "pdc-19",
+      "party": null,
+      "incumbent": false,
+      "website": "https://www.19thtogether.com/",
+      "runningOn": "Launched his campaign in September 2026 as a newcomer on a slate with incumbent council members Jenny Schaffer and Sam Schoenburg. The slate's stated goals are modernizing the approach to public safety, improving police transparency and accountability, promoting responsible, fair and effective policing, elevating the community's voice, and supporting a strong Community Commission for Public Safety and Accountability.",
+      "priorCareer": "Newcomer; the slate's campaign site has not yet posted his biography.",
+      "sourceUrls": [
+        "https://www.politico.com/newsletters/illinois-playbook/2026/09/15/trump-im-all-for-bailey-01076202",
+        "https://www.19thtogether.com/"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Lanzó su campaña en septiembre de 2026 como recién llegado en una planilla con los integrantes actuales del consejo Jenny Schaffer y Sam Schoenburg. Los objetivos declarados de la planilla son modernizar el enfoque de la seguridad pública, mejorar la transparencia y la rendición de cuentas de la policía, promover una labor policial responsable, justa y eficaz, elevar la voz de la comunidad y apoyar una Comisión Comunitaria de Seguridad Pública y Rendición de Cuentas sólida.",
+      "priorCareerEs": "Recién llegado; el sitio de campaña de la planilla aún no publica su biografía."
     }
   ],
   "raceNotes": [
     {
       "race": "ward-13",
-      "note": "An open seat: Ald. Marty Quinn announced in July 2026 that he will not seek re-election after four terms. No candidates for the seat are on record yet.",
+      "note": "An open seat: Ald. Marty Quinn announced in July 2026 that he will not seek re-election after four terms. He has endorsed Al Cacciottolo, the first candidate on record for the seat.",
       "sourceUrls": [
-        "https://blockclubchicago.org/2026/07/08/southwest-side-ald-marty-quinn-wont-seek-reelection-after-4-terms-in-city-council/"
+        "https://blockclubchicago.org/2026/07/08/southwest-side-ald-marty-quinn-wont-seek-reelection-after-4-terms-in-city-council/",
+        "https://suburbanchicagoland.com/2026/08/20/al-cacciottolo-to-run-for-13th-ward-alderman-to-succeed-ald-marty-quinn/"
       ],
-      "noteEs": "Un escaño abierto: el concejal Marty Quinn anunció en julio de 2026 que no buscará la reelección después de cuatro periodos. Aún no consta ningún candidato para el escaño."
+      "noteEs": "Un escaño abierto: el concejal Marty Quinn anunció en julio de 2026 que no buscará la reelección después de cuatro periodos. Respaldó a Al Cacciottolo, el primer candidato que consta para el escaño."
     },
     {
-      "race": "treasurer",
-      "note": "Incumbent Melissa Conyears-Ervin has not said whether she will seek a third term, and no candidate has declared for this office yet. This page fills in as the field forms.",
+      "race": "ward-19",
+      "note": "An open seat: Ald. Matt O'Shea announced on Sept. 10, 2026 that he will not seek a fifth term, and endorsed his chief of staff, Erin Ross. Melanie Stathis announced a run in March 2026 but withdrew the following month.",
       "sourceUrls": [
-        "https://ballotpedia.org/Melissa_Conyears-Ervin"
+        "https://blockclubchicago.org/2026/09/10/matt-oshea-wont-run-for-19th-ward-alderman-again-after-4-terms/",
+        "https://www.cbsnews.com/chicago/news/matt-oshea-alderman-chicago-city-council-mike-rodriguez-marty-quinn/"
       ],
-      "noteEs": "La titular Melissa Conyears-Ervin no ha dicho si buscará un tercer periodo, y ningún candidato se ha declarado todavía para este cargo. Esta página se irá llenando conforme se forme el campo de contendientes."
+      "noteEs": "Un escaño abierto: el concejal Matt O'Shea anunció el 10 de septiembre de 2026 que no buscará un quinto periodo, y respaldó a su jefa de gabinete, Erin Ross. Melanie Stathis anunció su candidatura en marzo de 2026, pero se retiró al mes siguiente."
+    },
+    {
+      "race": "ward-22",
+      "note": "An open seat: Ald. Michael Rodriguez announced on Sept. 9, 2026 that he will not seek a third term, and has endorsed his chief of staff, Elianne Bahena.",
+      "sourceUrls": [
+        "https://blockclubchicago.org/2026/09/09/little-village-ald-michael-rodriguez-wont-seek-reelection/",
+        "https://abc7chicago.com/post/chicago-alderman-michael-rodriguez-not-running-election-22nd-ward/19814542/"
+      ],
+      "noteEs": "Un escaño abierto: el concejal Michael Rodriguez anunció el 9 de septiembre de 2026 que no buscará un tercer periodo, y respaldó a su jefa de gabinete, Elianne Bahena."
     }
   ]
 }

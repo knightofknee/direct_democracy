@@ -34,20 +34,152 @@
       "priorCareerEs": "Agricultor y empresario del condado de Clay; sirvió en la Cámara y el Senado de Illinois y fue el candidato republicano a gobernador en 2022."
     },
     {
-      "name": "Gary Pierce",
+      "name": "Collin Corbett",
       "race": "governor",
-      "party": "Independence Party",
+      "party": "Independent",
       "incumbent": false,
-      "website": "https://www.standwithgary.com",
-      "runningOn": "Running with running mate Alejandro Cabrera on the view that government should serve citizens rather than elites. His campaign emphasizes evidence-based policy, individual liberty and free speech, ending the revolving door between industry and regulators, and strengthening communities dealing with addiction and poverty.",
-      "priorCareer": "Pastor with 25 years of experience in ministry and addiction recovery work.",
+      "website": "https://www.collinforil.com",
+      "runningOn": "Running as an independent with running mate Carolyn Schofield, president of the McHenry County Mental Health Board and a former McHenry County Board member. His campaign centers on affordability, including lowering property taxes, freezing discretionary state spending and the gas tax, and reining in data center growth to bring down energy costs. He also proposes cutting business regulations, phasing out the estate tax for family farms and businesses, fixing DCFS, and good-government changes such as fair legislative maps, open primaries, and campaign finance reform.",
+      "priorCareer": "Political strategist and small business owner from Palatine who founded Cor Strategies, a consulting firm that worked for Republican candidates; he left the firm after the March 2026 primary to run as an independent.",
       "sourceUrls": [
-        "https://www.standwithgary.com",
-        "https://ballotpedia.org/Illinois_gubernatorial_and_lieutenant_gubernatorial_election,_2026"
+        "https://www.collinforil.com/affordability",
+        "https://www.collinforil.com/grow",
+        "https://www.collinforil.com/reform",
+        "https://www.collinforil.com/about/collin",
+        "https://capitolnewsillinois.com/news/former-republican-strategist-collin-corbett-files-to-run-for-governor-as-independent/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf"
       ],
-      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/thumbs/200/300/Gary_Pierce_20260305_070454.jpg",
-      "runningOnEs": "Compite con su compañero de fórmula Alejandro Cabrera bajo la visión de que el gobierno debe servir a los ciudadanos y no a las élites. Su campaña enfatiza las políticas basadas en evidencia, la libertad individual y la libertad de expresión, poner fin a la puerta giratoria entre la industria y los reguladores, y fortalecer a las comunidades que enfrentan la adicción y la pobreza.",
-      "priorCareerEs": "Pastor con 25 años de experiencia en el ministerio y en trabajo de recuperación de adicciones."
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/collincorbett_2026-07-07_184143.jpg",
+      "runningOnEs": "Se postula como independiente con su compañera de fórmula Carolyn Schofield, presidenta de la Junta de Salud Mental del Condado de McHenry y exintegrante de la Junta del Condado de McHenry. Su campaña se centra en la asequibilidad, incluida la reducción de los impuestos a la propiedad, congelar el gasto estatal discrecional y el impuesto a la gasolina, y frenar el crecimiento de los centros de datos para bajar los costos de energía. También propone reducir las regulaciones a los negocios, eliminar gradualmente el impuesto sobre la herencia para granjas y negocios familiares, arreglar el DCFS y cambios de buen gobierno como mapas legislativos justos, primarias abiertas y una reforma al financiamiento de campañas.",
+      "priorCareerEs": "Estratega político y dueño de un pequeño negocio de Palatine que fundó Cor Strategies, una firma de consultoría que trabajó para candidatos republicanos; dejó la firma después de la primaria de marzo de 2026 para postularse como independiente."
+    },
+    {
+      "name": "Mike Vick",
+      "race": "governor",
+      "party": "American Solidarity Party",
+      "incumbent": false,
+      "writeIn": true,
+      "website": "https://www.votevickusa.com",
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. Running with Gary Pierce, a Navy veteran, addiction counselor, and ordained minister. Vick calls his campaign a \"pro-life for the whole life\" alternative and proposes shifting corporate subsidies toward small family businesses, local farms, and worker-owned co-ops, repairing existing roads before building new highways, and using citizen assemblies chosen by lottery to take on issues like pensions.",
+      "priorCareer": "Former reporter for Catholic San Francisco and SEIU organizer who chairs the party's Illinois affiliate; he was the party's endorsed candidate for Congress in Illinois's 2nd District in 2024 and hosts the Unorthodoxing podcast.",
+      "sourceUrls": [
+        "https://www.votevickusa.com/priorities",
+        "https://www.votevickusa.com/meet-mike",
+        "https://www.votevickusa.com/meet-gary",
+        "https://www.solidarity-party.org/candidates/mike-vick-2026",
+        "https://ballotpedia.org/Mike_Vick",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/IN29VickProfile.jpg",
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Se postula con Gary Pierce, veterano de la Marina, consejero en adicciones y ministro ordenado. Vick describe su campaña como una alternativa \"pro-life for the whole life\" y propone redirigir los subsidios corporativos hacia pequeños negocios familiares, granjas locales y cooperativas de trabajadores, reparar las carreteras existentes antes de construir nuevas autopistas y usar asambleas ciudadanas elegidas por sorteo para abordar temas como las pensiones.",
+      "priorCareerEs": "Exreportero de Catholic San Francisco y organizador de SEIU que preside la filial del partido en Illinois; fue el candidato respaldado por el partido para el Congreso en el Distrito 2 de Illinois en 2024 y conduce el pódcast Unorthodoxing."
+    },
+    {
+      "name": "Griselda Romero",
+      "race": "governor",
+      "party": "Green",
+      "incumbent": false,
+      "writeIn": true,
+      "website": "https://griselda4illinois.com",
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. Running with Eyde Arndell of Carbondale, a co-founder of the March for Medicare All. Romero says housing, health care, and fair wages are rights, wants to move money from military spending to needs at home, and backs mental health access, ballot access reform, and getting money out of politics. The Green ticket turned to a write-in campaign after falling short of the 25,000 petition signatures a new party needed for the ballot.",
+      "priorCareer": "Chicago-born licensed professional counselor who has worked in crisis mental health for more than a decade.",
+      "sourceUrls": [
+        "https://griselda4illinois.com",
+        "https://griselda4illinois.com/meet-griselda/",
+        "https://griselda4illinois.com/meet-eyde/",
+        "https://www.ilgp.org/gogreen2026/",
+        "https://www.wsiu.org/politics-elections/2026-07-21/third-party-candidates-face-steep-ballot-access-hurdles-in-illinois",
+        "https://ballotpedia.org/Griselda_Romero",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/IMG-7422_20260912_194027_54755_1.jpeg",
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Se postula con Eyde Arndell, de Carbondale, cofundadora de March for Medicare All. Romero dice que la vivienda, la atención médica y los salarios justos son derechos, quiere trasladar fondos del gasto militar a las necesidades del país y apoya el acceso a la salud mental, la reforma del acceso a la boleta y sacar el dinero de la política. La fórmula del Partido Verde optó por una campaña por escrito después de no reunir las 25,000 firmas que un partido nuevo necesitaba para aparecer en la boleta.",
+      "priorCareerEs": "Consejera profesional con licencia, nacida en Chicago, que ha trabajado en salud mental en situaciones de crisis por más de una década."
+    },
+    {
+      "name": "Patricia L. Tillman",
+      "race": "governor",
+      "party": "Democratic",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. Running with Joseph L. Mosley. No platform or campaign website found. The State Board of Elections removed the ticket from the March Democratic primary ballot in December 2025 for having too few valid petition signatures.",
+      "priorCareer": "Ran as a write-in candidate for alderperson of the 21st Ward in 2023.",
+      "sourceUrls": [
+        "https://ballotpedia.org/Patricia_Tillman",
+        "https://www.cities929.com/2025/12/09/pritzker-unchallenged-on-democrat-primary-ballot-after-tillman-removed-by-board/",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Patricia_Tillman_20251120_025647.png",
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Se postula con Joseph L. Mosley. No se encontró una plataforma ni un sitio web de campaña. La Junta Electoral del Estado retiró la fórmula de la boleta de las primarias demócratas de marzo en diciembre de 2025 por no tener suficientes firmas válidas.",
+      "priorCareerEs": "Se postuló como candidata por escrito a concejal del Distrito 21 (21st Ward) en 2023."
+    },
+    {
+      "name": "Rafael Varela",
+      "race": "governor",
+      "party": null,
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No platform or campaign website found.",
+      "priorCareer": null,
+      "sourceUrls": [
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma ni un sitio web de campaña.",
+      "priorCareerEs": null
+    },
+    {
+      "name": "Elizabeth Ann Sebesta",
+      "race": "governor",
+      "party": null,
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No platform or campaign website found.",
+      "priorCareer": "Was a write-in candidate for governor in 2022.",
+      "sourceUrls": [
+        "https://ballotpedia.org/Elizabeth_Sebesta",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma ni un sitio web de campaña.",
+      "priorCareerEs": "Fue candidata por escrito a gobernadora en 2022."
+    },
+    {
+      "name": "Misty Metroz",
+      "race": "governor",
+      "party": null,
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No platform or campaign website found.",
+      "priorCareer": null,
+      "sourceUrls": [
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma ni un sitio web de campaña.",
+      "priorCareerEs": null
+    },
+    {
+      "name": "Richard Benedict Mayers",
+      "race": "governor",
+      "party": "Independent",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No platform or campaign website found. He was disqualified from the governor ballot after objections to his nominating petitions.",
+      "priorCareer": "Frequent candidate who has filed for offices in several states, including Alaska and Indiana in 2026.",
+      "sourceUrls": [
+        "https://ballotpedia.org/Richard_Mayers",
+        "https://www.yahoo.com/news/politics/articles/illinois-gop-governor-nominee-darren-013600314.html",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma ni un sitio web de campaña. Fue descalificado de la boleta para gobernador después de objeciones a sus peticiones de candidatura.",
+      "priorCareerEs": "Candidato frecuente que se ha inscrito para cargos en varios estados, incluidos Alaska e Indiana en 2026."
     },
     {
       "name": "Juliana Stratton",
@@ -78,24 +210,30 @@
         "https://ballotpedia.org/Don_Tracy"
       ],
       "photoUrl": "https://dontracyforil.com/wp-content/uploads/2026/07/tracy-headshot-final.jpg",
+      "photoFrame": {
+        "x": 0.498,
+        "y": 0.3,
+        "zoom": 1.0
+      },
       "runningOnEs": "Dice que se postula porque el sueño americano se les está escapando a las familias trabajadoras. Su campaña se centra en reducir el costo de vida, incluidos la vivienda, los alimentos, los servicios básicos y la atención médica, en la seguridad pública y el apoyo a las fuerzas del orden, en el crecimiento de los pequeños negocios y en representar a los 102 condados de Illinois y no solo al área de Chicago.",
       "priorCareerEs": "Abogado y líder empresarial de Springfield; expresidente del Partido Republicano de Illinois y expresidente de la Illinois Gaming Board."
     },
     {
-      "name": "Tyrone Muhammad",
+      "name": "Whitfield Harrington Jr.",
       "race": "us-senate",
-      "party": "Independent",
+      "party": "American Center Party",
       "incumbent": false,
-      "website": "https://tyroneforsenate.us",
-      "runningOn": "Focuses on workforce development and job training including for returning citizens, prison reform centered on rehabilitation and education, school choice, and fiscal accountability in government. He would be the first formerly incarcerated person to appear on a statewide Illinois ballot as an independent Senate candidate.",
-      "priorCareer": "Founder of Ex-Cons for Community and Social Change, a Chicago organization focused on reducing recidivism; co-founded a college-in-prison education program with the University of Illinois.",
+      "website": "https://whit4ilsenate.com",
+      "runningOn": "Says he would govern from the political center under a platform he calls Renovate the American Dream. On the cost of living, he proposes expanding domestic oil and gas production alongside renewable energy, ending tariffs on food, requiring and incentivizing banks to make small mortgages on low-priced homes, and making the first year of community college free. He also proposes student loan forgiveness for doctors who open Direct Primary Care clinics, redirecting 20 percent of the defense budget to military bases, roads, bridges, rail, and the power grid, and having unemployment benefits match part of an employer's wages to get people back to work.",
+      "priorCareer": "Pastor in Chicago since moving to the city in 2013; previously worked at banks and insurance companies and ran his own insurance practice. Holds a political science degree from Delta State University in Mississippi.",
       "sourceUrls": [
-        "https://tyroneforsenate.us",
-        "https://chicagocrusader.com/tyrone-muhammad-takes-on-the-political-establishment/"
+        "https://whit4ilsenate.com/",
+        "https://ballotpedia.org/Whitfield_Harrington_Jr._(Illinois)",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf"
       ],
-      "photoUrl": "https://tyroneforsenate.us/wp-content/uploads/2025/08/TYRONE-PIC-1.png",
-      "runningOnEs": "Se enfoca en el desarrollo de la fuerza laboral y la capacitación para el empleo, incluso para ciudadanos que regresan tras estar encarcelados, en una reforma penitenciaria centrada en la rehabilitación y la educación, en la libre elección de escuelas y en la responsabilidad fiscal del gobierno. Sería la primera persona que estuvo encarcelada en aparecer en una boleta estatal de Illinois como candidato independiente al Senado.",
-      "priorCareerEs": "Fundador de Ex-Cons for Community and Social Change, una organización de Chicago enfocada en reducir la reincidencia; cofundó un programa de educación universitaria en prisión con la University of Illinois."
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/thumbs/200/300/618ff630-86a0-11f1-a391-85dcaae018f1_20260723_141459_31769_1.jpg",
+      "runningOnEs": "Dice que gobernaría desde el centro político con una plataforma que llama Renovate the American Dream. Sobre el costo de vida, propone ampliar la producción nacional de petróleo y gas junto con la energía renovable, eliminar los aranceles a los alimentos, exigir e incentivar a los bancos a otorgar hipotecas pequeñas para viviendas de bajo precio y hacer gratuito el primer año de colegio comunitario. También propone perdonar los préstamos estudiantiles a los médicos que abran clínicas de Direct Primary Care, destinar el 20 por ciento del presupuesto de defensa a bases militares, carreteras, puentes, ferrocarriles y la red eléctrica, y que los beneficios de desempleo cubran parte del salario que paga un empleador para que la gente vuelva a trabajar.",
+      "priorCareerEs": "Pastor en Chicago desde que se mudó a la ciudad en 2013; antes trabajó en bancos y compañías de seguros y tuvo su propia agencia de seguros. Tiene una licenciatura en ciencias políticas de Delta State University, en Mississippi."
     },
     {
       "name": "Kwame Raoul",
@@ -174,6 +312,11 @@
         "https://capitolnewsillinois.com/news/election-26-4-democrats-seeking-to-replace-mendoza-as-illinois-comptroller/"
       ],
       "photoUrl": "https://cdn.ilga.gov/assets/img/members/%7B1719759C-D601-4575-A753-1244D0FE550A%7D.jpg",
+      "photoFrame": {
+        "x": 0.498,
+        "y": 0.301,
+        "zoom": 1.09
+      },
       "runningOnEs": "Ganó una primaria demócrata de cuatro candidatos por el cargo que deja Susana Mendoza y se postula con una plataforma de transparencia, eficiencia y supervisión financiera. El mensaje de su campaña es equilibrar las cuentas del estado, pagar las facturas a tiempo y combinar la responsabilidad fiscal con la protección de las comunidades vulnerables.",
       "priorCareerEs": "Representante estatal por el Distrito 12 de Chicago desde 2021."
     },
@@ -190,8 +333,32 @@
         "https://en.wikipedia.org/wiki/2026_Illinois_Comptroller_election"
       ],
       "photoUrl": "https://static.wixstatic.com/media/66181f_774840a85c234cc795dd7dc2cd39cba4~mv2.png/v1/fill/w_800,h_972,al_c,q_90/Bryan_Headshot.jpg",
+      "photoFrame": {
+        "x": 0.483,
+        "y": 0.124,
+        "zoom": 3.31
+      },
       "runningOnEs": "Se postula con una plataforma de asequibilidad, rendición de cuentas y transparencia. Su campaña dice que trabajaría para frenar el desperdicio del gobierno y así reducir los costos para las familias trabajadoras, aumentar la transparencia para que los contribuyentes sepan en qué se gasta cada dólar, y actuar como vigilante de cómo los políticos gastan el dinero de los impuestos.",
       "priorCareerEs": "Abogado y propietario de un pequeño negocio de Benton, en el sur de Illinois."
+    },
+    {
+      "name": "Anna Schiefelbein",
+      "race": "comptroller",
+      "party": "Green",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. She says she would end the state rule that drops companies from Illinois investments because they boycott, steer state investments toward relationships that protect air, water, and soil, and bring fiscal accountability after long one-party control.",
+      "priorCareer": "Woodridge attorney with more than 20 years in accounting and finance who runs a small business; she was a write-in for Congress in Illinois's 11th District in 2024.",
+      "sourceUrls": [
+        "https://www.ilgp.org/gogreen2026/",
+        "https://www.gpelections.org/races/anna-schiefelbein-runs-for-state-comptroller-2026/",
+        "https://ballotpedia.org/Anna_Schiefelbein",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://www.ilgp.org/wp-content/uploads/2026/02/IMG_2521-980x980.jpg",
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Dice que eliminaría la regla estatal que excluye de las inversiones de Illinois a las empresas que participan en boicots, orientaría las inversiones del estado hacia relaciones que protejan el aire, el agua y el suelo, y aportaría responsabilidad fiscal tras un largo control de un solo partido.",
+      "priorCareerEs": "Abogada de Woodridge con más de 20 años de experiencia en contabilidad y finanzas que tiene un pequeño negocio; fue candidata por escrito al Congreso por el Distrito 11 de Illinois en 2024."
     },
     {
       "name": "Mike Frerichs",
@@ -222,8 +389,32 @@
         "https://ballotpedia.org/Max_Solomon"
       ],
       "photoUrl": "https://media.base44.com/images/public/6a51b60ba01cdf1b02d86d3c/3d254d8d5_04e35e48-a087-4936-87d6-dccf3ce63069.png",
+      "photoFrame": {
+        "x": 0.508,
+        "y": 0.327,
+        "zoom": 1.59
+      },
       "runningOnEs": "Se convirtió en el candidato republicano al recibir más de 5,000 votos por escrito en la primaria de marzo, después de que ningún republicano se registrara para el cargo. Su campaña enfatiza el servicio público basado en la fe, la accesibilidad y el contacto directo con los votantes; no ha publicado una plataforma de políticas detallada para el cargo que pudiéramos encontrar.",
       "priorCareerEs": "Abogado, instructor universitario de ciencias políticas y ministro ordenado de Hazel Crest."
+    },
+    {
+      "name": "Timothea Papas",
+      "race": "treasurer",
+      "party": "Green",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. She says the state's roughly $30 billion in funds should be invested for residents rather than private interests, wants required pension payments made in full, and supports a \"LaSalle Street Tax\" and a two-term limit for the treasurer.",
+      "priorCareer": "Retired minister and co-chair of the Illinois Green Party.",
+      "sourceUrls": [
+        "https://www.ilgp.org/gogreen2026/",
+        "https://www.ilgp.org/about/ilgp-coordinators/",
+        "https://ballotpedia.org/Timothea_Papas",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://www.ilgp.org/wp-content/uploads/2026/02/IMG_5092-980x980.jpg",
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Dice que los aproximadamente $30 mil millones en fondos del estado deben invertirse para beneficio de los residentes y no de intereses privados, quiere que los pagos obligatorios a las pensiones se hagan completos y apoya un \"LaSalle Street Tax\" y un límite de dos mandatos para el tesorero.",
+      "priorCareerEs": "Ministra jubilada y copresidenta del Partido Verde de Illinois."
     },
     {
       "name": "Toni Preckwinkle",
@@ -270,6 +461,11 @@
         "https://www.cbsnews.com/chicago/news/pat-hynes-defeats-fritz-kaegi-democratic-primary-cook-county-assessor/"
       ],
       "photoUrl": "https://run.imgix.net/d925e7a1-144d-40c2-b7c5-ee3a2881a5ee/da341b4d-1928-442d-bbd3-bf5520444586/da341b4d-1928-442d-bbd3-bf5520444586.jpg?rect=2616%2C0%2C5040%2C5106&fit=fillmax&w=800",
+      "photoFrame": {
+        "x": 0.426,
+        "y": 0.274,
+        "zoom": 1.84
+      },
       "runningOnEs": "Hace campaña por avalúos de propiedad más precisos, equitativos y transparentes, y dice que demasiados residentes han encontrado el sistema confuso e injusto. Enfatiza corregir los registros del impuesto a la propiedad, incluida la incorporación de las construcciones nuevas, para que los propietarios actuales no absorban impuestos que las propiedades nuevas deberían pagar. Derrotó en la primaria de marzo a Fritz Kaegi, el titular con dos mandatos.",
       "priorCareerEs": "Lyons Township Assessor desde 2021, con unos 30 años en el campo del impuesto a la propiedad, incluidos 20 años como tasador en la Oficina del Asesor del Condado de Cook."
     },
@@ -318,6 +514,11 @@
         "https://ballotpedia.org/Thomas_Dart"
       ],
       "photoUrl": "https://www.cookcountyil.gov/sites/g/files/ywwepo161/files/styles/crop_profile_photo/public/images/portraits/2023-11/Sheriff_Tom_Dart_20nov2023.jpg",
+      "photoFrame": {
+        "x": 0.589,
+        "y": 0.262,
+        "zoom": 2.11
+      },
       "runningOnEs": "Busca un sexto mandato, haciendo campaña por la seguridad pública y la confianza de la comunidad en el gobierno. Su historial incluye programas dirigidos a reducir la violencia y conectar a las fuerzas del orden con las comunidades a las que sirven, como el Sheriff's Anti-Violence Effort, que ofrece terapia y capacitación en habilidades para la vida a hombres jóvenes encarcelados.",
       "priorCareerEs": "Alguacil del Condado de Cook desde 2006; anteriormente legislador estatal de Illinois."
     },
@@ -334,6 +535,11 @@
         "https://ballotpedia.org/Brad_Sandefur"
       ],
       "photoUrl": "https://lp.org/wp-content/uploads/Brad.jpg",
+      "photoFrame": {
+        "x": 0.533,
+        "y": 0.618,
+        "zoom": 1.0
+      },
       "runningOnEs": "Hace campaña por un condado de Cook más seguro mediante una justicia imparcial y la colaboración comunitaria. Sus prioridades declaradas incluyen reformar la SAFE-T Act con medidas de seguridad pública más firmes, ampliar los programas de derivación a tratamiento de salud mental y adicciones, mejorar la capacitación de los agentes y establecer procedimientos disciplinarios más claros con protecciones del debido proceso.",
       "priorCareerEs": "Empleado de la oficina del Alguacil del Condado de Cook desde 1990, con 17 años como comandante de turno; sirvió en el Cuerpo de Marines de Estados Unidos."
     },
@@ -352,6 +558,29 @@
       "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/GORDON%2C_MONICA_Headshot.jpg/960px-GORDON%2C_MONICA_Headshot.jpg",
       "runningOnEs": "Ganó una elección especial en 2024 tras la muerte de la secretaria del condado Karen Yarbrough y busca un mandato completo. Su oficina supervisa las elecciones de los suburbios del condado de Cook, la extensión del impuesto a la propiedad y los registros vitales de todo el condado. Su mensaje público ha enfatizado la administración electoral; a principios de septiembre de 2026 no se pudo encontrar un sitio con una plataforma de campaña detallada para 2026.",
       "priorCareerEs": "Secretaria del Condado de Cook desde diciembre de 2024; anteriormente comisionada del Condado de Cook."
+    },
+    {
+      "name": "Justin Tucker",
+      "race": "cook-clerk",
+      "party": "Libertarian",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No platform or campaign website found.",
+      "priorCareer": "Executive director of the Libertarian Party of Illinois who leads its Cook County committee; he was a write-in for Cook County Board president in the March 2026 primary.",
+      "sourceUrls": [
+        "https://ballotpedia.org/Justin_Tucker",
+        "https://lpillinois.org/about/cook-county/",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://mywikis-wiki-media.s3.us-central-1.wasabisys.com/lpedia/Tucker-Justin.jpg",
+      "photoFrame": {
+        "x": 0.459,
+        "y": 0.26,
+        "zoom": 1.69
+      },
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma ni un sitio web de campaña.",
+      "priorCareerEs": "Director ejecutivo del Partido Libertario de Illinois que dirige su comité del condado de Cook; fue candidato por escrito a presidente de la Junta del Condado de Cook en las primarias de marzo de 2026."
     },
     {
       "name": "Precious Brady-Davis",
@@ -382,6 +611,11 @@
         "https://mwrd.org/board-commissioners/eira-l-corral-sepulveda"
       ],
       "photoUrl": "https://www.eira4water.com/wp-content/uploads/2020/01/Eira-Corral-Sepulveda-For-MWRD-Press-Kit-1-scaled.jpg",
+      "photoFrame": {
+        "x": 0.515,
+        "y": 0.311,
+        "zoom": 1.7
+      },
       "runningOnEs": "Describe al MWRD como un punto donde se cruzan la lucha contra el cambio climático, la inversión en infraestructura, el desarrollo de la fuerza laboral y la equidad, y busca un segundo mandato de 6 años.",
       "priorCareerEs": "Primera latina electa a la junta del MWRD, con toma de posesión en 2020; anteriormente sirvió tres mandatos como secretaria municipal (Village Clerk) de Hanover Park."
     },
@@ -406,10 +640,11 @@
       "race": "mwrd",
       "party": "Republican",
       "incumbent": false,
-      "website": null,
+      "website": "https://www.michelleforcleanwater.com",
       "runningOn": "Says the MWRD must balance environmental protection with fiscal responsibility, stating that the district must ensure that not a penny of taxpayer money is wasted.",
       "priorCareer": "Managing director of Medill Partners, a real estate development firm, with nonprofit work supporting Chicago Public Schools.",
       "sourceUrls": [
+        "https://www.michelleforcleanwater.com",
         "https://patch.com/illinois/glenview/3-republicans-launch-campaigns-metropolitan-water-reclamation-district-board",
         "https://ballotpedia.org/Cook_County,_Illinois,_elections,_2026"
       ],
@@ -446,7 +681,13 @@
         "https://ballotpedia.org/Cook_County,_Illinois,_elections,_2026"
       ],
       "runningOnEs": "Hace campaña por la transparencia pública sobre las operaciones y el financiamiento del MWRD, y señala que la mayoría de los residentes solo se relacionan con el distrito cuando las lluvias fuertes amenazan sus hogares. Se apoya en su trabajo previo dentro del distrito en políticas y educación pública.",
-      "priorCareerEs": "Exgerente de asuntos públicos del MWRD que trabajó en políticas, asuntos legislativos y educación pública."
+      "priorCareerEs": "Exgerente de asuntos públicos del MWRD que trabajó en políticas, asuntos legislativos y educación pública.",
+      "photoUrl": "https://www.rowtgop.org/assets/candidates/mwrd-trio.jpg",
+      "photoFrame": {
+        "x": 0.816,
+        "y": 0.439,
+        "zoom": 2.93
+      }
     },
     {
       "name": "Cameron Davis",
@@ -470,14 +711,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://www.illinoiscourts.gov/resources/df7f9ab4-600d-4431-b257-65f15230c892/Lampkin.jpg",
       "court": "Illinois Appellate Court, First District",
       "seat": null,
       "runningOn": "Sitting judge of the Illinois Appellate Court, First District, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Apelaciones de Illinois, Primer Distrito, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -489,14 +730,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Lewis-Nixon-1229x1536.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -515,7 +756,7 @@
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -527,14 +768,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Joan-Powell-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -546,14 +787,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Maureen-Ward-Kirby-520x480.jpeg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -565,14 +806,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/434215/434215.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -591,7 +832,7 @@
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -603,14 +844,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Kenworthy-retention-photo-520x650.jpeg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -622,14 +863,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Kristyna-Ryan-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -648,7 +889,7 @@
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -660,14 +901,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/434243/434243.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -686,7 +927,7 @@
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -705,7 +946,7 @@
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -717,14 +958,19 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Judge-Buford.jpg",
+      "photoFrame": {
+        "x": 0.518,
+        "y": 0.311,
+        "zoom": 1.7
+      },
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -736,14 +982,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/John-Allegretti-1229x1536.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -755,14 +1001,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Kristal-Rivers-1-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -774,14 +1020,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/434152/434152.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -793,14 +1039,19 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Abbey-Fishman-Romanek-520x650.jpg",
+      "photoFrame": {
+        "x": 0.446,
+        "y": 0.291,
+        "zoom": 1.25
+      },
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -812,14 +1063,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/JudyRice.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -831,14 +1082,19 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/434228/434228.jpg",
+      "photoFrame": {
+        "x": 0.5,
+        "y": 0.291,
+        "zoom": 1.0
+      },
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -850,14 +1106,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/goldish-headshot.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -869,14 +1125,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/434237/434237.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -888,33 +1144,19 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Judge-Robert-D.-Kuzas-520x650.png",
+      "photoFrame": {
+        "x": 0.506,
+        "y": 0.296,
+        "zoom": 1.26
+      },
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
-        "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
-      ],
-      "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
-      "priorCareerEs": null
-    },
-    {
-      "name": "John J. Mahoney",
-      "race": "judicial-retention",
-      "party": null,
-      "incumbent": true,
-      "website": null,
-      "photoUrl": null,
-      "court": "Circuit Court of Cook County",
-      "seat": null,
-      "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
-      "priorCareer": null,
-      "ratings": [],
-      "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -926,14 +1168,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Maritza-Martinez-1-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -952,7 +1194,7 @@
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -964,14 +1206,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Bridget-Mitchell-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -983,14 +1225,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/James-Pieczonka-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1009,7 +1251,7 @@
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1021,14 +1263,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/120727/120727.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1040,14 +1282,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399691/399691.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1059,14 +1301,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399665/399665.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1078,14 +1320,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/JTristan-headshot-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1097,14 +1339,19 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399780/399780.jpg",
+      "photoFrame": {
+        "x": 0.501,
+        "y": 0.31,
+        "zoom": 1.57
+      },
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1116,14 +1363,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399637/399637.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1135,14 +1382,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399674/399674.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1154,14 +1401,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/John-Mulroe-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1173,14 +1420,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Tyria-Walton.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1192,14 +1439,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Erin-Haggerty-Antonietti-819x1024.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1211,14 +1458,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://www.illinoislatinojudges.org/images/judges/teresa-molina-gonzalez.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1230,14 +1477,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Patricia-Maria-Fallon.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1249,14 +1496,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://law.news.niu.edu/wp-content/uploads/sites/5/2020/01/shenry.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1268,14 +1515,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Celestia-Mays.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1287,14 +1534,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://lagbac.org/wp-content/uploads/avatars/2335/602ddaf17e7df-bpfull.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1306,14 +1553,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Julie-Bess-Aimen-819x1024.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1325,14 +1572,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Laura-Gonzalez-robe-5x7-3.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1344,14 +1591,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/CAMPAIGN-HEADSHOT-FULL-2.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1363,14 +1610,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399682/399682.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1382,14 +1629,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399648/399648.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1401,14 +1648,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Jonathan-Clark-Green.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1420,14 +1667,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://dpu-p-001.sitecorecontenthub.cloud/api/public/content/4ba8327967b04ab69c8b9a4cb9f103e6",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1439,14 +1686,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Regina-Ann-Mescall.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1458,14 +1705,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/120655/120655.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1477,14 +1724,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/EOC-Bio-Photo-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1496,14 +1743,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://www.cookcountydems.com/wp-content/uploads/2020/03/jill_rose_quinn.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1515,14 +1762,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cdn.ilga.gov/assets/img/members/%7B07593939-B788-43A5-9BE9-ED5119399A4A%7D.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1534,14 +1781,19 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Tiesha-L.-Smith.jpg",
+      "photoFrame": {
+        "x": 0.494,
+        "y": 0.294,
+        "zoom": 1.25
+      },
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1553,14 +1805,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://static.wixstatic.com/media/e6b880_048d00d524674afdb21e25bd8ae3e1b0~mv2.jpg/v1/fill/w_800,h_800,al_c,q_85/christ-stacey.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1572,14 +1824,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Perla-Tirado-headshot.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1591,14 +1843,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/399779/399779.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1610,14 +1862,14 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Maura-McMahon-Zeller-819x1024.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Sitting judge of the Circuit Court of Cook County, asking voters for another term. A judge stays on the bench with a yes from 60 percent of voters. Bar association evaluations and Injustice Watch findings are added here the week they publish.",
       "priorCareer": null,
       "ratings": [],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.injusticewatch.org/judges/judicial-elections/2026-retention/2026/cook-county-judges-running-for-retention-november-2026-tips/"
       ],
       "runningOnEs": "Juez en funciones de la Corte de Circuito del Condado de Cook, que pide a los votantes otro término. Un juez permanece en el cargo con el sí del 60 por ciento de los votantes. Las evaluaciones de los colegios de abogados y los hallazgos de Injustice Watch se agregan aquí la semana en que se publiquen.",
@@ -1629,7 +1881,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/JudyRice.jpg",
       "seat": "Vacancy of Hon. Thomas E. Hoffman",
       "court": null,
       "runningOn": "Presiding judge of the Cook County Circuit Court domestic violence division since 2021, a circuit judge since 2014, and formerly Chicago City Treasurer (2000-2006); unopposed in the March primary (590,227 votes).",
@@ -1638,16 +1890,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Judith%20C.%20Rice"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/judith-c-rice-34839",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1660,7 +1912,12 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://stevenqmckenzieforjudge.com/wp-content/uploads/2025/11/SQM-for-judge.png",
+      "photoFrame": {
+        "x": 0.164,
+        "y": 0.464,
+        "zoom": 1.52
+      },
       "seat": "Vacancy of Hon. Kathleen Marie Burke",
       "court": null,
       "runningOn": "Assistant corporation counsel supervisor in the Chicago Law Department since 2006, handling building-code lawsuits against property owners; unopposed in the primary.",
@@ -1669,16 +1926,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Steven%20Q.%20McKenzie"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/steven-q-mckenzie-34845",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1690,8 +1947,13 @@
       "race": "judicial-circuit",
       "party": "Democratic",
       "incumbent": false,
-      "website": null,
-      "photoUrl": null,
+      "website": "https://toledoforjudge.com/",
+      "photoUrl": "https://toledoforjudge.com/wp-content/uploads/2025/08/LMT-Hero.png",
+      "photoFrame": {
+        "x": 0.339,
+        "y": 0.292,
+        "zoom": 1.91
+      },
       "seat": "Vacancy of Hon. Cynthia Y. Cobbs",
       "court": null,
       "runningOn": "Cook County assistant state's attorney since 2007, now in the civil bureau after 11 years prosecuting criminal cases; defeated appointed judge Linda Sackey in the primary, 56.83% to 43.17%.",
@@ -1700,16 +1962,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Luz%20Maria%20Toledo"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/luz-maria-toledo-34871",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1722,7 +1984,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://www.ashontaforjudge.com/UserFiles/image/Ashonta-Rice-for-Cook-County-Circuit-Court-Judge.webp",
       "seat": "Vacancy of Hon. Mary Ellen Coghlan",
       "court": null,
       "runningOn": "Family-law attorney in private practice since 2007 and a court-appointed child representative; defeated appointed judge Michael Cabonargi in the primary, 60.44% to 39.56%.",
@@ -1731,16 +1993,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Ashonta%20C.%20Rice"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/ashonta-c-rice-34952",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1753,7 +2015,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://static.wixstatic.com/media/c5f985_f00035d9dc19422aa64a6a736f35bcfe~mv2.png",
       "seat": "Vacancy of Hon. William Hooks",
       "court": null,
       "runningOn": "Solo practitioner in traffic, DUI, criminal and civil cases, former chief of the Lake County State's Attorney's misdemeanor and traffic division, and vice chair of the Illinois Guardianship and Advocacy Commission; unopposed in the primary.",
@@ -1762,16 +2024,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Ava%20George%20Stewart"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/ava-george-stewart-34873",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1784,7 +2046,12 @@
       "party": "Democratic",
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://judgedanthonythedford.com/wp-content/uploads/2025/03/Judge-Tony-Thedford-Hero.png",
+      "photoFrame": {
+        "x": 0.316,
+        "y": 0.28,
+        "zoom": 1.89
+      },
       "seat": "Vacancy of Hon. Paul Karkula",
       "court": null,
       "runningOn": "Circuit judge appointed by the Illinois Supreme Court in 2024, previously a criminal defense and civil rights lawyer and Cook County assistant public defender; unopposed in the primary.",
@@ -1793,16 +2060,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Highly Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=D%E2%80%99%20Anthony%20%E2%80%9CTony%E2%80%9D%20Thedford"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/danthony-tony-thedford-34874",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1814,8 +2081,8 @@
       "race": "judicial-subcircuit-1",
       "party": "Democratic",
       "incumbent": false,
-      "website": null,
-      "photoUrl": null,
+      "website": "https://www.radiancewardforjudge.com/",
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/67cdf08e455fe25a879f03f7/e4750347-3186-473b-8177-c8365ec90ed5/Headshot+Option+1.jpg",
       "seat": "Vacancy of Hon. Robert Balanoff",
       "court": null,
       "runningOn": "Cook County assistant public defender since 2013, currently lead trial attorney in first-degree murder cases; won the primary over Natalie L. Howse, 66.17% to 33.83%.",
@@ -1824,16 +2091,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Highly Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Radiance%20Ward"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/radiance-ward-34653",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1846,7 +2113,12 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://static.wixstatic.com/media/ba075b_f0f03826d8094e30887a2352333c4514~mv2.png/v1/fit/w_1600,h_1200,q_90/ba075b_f0f03826d8094e30887a2352333c4514~mv2.jpg",
+      "photoFrame": {
+        "x": 0.53,
+        "y": 0.449,
+        "zoom": 2.11
+      },
       "seat": "Vacancy of Hon. Carl A. Walker",
       "court": null,
       "runningOn": "Cook County assistant public defender since 2012 handling felony cases, and an ARDC review board member; won a three-way primary with 39.11% over Tiffany N. Brooks (38.94%) and appointed judge Ginger Odom (21.95%).",
@@ -1855,16 +2127,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Ashley%20Greer%20Shambley"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/ashley-greer-shambley-34661",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1877,7 +2149,12 @@
       "party": "Democratic",
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/68a20f0e33fe5019b4ce143d/37031373-0edf-497a-a0db-3a6bb010f34f/004_WIDE_04.jpg",
+      "photoFrame": {
+        "x": 0.527,
+        "y": 0.403,
+        "zoom": 2.15
+      },
       "seat": "Vacancy of Hon. Thomas W. Murphy",
       "court": null,
       "runningOn": "Circuit judge appointed by the Illinois Supreme Court in 2025, formerly deputy chief of staff in the Illinois Attorney General's office and a Cook County assistant state's attorney (2000-2019); unopposed in the primary.",
@@ -1886,16 +2163,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Highly Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=John%20Carroll"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/john-carroll-34859",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1908,7 +2185,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/692b842484f7e5163213bbe0/e9ee1e09-c54f-495f-9cf3-f04050229418/Rachel+Website+pic.jpg",
       "seat": "Vacancy of Hon. Patrick J. Sherlock",
       "court": null,
       "runningOn": "Operations counsel at Cook County Health since 2022, previously an investigator for the Cook County Independent Inspector General (2010-2022); won the primary over Martin Douglas Reggi, 72.38% to 27.62%.",
@@ -1917,16 +2194,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Not Recommended",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Rachel%20Marello"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/rachel-marrello-34843",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1939,7 +2216,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/927435/927435.jpg",
       "seat": "Vacancy of Hon. Dominique Ross",
       "court": null,
       "runningOn": "Labor and employment lawyer, formerly general counsel of Chicago State University and a law firm partner; Injustice Watch reports she did not participate in the CBA screening, which yields a not recommended rating; unopposed in the primary.",
@@ -1948,16 +2225,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Not Recommended",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Stephanie%20S.%20Kelly"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/stephanie-s-kelly-35242",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -1970,7 +2247,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/683668881595ec0792f74d3b/60bef387-4cc4-4af4-95de-67c4686b4143/IMG_7707.jpg",
       "seat": "Vacancy of Hon. Celia L. Gamrath",
       "court": null,
       "runningOn": "Cook County assistant state's attorney since 2017, deputy supervisor of the labor and employment litigation division, and a former clerk to U.S. Appellate Judge William Bauer; won a three-way primary with 43.34% over Elizabeth Christina Dibler (42.71%).",
@@ -1979,16 +2256,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Kathleen%20Cunniff%20Ori"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/kathleen-cunniff-ori-34851",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2001,7 +2278,7 @@
       "party": "Democratic",
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/927439/927439.jpg",
       "seat": "Vacancy of Hon. Mary L. Mikva",
       "court": null,
       "runningOn": "Circuit judge appointed by the Illinois Supreme Court in 2025 after 37 years in the Cook County Public Defender's office, where he was chief of staff; won a three-way primary with 51.83%.",
@@ -2010,16 +2287,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Lester%20Finkle"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/lester-finkle-34921",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2032,7 +2309,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://www.knoxforjudge.com/wp-content/uploads/2025/11/Jarrett-Headshot-Edited.png",
       "seat": "Vacancy of Hon. Pamela McLean Meyerson",
       "court": null,
       "runningOn": "Cook County assistant state's attorney in the child protection division since 2019, formerly an attorney at the Cook County Public Guardian's office; won the primary over John R. Carrozza, 61.51% to 38.49%.",
@@ -2041,16 +2318,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Jarrett%20Knox"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/jarrett-knox-34658",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2063,7 +2340,12 @@
       "party": "Democratic",
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/64df9ae9ad509875e0fe2bdc/6d84e1ed-e29b-4a3c-b556-74596f1eac3a/4.jpg",
+      "photoFrame": {
+        "x": 0.485,
+        "y": 0.308,
+        "zoom": 1.76
+      },
       "seat": "Vacancy of Hon. Mary Colleen Roberts",
       "court": null,
       "runningOn": "Circuit judge appointed by the Illinois Supreme Court in 2025, previously a Cook County assistant state's attorney (2008-2025); unopposed in the primary.",
@@ -2072,16 +2354,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Kim%20Przekota"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/kim-przekota-34718",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2094,7 +2376,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/927443/927443.jpg",
       "seat": "Vacancy of Hon. John Curry, Jr.",
       "court": null,
       "runningOn": "Cook County assistant state's attorney since 1999, currently assigned to the Skokie courthouse; unopposed in the primary.",
@@ -2103,16 +2385,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Robert%20%E2%80%9CBob%E2%80%9D%20Groebner"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://www.cookcountyclerkil.gov/elections/current-elections/view-all-candidates",
         "https://2026primary.injusticewatch.org/table/candidate/robert-bob-groebner-34904",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2125,7 +2407,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://static.wixstatic.com/media/3933e1_c165420257b345718b78282c346f0708~mv2.jpg",
       "seat": "Vacancy of Hon. Martin C. Kelley",
       "court": null,
       "runningOn": "Managing partner of a Kane County criminal defense and civil litigation firm and a former Kane County assistant public defender who ran unsuccessfully for Kane County judge in 2020 and 2022; unopposed in the primary.",
@@ -2134,16 +2416,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Not Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Brittany%20Michelle%20Pedersen"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://www.cookcountyclerkil.gov/elections/current-elections/view-all-candidates",
         "https://2026primary.injusticewatch.org/table/candidate/brittany-michelle-pedersen-34905",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2156,7 +2438,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/499719/499719.jpg",
       "seat": "Vacancy of Hon. Thomas J. Kelley",
       "court": null,
       "runningOn": "Managing partner of Kelley, Kelley & Kelley since 1984 and chair of the Harper College Board of Trustees; the seat was held by his brother Thomas J. Kelley, who retired in 2025; unopposed in the primary.",
@@ -2165,16 +2447,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=William%20F.%20Kelley"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://www.cookcountyclerkil.gov/elections/current-elections/view-all-candidates",
         "https://2026primary.injusticewatch.org/table/candidate/william-f-kelley-34906",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2187,7 +2469,7 @@
       "party": "Democratic",
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/927445/927445.jpg",
       "seat": "Vacancy of Hon. Shannon P. O'Malley",
       "court": null,
       "runningOn": "Circuit judge appointed by the Illinois Supreme Court in 2025 after 25 years as a Cook County assistant public defender; unopposed in the primary.",
@@ -2196,16 +2478,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Dan%20Naranjo"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://www.cookcountyclerkil.gov/elections/current-elections/view-all-candidates",
         "https://2026primary.injusticewatch.org/table/candidate/dan-naranjo-34903",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2218,7 +2500,12 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/683ce77c8dc6973acc6867bb/950fe5fa-0a6d-4899-af47-12da34b394a3/JSC_JCG.jpg",
+      "photoFrame": {
+        "x": 0.49,
+        "y": 0.309,
+        "zoom": 1.63
+      },
       "seat": "Converted from Associate Judgeship of Hon. Callie L. Baird",
       "court": null,
       "runningOn": "Criminal defense partner at a small firm (2018-2025) and a former Cook County assistant state's attorney (2013-2018); unopposed in the primary.",
@@ -2227,16 +2514,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Julian%20Sanchez%20Crozier"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/julian-sanchez-crozier-34716",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2249,7 +2536,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://static.wixstatic.com/media/cd7905_62f504ca15ba43799c6981aa61f010fa~mv2.jpg",
       "seat": "Converted from Associate Judgeship of Hon. Patricia Mendoza",
       "court": null,
       "runningOn": "Former deputy general counsel at the Illinois Office of the Comptroller (2023-2025) and civil litigation associate; unopposed in the primary.",
@@ -2258,16 +2545,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Not Recommended",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Not Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Jessica%20Karina%20Velez"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/jessica-karina-velez-34714",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2280,7 +2567,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/927448/927448.jpg",
       "seat": "Converted from Associate Judgeship of Hon. Lloyd J. Brooks",
       "court": null,
       "runningOn": "Lead attorney in the Cook County State's Attorney's child support services division since 2008; won the primary over Meridth Hammer, 74.67% to 25.33%.",
@@ -2289,16 +2576,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Not Recommended",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Not Recommended",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Natalia%20Moore"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/natalia-moore-34842",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2311,7 +2598,12 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://content.campaignpartner.net/images/142060/IMG_1860.jpeg",
+      "photoFrame": {
+        "x": 0.517,
+        "y": 0.268,
+        "zoom": 1.38
+      },
       "seat": "Converted from Associate Judgeship of Hon. James R. Carroll",
       "court": null,
       "runningOn": "Law firm associate, former chief attorney at the Chicago Transit Authority (2021-2025), and former Cook County assistant state's attorney and Illinois assistant attorney general; won a three-way primary with 57.81%.",
@@ -2320,16 +2612,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Bianca%20B.%20Brown"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/bianca-b-brown-34747",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2342,7 +2634,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/68446fa862fb7703bd3ea180/049405a1-01dd-438c-8986-c5cdd66e641f/22340218.jpg",
       "seat": "Converted from Associate Judgeship of Hon. Frank J. Andreou",
       "court": null,
       "runningOn": "Des Plaines attorney in private practice since 2012 and a former River Trails School District 26 board member; unopposed in the primary.",
@@ -2351,16 +2643,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Sam%20Bae"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://www.cookcountyclerkil.gov/elections/current-elections/view-all-candidates",
         "https://2026primary.injusticewatch.org/table/candidate/sam-bae-34974",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2373,7 +2665,12 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/688c1457be7f52433d407e33/3b6989e7-fd42-4cd2-82c9-2323b05bc6d7/juan-ponce-de-leon-headshot.JPG",
+      "photoFrame": {
+        "x": 0.519,
+        "y": 0.298,
+        "zoom": 1.53
+      },
       "seat": "Converted from Associate Judgeship of Hon. Jeffrey G. Chrones",
       "court": null,
       "runningOn": "Cook County assistant public defender since 2010, assigned to the Rolling Meadows courthouse; unopposed in the primary.",
@@ -2382,16 +2679,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Juan%20Ponce%20de%20Leon"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://www.cookcountyclerkil.gov/elections/current-elections/view-all-candidates",
         "https://2026primary.injusticewatch.org/table/candidate/juan-ponce-de-leon-34899",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2404,7 +2701,7 @@
       "party": "Democratic",
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/927453/927453.jpg",
       "seat": "Converted from Associate Judgeship of Hon. John A. Fairman",
       "court": null,
       "runningOn": "Circuit judge appointed by the Illinois Supreme Court in July 2025, previously a Cook County assistant state's attorney supervising criminal appeals; unopposed in the primary.",
@@ -2413,16 +2710,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Not Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Sara%20McGann"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/sara-mcgann-34937",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2435,7 +2732,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://static.wixstatic.com/media/44869d_15df671168e645f48dd7f942491f1b9f~mv2.jpg/v1/fill/w_600,h_800,al_c,q_85/Monica_Somerville.jpg",
       "seat": "Converted from Associate Judgeship of Hon. Michael J. Kane",
       "court": null,
       "runningOn": "Staff attorney at Cabrini Green Legal Aid and a City of Chicago administrative hearing officer, formerly a deputy director in the Chicago Department of Finance; won a three-way primary with 42.39%.",
@@ -2444,16 +2741,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Not Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Monica%20Somerville"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/monica-somerville-34746",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2466,7 +2763,7 @@
       "party": "Democratic",
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/MichaelZink2.jpg",
       "seat": "Converted from Associate Judgeship of Hon. David E. Haracz",
       "court": null,
       "runningOn": "Circuit judge appointed by the Illinois Supreme Court in 2024 after two decades as a partner in a housing and eviction law firm; unopposed in the primary.",
@@ -2475,16 +2772,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Michael%20J.%20Zink"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/michael-j-zink-34926",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2497,7 +2794,7 @@
       "party": "Democratic",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Jon_Stromsta.png",
       "seat": "Converted from Associate Judgeship of Hon. Stephanie K. Miller",
       "court": null,
       "runningOn": "Administrative law judge at the Illinois Department of Employment Security since 2022 and a former assistant defender in the Office of the State Appellate Defender; won the primary over Belle Katubig, 58.16% to 41.84%.",
@@ -2506,16 +2803,16 @@
         {
           "source": "Chicago Bar Association",
           "rating": "Qualified",
-          "url": "https://www.chicagobar.org/votejudges"
+          "url": "https://www.chicagobar.org/common/Uploaded%20files/JEC%20PDFs/2026MarchSmartGuide%20FINAL.pdf"
         },
         {
           "source": "Illinois State Bar Association",
           "rating": "Qualified",
-          "url": "https://www.isba.org/judicial-elections/counties/cook"
+          "url": "https://web.archive.org/web/20260320230342/https://www.isba.org/judicial-elections/counties/cook#:~:text=Jon%20Stromsta"
         }
       ],
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://2026primary.injusticewatch.org/table/candidate/jon-stromsta-34677",
         "https://2026primary.injusticewatch.org/results"
       ],
@@ -2585,6 +2882,24 @@
       ],
       "runningOnEs": "Su sitio destaca la asequibilidad de los seguros de auto y de propiedad y las protecciones al consumidor en los reclamos de seguros; preside el Comité de Seguros de la Cámara. Su historial en ilga.gov también abarca los impuestos a la propiedad, el acceso a la atención médica y el desarrollo económico en Calumet City.",
       "priorCareerEs": "Es alcalde de Calumet City, fue el primer concejal negro de la ciudad por su Tercer Distrito, fundó la Jones Foundation y tiene un título en justicia penal de Loyola University."
+    },
+    {
+      "name": "Monet S. Wilson",
+      "race": "il-house-29",
+      "party": "Independent",
+      "incumbent": false,
+      "writeIn": true,
+      "website": "https://wilsonil29.com",
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. Calls herself a centrist and says she would lower property taxes through circuit-breaker relief and changes to how Illinois funds schools, revise parts of the SAFE-T Act to hold repeat violent offenders accountable, and push ethics enforcement and balanced budgets before tax increases.",
+      "priorCareer": "Calumet City 2nd Ward alderwoman in her second term; she ran against Thaddeus Jones in the 2022 Democratic primary.",
+      "sourceUrls": [
+        "https://wilsonil29.com",
+        "https://ballotpedia.org/Monet_Wilson",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/IMG-9764-Original_20260818_183753_51926_1.jpeg",
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Se describe como centrista y dice que bajaría los impuestos a la propiedad mediante alivio tipo circuit breaker y cambios en la forma en que Illinois financia las escuelas, revisaría partes de la SAFE-T Act para responsabilizar a los reincidentes violentos, e impulsaría la aplicación de normas de ética y presupuestos equilibrados antes de aumentar impuestos.",
+      "priorCareerEs": "Concejal del Distrito 2 (2nd Ward) de Calumet City en su segundo periodo; compitió contra Thaddeus Jones en las primarias demócratas de 2022."
     },
     {
       "race": "il-house-31",
@@ -2659,6 +2974,11 @@
       "incumbent": false,
       "website": "https://www.miguelfor40.org/",
       "photoUrl": "https://images.solidarity.tech/fit-in/1200x0/filters:no_upscale()/3eg1ids1dvvcx91he1e2rbzmxgmj",
+      "photoFrame": {
+        "x": 0.44,
+        "y": 0.58,
+        "zoom": 1.37
+      },
       "runningOn": "Says housing affordability is the district's most pressing problem and supports lifting the state ban on rent control, a graduated income tax on high earners and corporations to fund schools and health care, labor protections, climate resilience, and protections for immigrant, LGBTQ and disabled residents. He defeated incumbent Rep. Jaime Andrade Jr. in the March 17 Democratic primary with about 56 percent of the vote.",
       "priorCareer": "Executive director of the Latino Union of Chicago, a workers' rights organization, and a former adult literacy educator and after-school program director; holds a B.S. from Northland University and an M.A. from the University of Wisconsin-Milwaukee.",
       "sourceUrls": [
@@ -2825,6 +3145,11 @@
       "incumbent": false,
       "website": "https://www.citizensforantoinette.com/",
       "photoUrl": "https://static.wixstatic.com/media/ffb62a_a3a1f8c153f14d11928c44865db759bd~mv2.png",
+      "photoFrame": {
+        "x": 0.367,
+        "y": 0.195,
+        "zoom": 1.46
+      },
       "runningOn": "Her campaign site lists education equity, expanding access to affordable health care, workforce development, modernizing law enforcement alongside community-based public safety, environmental protection, and investment in roads, bridges and transit. Its tagline calls for better schools, safer streets and fair wages.",
       "priorCareer": "Community organizer who has worked as a contractor at the South Side Community Art Center since 2015, was an executive assistant at the DuSable Museum (2001-2014), and was general manager of Urban Broadcast Media.",
       "sourceUrls": [
@@ -3080,6 +3405,26 @@
       "priorCareerEs": "Legisladora de tiempo completo criada en La Villita, fue gerente de participación cívica y juvenil en la Illinois Coalition for Immigrant and Refugee Rights y sirvió en la Cámara de Illinois de 2019 a 2020 antes de pasar al Senado."
     },
     {
+      "name": "Jordan Villas",
+      "race": "il-senate-12",
+      "party": "Working Class Party",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. Says working people need a party of their own, independent of both major parties, and points to wages that lag prices, worsening working conditions, cuts to public schools and services, and immigration enforcement raids. He was removed from the ballot after a petition objection invalidated more than 1,400 of his signatures.",
+      "priorCareer": "FedEx delivery driver.",
+      "sourceUrls": [
+        "https://www.workingclassfight.com/blog/2026-write-in-jordan-villas-for-illinois-state-senate/",
+        "https://www.workingclassfight.com/blog/2026-jordan-villas-off-the-ballot-in-illinois/",
+        "https://storage.googleapis.com/media.workingclassfight.com/uploads/candidates/2026-illinois-senate-12.pdf",
+        "https://ballotpedia.org/Jordan_Villas",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Dice que los trabajadores necesitan un partido propio, independiente de los dos partidos principales, y señala salarios que no alcanzan a los precios, condiciones laborales que empeoran, recortes a las escuelas y servicios públicos, y operativos de control migratorio. Fue retirado de la boleta después de que una objeción a sus peticiones invalidó más de 1,400 de sus firmas.",
+      "priorCareerEs": "Repartidor de FedEx."
+    },
+    {
       "race": "il-senate-15",
       "name": "Napoleon B. Harris III",
       "party": "Democratic",
@@ -3202,18 +3547,38 @@
       "priorCareerEs": "Maestro y entrenador de las Escuelas Públicas de Chicago que después abrió un negocio de bienes raíces, y miembro de la Cámara de Representantes de Illinois por el distrito 8 desde 2007."
     },
     {
+      "name": "Lien Choi",
+      "race": "us-house-7",
+      "party": "Independent",
+      "incumbent": false,
+      "writeIn": true,
+      "website": "https://lienchoi.com",
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. Calls himself a progressive centrist who takes no special-interest money. His top issues are campaign finance reform, universal health care, and universal basic income, and his site also lists climate action such as turning vacant lots into parks and gardens.",
+      "priorCareer": "Illinois Institute of Technology graduate who has worked in construction and as a director at Hope House homeless shelter and transitional housing; he also ran for this seat in 2024.",
+      "sourceUrls": [
+        "https://lienchoi.com",
+        "https://lienchoi.com/plan",
+        "https://ballotpedia.org/Lien_Choi",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://assets.zyrosite.com/YanzpKJjM4IpQLrX/website-profile-pic-YbNypp0O7xi0kaR4.png",
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Se describe como un centrista progresista que no acepta dinero de intereses especiales. Sus temas principales son la reforma del financiamiento de campañas, la atención médica universal y el ingreso básico universal, y su sitio también incluye acción climática, como convertir lotes baldíos en parques y huertos.",
+      "priorCareerEs": "Egresado del Illinois Institute of Technology que ha trabajado en construcción y como director en Hope House, un albergue para personas sin hogar y vivienda de transición; también se postuló para este escaño en 2024."
+    },
+    {
       "race": "us-house-3",
       "name": "Angel Oakley",
       "party": "Republican",
       "incumbent": false,
       "website": "https://www.libertyangel.us/",
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Angel_Oakley_20240808_092020.jpg",
       "runningOn": "Oakley's campaign policy page lists ten areas, including government accountability and transparency, election reform with national voter ID standards, cutting federal spending and small-business regulation, border security, and defending constitutional rights including free speech and the Second Amendment. She also lists balanced budgets, a prevention and patient-choice approach to healthcare she calls medical freedom, and privacy and accountability rules for AI and technology. Her BallotReady profile summarizes her positions as ending the surveillance state, cutting inflation and housing costs, shrinking the deficit, addressing chronic disease, and securing the border with immigration reform.",
       "priorCareer": "BallotReady lists her work as a cannabis educator, advisor, and CBD broker since 2017 and in Airbnb hospitality and property management since 2023, with bachelor's and master's degrees from Judson University.",
       "sourceUrls": [
         "https://www.libertyangel.us/",
         "https://www.libertyangel.us/policy",
-        "https://www.ballotready.org/people/angel-oakley"
+        "https://www.ballotready.org/people/angel-oakley",
+        "https://ballotpedia.org/Angel_Oakley"
       ],
       "runningOnEs": "La página de propuestas de la campaña de Oakley enumera diez áreas, entre ellas rendición de cuentas y transparencia gubernamental, reforma electoral con estándares nacionales de identificación de votantes, recortes al gasto federal y a la regulación de los pequeños negocios, seguridad fronteriza y defensa de los derechos constitucionales, incluidas la libertad de expresión y la Segunda Enmienda. También menciona presupuestos equilibrados, un enfoque de prevención y libre elección del paciente en el cuidado de la salud que llama libertad médica, y reglas de privacidad y rendición de cuentas para la inteligencia artificial y la tecnología. Su perfil de BallotReady resume sus posturas como acabar con el estado de vigilancia, reducir la inflación y los costos de la vivienda, achicar el déficit, atender las enfermedades crónicas y asegurar la frontera con una reforma migratoria.",
       "priorCareerEs": "BallotReady registra su trabajo como educadora, asesora y corredora de CBD en el sector del cannabis desde 2017 y en hospitalidad de Airbnb y administración de propiedades desde 2023, con licenciatura y maestría de Judson University."
@@ -3275,12 +3640,35 @@
       "priorCareerEs": "Sirvió en la Junta de Comisionados del Condado de Cook de 1998 a 2009 y enseñó política ambiental y política de Chicago como profesor adjunto en Loyola University Chicago."
     },
     {
+      "name": "Frank Rowder",
+      "race": "us-house-5",
+      "party": "Independent",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No platform or campaign website found.",
+      "priorCareer": "Repeat write-in candidate, including for this seat in 2020 and 2024 and in the March 2026 Republican primaries for state senate and the Water Reclamation District.",
+      "sourceUrls": [
+        "https://ballotpedia.org/Frank_Rowder",
+        "https://api.open.fec.gov/v1/candidate/H6IL05226/?api_key=DEMO_KEY",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma ni un sitio web de campaña.",
+      "priorCareerEs": "Candidato por escrito recurrente, incluso para este escaño en 2020 y 2024 y en las primarias republicanas de marzo de 2026 para senador estatal y el Distrito de Recuperación de Agua (Water Reclamation District)."
+    },
+    {
       "race": "us-house-1",
       "name": "Christian Maxwell",
       "party": "Republican",
       "incumbent": false,
       "website": "https://www.christianmaxwellforcongress.com/",
       "photoUrl": "https://media.base44.com/images/public/692fbfac2645ab6867a836cf/7c8a988a6_image.png",
+      "photoFrame": {
+        "x": 0.423,
+        "y": 0.589,
+        "zoom": 1.0
+      },
       "runningOn": "Her campaign site lists public safety, economic growth, education reform, and family policy as her platform, including support for law enforcement, tax relief, school choice, and maternal care and childcare access. In her Chicago Sun-Times questionnaire she says her priorities are improving children's literacy through school choice, addressing property crime, reducing taxes, and requiring accountability for how federal dollars are spent.",
       "priorCareer": "E-commerce growth marketing consultant and marketing strategist with no prior elected office.",
       "sourceUrls": [
@@ -3313,15 +3701,16 @@
       "name": "Michael Scott Noack",
       "party": "Republican",
       "incumbent": false,
-      "website": null,
-      "photoUrl": null,
+      "website": "https://noack4congress.com/",
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/mnoack.jpg",
       "runningOn": "His campaign site's issues page says he wants to convert health insurance companies to nonprofit organizations, invest in hydroelectric power, focus immigration enforcement on violent criminals while fixing the legal immigration process, cut taxes and federal spending, and support veterans. In news coverage he cites grocery prices, gas prices, the state gas tax, and overall affordability as his reasons for running.",
       "priorCareer": "Truck driver from Bonfield in Kankakee County who has not previously run for office.",
       "sourceUrls": [
-        "http://web.archive.org/web/20260319005919/http://noack4congress.com/issues/",
-        "http://web.archive.org/web/20260319005932/https://noack4congress.com/about/",
+        "https://noack4congress.com/issues/",
+        "https://noack4congress.com/about/",
         "https://www.shawlocal.com/news/2026/03/19/whats-next-for-northern-illinois-congressional-candidates/",
-        "https://www.cbsnews.com/chicago/news/who-is-running-house-illinois-2nd-congressional-district-2026-primary-election/"
+        "https://www.cbsnews.com/chicago/news/who-is-running-house-illinois-2nd-congressional-district-2026-primary-election/",
+        "https://ballotpedia.org/Mike_Noack"
       ],
       "runningOnEs": "La página de temas de su sitio de campaña dice que quiere convertir las aseguradoras de salud en organizaciones sin fines de lucro, invertir en energía hidroeléctrica, enfocar la aplicación de las leyes migratorias en los criminales violentos mientras se arregla el proceso de inmigración legal, recortar los impuestos y el gasto federal, y apoyar a los veteranos. En coberturas de prensa cita los precios de los alimentos, los precios de la gasolina, el impuesto estatal a la gasolina y la asequibilidad en general como sus razones para postularse.",
       "priorCareerEs": "Chofer de camión de Bonfield, en el condado de Kankakee, que no se había postulado antes a un cargo público."
@@ -3352,6 +3741,11 @@
       "incumbent": false,
       "website": "https://www.votejenniferdavis.com/",
       "photoUrl": "https://static.wixstatic.com/media/acaba8_2a5c202d028e48fdad468e3d9e01f681~mv2.jpg/v1/crop/x_3000,y_0,w_3000,h_4000/fill/w_720,h_960,al_c,q_85/portrait.jpg",
+      "photoFrame": {
+        "x": 0.457,
+        "y": 0.229,
+        "zoom": 1.49
+      },
       "runningOn": "Davis's campaign site lists small business, education, immigration, national security, community safety and tax relief as her issues, and says she wants to cut taxes, streamline regulations and expand school options including public, charter, private and home schools. She says she supports securing the border with technology, enforcing existing immigration law and prioritizing legal immigration, and proposes a national cyber defense she calls a Digital Dome. In her Sun-Times questionnaire she names affordability as the district's most important issue and says she backs term limits and independent redistricting commissions.",
       "priorCareer": "Co-founded the field service software company Davisware with her husband and later founded BExponential, an organization for women entrepreneurs; she has not held elected office.",
       "sourceUrls": [
@@ -3481,6 +3875,11 @@
       "incumbent": false,
       "website": "https://www.chrisgettyforcongress.com/",
       "photoUrl": "https://run.imgix.net/d3ff4e65-4939-4777-a36d-83865d17f4db/f148fde4-7976-4a6c-aee0-fe5397575f9f/f148fde4-7976-4a6c-aee0-fe5397575f9f.jpg",
+      "photoFrame": {
+        "x": 0.515,
+        "y": 0.486,
+        "zoom": 2.36
+      },
       "runningOn": "Getty's campaign site lists cost of living, immigration and public safety, and government accountability as his priorities, and says he wants to restore trust in government and protect the integrity of elections. At an April 2026 UIC forum he said he does not support abolishing ICE, that there should be a clear process for immigrants to become citizens, and that federal agents should not come into neighborhoods to detain people. In August 2026 he told Desplaines Valley News that the cost of living was the top issue he heard while gathering petition signatures.",
       "priorCareer": "He has been mayor of Lyons, Illinois since 2009, also serves as Lyons Township supervisor, and works as a licensed insurance producer.",
       "sourceUrls": [
@@ -3600,6 +3999,11 @@
       "incumbent": false,
       "website": "https://www.lizfor2.com/",
       "photoUrl": "https://images.squarespace-cdn.com/content/v1/67d4a74bd8d9843e4a8e420a/9b5f29aa-72e4-4a58-a9b7-b3cd98252675/LizHero+MU22.jpg",
+      "photoFrame": {
+        "x": 0.679,
+        "y": 0.431,
+        "zoom": 1.78
+      },
       "runningOn": "Nicholson says every property owner or renter deserves a property tax system that is fair, transparent, and predictable, and that every taxpayer appealing an assessment should get a fair chance to reduce their bill. Her stated priorities are making appeals more accessible to working families and small businesses rather than those who hire connected attorneys, modernizing the process with clearer online tools and multilingual support, publishing more appeals data to identify systemic inequities, community outreach through neighborhood groups, schools, and libraries, and stricter ethics rules to limit the influence of property tax lawyers and special interests.",
       "priorCareer": "Nicholson was a longtime campaign adviser to former Illinois Senate President John Cullerton and held state posts including top aide to Secretary of State Jesse White, deputy director of the Illinois Department of Employment Security, and chief operating officer of Central Management Services.",
       "sourceUrls": [
@@ -3619,7 +4023,12 @@
       "party": "Republican",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Vince_Romano.jpeg",
+      "photoFrame": {
+        "x": 0.376,
+        "y": 0.627,
+        "zoom": 1.0
+      },
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": "Has worked in real estate and finance, as a self-defense instructor and small business owner, and was the Republican nominee for Illinois House District 16 in 2012 and 2022.",
       "sourceUrls": [
@@ -3646,12 +4055,28 @@
       "priorCareerEs": "Ex coordinador legislativo de SEIU Healthcare, director de alcance comunitario del representante federal Brad Schneider y ex presidente de la Indo-American Democratic Organization."
     },
     {
+      "name": "Aris F. Yanibas",
+      "race": "il-senate-8",
+      "party": null,
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No platform or campaign website found.",
+      "priorCareer": null,
+      "sourceUrls": [
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": null,
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma ni un sitio web de campaña.",
+      "priorCareerEs": null
+    },
+    {
       "race": "il-senate-9",
       "name": "Tom Lally",
       "party": "Republican",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/IMG-0933_20260727_192950_31944_1.jpeg",
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": null,
       "sourceUrls": [
@@ -3686,6 +4111,11 @@
       "incumbent": false,
       "website": "https://www.skalaforillinois.com/",
       "photoUrl": "https://primary.jwwb.nl/public/o/u/h/temp-vusjdrzjsfruzqursfbj/20251214_114330-standard-pr1h9e.jpg",
+      "photoFrame": {
+        "x": 0.519,
+        "y": 0.455,
+        "zoom": 1.59
+      },
       "runningOn": "His campaign site lists lower taxes, lower utility bills, and safer communities as its key issues, along with job creation and keeping families in Illinois.",
       "priorCareer": "Plumbers Local 130 member since 1997 and an elected Village of Crestwood trustee who previously served on the Crestwood Planning and Zoning Committee.",
       "sourceUrls": [
@@ -3713,6 +4143,28 @@
       "priorCareerEs": "Ex administrador en el Departamento de Comercio y Oportunidad Económica de Illinois; hijo del ex presidente del Senado Emil Jones Jr."
     },
     {
+      "name": "Paris Walker Thomas",
+      "race": "il-senate-14",
+      "party": "Democratic",
+      "incumbent": false,
+      "writeIn": true,
+      "website": null,
+      "runningOn": "Declared write-in candidate; the name is not printed on the ballot. No 2026 platform or campaign website found. In a 2024 candidate survey she named mental health, the rights of seniors, and domestic violence prevention as her top issues.",
+      "priorCareer": "Paralegal who grew up in Roseland; she has run several times as a write-in for state representative in the 28th District, most recently in the March 2026 Democratic primary.",
+      "sourceUrls": [
+        "https://ballotpedia.org/Paris_Walker_Thomas",
+        "https://www.cookcountyclerkil.gov/elections/november-3-2026-write-candidates"
+      ],
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/ParisWalkerThomas.jpeg",
+      "photoFrame": {
+        "x": 0.48,
+        "y": 0.258,
+        "zoom": 1.0
+      },
+      "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. No se encontró una plataforma para 2026 ni un sitio web de campaña. En una encuesta de candidatos de 2024 mencionó la salud mental, los derechos de las personas mayores y la prevención de la violencia doméstica como sus temas principales.",
+      "priorCareerEs": "Asistente legal que creció en Roseland; se ha postulado varias veces como candidata por escrito a representante estatal por el Distrito 28, más recientemente en las primarias demócratas de marzo de 2026."
+    },
+    {
       "race": "il-house-12",
       "name": "Justin J. Kumar",
       "party": "Republican",
@@ -3736,6 +4188,11 @@
       "incumbent": false,
       "website": "https://www.paulforillinois.com",
       "photoUrl": "https://images.squarespace-cdn.com/content/v1/68801793e41543270d3eaa3e/2385c696-6612-46f7-8b1d-179409a2e6a8/Paul_Header.png",
+      "photoFrame": {
+        "x": 0.527,
+        "y": 0.236,
+        "zoom": 1.96
+      },
       "runningOn": "Campaigns on public safety, lower costs, and stronger communities, citing property tax relief through expanded homestead exemptions, housing and childcare costs, violence intervention and police recruitment, and ethics reforms such as limits on legislators' outside employment. Also lists reproductive rights, education funding, and environmental protection.",
       "priorCareer": "Nonprofit leader and author who worked in the Obama administration's Department of Education and White House, at Harlem Children's Zone, Hope Chicago, and Rust Belt Rising, and served on the Lincoln Park High School Local School Council.",
       "sourceUrls": [
@@ -3754,12 +4211,13 @@
       "party": "Republican",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Terry_Le_20240620_012625.jpg",
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": "Home caregiver and University of Illinois Chicago graduate who was the Republican candidate for this same seat in 2024.",
       "sourceUrls": [
         "https://chicago.suntimes.com/candidate-questionnaires/terry-nguyen-le-illinois-house-13th-district",
-        "https://www.ilga.gov/House/Members/Details/3418"
+        "https://www.ilga.gov/House/Members/Details/3418",
+        "https://ballotpedia.org/Terry_Le"
       ],
       "runningOnEs": "No ha publicado una plataforma para esta contienda que pudiéramos encontrar.",
       "priorCareerEs": "Cuidador a domicilio y graduado de la University of Illinois Chicago que fue el candidato republicano para este mismo escaño en 2024."
@@ -3771,6 +4229,11 @@
       "incumbent": false,
       "website": "https://www.demiforillinois.com",
       "photoUrl": "https://static.wixstatic.com/media/e62ce9_23ef01dd793642db93e0a5511675abfd~mv2.png/v1/fill/w_800,h_800,al_c,q_85/e62ce9_23ef01dd793642db93e0a5511675abfd~mv2.png",
+      "photoFrame": {
+        "x": 0.489,
+        "y": 0.16,
+        "zoom": 2.7
+      },
       "runningOn": "Lists affordable housing (rent stabilization, tenant protections, SRO preservation), healthcare and mental health access, reproductive freedom, public school funding including universal pre-K, union rights and fair wages, and climate investment as priorities. Supports a graduated income tax and ethics reforms such as barring legislators from outside lobbying work.",
       "priorCareer": "Marketing and communications consultant and Army National Guard member (previously U.S. Air Force Security Forces), former communications manager for state Rep. Stephanie Kifowit, and president of the 46th Ward Democrats.",
       "sourceUrls": [
@@ -4025,6 +4488,11 @@
       "incumbent": false,
       "website": "https://franhurley.com/",
       "photoUrl": "https://franhurley.com/wp-content/uploads/meet-fran-img.webp",
+      "photoFrame": {
+        "x": 0.428,
+        "y": 0.299,
+        "zoom": 1.92
+      },
       "runningOn": "Her campaign lists three priorities: seniors (property tax relief, lower prescription drug costs), first responders (access to mental health services and suicide prevention resources), and affordability (rising costs of groceries, utilities and housing).",
       "priorCareer": "State representative for the 35th District from 2013 to 2023, then a member of the Illinois Labor Relations Board; earlier an aide to 19th Ward aldermen and a project manager at the Cook County Sheriff's Office.",
       "sourceUrls": [
@@ -4045,6 +4513,11 @@
       "incumbent": false,
       "website": "https://www.repdaviddewar.com/",
       "photoUrl": "https://content.campaignpartner.net/images/128200/David_Dewar2.jpg",
+      "photoFrame": {
+        "x": 0.52,
+        "y": 0.294,
+        "zoom": 1.15
+      },
       "runningOn": "He says Springfield has a spending problem rather than a revenue problem and proposes a yearly outside forensic audit of state finances, repeal of the SAFE-T Act, support for police, and same-day paper ballots; he names illegal immigration as the district's most pressing issue.",
       "priorCareer": "Independent retirement specialist who founded Tax-Free Retirement Solutions in 2010 after working in real estate, mortgage brokerage and life insurance, and served 10 years as an election judge in the 19th Ward.",
       "sourceUrls": [
@@ -4117,6 +4590,11 @@
       "incumbent": false,
       "website": "https://www.votealicehu.com",
       "photoUrl": "https://images.squarespace-cdn.com/content/v1/69f539f965dd232961163e5e/0881c378-a6d2-4a9e-9d38-b42e51832d9b/Headshot.jpg",
+      "photoFrame": {
+        "x": 0.502,
+        "y": 0.394,
+        "zoom": 2.4
+      },
       "runningOn": "Her campaign lists four goals: strong neighborhoods, safe streets, lower taxes, and smarter government. She frames her candidacy around common-sense leadership, transparent government, and protecting taxpayers, and describes herself as a business leader and an independent voice rather than a career politician.",
       "priorCareer": "Small business owner who was the Republican nominee for this same seat in 2022, losing to Bridget Degnen.",
       "sourceUrls": [
@@ -4136,6 +4614,11 @@
       "incumbent": false,
       "website": "https://www.elizabethforcookcounty.com",
       "photoUrl": "https://images.squarespace-cdn.com/content/v1/689a43f2c37da80bec8ec030/8ef9dade-f2da-476a-ab84-3c38e17a0364/891A3914.JPG",
+      "photoFrame": {
+        "x": 0.41,
+        "y": 0.315,
+        "zoom": 2.16
+      },
       "runningOn": "Her campaign says she will focus on protecting health care access, reducing the cost of living, and making sure large corporations and the wealthy do not shift their tax obligations onto the middle class. She points to her county government experience in procurement, budgets, federal funding streams, and health care systems as preparation for the job.",
       "priorCareer": "Bureau chief of the Cook County Bureau of Asset Management (on leave to run), with about 15 years in public service; previously served on a CPS local school council and a North River mental health services governing commission.",
       "sourceUrls": [
@@ -4154,7 +4637,7 @@
       "party": "Republican",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/959404/959404.jpg",
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": null,
       "sourceUrls": [
@@ -4189,6 +4672,11 @@
       "incumbent": false,
       "website": "https://mirandaforcookcounty.org",
       "photoUrl": "https://mirandaforcookcounty.org/wp-content/uploads/2025/11/Miranda-104-BG.jpg",
+      "photoFrame": {
+        "x": 0.297,
+        "y": 0.375,
+        "zoom": 1.73
+      },
       "runningOn": "Her campaign lists five priorities: improving maternal health outcomes, funding law enforcement and public safety initiatives, helping homeowners with property tax appeals, expanding small business access to grant funding, and providing recreational opportunities in the forest preserves.",
       "priorCareer": "Attorney who served as counsel to the U.S. Senate Judiciary Committee and as a political appointee at the U.S. Department of Justice, then as deputy director of legislative affairs at the Cook County State's Attorney's Office, where she now works in criminal appeals.",
       "sourceUrls": [
@@ -4269,7 +4757,7 @@
       "party": "Republican",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://assets.civicengine.com/uploads/candidate/headshot/959407/959407.jpg",
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": "Chicago Public Schools employee who served as an SEIU executive board member and chief union steward until the union board removed her in March 2025, and who filed as the Republican candidate for this seat in 2022 before being removed from that ballot.",
       "sourceUrls": [
@@ -4306,15 +4794,16 @@
       "party": "Republican",
       "incumbent": false,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/JonathonLuers.JPG",
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": "Software engineer (Northwestern BS and MS) from Chicago's O'Hare neighborhood who was the Republican nominee for Illinois Senate 10th District in 2022 and 2024, losing both times to Robert Martwick.",
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.journal-topics.com/articles/republicans-slate-candidates-for-suburban-county-board-races/",
         "https://www.ballotready.org/people/jon-luers",
         "https://goodparty.org/candidate/jon-luers/cook-county-commission-district-9",
-        "https://chicago.suntimes.com/candidate-questionnaires/jon-luers-illinois-senate-10th-district"
+        "https://chicago.suntimes.com/candidate-questionnaires/jon-luers-illinois-senate-10th-district",
+        "https://ballotpedia.org/Jonathon_Luers"
       ],
       "runningOnEs": "No ha publicado una plataforma para esta contienda que pudiéramos encontrar.",
       "priorCareerEs": "Ingeniero de software (licenciatura y maestría de Northwestern) del vecindario de O'Hare en Chicago que fue el candidato republicano al Senado de Illinois por el Distrito 10 en 2022 y 2024, perdiendo ambas veces ante Robert Martwick."
@@ -4345,10 +4834,15 @@
       "incumbent": false,
       "website": "https://drakefor10.com/",
       "photoUrl": "https://drakefor10.com/wp-content/uploads/2025/05/Drake-Train-Properly-Sized-926x1024.jpg",
+      "photoFrame": {
+        "x": 0.41,
+        "y": 0.217,
+        "zoom": 2.28
+      },
       "runningOn": "His campaign site lists six planks: protecting health care (strengthening Cook County Health and CountyCare), fairness in property taxes, lowering the cost of living by expanding housing supply, standing up to federal actions including immigration enforcement and data sharing, restorative justice, and an open and ethical county government. In coverage he has also proposed ethics rules barring officials from voting on matters tied to their employers and exploring land value or split-rate taxation.",
       "priorCareer": "Industrial engineer and West Monroe consultant who spent about a decade as a community organizer on housing, health care access, and environmental restoration; a first-time candidate who served on the Chicago Growth Project steering committee.",
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://drakefor10.com/",
         "https://nadignewspapers.com/newcomer-warren-defeats-incumbent-gainer-for-seat-on-cook-county-board-in-north-northwest-side-district/",
         "https://www.thedailyline.com/cook-county-commissioner-drake-warren-profile-2026-incoming-presumptive-district-10-commissioner-urbanism",
@@ -4367,14 +4861,15 @@
       "website": null,
       "photoUrl": null,
       "runningOn": "Has not published a platform for this race that we could find.",
-      "priorCareer": null,
+      "priorCareer": "Filed to run in the March 2026 Republican primary for Illinois House District 22 but was disqualified from that ballot. No Republican ran in the March primary for this county board seat; he appears on the certified November ballot as the Republican nominee.",
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://theballotbrief.com/state/illinois/cook-county/commissioner-district-11",
-        "https://ballotpedia.org/Charles_Spizzirri"
+        "https://ballotpedia.org/Charles_Spizzirri",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-01/Candidate%20List%201.22.26.pdf"
       ],
       "runningOnEs": "No ha publicado una plataforma para esta contienda que pudiéramos encontrar.",
-      "priorCareerEs": null
+      "priorCareerEs": "Se registró para la primaria republicana de marzo de 2026 por el Distrito 22 de la Cámara de Illinois, pero fue descalificado de esa boleta. Ningún republicano participó en la primaria de marzo por este escaño de la junta del condado; aparece en la boleta certificada de noviembre como el candidato republicano."
     },
     {
       "race": "cook-commissioner-11",
@@ -4386,7 +4881,7 @@
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": "Former school teacher and insurance broker who served in the Illinois House (1985 to 1989) and Illinois Senate (1989 to 1992) before joining the county board in February 1992; he chairs the board's Finance Committee.",
       "sourceUrls": [
-        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260901-1.pdf",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://www.cookcountyil.gov/all-people/john-daley",
         "https://en.wikipedia.org/wiki/John_P._Daley",
         "https://en.wikipedia.org/wiki/Cook_County_Board_of_Commissioners_11th_district"
@@ -4398,11 +4893,12 @@
   "raceNotes": [
     {
       "race": "cook-board-president",
-      "note": "No Republican has qualified for this race as of early September 2026; write-in primary results were still being certified. The ballot is final in October.",
+      "note": "No Republican is on the November ballot for this race. The Chicago Board of Elections candidate list in ballot order (September 11, 2026) shows only the Democratic and Libertarian nominees.",
       "sourceUrls": [
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-09/Candidate%20List_20260911-1.pdf",
         "https://ballotpedia.org/Cook_County,_Illinois,_elections,_2026"
       ],
-      "noteEs": "Ningún republicano ha calificado para esta contienda a principios de septiembre de 2026; los resultados de los votos por escrito de la primaria aún se estaban certificando. La boleta queda definitiva en octubre."
+      "noteEs": "Ningún republicano aparece en la boleta de noviembre para esta contienda. La lista de candidatos en orden de boleta de la Junta Electoral de Chicago (11 de septiembre de 2026) muestra solo a los candidatos demócrata y libertario."
     },
     {
       "race": "mwrd",

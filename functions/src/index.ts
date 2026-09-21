@@ -975,7 +975,7 @@ export const onQuestionUpvoteWrite = onDocumentWritten(
           type: 'question',
           title: `${c.next} people want this answered`,
           body: excerpt(c.body),
-          link: `/official/${event.params.officialUid}`,
+          link: `/official/${event.params.officialUid}?q=${event.params.questionId}`,
         }
       );
     }
@@ -998,7 +998,7 @@ export const onQuestionCreated = onDocumentCreated(
         type: 'question',
         title: 'New question in your AMA',
         body: excerpt(q?.body),
-        link: `/official/${event.params.officialUid}`,
+        link: `/official/${event.params.officialUid}?q=${event.params.questionId}`,
       },
       q?.authorUid as string
     );
@@ -1027,7 +1027,7 @@ export const onQuestionResponded = onDocumentWritten(
         type: 'response',
         title: `${official.data()?.name ?? 'The official'} responded to your question`,
         body: excerpt(after.response),
-        link: `/official/${event.params.officialUid}`,
+        link: `/official/${event.params.officialUid}?q=${event.params.questionId}`,
       },
       event.params.officialUid
     );
@@ -1367,7 +1367,7 @@ const VOTING_MILESTONES: { date: string; title: string; body: string }[] = [
   {
     date: '2026-10-29',
     title: 'Last day to apply for a mail ballot',
-    body: 'Mail ballot applications close at 5 pm today. Return your ballot by mail or at any secured drop box; it must be postmarked by November 3.',
+    body: 'Mail ballot applications close today. Return your ballot by mail or at any secured drop box; it must be postmarked by November 3.',
   },
   {
     date: '2026-11-03',

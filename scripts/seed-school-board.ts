@@ -39,7 +39,9 @@ interface Entry {
   race: string;
   incumbent: boolean;
   website: string | null;
+  writeIn?: boolean;
   photoUrl?: string | null;
+  photoFrame?: { x: number; y: number; zoom: number } | null;
   runningOn: string;
   priorCareer: string | null;
   runningOnEs?: string | null;
@@ -74,6 +76,13 @@ function validate(entries: Entry[]): void {
       problems.push(`${e.name}: website must be https`);
     if (e.photoUrl != null && !/^https:\/\//.test(e.photoUrl))
       problems.push(`${e.name}: photoUrl must be https`);
+    if (e.photoFrame != null) {
+      const { x, y, zoom } = e.photoFrame;
+      if (!e.photoUrl) problems.push(`${e.name}: photoFrame without a photoUrl`);
+      if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1 && zoom >= 1 && zoom <= 8))
+        problems.push(`${e.name}: photoFrame needs x/y in 0-1 and zoom in 1-8`);
+    }
+    if (e.writeIn != null && typeof e.writeIn !== 'boolean') problems.push(`${e.name}: writeIn must be boolean`);
     if (!Array.isArray(e.sourceUrls) || e.sourceUrls.length === 0)
       problems.push(`${e.name}: needs at least one source URL`);
     for (const text of [e.runningOn, e.priorCareer ?? '', e.runningOnEs ?? '', e.priorCareerEs ?? '']) {
@@ -113,6 +122,8 @@ async function main() {
         incumbent: e.incumbent,
         website: e.website ?? null,
         photoUrl: e.photoUrl ?? null,
+        photoFrame: e.photoFrame ?? null,
+        writeIn: e.writeIn === true,
         runningOn: e.runningOn.trim(),
         priorCareer: e.priorCareer?.trim() || null,
         runningOnEs: e.runningOnEs?.trim() || null,

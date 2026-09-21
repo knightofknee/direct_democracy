@@ -49,6 +49,39 @@ Conventions:
   (`source: 'app'`) are the candidate's own. Candidates who never signed up
   are provisioned with `add-candidate --create` (passwordless account under
   the campaign's published contact email; they claim it via password reset).
+- Mayoral candidate pages carry two pieces of operator copy, both held in
+  `scripts/data/platform-summaries.json` and written by
+  `npm run set-platform-summaries` (`--check` lists stale ones, `--dump`
+  writes every live platform out for rereading): the platform note
+  (`platformNote` / `platformNoteEs` / `platformNoteTone`) and the expandable
+  "AI summary" (`aiSummary`: "The platform" and "Next to the other
+  candidates", each a few short chunks that open with a bold "Topic: " lead,
+  shown at full body text size, never as a block of small print, with the
+  `policiesHash` it was written from). It is a summary for a voter on a
+  phone who will not read the policies: what the candidate would do, weighted
+  the way the platform weights it, with no description of the document, no
+  legal caveats, and nothing nearly every candidate says. A fact shared
+  across pages is worded the same on each. Every summary uses the ONE prompt in
+  `scripts/data/platform-summary-prompt.md`, Brian's own page included, and
+  its only source is the policies as listed in the app. Notes and summaries
+  describe and never rate: counts and structure are fine; praise words,
+  superlatives, and ranking ("most detailed", "real platform",
+  "well-formatted") are not, because under scrutiny they read as the app
+  picking favorites. Alexi Giannoulias's English note is Brian's wording
+  (`"note": null` in the JSON leaves it alone) until he publishes a mayoral
+  platform; the weekly task checks for that. Page order is fixed: name card
+  (no initials tile; the portrait shows only when a photo is linked), note,
+  AI summary (a solid orange `highlight` bar, the one tap the page most
+  wants; keep that color for nothing else), the centered "more perfect platform" header, "Imported from",
+  policies.
+- Policy bodies cap at 20,000 characters (`MAX_BODY` in
+  `functions/src/platform.ts`, `firestore.rules`, and the edit-policy field
+  move together); `PolicyBody` opens anything over 5,000 collapsed behind a
+  Show more button, cut at a paragraph or bullet boundary.
+- Signing out is a confirmed, red action on the profile tab and lands on the
+  big board with the sign-in sheet over it. Settings carries a gear icon on
+  purpose: it holds the language switch, so it has to be findable by someone
+  who cannot read the current language.
 - Election directories: `electionCandidates/{election--slug}` +
   `electionRaceNotes/{election--race}` are read-only voter directories for the
   Nov 3, 2026 general ballot ('2026-general': statewide + Cook County races)
@@ -57,8 +90,13 @@ Conventions:
   `scripts/data/general-2026.json` and `municipal-2027.json` (full sync per
   election, same contract as the school board). Cards carry an optional
   `photoUrl` (external https headshot, rendered by link like officials'
-  portraits, never stored); race screens show each candidate's runningOn
-  preview so the comparison happens without a tap. Race ids/labels and the
+  portraits, never stored) and, when the photo isn't a centered headshot, a
+  `photoFrame` {x, y, zoom} (focal point as image fractions + zoom past cover,
+  applied by `OfficialAvatar`); race screens show each candidate's runningOn
+  preview so the comparison happens without a tap. Declared write-ins carry
+  `writeIn: true` (school board cards too): listed after the printed names
+  under the sourced how-to-write-in explainer (`WRITE_IN_2026`), and only in
+  offices with a Chicago write-in line, since only filed write-ins count. Race ids/labels and the
   how-to-vote dates live in `src/constants/elections.ts`; sections render on
   the election tab (`november-section.tsx`, `ward-race-section.tsx`), and
   `/ward-race/[ward]` pairs the incumbent's report card with declared
@@ -101,6 +139,10 @@ Conventions:
 - Notifications live at `users/{uid}/notifications/{id}`, written ONLY by
   Cloud Functions triggers (question asked/responded, community verdicts,
   comment replies, writing credits); clients read, mark read, and delete.
+  A notification about one item links to that item, not just its page: AMA
+  notifications carry `?q=<questionId>` and `/official/[id]` opens scrolled
+  to that question with an outline around it. New notification types follow
+  the same rule.
   The notifications tab replaced the ama tab (the officials directory moved
   to `/officials`; wards link to each alderman directly).
 - Claimed profiles: `claimed` on officials/candidates is set by
@@ -120,6 +162,17 @@ Conventions:
   app.json carries the matching entitlement and intent filter. Never point
   links at firebaseapp.com universal links: Firebase stopped serving the
   association file there when Dynamic Links shut down.
+- Small screens: words are never cut off or broken mid-word. Older phones
+  have a narrow screen AND large system text, so `useScreenRoom()`
+  (`src/hooks/use-screen-room.ts`) divides the width by the text scale and
+  reports `tight` (under 360) and `roomy` (420 and up). When room runs out,
+  decoration gives way first (row chevrons, portrait size via
+  `OfficialAvatar`, padding, the grade badge dropping under the name), then
+  text wraps. `numberOfLines` is only for teasers whose full text is one tap
+  away (policy and runningOn previews, prior-career lines at 2, reference
+  URLs); never on a label, a name, a court, or a time. Tab bar labels ignore
+  the system text scale and step down a point under 360pt. Check new rows at
+  320pt wide before calling them done.
 - Use `notify()` from `src/lib/notify.ts` for user-facing errors - RN's
   Alert is a silent no-op on web.
 - Assume success on a user's own vote/action: every displayed aggregate a

@@ -713,7 +713,7 @@ service cloud.firestore {
           && request.resource.data.title.size() >= 3
           && request.resource.data.title.size() <= 140
           && request.resource.data.body is string
-          && request.resource.data.body.size() <= 8000
+          && request.resource.data.body.size() <= 20000
           && request.resource.data.section is string
           && request.resource.data.section.size() <= 60
           && request.resource.data.links is list
@@ -734,7 +734,7 @@ service cloud.firestore {
           && request.resource.data.title.size() >= 3
           && request.resource.data.title.size() <= 140
           && request.resource.data.body is string
-          && request.resource.data.body.size() <= 8000
+          && request.resource.data.body.size() <= 20000
           && request.resource.data.section is string
           && request.resource.data.section.size() <= 60
           && request.resource.data.links is list

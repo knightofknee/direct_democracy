@@ -20,6 +20,7 @@ import { daysUntil, nextMilestone } from '@/constants/elections';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
+import { useScreenRoom } from '@/hooks/use-screen-room';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { timeAgo } from '@/lib/format';
@@ -262,6 +263,13 @@ function GridCell({
   scrollRef: React.RefObject<ScrollView | null>;
 }) {
   const theme = useTheme();
+  // Small phones and large system text (an older phone usually has both)
+  // leave a cell about 60pt of text width. Nothing here is ever cut off:
+  // both lines wrap. Before they have to, the decoration gives way: the
+  // chevron costs 23pt, enough to push "your districts" onto two lines on a
+  // 375pt iPhone, so only the widest phones keep it, and the narrowest give
+  // up some padding as well.
+  const { tight, roomy: chevron } = useScreenRoom();
   return (
     <Pressable
       onPress={() => scrollRef.current?.scrollTo({ y: target.current, animated: true })}
@@ -269,6 +277,7 @@ function GridCell({
       accessibilityLabel={`Jump to ${hint}`}
       style={({ pressed }) => [
         styles.gridCell,
+        tight && { paddingHorizontal: Spacing.two + 2, gap: 7 },
         {
           backgroundColor: theme.backgroundElement,
           borderColor: theme.border,
@@ -277,18 +286,14 @@ function GridCell({
       ]}>
       <Ionicons name="star" size={14} color={theme.accent} />
       <View style={{ flex: 1, gap: 1 }}>
-        <ThemedText type="smallBold" numberOfLines={1} style={{ fontSize: 14, lineHeight: 18 }}>
+        <ThemedText type="smallBold" style={{ fontSize: 14, lineHeight: 18 }}>
           {label}
         </ThemedText>
-        <ThemedText
-          type="small"
-          themeColor="textSecondary"
-          numberOfLines={1}
-          style={{ fontSize: 11, lineHeight: 14 }}>
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 11, lineHeight: 14 }}>
           {caption}
         </ThemedText>
       </View>
-      <Ionicons name="chevron-forward" size={14} color={theme.textSecondary} />
+      {chevron ? <Ionicons name="chevron-forward" size={14} color={theme.textSecondary} /> : null}
     </Pressable>
   );
 }
@@ -392,19 +397,14 @@ function ElectionAma() {
               <ThemedText type="smallBold" style={{ fontSize: 15 }}>
                 {q.body}
               </ThemedText>
-              {/* One guaranteed line: the name yields (truncates) so the
-                  badge and pill stay aligned; the answer count gets its own
-                  line below rather than fighting for this one. */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
-                <ThemedText
-                  type="small"
-                  themeColor="textSecondary"
-                  numberOfLines={1}
-                  style={{ fontSize: 12, flexShrink: 1 }}>
+              {/* Wraps on a narrow screen rather than cutting the name or
+                  time; the answer count gets its own line below. */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: Spacing.two }}>
+                <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, flexShrink: 1 }}>
                   {q.authorName} · {timeAgo(q.createdAt)}
                 </ThemedText>
                 {q.authorVerified && <VerifiedBadge compact />}
-                <View style={{ flex: 1 }} />
+                <View style={{ flexGrow: 1 }} />
                 <ElectionQuestionJoin question={q} />
               </View>
               {q.answerCount > 0 && (

@@ -16,6 +16,7 @@ import { TEST_WARD } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
+import { useScreenRoom } from '@/hooks/use-screen-room';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
@@ -83,6 +84,9 @@ export default function AmaScreen() {
 function OfficialRow({ official, highlighted }: { official: Official; highlighted?: boolean }) {
   const router = useRouter();
   const theme = useTheme();
+  // The whole card is the tap target; on a tight screen the chevron's width
+  // goes to the name instead.
+  const { tight } = useScreenRoom();
   const t = useT();
   const grade = computeGrade(official);
   return (
@@ -92,7 +96,7 @@ function OfficialRow({ official, highlighted }: { official: Official; highlighte
       <View style={styles.row}>
         <OfficialAvatar name={official.name} photoUrl={official.photoUrl} size={48} />
         <View style={{ flex: 1, gap: 3 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', columnGap: Spacing.two, rowGap: 2 }}>
             <ThemedText type="smallBold" style={{ fontSize: 15 }}>
               {official.name}
             </ThemedText>
@@ -117,7 +121,7 @@ function OfficialRow({ official, highlighted }: { official: Official; highlighte
           </View>
         </View>
         <GradeBadge letter={grade.letter} score={grade.overall} />
-        <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
+        {tight ? null : <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />}
       </View>
     </Card>
   );

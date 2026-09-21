@@ -37,7 +37,7 @@ export const HOW_TO_VOTE_2026 = {
     url: 'https://chicagoelections.gov/voting/register-votechange-name-or-address',
   },
   voteByMail: {
-    applyBy: 'apply by October 29, 5 pm',
+    applyBy: 'apply by October 29',
     detail:
       'ballots start mailing September 24; return by mail or at any secured drop box (one at every ward early voting site)',
     url: 'https://chicagoelections.gov/voting/vote-mail',
@@ -195,13 +195,28 @@ export const GENERAL_2026_QUESTION = {
  * published ratings, and leans on Injustice Watch, whose guide is the
  * deepest reporting on these judges, as the tool to read before voting.
  */
+/**
+ * How write-in votes work, shown above the write-in candidates on a race and
+ * on each write-in's card. Marking: the Board's voting instructions (Form
+ * 255). Counting only declared write-ins, and judges holding the list:
+ * 10 ILCS 5/17-16.1. The Board posts no names, only which offices have a
+ * write-in line, so cards come from the Cook County Clerk's list and public
+ * campaigns in offices that have a Chicago write-in line.
+ */
+export const WRITE_IN_2026 = {
+  explainer:
+    "These names are not printed on the ballot. To vote for one, write the name in the blank write-in space for that office and fill in the oval (on a touchscreen, follow the write-in steps on screen). Votes count only for write-ins who filed a declaration. The Chicago Board of Elections does not post those names, so this list comes from the Cook County Clerk's list and campaign announcements; election judges at your polling place have the official one.",
+  urlLabel: 'How to mark your ballot (Board of Elections)',
+  url: 'https://app.chicagoelections.gov/documents/general/Paper-Ballot-and-Touchscreen-Instructions.pdf',
+} as const;
+
 export const JUDICIAL_2026 = {
   detail:
     'Every Cook County judge up for retention needs a yes from 60 percent of voters to keep the job. Bar associations screen each one; Injustice Watch reports on their records.',
   guideLabel: 'Injustice Watch judicial guide',
   guideUrl: 'https://www.injusticewatch.org/judges/judicial-elections/2026-retention/',
   cbaLabel: 'Chicago Bar Association evaluations',
-  cbaUrl: 'https://www.chicagobar.org/chicagobar/Judicial_Evaluations',
+  cbaUrl: 'https://www.chicagobar.org/votejudges',
 } as const;
 
 export const JUDICIAL_RACES: RaceInfo[] = [

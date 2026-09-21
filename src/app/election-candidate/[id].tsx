@@ -10,6 +10,7 @@ import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, Chip, EmptyState, SectionHeader } from '@/components/ui';
+import { WriteInChip, WriteInNote } from '@/components/write-in';
 import { GENERAL_ELECTION, generalRaceLabel, municipalRaceLabel } from '@/constants/elections';
 import { Spacing } from '@/constants/theme';
 import { useLiveDoc } from '@/hooks/use-firestore';
@@ -56,7 +57,12 @@ export default function ElectionCandidateScreen() {
     <Screen>
       <Card>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.three }}>
-          <OfficialAvatar name={candidate.name} photoUrl={candidate.photoUrl ?? null} size={56} />
+          <OfficialAvatar
+            name={candidate.name}
+            photoUrl={candidate.photoUrl ?? null}
+            frame={candidate.photoFrame}
+            size={56}
+          />
           <View style={{ flex: 1, gap: 4 }}>
             <ThemedText type="subtitle" style={{ fontSize: 20, lineHeight: 26 }}>
               {candidate.name}
@@ -65,6 +71,7 @@ export default function ElectionCandidateScreen() {
               <Chip label={t(raceLabel)} />
               {candidate.party && <Chip label={t(candidate.party)} />}
               {candidate.incumbent && <Chip label={t('Incumbent')} tone="primary" />}
+              {candidate.writeIn && <WriteInChip />}
             </View>
           </View>
         </View>
@@ -80,6 +87,8 @@ export default function ElectionCandidateScreen() {
           </View>
         ) : null}
       </Card>
+
+      {candidate.writeIn && <WriteInNote />}
 
       {(candidate.seat || candidate.court) && (
         <Card>

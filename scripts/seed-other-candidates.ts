@@ -43,15 +43,6 @@ interface Entry {
 
 const ENTRIES: Entry[] = [
   {
-    slug: 'matt-brewer',
-    title: 'Matt Brewer',
-    body: [
-      'Attorney and South Side native. Chair of the Chicago Housing Authority board until April 2026, when Mayor Johnson removed him; co-owner of the Wieners Circle and the Grasshopper Club dispensary. Announced his run June 25, 2026.',
-      "His campaign site has no issues or platform section at all: the navigation is Home, Meet Matt, Volunteer, and Donate, and the site template's unlinked issues page still carries placeholder text.",
-    ].join('\n\n'),
-    links: [{ label: 'mattbrewer.com', url: 'https://mattbrewer.com/' }],
-  },
-  {
     slug: 'danielle-carter-walters',
     title: 'Danielle Carter-Walters',
     body: [

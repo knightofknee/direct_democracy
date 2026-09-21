@@ -11,6 +11,7 @@ import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Card, Chip, EmptyState } from '@/components/ui';
+import { WriteInChip, WriteInHeader } from '@/components/write-in';
 import {
   GENERAL_ELECTION,
   GENERAL_ELECTION_DATE,
@@ -69,12 +70,17 @@ export default function ElectionRaceScreen() {
   }
 
   // Retention lists alphabetically (there is nothing to rank); contests put
-  // the incumbent first, then alphabetical.
+  // ballot names before declared write-ins, the incumbent first, then
+  // alphabetical.
   const sorted = [...candidates].sort((a, b) =>
     retention
       ? a.name.localeCompare(b.name)
-      : Number(b.incumbent) - Number(a.incumbent) || a.name.localeCompare(b.name)
+      : Number(!!a.writeIn) - Number(!!b.writeIn) ||
+        Number(b.incumbent) - Number(a.incumbent) ||
+        a.name.localeCompare(b.name)
   );
+  const onBallot = sorted.filter((c) => !c.writeIn);
+  const firstWriteIn = sorted.find((c) => c.writeIn)?.id;
   const electionDate =
     info.election === GENERAL_ELECTION ? GENERAL_ELECTION_DATE : MUNICIPAL_ELECTION_DATE;
 
@@ -113,9 +119,10 @@ export default function ElectionRaceScreen() {
         <EmptyState icon="ribbon-outline" message={t('No candidates listed for this race yet.')} />
       ) : (
         <>
-          {sorted.length === 1 && !retention && (
+          {onBallot.length === 1 && !retention && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {sorted[0].name} {t('is running unopposed.')}
+              {onBallot[0].name}{' '}
+              {t(sorted.length === 1 ? 'is running unopposed.' : 'is the only name printed on the ballot.')}
             </ThemedText>
           )}
           {retention && (
@@ -126,10 +133,17 @@ export default function ElectionRaceScreen() {
           {sorted.map((candidate, i) => (
             <Animated.View
               key={candidate.id}
-              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
+              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}
+              style={{ gap: Spacing.three }}>
+              {candidate.id === firstWriteIn && <WriteInHeader />}
               <Card onPress={() => router.push(`/election-candidate/${candidate.id}`)}>
                 <View style={styles.row}>
-                  <OfficialAvatar name={candidate.name} photoUrl={candidate.photoUrl ?? null} size={48} />
+                  <OfficialAvatar
+                    name={candidate.name}
+                    photoUrl={candidate.photoUrl ?? null}
+                    frame={candidate.photoFrame}
+                    size={48}
+                  />
                   <View style={{ flex: 1, gap: 3 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
                       <ThemedText type="smallBold" style={{ fontSize: 15 }}>
@@ -137,13 +151,14 @@ export default function ElectionRaceScreen() {
                       </ThemedText>
                       {candidate.party && <Chip label={t(candidate.party)} />}
                       {candidate.incumbent && !retention && <Chip label={t('Incumbent')} tone="primary" />}
+                      {candidate.writeIn && <WriteInChip />}
                     </View>
                     {candidate.seat || candidate.court ? (
-                      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }} numberOfLines={1}>
+                      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
                         {[candidate.seat, candidate.court && t(candidate.court)].filter(Boolean).join(' · ')}
                       </ThemedText>
                     ) : candidate.priorCareer ? (
-                      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }} numberOfLines={1}>
+                      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }} numberOfLines={2}>
                         {loc(candidate.priorCareer, candidate.priorCareerEs)}
                       </ThemedText>
                     ) : null}

@@ -11,6 +11,7 @@ import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Card, EmptyState, SectionHeader } from '@/components/ui';
+import { WriteInChip } from '@/components/write-in';
 import { wardLabel } from '@/constants/chicago';
 import {
   MUNICIPAL_2027_FILING,
@@ -142,17 +143,25 @@ export default function WardRaceScreen() {
             entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
             <Card onPress={() => router.push(`/election-candidate/${candidate.id}`)}>
               <View style={styles.row}>
-                <OfficialAvatar name={candidate.name} photoUrl={candidate.photoUrl ?? null} size={48} />
+                <OfficialAvatar
+                  name={candidate.name}
+                  photoUrl={candidate.photoUrl ?? null}
+                  frame={candidate.photoFrame}
+                  size={48}
+                />
                 <View style={{ flex: 1, gap: 3 }}>
-                  <ThemedText type="smallBold" style={{ fontSize: 15 }}>
-                    {candidate.name}
-                  </ThemedText>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
+                    <ThemedText type="smallBold" style={{ fontSize: 15 }}>
+                      {candidate.name}
+                    </ThemedText>
+                    {candidate.writeIn && <WriteInChip />}
+                  </View>
                   {candidate.priorCareer ? (
                     <ThemedText
                       type="small"
                       themeColor="textSecondary"
                       style={{ fontSize: 12 }}
-                      numberOfLines={1}>
+                      numberOfLines={2}>
                       {loc(candidate.priorCareer, candidate.priorCareerEs)}
                     </ThemedText>
                   ) : null}

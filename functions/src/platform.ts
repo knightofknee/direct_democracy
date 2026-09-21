@@ -433,7 +433,7 @@ function finalize(raw: RawPolicy[]): ParsedPolicy[] {
     let slug = slugify(p.title);
     for (let n = 2; usedSlugs.has(slug); n += 1) slug = `${slugify(p.title)}-${n}`;
     usedSlugs.add(slug);
-    return { ...p, slug, body: p.body.slice(0, 8000), order };
+    return { ...p, slug, body: p.body.slice(0, MAX_BODY), order };
   });
 }
 
@@ -450,6 +450,13 @@ interface HubLink {
   title: string;
   url: string;
 }
+
+/**
+ * Longest policy body kept, matching firestore.rules and the edit-policy
+ * field. Sized for full written plans (Quigley's run 10,000 to 13,000
+ * characters); the app collapses long bodies behind Show more.
+ */
+export const MAX_BODY = 20000;
 
 /** Static per-pillar pages (cardenas4chicago.com): links to pillar-*.html. */
 function hubPillarPages(html: string, baseUrl: string): HubLink[] {
@@ -485,6 +492,20 @@ function hubSquarespaceButtons(html: string, baseUrl: string): HubLink[] {
   return links;
 }
 
+/** RUN! website builder hubs (mattbrewer.com): plain links to /issues/<slug> pages. */
+function hubRunIssues(html: string, baseUrl: string): HubLink[] {
+  const links: HubLink[] = [];
+  const seen = new Set<string>();
+  for (const m of html.matchAll(/<a[^>]*href="(\/issues\/[a-z0-9-]+)"[^>]*>([\s\S]*?)<\/a>/g)) {
+    const path = m[1];
+    const title = stripTags(m[2]).slice(0, 140);
+    if (seen.has(path) || !title) continue;
+    seen.add(path);
+    links.push({ title, url: new URL(path, baseUrl).toString() });
+  }
+  return links;
+}
+
 /** SHOUTING CASE titles (Squarespace headers) read better in title case. */
 function titleCase(text: string): string {
   if (text !== text.toUpperCase()) return text;
@@ -512,7 +533,29 @@ function parseSubpage(html: string, link: HubLink): RawPolicy | null {
   return { section: '', title, body, links };
 }
 
-const HUBS = [hubPillarPages, hubSquarespaceButtons];
+/**
+ * cardenas4chicago.com draws its pillar grid in the browser from
+ * data/pillars.json; the static html links only whichever pillars the
+ * homepage happens to feature. When that manifest exists it is the full,
+ * ordered list, so it wins over the scraped links.
+ */
+async function pillarManifest(baseUrl: string, fetchHtml: FetchHtml): Promise<HubLink[]> {
+  try {
+    const data: unknown = JSON.parse(await fetchHtml(new URL('data/pillars.json', baseUrl).toString()));
+    if (!Array.isArray(data)) return [];
+    return data
+      .filter(
+        (p): p is { title: string; path: string; number?: number } =>
+          typeof p?.title === 'string' && typeof p?.path === 'string' && /^pillar-[a-z0-9-]+\.html$/.test(p.path)
+      )
+      .sort((a, b) => (a.number ?? 0) - (b.number ?? 0))
+      .map((p) => ({ title: p.title.slice(0, 140), url: new URL(p.path, baseUrl).toString() }));
+  } catch {
+    return [];
+  }
+}
+
+const HUBS = [hubPillarPages, hubSquarespaceButtons, hubRunIssues];
 
 /**
  * Parse a platform from its source URL, following hub pages to their
@@ -527,7 +570,11 @@ export async function parsePlatformUrl(
   const html = await fetchHtml(sourceUrl);
 
   for (const hub of HUBS) {
-    const links = hub(html, sourceUrl);
+    let links = hub(html, sourceUrl);
+    if (hub === hubPillarPages && links.length > 0) {
+      const manifest = await pillarManifest(sourceUrl, fetchHtml);
+      if (manifest.length > links.length) links = manifest;
+    }
     if (links.length < 2) continue;
     const raw: RawPolicy[] = [];
     for (const link of links) {

@@ -60,6 +60,7 @@
     "seed": "tsx scripts/seed.ts",
     "add-candidate": "tsx scripts/add-candidate.ts",
     "sync-platform": "tsx scripts/sync-platform.ts",
+    "set-platform-summaries": "tsx scripts/set-platform-summaries.ts",
     "set-official": "tsx scripts/set-official.ts",
     "seed-aldermen": "tsx scripts/seed-aldermen.ts",
     "verify-user": "tsx scripts/verify-user.ts",

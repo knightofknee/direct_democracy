@@ -20,7 +20,7 @@ import { isAdminUser } from '@/lib/admin';
 import { db } from '@/lib/firebase';
 import { plural } from '@/lib/format';
 import { randomDisplayName } from '@/lib/names';
-import { notify } from '@/lib/notify';
+import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import type { Candidate, Official } from '@/lib/types';
 import { unblockUser } from '@/services/moderation';
 import { updateDisplayName } from '@/services/users';
@@ -47,16 +47,19 @@ export default function ProfileScreen() {
     [profile?.role, profile?.uid]
   );
 
+  // Each auth state gets its own ScrollView. A shared one kept the signed-in
+  // scroll offset over the much shorter signed-out content, and with bounce
+  // off nothing pulled it back: a blank tab after signing out while scrolled.
   if (loading)
     return (
-      <Screen tab>
+      <Screen tab key="loading">
         <SkeletonCards />
       </Screen>
     );
 
   if (!user || !profile) {
     return (
-      <Screen tab>
+      <Screen tab key="signed-out">
         <View style={{ gap: Spacing.one, alignItems: 'center' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
             <ChicagoStar size={18} />
@@ -79,6 +82,24 @@ export default function ProfileScreen() {
     );
   }
 
+  // Signing out lands on the big board with the sign-in sheet over it, never
+  // on a gutted profile tab.
+  const confirmSignOut = async () => {
+    const ok = await confirmDestructive(
+      t('Sign out?'),
+      t('You will need to sign in again to vote, comment, or ask questions.'),
+      t('Sign out')
+    );
+    if (!ok) return;
+    try {
+      await signOut();
+      router.navigate('/');
+      router.push('/sign-in');
+    } catch (e) {
+      notifyError(t('Could not sign out'), e);
+    }
+  };
+
   const saveName = async (name: string) => {
     setSavingName(true);
     try {
@@ -92,7 +113,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <Screen tab>
+    <Screen tab key="signed-in">
       <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34, textAlign: 'center' }}>
         {t('profile')}
       </ThemedText>
@@ -228,8 +249,21 @@ export default function ProfileScreen() {
         </>
       )}
 
-      <Button title={t('Settings')} variant="ghost" onPress={() => router.push('/settings')} />
-      <Button title={t('Sign out')} variant="ghost" onPress={() => void signOut()} />
+      {/* The gear is for whoever cannot read the label: Settings holds the
+          language switch, so someone stuck in the wrong language has to be
+          able to find it by shape alone. */}
+      <Button
+        title={t('Settings')}
+        variant="secondary"
+        icon={<Ionicons name="settings-sharp" size={16} color={theme.text} />}
+        onPress={() => router.push('/settings')}
+      />
+      <Button
+        title={t('Sign out')}
+        variant="danger"
+        icon={<Ionicons name="log-out-outline" size={16} color="#FFFFFF" />}
+        onPress={confirmSignOut}
+      />
     </Screen>
   );
 }

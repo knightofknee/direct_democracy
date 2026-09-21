@@ -1,9 +1,12 @@
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
+import { Button } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 
 /**
  * Renders a policy body with real typography instead of one flat text run.
@@ -55,9 +58,46 @@ export function policyPreview(body: string): string {
     .trim();
 }
 
+/** Bodies longer than this open collapsed... */
+const COLLAPSE_OVER = 5000;
+/** ...showing about this much, cut at a paragraph or bullet boundary. */
+const COLLAPSED_LENGTH = 3000;
+
+/**
+ * The opening of a long body: whole blocks up to COLLAPSED_LENGTH, splitting
+ * a bullet list between items (some plans are one very long list) and never
+ * ending on a heading with nothing under it.
+ */
+function leadingBlocks(blocks: Block[]): Block[] {
+  const lead: Block[] = [];
+  let used = 0;
+  for (const block of blocks) {
+    if (block.kind === 'bullets') {
+      const items: string[] = [];
+      for (const item of block.items) {
+        if (used >= COLLAPSED_LENGTH) break;
+        items.push(item);
+        used += item.length;
+      }
+      if (items.length) lead.push({ kind: 'bullets', items });
+    } else {
+      if (used >= COLLAPSED_LENGTH) break;
+      lead.push(block);
+      used += block.text.length;
+    }
+    if (used >= COLLAPSED_LENGTH) break;
+  }
+  while (lead.length > 1 && lead[lead.length - 1].kind === 'heading') lead.pop();
+  return lead;
+}
+
 export function PolicyBody({ body }: { body: string }) {
   const theme = useTheme();
-  const blocks = parsePolicyBlocks(body);
+  const t = useT();
+  const [expanded, setExpanded] = useState(false);
+  const all = parsePolicyBlocks(body);
+  const long = body.length > COLLAPSE_OVER;
+  const blocks = long && !expanded ? leadingBlocks(all) : all;
 
   return (
     <View style={styles.container}>
@@ -83,6 +123,14 @@ export function PolicyBody({ body }: { body: string }) {
         }
         return <ThemedText key={i}>{block.text}</ThemedText>;
       })}
+      {long ? (
+        <Button
+          title={expanded ? t('Show less') : t('Show more')}
+          variant="secondary"
+          icon={<Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={15} color={theme.text} />}
+          onPress={() => setExpanded((v) => !v)}
+        />
+      ) : null}
     </View>
   );
 }

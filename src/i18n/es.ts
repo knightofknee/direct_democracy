@@ -77,8 +77,8 @@ export const ES: Record<string, string> = {
     'en línea hasta el 18 de octubre (requiere licencia o identificación de Illinois), por correo hasta el 6 de octubre, o en persona hasta el mismo día de la elección, en cualquier sitio de votación anticipada o lugar de votación, con dos identificaciones (una con tu dirección).',
   'Register or check your registration': 'Regístrate o revisa tu registro',
   'Vote by mail': 'Vota por correo',
-  'apply by October 29, 5 pm; ballots start mailing September 24; return by mail or at any secured drop box (one at every ward early voting site).':
-    'solicita antes del 29 de octubre a las 5 pm; las boletas se envían desde el 24 de septiembre; devuélvela por correo o en cualquier buzón seguro (hay uno en cada sitio de votación anticipada de distrito).',
+  'apply by October 29; ballots start mailing September 24; return by mail or at any secured drop box (one at every ward early voting site).':
+    'solicita a más tardar el 29 de octubre; las boletas se envían desde el 24 de septiembre; devuélvela por correo o en cualquier buzón seguro (hay uno en cada sitio de votación anticipada de distrito).',
   'Apply for a mail ballot': 'Pide una boleta por correo',
   'Track your mail ballot': 'Rastrea tu boleta por correo',
   'Vote early': 'Vota anticipado',
@@ -190,6 +190,12 @@ export const ES: Record<string, string> = {
   'Race not found.': 'Carrera no encontrada.',
   'on the ballot': 'en la boleta del',
   'is running unopposed.': 'se postula sin oposición.',
+  'is the only name printed on the ballot.': 'es el único nombre impreso en la boleta.',
+  'Write-in': 'Por escrito',
+  'Write-in candidates': 'Candidaturas por escrito',
+  "These names are not printed on the ballot. To vote for one, write the name in the blank write-in space for that office and fill in the oval (on a touchscreen, follow the write-in steps on screen). Votes count only for write-ins who filed a declaration. The Chicago Board of Elections does not post those names, so this list comes from the Cook County Clerk's list and campaign announcements; election judges at your polling place have the official one.":
+    'Estos nombres no aparecen impresos en la boleta. Para votar por uno, escribe el nombre en el espacio en blanco para votos por escrito de ese cargo y llena el óvalo (en la pantalla táctil, sigue los pasos para votos por escrito). Solo cuentan los votos por escrito de quienes presentaron una declaración. La Junta Electoral de Chicago no publica esos nombres, así que esta lista viene de la lista de la Oficina del Secretario del Condado de Cook y de anuncios de campaña; los jueces electorales de tu lugar de votación tienen la oficial.',
+  'How to mark your ballot (Board of Elections)': 'Cómo marcar tu boleta (Junta Electoral)',
   'judges. Each is a separate yes-or-no question on your ballot.': 'jueces. Cada uno es una pregunta aparte de sí o no en tu boleta.',
   Incumbent: 'Titular',
   'No candidates listed for this race yet.': 'Aún no hay candidatos en esta carrera.',
@@ -279,6 +285,9 @@ export const ES: Record<string, string> = {
   'Could not unblock': 'No se pudo desbloquear',
   Settings: 'Ajustes',
   'Sign out': 'Cerrar sesión',
+  'Sign out?': '¿Cerrar sesión?',
+  'You will need to sign in again to vote, comment, or ask questions.': 'Tendrás que iniciar sesión de nuevo para votar, comentar o hacer preguntas.',
+  'Could not sign out': 'No se pudo cerrar la sesión',
 
   // Wards tab
   'Every ward’s board is public. Pick one to browse.': 'El tablero de cada distrito es público. Elige uno para explorar.',
@@ -535,6 +544,12 @@ export const ES: Record<string, string> = {
   'Questions from {name}': 'Preguntas de {name}',
   'Polls this candidate has put to the city': 'Votaciones que este candidato ha puesto a la ciudad',
   'Imported from {host}': 'Importado de {host}',
+  'AI summary': 'Resumen de IA',
+  'The platform': 'La plataforma',
+  'Next to the other candidates': 'Junto a los demás candidatos',
+  'Show more': 'Mostrar más',
+  'Written by AI on {date} from the policies listed below, with the same prompt for every candidate. It can miss things. The policies are the source.':
+    'Escrito por IA el {date} a partir de las propuestas que aparecen abajo, con la misma instrucción para cada candidatura. Puede omitir cosas. Las propuestas son la fuente.',
   'Copy platform source link': 'Copiar el enlace de la fuente de la plataforma',
   'Hidden': 'Oculta',
   'Campaign website (https)': 'Sitio de campaña (https)',

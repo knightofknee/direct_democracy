@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { collection, limit, query, where } from 'firebase/firestore';
 import React from 'react';
+import { useWindowDimensions } from 'react-native';
 
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
@@ -10,6 +11,7 @@ import { db } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
 
 export default function TabsLayout() {
+  const { width } = useWindowDimensions();
   const theme = useTheme();
   const t = useT();
   const { profile } = useAuth();
@@ -35,6 +37,14 @@ export default function TabsLayout() {
         // Android resizes the window for the keyboard; without this the tab
         // bar rides up and sits on top of it. No effect on iOS.
         tabBarHideOnKeyboard: true,
+        // Five labels share the width, and "notifications" is the long one:
+        // on a 320pt phone, or with large system text, it was cut to
+        // "notificati...". Labels stay at their designed size (tab bars do
+        // not follow the text-size setting on either platform) and step down
+        // a point on narrow screens so every word fits whole.
+        tabBarAllowFontScaling: false,
+        tabBarItemStyle: { paddingHorizontal: 0 },
+        tabBarLabelStyle: width < 360 ? { fontSize: 9, letterSpacing: -0.2 } : undefined,
         headerShown: false,
       }}>
       <Tabs.Screen
