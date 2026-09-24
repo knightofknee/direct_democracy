@@ -23,6 +23,15 @@ export type AppUpdateInfo = {
   latestVersion: string;
   /** Link to this platform's store listing. */
   storeUrl: string;
+  /**
+   * True when the installed binary is older than config/app.minVersion: the
+   * prompt cannot be closed or snoozed, only Update. For builds whose
+   * behavior the backend can no longer safely support (a security rule that
+   * would surface as a raw error, a data shape they cannot read).
+   */
+  required: boolean;
+  /** Per-release copy in Brian's voice for BOTH cards (config/app.updateMessage / updateMessageEs). */
+  message?: { en: string; es?: string };
 };
 
 /**
@@ -112,6 +121,11 @@ export async function saveDismissRecord(version: string): Promise<void> {
  *
  * config/app is world-readable by rule, so this works signed-out too. Fields:
  *   latestVersion  string  latest released binary version; blank/absent disables the nudge
+ *   minVersion     string  oldest binary still allowed in; older ones get an
+ *                          undismissable prompt (blank/absent = no floor)
+ *   updateMessage  string  what either card says, set per release: what's new
+ *                          and a friendly ask (updateMessageEs for Spanish);
+ *                          absent = the binary's built-in text
  *   iosUrl         string  App Store listing link
  *   androidUrl     string  Play Store listing link (absent while Android has no public release)
  */
@@ -137,7 +151,11 @@ export async function checkForAppUpdate(): Promise<AppUpdateInfo | null> {
     if (typeof storeUrl !== 'string' || !storeUrl) return null;
 
     if (!isNewerVersion(latestVersion, installed)) return null;
-    return { latestVersion, storeUrl };
+    const minVersion = typeof data?.minVersion === 'string' ? data.minVersion.trim() : '';
+    const required = !!minVersion && isNewerVersion(minVersion, installed);
+    const en = typeof data?.updateMessage === 'string' ? data.updateMessage.trim() : '';
+    const es = typeof data?.updateMessageEs === 'string' ? data.updateMessageEs.trim() : '';
+    return { latestVersion, storeUrl, required, ...(en ? { message: { en, es: es || undefined } } : {}) };
   } catch {
     return null;
   }

@@ -67,6 +67,7 @@
     "seed-other-candidates": "tsx scripts/seed-other-candidates.ts",
     "seed-school-board": "tsx scripts/seed-school-board.ts",
     "seed-election": "tsx scripts/seed-election.ts",
+    "release-status": "tsx scripts/release-status.ts",
     "set-latest-version": "tsx scripts/set-latest-version.ts",
     "build-ward-map": "tsx scripts/build-ward-map.ts"
   },

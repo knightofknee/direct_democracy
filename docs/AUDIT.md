@@ -5,6 +5,57 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-09-22: AI summaries, longer policies, deep-linked notifications
+
+- **App Check enforcement re-verified** from outside the app: a REST read of
+  the world-readable `config/app` doc with the web API key but no App Check
+  token returns PERMISSION_DENIED, and an unattested call to `refreshClaim`
+  returns 401. Firestore and every callable are enforced; nothing changed
+  here, this is the periodic check.
+- **`candidates/{uid}.aiSummary` and `platformNoteEs`**: operator copy
+  written only by the Admin SDK (`scripts/set-platform-summaries.ts`). The
+  candidate-update rule is unchanged (`onlyChanges(['bio', 'photoUrl',
+  'websiteUrl'])`), so a candidate cannot edit their own summary or note.
+  Every summary is generated from the same prompt and only from the
+  policies as listed in the app (`scripts/data/platform-summary-prompt.md`);
+  the stored `policiesHash` makes a stale summary detectable. Integrity
+  risk is editorial, not technical: the operator is also a candidate, so
+  the prompt forbids praise, ranking, and any per-candidate variation, and
+  the data file is in the repo for anyone to diff.
+- **Policy body cap 8,000 -> 20,000 chars**, moved together in
+  `firestore.rules` (candidate create/update), the parser (`MAX_BODY`), and
+  the edit-policy field. Motivation: two campaign plans run 10,500 and
+  12,600 chars and were being cut mid-sentence. The app collapses bodies
+  over 5,000 behind Show more. Read cost per policy doc rises accordingly;
+  still well under the 1 MiB document limit.
+- **Notification deep links** now carry `?q=<questionId>` for the three AMA
+  notifications. Links are written only by triggers, read by the client as
+  a route param, and used solely to pick which already-public question card
+  to scroll to; an unknown id simply scrolls nowhere.
+- **Approvals gate re-enabled and DEPLOYED 2026-09-22** (`me().verified ==
+  true && me().wardId != null`; verified live via the Rules API). It does
+  not depend on the release: every build from 1.0.8 on already grays the
+  buttons, and the store has served such a build since September. Closes the accepted interim exposure from 2026-09-07:
+  unverified 1.0.7 users could cast approvals that the grade never counted.
+  Cost accepted this time: a 1.0.7 user tapping Approve sees a raw
+  permissions error until they update. Brian's call: the graded number has
+  to be trustworthy, and 1.0.7 predates the update modal, so no in-app
+  message can reach it.
+- **Update dials**: `config/app.latestVersion` warns (snoozable),
+  `config/app.minVersion` blocks (no Close, no snooze; only binaries built
+  from this code onward honor it). `npm run release-status` prints both
+  dials and whether the LIVE ruleset carries the approvals gate
+  (comments stripped before matching, since the rule's own comment quotes
+  it). The required card's text is `config/app.updateMessage` (admin-only,
+  like the rest of the doc), with the binary's built-in copy as fallback.
+- **Sign-out** now requires a confirmation and routes to the big board with
+  the sign-in sheet; no change to the auth model.
+- **Platform sync**: `cardenas4chicago.com`'s redesign silently archived 7 of
+  9 policies for two weeks (the homepage stopped linking the pillar pages).
+  The parser now also reads the site's `data/pillars.json` manifest. Lesson
+  recorded in AGENTS.md: a sudden drop in a candidate's policy count is a
+  parser problem to fix before anyone summarizes the platform.
+
 ## Update - 2026-09-07: question upvotes, weighted grading, election directories
 
 - **Question upvotes** (`officials/{uid}/questions/{qid}/votes/{voterUid}`

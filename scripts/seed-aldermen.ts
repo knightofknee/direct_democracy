@@ -85,11 +85,17 @@ async function main() {
 
   let created = 0;
   let updated = 0;
+  // Where the ward's own chicago.gov page publishes a better inbox than the
+  // dataset, the page wins (checked 2026-09-22). Accounts are keyed by this
+  // email, so an override here must match the live auth user.
+  const EMAIL_OVERRIDES: Record<number, string> = {
+    1: 'info@the1stward.com', // dataset: Ward01@cityofchicago.org; chicago.gov Ward 1 page and La Spata's office use info@
+  };
   for (const row of rows) {
     const wardId = Number(row.ward);
     const name = displayName(row.alderman);
     const title = `Alderman, ${ordinal(wardId)} Ward`;
-    const email = row.email;
+    const email = EMAIL_OVERRIDES[Number(row.ward)] ?? row.email;
     if (!email) {
       console.warn(`Ward ${wardId} (${name}): no email in dataset - skipped.`);
       continue;

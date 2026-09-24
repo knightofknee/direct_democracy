@@ -510,18 +510,18 @@ service cloud.firestore {
       // Approval ballots - one standing approve/disapprove per person,
       // changeable or retractable any time. Aggregated by onApprovalWrite.
       // VERIFIED residents only is the product rule (a rating anonymous
-      // accounts could stuff would be worthless) and the 1.0.8+ client
-      // enforces it with grayed buttons. The server-side gate
-      // (`me().verified == true && me().wardId != null`) is deliberately NOT
-      // enabled yet: the 1.0.7 binary in the store shows live buttons to
-      // everyone and a rules deny surfaces as a raw permissions error.
-      // Re-add those two clauses once 1.0.8 is the installed base (when
-      // set-latest-version flips).
+      // accounts could stuff would be worthless): the 1.0.8+ client grays
+      // the buttons and links to /verify, and the server gate below backs
+      // it. The gate was held back while the 1.0.7 binary (live buttons
+      // for everyone, a deny shows as a raw error) was the installed base;
+      // re-enabled 2026-09-22 once the store served 1.0.10 with grayed buttons.
       match /approvals/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
         allow create, update: if signedIn()
           && request.auth.uid == voterUid
           && request.auth.uid != officialUid
+          && me().verified == true
+          && me().wardId != null
           && request.resource.data.keys().hasOnly(['value', 'verified', 'wardId', 'createdAt'])
           && request.resource.data.value in ['approve', 'disapprove']
           && request.resource.data.verified == me().verified

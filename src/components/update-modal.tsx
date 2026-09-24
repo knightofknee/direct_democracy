@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Button } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { useT } from '@/lib/i18n';
+import { useLocale, useT } from '@/lib/i18n';
 import {
   checkForAppUpdate,
   isSnoozed,
@@ -29,7 +29,10 @@ const CHECK_INTERVAL_MS = 30 * 60 * 1000;
  * stay resident for days; waiting for a cold start would add days on top of
  * Apple review.
  *
- * Purely a suggestion: Update deep-links to the store listing, and either
+ * Below config/app.minVersion it is not a suggestion: the card has no Close,
+ * the back button does nothing, and the snooze is ignored, so the app is
+ * unusable until updated (a "required" update). Above the floor it is
+ * purely a suggestion: Update deep-links to the store listing, and either
  * button snoozes the nudge for a day (persisted across relaunches; a later,
  * newer release re-prompts immediately). One nag per day, but nagging resumes
  * until the user is actually current.
@@ -37,6 +40,7 @@ const CHECK_INTERVAL_MS = 30 * 60 * 1000;
 export function UpdateModal() {
   const theme = useTheme();
   const t = useT();
+  const { locale } = useLocale();
   const [info, setInfo] = useState<AppUpdateInfo | null>(null);
   const lastCheckRef = useRef(0);
 
@@ -48,7 +52,9 @@ export function UpdateModal() {
       lastCheckRef.current = Date.now();
       const result = await checkForAppUpdate();
       if (unmounted || !result) return;
-      const dismissed = await loadDismissRecord();
+      // A required update ignores the snooze: it comes back every launch and
+      // foreground until the binary is current.
+      const dismissed = result.required ? null : await loadDismissRecord();
       if (unmounted || isSnoozed(result.latestVersion, dismissed, Date.now())) return;
       setInfo(result);
     }
@@ -78,27 +84,35 @@ export function UpdateModal() {
   };
 
   return (
-    <Modal visible transparent animationType="fade" onRequestClose={dismiss}>
+    <Modal visible transparent animationType="fade" onRequestClose={info.required ? () => {} : dismiss}>
       <View style={styles.overlay}>
         <View style={[styles.card, { backgroundColor: theme.background }]}>
-          <ThemedText style={styles.emoji}>⬆️</ThemedText>
+          <ThemedText style={styles.emoji}>{info.required ? '🙏' : '✨'}</ThemedText>
           <ThemedText type="smallBold" style={styles.title}>
-            {t('Update available')}
+            {info.required ? t('Time for an update') : t('A fresh update is here')}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={styles.body}>
-            {t('A newer version of direct democracy is on the store. Update now for the latest fixes and features.')}
+            {/* The release's own message first (what's new, asked nicely);
+                the built-in lines only cover a release that sets none. */}
+            {(locale === 'es' && info.message?.es) ||
+              info.message?.en ||
+              (info.required
+                ? t('This version is too old to keep up anymore. Please grab the update from the store. Thank you!')
+                : t("We've been busy making direct democracy better. Would you mind grabbing the update? Thank you!"))}
           </ThemedText>
           <Button title={t('Update')} onPress={openStore} style={styles.updateButton} />
+          {info.required ? null : (
           <Pressable
             onPress={dismiss}
             accessibilityRole="button"
-            accessibilityLabel={t('Close')}
+            accessibilityLabel={t('Maybe later')}
             hitSlop={8}
             style={styles.closeButton}>
             <ThemedText type="small" themeColor="textSecondary">
-              {t('Close')}
+              {t('Maybe later')}
             </ThemedText>
           </Pressable>
+          )}
         </View>
       </View>
     </Modal>

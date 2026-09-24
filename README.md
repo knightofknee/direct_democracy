@@ -1,11 +1,14 @@
 # direct democracy
 
-An open-source civic app for Chicago: a citywide **big board** of the people's top
-concerns, ward-level voting on questions from your alderman, and ongoing **AMAs**
-where the community - not the politician - decides whether a question was actually
-answered.
+A civic app for Chicago: a citywide **big board** of the issues people care
+about most, a ward tab with polls from your alderman, public **AMAs** where the
+community (not the politician) decides whether a question was actually
+answered, report cards for all 50 aldermen, and a voter guide for the
+November 2026 and February 2027 ballots. The whole app is available in
+English and Spanish.
 
-Built with React Native (Expo) for iOS and Android, backed by Firebase.
+Built with React Native (Expo) for iOS and Android, backed by Firebase. The
+code is MIT licensed (see [LICENSE](LICENSE)).
 
 ## How it works
 
@@ -13,60 +16,78 @@ Built with React Native (Expo) for iOS and Android, backed by Firebase.
 
 | Group | What they can do |
 | --- | --- |
-| Unverified users | Vote and comment on all citywide concerns and citywide polls, and **browse every ward's** board and ballots |
-| Verified users | Everything above, plus a home ward: their votes count in its verified tallies and they vote on their alderman's polls (the ward tab defaults to home; the city big board is everyone's default view) |
-| Elected officials | Approved admins - post polls to their ward or the whole city, and answer their AMA |
-| Candidates | Operator-provisioned challengers - publish **the more perfect platform** (below) and poll their audience, but carry no report card until they hold office |
+| Unverified users | Post citywide concerns, vote on any concern and on citywide polls, ask officials and candidates questions, judge answers, comment on policies, and browse every ward |
+| Verified users | Everything above, plus their votes count in the verified tallies. A verified resident of a ward also posts ward concerns, votes on that ward's polls, and rates their alderman |
+| Elected officials | Real officeholders on claimable accounts: post polls to their ward or the whole city, and answer their AMA |
+| Candidates | Operator-provisioned: publish **the more perfect platform** (below), answer the election AMA, and poll their audience. No report card until they hold office |
 
-**Every result is shown two ways:** all users, and identity-verified users. You
-always see the general vote % and the verified-only % side by side. On
-ward-scoped items, "verified" means verified residents of that ward; on
-citywide items it means any verified Chicagoan. The verified lens is always
-scoped to the area the vote is about.
+**Every result is shown two ways:** all users, and identity-verified users,
+side by side. On ward-scoped items "verified" means verified residents of that
+ward; on citywide items it means any verified Chicagoan.
 
-**Voting isn't just up/down.** Concerns are voted by *priority* (critical → low),
-which ranks the big board. Officials choose their poll format: yes/no, multiple
-choice, approval (pick all you support), or a 5-point scale.
+**Voting isn't just up/down.** Concerns are voted by *priority* (critical to
+low), which ranks the big board. Officials choose their poll format: yes/no,
+multiple choice, approval (pick all you support), or a 5-point scale.
 
-**AMAs are scored for honesty.** Users mark an official's response as "answered"
-or "dodged" - there's no upvoting of responses. Ignored and dodged questions
-drag the official's public answer score down.
+**AMAs are scored for honesty.** Anyone signed in can ask an official a
+question, or join one someone else asked ("I want this answered too"). Once
+the official responds, anyone can mark the response "answered" or "dodged".
+Both counts are shown, and the question's status (and the official's grade)
+follows the verified votes, so a pile of throwaway accounts can't brand an
+official a dodger. Unanswered questions get a week of grace, then count as
+ignored; questions to an official who hasn't claimed their account stay
+pending.
 
 **Officials get a two-axis report card.** Approval (a standing
-approve/disapprove any user can flip at any time, graded on verified
-constituents only, 5-ballot minimum) and the answer score above, averaged into
-an overall A–F. Portraits are links to externally hosted images - the platform
-never stores the photo. Participation earns celebrations: first concern, tenth
-post, hundredth vote.
+approve/disapprove from verified residents of the official's ward, 5-ballot
+minimum) and the answer score, which weights each question by 1 + its verified
+backers so ignoring a question fifty people joined costs far more than
+ignoring one nobody backed. The two average into an overall A to F. Aldermen
+are provisioned from the city's Ward Offices dataset as placeholder accounts
+under each ward's published email; an alderman claims theirs by proving
+control of that inbox. Portraits are links to externally hosted images; the
+app never stores the photo.
 
 **The more perfect platform.** The election tab lists every candidate for
-mayor; each publishes their full platform as individual policies - a title,
-all the text the case needs, and a receipts list of cited sources. Every
-policy takes support/oppose votes (dual-tallied like everything else) and has
-a full comments section where the candidate's own replies are marked with a
-candidate badge. A candidate can manage policies in-app, or link their
-campaign site as the source of truth: a nightly Cloud Function (plus a "Sync
-from my site" button) parses the site's policy list and upserts it, so the
-website and the app are edited in one place. Policies that leave the site are
-hidden, never deleted - their votes and comments survive. Provision a
-candidate with `npm run add-candidate`.
+mayor. Each platform is a list of individual policies (a title, the full
+text, and a list of cited sources), with a comments section where the
+candidate's own replies carry a candidate badge. There is deliberately no
+support/oppose vote on policies: the goal is arguments, not approval ratings.
+A candidate can write policies in the app, or link their campaign site: a
+nightly Cloud Function (plus a "Sync from my site" button) reads the site and
+imports each policy, labeled with where it came from. Editing an imported
+policy in the app takes it over from the site. Each mayoral candidate's page
+also carries a short operator-written note and an expandable AI summary; every
+summary is written from the same prompt
+([`scripts/data/platform-summary-prompt.md`](scripts/data/platform-summary-prompt.md))
+using only the policies as listed in the app, and describes rather than rates.
 
-**Identity verification is third-party.** Didit checks the government ID and
-address; direct democracy only ever stores `verified: yes/no` and the ward.
-Documents never touch our servers. Display names are
-random adjective + noun pairs ("Steadfast Heron") and can be changed any time -
-verification never exposes your real name.
+**The election AMA.** Ask every mayoral candidate the same question at once;
+each candidate posts one answer, and the community rates which answers
+actually answer it.
+
+**The rest of the ballot.** Read-only, sourced candidate directories for the
+Nov 3, 2026 general election (statewide, Cook County, district races, and
+judges with bar association ratings quoted verbatim) and the Feb 23, 2027
+municipal election (citywide offices, every ward's aldermanic race, police
+district councils), plus the 2026 school board races, declared write-ins, and
+how, when, and where to vote. Seeded from `scripts/data/*.json` and
+re-verified weekly.
+
+**Identity verification is third-party.** Didit checks the government ID;
+direct democracy stores only a verified yes/no, the ward you live in, and a
+one-way hash that stops one person from verifying two accounts. Documents never touch our
+servers. Display names are random adjective + noun pairs ("Steadfast Heron")
+and can be changed any time; verification never exposes your real name.
 
 **You stay in control.** Report any content, block any user (hides their
 content for you), see everything you've posted under **my activity**, withdraw
 your own concerns and unanswered questions, retract any ballot while its vote
-is still open, and delete
-your account entirely from the profile tab. The in-app **Privacy & data**
-screen spells out exactly what is and isn't stored (host a copy at a public
-URL for the app-store listing).
+is still open, and delete your account entirely from the profile tab. The
+in-app **Privacy & data** screen spells out exactly what is and isn't stored.
 
-Chicago-only for launch (50 wards, aldermen, the flag's colors), but the data
-model keeps `city` as a concept so other cities can come later.
+Chicago-only (50 wards, aldermen, the flag's colors), but the data model keeps
+`city` as a concept so other cities can come later.
 
 ## Running it locally (against the Emulator Suite)
 
@@ -145,9 +166,12 @@ dismiss the report. Move to custom claims when there's more than one admin.
 
 **Sign-in.** Email/password, passwordless email links, and Google/Apple SSO.
 Email links complete on web out of the box (enable "Email link" on the
-Email/Password provider); completing them inside the native apps additionally
-needs a Firebase Hosting link domain (`EXPO_PUBLIC_AUTH_LINK_DOMAIN`) plus
-iOS Associated Domains / Android App Links. Web SSO works once the
+Email/Password provider). In the native apps, the link's continue URL
+(`EXPO_PUBLIC_AUTH_CONTINUE_URL`) is a page on waldgrave.com that reopens the
+app as `directdemocracy://sign-in?...`; waldgrave.com also serves the
+app-site-association and assetlinks files that match the entitlement and
+intent filter in `app.json`. Don't point links at firebaseapp.com universal
+links: Firebase stopped serving the association file there. Web SSO works once the
 providers are enabled in Firebase console → Authentication. Native builds
 additionally need: `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` (from the Firebase
 project's OAuth clients) for Google, and an Apple Developer "Sign in with
@@ -177,27 +201,31 @@ Production verification uses [Didit](https://didit.me) hosted sessions
    function URL and copy its secret into `DIDIT_WEBHOOK_SECRET`.
 
 The app calls `createVerificationSession` to open the hosted flow; the
-webhook is the only thing in production that can set `verified: true`, and it
-refuses a document that already verified a different account
+webhook is the only thing in production that can set `verified` and the
+ward (matched from the verified address against the city's ward boundaries),
+and it refuses a document that already verified a different account
 (`identityClaims/{hash}`, released on account deletion). Against the
 emulators, the **Verify** screen instead offers a dev-only simulated
 verification (`devVerify`, which refuses to run outside the emulator).
 
-Ward assignment from the verified address (Chicago ward-boundaries lookup) is
-future work; until then production verification grants city-level verified.
-
 ## Repository layout
 
 ```
-src/app/            expo-router screens: (tabs)/ big board · my ward · ama · profile,
-                    plus concern/[id], official/[id], sign-in, verify, new-concern, new-poll
-src/components/     shared UI (cards, lens toggle, tally bars, poll voting)
-src/lib/            firebase init, domain types, tally arithmetic, name generator
-src/services/       Firestore write paths (concerns, polls, AMA, users)
-src/constants/      theme (Chicago flag palette) and the 50-ward dataset
-functions/          Cloud Functions: Didit webhook + dev verification
-scripts/seed.ts     emulator seed data
-firestore.rules     security rules (see the header note about MVP tally writes)
+src/app/            expo-router screens: (tabs)/ big board · wards · election ·
+                    notifications · profile, plus concern, official, candidate,
+                    election and school board screens, sign-in, verify, settings
+src/components/     shared UI (cards, lens toggle, tally bars, poll voting, ward map)
+src/lib/            firebase init, domain types, tally math, i18n, optimistic UI
+src/i18n/es.ts      Spanish strings, keyed by their English source text
+src/services/       Firestore write paths (a client writes only its own docs)
+src/constants/      theme (Chicago flag palette), wards, elections, school board
+functions/src/      Cloud Functions: tally triggers, Didit webhook, platform sync,
+                    claims, deadline reminders
+scripts/            seed scripts (emulator demo data, aldermen, election and
+                    school board directories) and operator tools
+scripts/data/       election data files and the AI summary prompt
+firestore.rules     security rules (deny by default on every aggregate)
+docs/AUDIT.md       security posture and accepted limitations
 ```
 
 ## Trust model
@@ -210,13 +238,6 @@ Cloud Functions triggers (`functions/src/index.ts`) using the Admin SDK. There
 is no client write path to any total, so a hostile client can cast exactly one
 ballot and nothing more.
 
-## Known MVP tradeoffs
-
-- **Ward assignment in dev is self-attested.** Real ward assignment must come
-  from the verified address via Didit.
-- **Officials are provisioned manually** (seed script / Admin SDK). An admin
-  approval flow is future work.
-
 ## License
 
-Open source - see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).

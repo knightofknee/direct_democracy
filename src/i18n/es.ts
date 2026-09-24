@@ -694,9 +694,12 @@ export const ES: Record<string, string> = {
   'Highest rated': 'Mejor calificadas',
   'Leave this question': 'Dejar esta pregunta',
   'Join this question, I want it answered too': 'Unirme a esta pregunta, yo también quiero que la respondan',
-  'Update available': 'Actualización disponible',
-  'A newer version of direct democracy is on the store. Update now for the latest fixes and features.': 'Hay una versión más nueva de direct democracy en la tienda. Actualiza ahora para tener las últimas mejoras.',
   'Update': 'Actualizar',
+  'Time for an update': 'Es hora de actualizar',
+  'A fresh update is here': 'Hay una actualización nueva',
+  'This version is too old to keep up anymore. Please grab the update from the store. Thank you!': 'Esta versión ya es muy antigua para seguir el paso. Por favor descarga la actualización en la tienda. ¡Gracias!',
+  "We've been busy making direct democracy better. Would you mind grabbing the update? Thank you!": 'Hemos estado trabajando para mejorar direct democracy. ¿Nos haces el favor de descargar la actualización? ¡Gracias!',
+  'Maybe later': 'Más tarde',
 
   // Milestones, lenses, misc components
   'First concern raised!': '¡Primera preocupación planteada!',

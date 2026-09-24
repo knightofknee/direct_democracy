@@ -117,10 +117,9 @@ Conventions:
   `officials/{uid}/approvals/{voterUid}` and aggregate in `onApprovalWrite`;
   casting one requires a VERIFIED ward resident (service + widget enforce it;
   unverified accounts see the buttons disabled with the verify path). The
-  matching rules clause is deliberately OFF until the 1.0.8+ client is the
-  installed base, because the 1.0.7 binary shows live buttons to everyone
-  and a rules deny is a raw error there. Re-add `me().verified == true &&
-  me().wardId != null` to the approvals rule when set-latest-version flips. Officials set their own `upvoteAlertThreshold` on their card; the
+  matching rules clause (`me().verified == true && me().wardId != null`) is
+  live in `firestore.rules` since 2026-09-22; it was held back while the 1.0.7 binary, which shows live buttons to everyone, was the
+  installed base. Officials set their own `upvoteAlertThreshold` on their card; the
   upvote trigger notifies them once per question when it crosses that bar.
 - Question upvotes ("I want this answered too"): one presence-only vote doc at
   `officials/{uid}/questions/{qid}/votes/{voterUid}` (and the same under
@@ -222,8 +221,19 @@ Conventions:
   against the running binary's own version, never the store listing's public
   name (the two are different numbering schemes). After a release is confirmed
   live in the store, flip it with `npm run set-latest-version -- <version>`.
-  The doc is world-readable, admin-write-only; a platform with no store URL
-  on the doc never nudges.
+  Two dials on the same doc: `latestVersion` WARNS (snoozable for a day) and
+  `minVersion` BLOCKS (no Close, no snooze, the app is unusable until
+  updated); set the floor with `--min-version <version>`, never above
+  latestVersion, and only when a rule or data change would break the older
+  binary. The floor can only reach binaries that shipped with the modal
+  (1.0.9+); 1.0.7 and earlier have no prompt code at all. Both cards' built-in
+  text is warm and feature-free on purpose (it lives in the binary forever):
+  a please, a thank you, nothing about a specific release. An optional
+  per-release line (`--message "..." --message-es "..."`, stored as
+  `config/app.updateMessage(Es)`) replaces it on both cards in builds after
+  1.0.12; clear it on the next flip so it never describes the wrong release. The doc is
+  world-readable, admin-write-only; a platform with no store URL on the doc
+  never nudges.
 - Security posture and accepted limitations are documented in `docs/AUDIT.md`;
   update it when the trust model changes.
 - Typecheck with `npm run typecheck` before finishing.
