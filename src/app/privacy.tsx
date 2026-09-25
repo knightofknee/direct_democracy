@@ -28,11 +28,12 @@ export default function PrivacyScreen() {
         <Bullet text={t('Your ballots, comments, questions, and judgments - the content you post.')} />
         <Bullet text={t('If you verify: a yes/no verified flag, your ward, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.')} />
         <Bullet text={t('Participation counters (votes cast, concerns raised) that power your milestones.')} />
+        <Bullet text={t('If you pay for a verification: which one you bought, when, and the store’s transaction number. Your payment details stay with Apple or Google.')} />
       </Section>
 
       <Section title={t('What we never see')}>
         <Bullet text={t('Your identity documents. Verification is performed by Didit, a third-party service; documents go to them, and we receive only the verdict.')} />
-        <Bullet text={t('Your address. Didit derives your ward from it and tells us just the ward number.')} />
+        <Bullet text={t('Your address. It is used only at the moment you verify, to find your ward, and is never saved.')} />
       </Section>
 
       <Section title={t('Who can see what')}>

@@ -19,7 +19,7 @@ import { timeAgo } from '@/lib/format';
 import { notifyError } from '@/lib/notify';
 import type { AppNotification } from '@/lib/types';
 import { markAllNotificationsRead, markNotificationRead } from '@/services/notifications';
-import { useT } from '@/lib/i18n';
+import { useLocalized, useT } from '@/lib/i18n';
 
 /**
  * The inbox: answers to your questions, replies to your comments, writing
@@ -119,10 +119,15 @@ const TYPE_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   verdict: 'ribbon',
   comment: 'chatbubbles',
   credit: 'create',
+  verification: 'shield-checkmark',
 };
 
 function NotificationRow({ note, onPress }: { note: AppNotification; onPress: () => void }) {
   const theme = useTheme();
+  // The server writes both languages; the device's setting picks.
+  const localized = useLocalized();
+  const title = localized(note.title, note.titleEs);
+  const body = localized(note.body, note.bodyEs);
   return (
     <Card onPress={onPress} style={note.read ? { opacity: 0.75 } : undefined}>
       <View style={styles.row}>
@@ -133,11 +138,11 @@ function NotificationRow({ note, onPress }: { note: AppNotification; onPress: ()
         />
         <View style={{ flex: 1, gap: 2 }}>
           <ThemedText type={note.read ? 'small' : 'smallBold'} style={{ fontSize: 14 }}>
-            {note.title}
+            {title}
           </ThemedText>
-          {note.body ? (
-            <ThemedText type="small" themeColor="textSecondary" numberOfLines={2}>
-              {note.body}
+          {body ? (
+            <ThemedText type="small" themeColor="textSecondary">
+              {body}
             </ThemedText>
           ) : null}
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 11 }}>

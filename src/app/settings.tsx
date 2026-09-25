@@ -5,11 +5,13 @@ import { View } from 'react-native';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card } from '@/components/ui';
+import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { setDeletingAccount, useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
 import { useLocale, useT } from '@/lib/i18n';
 import { confirmDestructive, notify, notifyError } from '@/lib/notify';
+import { reverifyOpensAt } from '@/lib/verification';
 import { deleteAccount } from '@/services/users';
 
 /** The rarely-needed account plumbing, kept out of the profile's way. */
@@ -58,6 +60,10 @@ export default function SettingsScreen() {
     <Screen>
       {language}
       <Button title={t('Privacy & data')} variant="secondary" onPress={() => router.push('/privacy')} />
+
+      {/* Officials and candidates keep the ward their account was set up
+          with, so moving is a citizen setting. */}
+      {profile.role === 'citizen' && <VerificationCard />}
 
       {profile.role === 'citizen' && (
         <Card>
@@ -116,5 +122,69 @@ export default function SettingsScreen() {
         </Card>
       )}
     </Screen>
+  );
+}
+
+/**
+ * Verification status, and for someone verified, moving: verify a new
+ * address with the ID alone, or with a bill or statement when the ID still
+ * shows the old one. Once every 3 months either way (the server enforces
+ * the window; the buttons mirror it).
+ */
+function VerificationCard() {
+  const router = useRouter();
+  const { profile } = useAuth();
+  const { locale } = useLocale();
+  const t = useT();
+  if (!profile) return null;
+
+  if (!profile.verified) {
+    return (
+      <Card>
+        <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+          {t('Verification')}
+        </ThemedText>
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          {t('Verify to participate in your ward’s board and polls.')}
+        </ThemedText>
+        <Button title={t('Verify my identity')} onPress={() => router.push('/verify')} />
+      </Card>
+    );
+  }
+
+  const opensAt = reverifyOpensAt(profile);
+  const opensOn = opensAt?.toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  return (
+    <Card>
+      <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+        {t('Verification')}
+      </ThemedText>
+      {profile.wardId != null && (
+        <ThemedText type="small">
+          {t('Resident of the {ward}.').replace('{ward}', wardLabel(profile.wardId))}
+        </ThemedText>
+      )}
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+        {opensOn
+          ? t('You can verify a new address again on {date}.').replace('{date}', opensOn)
+          : t('Moved within Chicago? Verify your new address and your ward moves with you. If your ID shows the new address, your ID is enough. If it doesn’t, add a utility bill or bank statement from the last 3 months. You can do this once every 3 months.')}
+      </ThemedText>
+      <Button
+        title={t('Verify with my ID')}
+        variant="secondary"
+        disabled={opensAt != null}
+        onPress={() => router.push('/verify?move=1')}
+      />
+      <Button
+        title={t('Verify with a bill or statement')}
+        variant="secondary"
+        disabled={opensAt != null}
+        onPress={() => router.push('/verify?move=1&with=address')}
+      />
+    </Card>
   );
 }

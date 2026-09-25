@@ -5,6 +5,110 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-09-24: nothing kept at Didit, keyed identity code
+
+- **Found:** Didit's retention was the default, unlimited: ID images,
+  selfies, face embeddings, and extracted fields stayed in Didit (and in
+  the operator's console) indefinitely, contradicting the published policy
+  ("only as long as needed") and, for face data, a BIPA exposure in Illinois.
+- **Fixed:** after a final result (Approved, Declined, Abandoned, Expired)
+  is handled, the webhook calls Didit's delete with `privacy_erasure` and
+  marks `verificationSessions/{id}.erased`. `eraseDiditSessions` (nightly)
+  retries failed erasures and erases sessions still undecided after 7 days.
+  A 500 (geocoder outage) keeps the session so Didit can redeliver. Checked:
+  the API key has delete rights (200, then 404 on repeat); a bad key gets
+  403 and is never marked erased. The 3 expired August sessions were erased
+  on deploy.
+- **Identity code:** was an unkeyed SHA-256 of state, document number, and
+  birth date, brute-forceable from a database copy by guessing ID numbers.
+  Now an HMAC-SHA256 of normalized state and document number keyed by the
+  `IDENTITY_HASH_KEY` secret (generated server-side, never printed). The
+  birth date is no longer used. No claims existed in the old format.
+- **Backstop:** Didit's console retention (App Settings, Data) can be set
+  to its 1-month minimum in case both erasure paths ever fail.
+
+## Update - 2026-09-24: paid verification
+
+- **Who pays:** `createVerificationSession` decides in one transaction with
+  the month's check count: free inside Didit's 500 for the main workflow,
+  otherwise it spends one credit or refuses with `paymentRequired` (old
+  binaries show the message; they cannot pay). The 700-a-month hard cap is
+  gone: every check past the free 500 is paid for.
+- **Credits are server-granted only.** `verificationCredits`,
+  `verificationPurchases` match no security rule. `redeemVerificationPurchase`
+  verifies before granting: Apple JWS signature chain against Apple's roots
+  (forged and malformed tokens rejected in testing), bundle id and app id,
+  refund status, and the per-account `appAccountToken`; Google token looked
+  up and acknowledged through the Play Developer API, purchase state and
+  `obfuscatedExternalAccountId` checked. Each store transaction is recorded
+  once; a second redeem grants nothing and another account's redeem is
+  refused.
+- **Refunds:** a credit returns when the Didit session never starts or its
+  link expires unopened (Didit billed nothing). Declined and abandoned
+  sessions keep it (Didit billed).
+- **Accepted:** a purchase Apple or Google refunds after its credit was
+  spent is not clawed back (the check already ran). Sandbox purchases grant
+  real credits so App Review can test; that costs a few Didit checks.
+- **Privacy:** purchase records hold uid, product, store transaction id,
+  and time; payment details never reach us. The public policy and the
+  in-app privacy screen say so.
+
+## Update - 2026-09-24: verification assigns the ward, moving, Spanish notifications
+
+- **Found:** the Didit webhook minted `verified: true` with no `wardId`, so
+  every Didit-verified account was locked out of ward concerns, ward polls,
+  and alderman approval (all of which require `me().wardId != null`). Only
+  operator-verified accounts (`verify-user`) had wards. No Didit session had
+  been approved yet, so no account needed a backfill.
+- **Fixed:** `diditWebhook` resolves the ward before it verifies
+  (`functions/src/ward.ts`). Addresses come from the decision, proof of
+  address before the ID; each is geocoded by the US Census Bureau geocoder
+  (Didit's own geocoded point is the fallback, trusted only when a street was
+  parsed) and matched point-in-polygon against the city's full-resolution
+  ward boundaries (`functions/data/ward-boundaries.json`, regenerated with
+  the app's map by `npm run build-ward-map`). Cross-checked against the
+  city's own `intersects()` query on random points: 60/60 agree.
+- **Verified now always means verified with a ward.** An address that
+  geocodes outside Chicago, or no address we can locate (a passport, a
+  failed OCR read), verifies nothing; the session records the outcome
+  (`outside-chicago` / `no-address`, never the address), the person gets a
+  notification saying why and how to retry, and the identity claim is not
+  taken, so a retry with a current ID can pass. A geocoder outage answers 500
+  so Didit redelivers instead of refusing a resident.
+- **Notifications in Spanish:** every server-written notification now
+  carries `titleEs`/`bodyEs` beside the English; the app picks by the
+  device's language (which never leaves the device). Quoted user text stays
+  as written.
+- **Privacy:** the address still never touches Firestore. It is sent once to
+  the Census geocoder (a public US government service, HTTPS, no account)
+  and discarded. When the webhook arrives without the address, the function
+  fetches the session decision from Didit's API with the existing key.
+- **Moving:** a verified citizen can verify a new address from Settings
+  once per 90 days. `createVerificationSession` enforces the window in a
+  transaction and stamps `users/{uid}.reverifyAt` (Admin SDK only; the users
+  update rule still allows only `displayName`) when the session starts,
+  since that is when Didit can bill; an unopened link that expires hands the
+  stamp back, and a failed session start releases it. A new ward replaces
+  the old one and withdraws the mover's standing approval of the old ward's
+  alderman (it was a constituent's; `onApprovalWrite` rebalances the grade).
+  An address outside Chicago or unreadable on a move leaves the account
+  exactly as it was. Officials and candidates cannot move (their account's
+  ward is their office's). A renewed ID replaces the old identity claim
+  instead of leaving it locked to the account.
+- **Replays:** the webhook records each approved session's `outcome` on
+  `verificationSessions/{id}` and acknowledges any later delivery of the
+  same session without re-applying it.
+- **Two ways to move:** "Verify with my ID" runs the main workflow (the
+  address comes off the ID). "Verify with a bill or statement" runs the
+  `DIDIT_ADDRESS_WORKFLOW_ID` workflow (functions/.env: "Move: ID + proof of
+  address, 18+", $0.53, proof of address has no free tier), for someone
+  whose ID still shows the old address. Didit requires the bill's name to
+  match the ID and the bill to be under 3 months old; no expected address
+  is sent, so the new address never trips an address-mismatch check. The
+  webhook reads the bill's address first. Both share the 90-day window.
+- **Age:** verification is 18+ (both workflows decline a younger ID holder).
+  Age matters only for verification; anyone can use the app unverified.
+
 ## Update - 2026-09-22: AI summaries, longer policies, deep-linked notifications
 
 - **App Check enforcement re-verified** from outside the app: a REST read of
@@ -551,8 +655,8 @@ Two consequences of the exactly-once work to know about:
 3. **One approval account = one ballot, but one person ≠ one account** for
    unverified users. This is exactly why the graded number is
    constituents-only and every surface shows the verified lens.
-4. **Ward assignment via Persona** still needs the address→ward lookup wired
-   in the inquiry template (Chicago ward boundary dataset).
+4. **Ward assignment** from the verified address: done 2026-09-24 (see that
+   update).
 5. **Officials are provisioned manually** by the operator via Admin SDK - an
    intentional control, documented so it isn't mistaken for an oversight.
 

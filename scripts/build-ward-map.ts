@@ -1,16 +1,23 @@
 /**
- * Regenerates src/constants/ward-map.ts from the city's ward-boundary
- * dataset (data.cityofchicago.org p293-wvbd, "Boundaries - Wards (2023-)").
- * Re-run after a remap. Boundaries are simplified (Douglas-Peucker) and
- * projected into a fixed SVG viewBox so the app ships plain path strings -
- * no GeoJSON parsing, no map SDK.
+ * Regenerates both copies of the city's ward boundaries from its dataset
+ * (data.cityofchicago.org p293-wvbd, "Boundaries - Wards (2023-)"). Re-run
+ * after a remap.
+ *
+ * - src/constants/ward-map.ts: the app's map. Simplified (Douglas-Peucker)
+ *   and projected into a fixed SVG viewBox so the app ships plain path
+ *   strings - no GeoJSON parsing, no map SDK.
+ * - functions/data/ward-boundaries.json: full resolution in lon/lat, for the
+ *   Didit webhook's address-to-ward lookup, where a house on a boundary
+ *   street has to land on the right side of it.
  *
  *   npm run build-ward-map
  */
-import { writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync } from 'fs';
+import { dirname } from 'path';
 
 const SOURCE = 'https://data.cityofchicago.org/resource/p293-wvbd.geojson?$limit=60';
 const OUT = 'src/constants/ward-map.ts';
+const OUT_BOUNDARIES = 'functions/data/ward-boundaries.json';
 const VIEW_WIDTH = 1000;
 /** Simplification tolerance in viewBox units (1 unit is roughly 25 meters). */
 const TOLERANCE = 1.4;
@@ -79,6 +86,26 @@ async function main() {
   if (geo.features.length !== 50) {
     throw new Error(`Expected 50 wards, got ${geo.features.length} - check the dataset.`);
   }
+
+  // Full-resolution boundaries for the server: each ward is a list of
+  // polygons, each polygon an outer ring followed by any holes. Six decimal
+  // places is about ten centimeters.
+  const round = (n: number) => Math.round(n * 1e6) / 1e6;
+  const boundaries = geo.features
+    .map((f) => ({
+      ward: Number(f.properties.ward),
+      polygons: (f.geometry.type === 'Polygon'
+        ? [f.geometry.coordinates as number[][][]]
+        : (f.geometry.coordinates as number[][][][])
+      ).map((poly) => poly.map((ring) => ring.map(([lon, lat]) => [round(lon), round(lat)]))),
+    }))
+    .sort((a, b) => a.ward - b.ward);
+  mkdirSync(dirname(OUT_BOUNDARIES), { recursive: true });
+  const boundaryJson = JSON.stringify({ source: SOURCE, wards: boundaries });
+  writeFileSync(OUT_BOUNDARIES, boundaryJson);
+  console.log(
+    `✓ ${OUT_BOUNDARIES}: 50 wards, ${(boundaryJson.length / 1024).toFixed(0)} KB`
+  );
 
   // Equirectangular projection is plenty at city scale: x scaled by cos of
   // the city's mid-latitude so shapes keep their proportions.

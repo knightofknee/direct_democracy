@@ -24,7 +24,7 @@
     "production": {
       "android": {
         "track": "alpha",
-        "releaseStatus": "draft",
+        "releaseStatus": "completed",
         "changesNotSentForReview": false
       }
     }

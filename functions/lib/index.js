@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.diditWebhook = exports.createVerificationSession = exports.devVerify = exports.syncMyPlatform = exports.syncPlatforms = exports.sendDeadlineReminders = exports.sweepPendingQuestions = exports.refreshClaim = exports.sweepClaims = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onQuestionUpvoteWrite = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onPolicyWrite = exports.onPolicyCommentCredited = exports.onPolicyCommentDeleted = exports.onPolicyCommentCreated = exports.onPolicyVoteWrite = exports.onElectionQuestionDeleted = exports.onElectionQuestionUpvoteWrite = exports.onElectionAnswerVoteWrite = exports.onElectionAnswerWrite = exports.onConcernDeleted = exports.onPolicyCommentVoteWrite = exports.onCommentVoteWrite = exports.onCommentDeleted = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onConcernCreated = void 0;
+exports.diditWebhook = exports.redeemVerificationPurchase = exports.getVerificationQuote = exports.createVerificationSession = exports.devVerify = exports.syncMyPlatform = exports.syncPlatforms = exports.eraseDiditSessions = exports.sendDeadlineReminders = exports.sweepPendingQuestions = exports.refreshClaim = exports.sweepClaims = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onQuestionUpvoteWrite = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onPolicyWrite = exports.onPolicyCommentCredited = exports.onPolicyCommentDeleted = exports.onPolicyCommentCreated = exports.onPolicyVoteWrite = exports.onElectionQuestionDeleted = exports.onElectionQuestionUpvoteWrite = exports.onElectionAnswerVoteWrite = exports.onElectionAnswerWrite = exports.onConcernDeleted = exports.onPolicyCommentVoteWrite = exports.onCommentVoteWrite = exports.onCommentDeleted = exports.onCommentCreated = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onConcernCreated = void 0;
 const crypto = __importStar(require("crypto"));
 const app_1 = require("firebase-admin/app");
 const auth_1 = require("firebase-admin/auth");
@@ -57,6 +57,8 @@ async function fetchPageHtml(url) {
     return resp.text();
 }
 const tally_1 = require("./tally");
+const payments_1 = require("./payments");
+const ward_1 = require("./ward");
 (0, app_1.initializeApp)();
 const db = (0, firestore_1.getFirestore)();
 const WARD_MIN = 1;
@@ -86,17 +88,79 @@ const APP_CHECK = { enforceAppCheck: !process.env.FUNCTIONS_EMULATOR };
 const DIDIT_API_KEY = (0, params_1.defineSecret)('DIDIT_API_KEY');
 const DIDIT_WORKFLOW_ID = (0, params_1.defineSecret)('DIDIT_WORKFLOW_ID');
 const DIDIT_WEBHOOK_SECRET = (0, params_1.defineSecret)('DIDIT_WEBHOOK_SECRET');
-// Cost guardrail: Didit bills per module that runs in a session (Approved and
+// Key for the one-way identity code (see identityCode). Kept only in Secret
+// Manager, so a copy of the database alone can't be matched against guessed
+// ID numbers.
+const IDENTITY_HASH_KEY = (0, params_1.defineSecret)('IDENTITY_HASH_KEY');
+/** Didit sessions still undecided after this long are erased anyway. */
+const DIDIT_SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+/**
+ * The one-human-one-account code for an ID document: a keyed hash of the
+ * issuing state and document number, nothing else (no birth date, no name).
+ * Null when the key or either field is missing.
+ */
+function identityCode(issuingState, documentNumber) {
+    const key = IDENTITY_HASH_KEY.value();
+    const norm = (v) => (typeof v === 'string' ? v.toUpperCase().replace(/[^A-Z0-9]/g, '') : '');
+    const state = norm(issuingState);
+    const number = norm(documentNumber);
+    if (!key || !state || !number)
+        return null;
+    return crypto.createHmac('sha256', key).update(`${state}:${number}`).digest('hex');
+}
+/**
+ * Erase a session from Didit, face data and all ("privacy_erasure"), once
+ * the app has kept what it keeps. Marks `verificationSessions/{id}.erased`;
+ * a failure is left for the nightly sweep to retry.
+ */
+async function eraseDiditSession(sessionId) {
+    const apiKey = DIDIT_API_KEY.value();
+    if (!apiKey)
+        return false;
+    try {
+        const resp = await fetch(`https://verification.didit.me/v3/session/${encodeURIComponent(sessionId)}/delete/`, {
+            method: 'DELETE',
+            headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deletion_instruction: 'privacy_erasure', instruction_id: `dd-${sessionId}` }),
+            signal: AbortSignal.timeout(10_000),
+        });
+        // 404: already gone.
+        if (!resp.ok && resp.status !== 404) {
+            console.warn(`Didit erase of ${sessionId} failed: ${resp.status} ${(await resp.text()).slice(0, 200)}`);
+            return false;
+        }
+        await db
+            .doc(`verificationSessions/${sessionId}`)
+            .set({ erased: true, erasedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+        return true;
+    }
+    catch (err) {
+        console.warn(`Didit erase of ${sessionId} threw:`, err);
+        return false;
+    }
+}
+// Who pays: Didit bills per module that runs in a session (Approved and
 // Declined both bill; a session whose link is never opened bills nothing), and
-// the first 500 checks each calendar month are free. Until users are charged
-// for verification, cap monthly spend by reserving a slot per session start
-// and giving the slot back if the session expires unopened. Usage lives in
-// `verificationUsage/{YYYY-MM}` with per-session reservations in
-// `verificationSessions/{sessionId}` - no security rule matches either path,
-// so only the Admin SDK can touch them. The ledger keeps the free-tier line
-// so a future paid tier can start charging at check 501 instead of capping.
-const VERIFICATION_FREE_TIER = 500;
-const VERIFICATION_MONTHLY_CAP = 700;
+// its first 500 ID checks each calendar month are free. Every session start
+// counts in `verificationUsage/{YYYY-MM}` (Chicago time) with its record in
+// `verificationSessions/{sessionId}`; an unopened link that expires is given
+// back. Inside the free 500 a main-workflow session is free; past them, and
+// for every bill move, the session spends a purchased credit (payments.ts).
+// No security rule matches any of these paths, so only the Admin SDK can
+// touch them.
+/**
+ * Moving: a verified citizen can verify again at a new address from Settings,
+ * once per 90 days (mirror of REVERIFY_COOLDOWN_DAYS in src/lib/verification.ts).
+ * The clock (`users/{uid}.reverifyAt`, Admin SDK only) is stamped when the
+ * session starts, since that is when Didit can start billing, and handed back
+ * if the link expires unopened. A move runs one of two workflows, the
+ * person's choice in Settings: `id` (the main workflow; the address comes
+ * off the ID) or `address` (DIDIT_ADDRESS_WORKFLOW_ID in functions/.env: the
+ * same ID checks plus a utility bill or bank statement, for someone whose ID
+ * still shows the old address; its name must match the ID's, and the webhook
+ * reads its address first). Both share the one 90-day window.
+ */
+const REVERIFY_COOLDOWN_MS = 90 * 24 * 60 * 60 * 1000;
 /** Current month key in Chicago time, e.g. "2026-08". */
 function verificationMonthKey() {
     return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }).slice(0, 7);
@@ -114,8 +178,25 @@ async function settleVerificationSlot(sessionId, status) {
         const snap = await tx.get(sessionRef);
         if (!snap.exists || snap.data().settled)
             return;
-        const monthRef = db.doc(`verificationUsage/${snap.data().monthKey}`);
+        const session = snap.data();
+        // A re-verification link that expired unopened cost nothing, so it
+        // doesn't use up the person's 90 days either.
+        const userRef = status === 'Expired' && session.kind === 'reverify' ? db.doc(`users/${session.uid}`) : null;
+        const user = userRef ? await tx.get(userRef) : null;
+        // A paid session that expired unopened cost nothing, so its credit
+        // goes back for the next attempt.
+        const creditsRef = status === 'Expired' && session.creditType ? db.doc(`verificationCredits/${session.uid}`) : null;
+        const credits = creditsRef ? await tx.get(creditsRef) : null;
+        const monthRef = db.doc(`verificationUsage/${session.monthKey}`);
         tx.update(sessionRef, { settled: true, finalStatus: status });
+        if (creditsRef) {
+            const type = session.creditType;
+            tx.set(creditsRef, { [type]: (credits?.data()?.[type] ?? 0) + 1, updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+        }
+        const stamped = user?.data()?.reverifyAt;
+        if (userRef && stamped && session.reverifyAt && stamped.isEqual(session.reverifyAt)) {
+            tx.update(userRef, { reverifyAt: session.prevReverifyAt ?? firestore_1.FieldValue.delete() });
+        }
         const counters = { updatedAt: firestore_1.FieldValue.serverTimestamp() };
         if (status === 'Expired') {
             counters.sessions = firestore_1.FieldValue.increment(-1);
@@ -303,6 +384,12 @@ exports.onPollVoteWrite = (0, firestore_2.onDocumentWritten)('polls/{pollId}/vot
 function excerpt(text, max = 140) {
     return typeof text === 'string' ? text.replace(/\s+/g, ' ').trim().slice(0, max) : '';
 }
+/**
+ * Every notification carries English and Spanish. The language setting lives
+ * only on the device, so the app picks titleEs/bodyEs for Spanish readers
+ * (falling back to English). People's own words (a question, a comment, a
+ * response) are quoted as written in both.
+ */
 async function sendNotification(uid, eventKey, data, actorUid) {
     // Never notify someone about their own action.
     if (!uid || uid === actorUid)
@@ -351,12 +438,22 @@ async function notifyNewComment(eventId, parentPath, comment, parent) {
         const root = await db.doc(`${parentPath}/comments/${comment.threadId}`).get();
         const rootAuthor = root.data()?.authorUid;
         if (rootAuthor && !targets.has(rootAuthor)) {
-            targets.set(rootAuthor, `${authorName} replied to your comment`);
+            targets.set(rootAuthor, {
+                en: `${authorName} replied to your comment`,
+                es: `${authorName} respondió a tu comentario`,
+            });
         }
     }
     let n = 0;
     for (const [uid, title] of targets) {
-        await sendNotification(uid, `${eventId}-c${n++}`, { type: 'comment', title, body: excerpt(comment.body), link: parent.link }, comment.authorUid);
+        await sendNotification(uid, `${eventId}-c${n++}`, {
+            type: 'comment',
+            title: title.en,
+            titleEs: title.es,
+            body: excerpt(comment.body),
+            bodyEs: excerpt(comment.body),
+            link: parent.link,
+        }, comment.authorUid);
     }
 }
 exports.onCommentCreated = (0, firestore_2.onDocumentCreated)('concerns/{concernId}/comments/{commentId}', async (event) => {
@@ -364,7 +461,10 @@ exports.onCommentCreated = (0, firestore_2.onDocumentCreated)('concerns/{concern
     await notifyNewComment(event.id, `concerns/${event.params.concernId}`, event.data?.data(), {
         ownerField: 'authorUid',
         link: `/concern/${event.params.concernId}`,
-        ownerTitle: (_p, name) => `${name} commented on your concern`,
+        ownerTitle: (_p, name) => ({
+            en: `${name} commented on your concern`,
+            es: `${name} comentó en tu preocupación`,
+        }),
     });
 });
 exports.onCommentDeleted = (0, firestore_2.onDocumentDeleted)('concerns/{concernId}/comments/{commentId}', async (event) => {
@@ -449,7 +549,9 @@ exports.onElectionAnswerWrite = (0, firestore_2.onDocumentWritten)('electionQues
         await sendNotification(question?.authorUid, `election-answer-${event.params.questionId}-${event.params.candidateUid}`, {
             type: 'electionAnswer',
             title: `${after.candidateName} answered your question`,
+            titleEs: `${after.candidateName} respondió tu pregunta`,
             body: excerpt(after.body),
+            bodyEs: excerpt(after.body),
             link: `/election-question/${event.params.questionId}`,
         }, event.params.candidateUid);
     }
@@ -520,7 +622,10 @@ exports.onPolicyCommentCreated = (0, firestore_2.onDocumentCreated)('candidates/
     await notifyNewComment(event.id, policyPath, event.data?.data(), {
         ownerField: 'candidateUid',
         link: `/candidate/${event.params.candidateUid}/${event.params.policyId}`,
-        ownerTitle: (p, name) => `${name} commented on "${excerpt(p.title, 60)}"`,
+        ownerTitle: (p, name) => ({
+            en: `${name} commented on "${excerpt(p.title, 60)}"`,
+            es: `${name} comentó en "${excerpt(p.title, 60)}"`,
+        }),
     });
 });
 exports.onPolicyCommentDeleted = (0, firestore_2.onDocumentDeleted)('candidates/{candidateUid}/policies/{policyId}/comments/{commentId}', async (event) => {
@@ -555,7 +660,9 @@ exports.onPolicyCommentCredited = (0, firestore_2.onDocumentWritten)('candidates
         await sendNotification(authorUid, `${event.id}-credit`, {
             type: 'credit',
             title: `${candidate.data()?.name ?? 'The candidate'} credited your comment`,
+            titleEs: `${candidate.data()?.name ?? 'El candidato'} dio crédito de autoría a tu comentario`,
             body: 'Your argument changed the platform. It now carries a writing credit.',
+            bodyEs: 'Tu argumento cambió la plataforma. Ahora lleva un crédito de autoría.',
             link: `/candidate/${event.params.candidateUid}/${event.params.policyId}`,
         }, event.params.candidateUid);
     }
@@ -759,7 +866,9 @@ exports.onQuestionUpvoteWrite = (0, firestore_2.onDocumentWritten)('officials/{o
         await sendNotification(event.params.officialUid, `upvotes-${event.params.questionId}-${threshold}`, {
             type: 'question',
             title: `${c.next} people want this answered`,
+            titleEs: `${c.next} personas quieren que se responda esto`,
             body: excerpt(c.body),
+            bodyEs: excerpt(c.body),
             link: `/official/${event.params.officialUid}?q=${event.params.questionId}`,
         });
     }
@@ -774,7 +883,9 @@ exports.onQuestionCreated = (0, firestore_2.onDocumentCreated)('officials/{offic
     await sendNotification(event.params.officialUid, `${event.id}-asked`, {
         type: 'question',
         title: 'New question in your AMA',
+        titleEs: 'Nueva pregunta en tu AMA',
         body: excerpt(q?.body),
+        bodyEs: excerpt(q?.body),
         link: `/official/${event.params.officialUid}?q=${event.params.questionId}`,
     }, q?.authorUid);
 });
@@ -795,7 +906,9 @@ exports.onQuestionResponded = (0, firestore_2.onDocumentWritten)('officials/{off
     await sendNotification(after.authorUid, `${event.id}-responded`, {
         type: 'response',
         title: `${official.data()?.name ?? 'The official'} responded to your question`,
+        titleEs: `${official.data()?.name ?? 'El oficial'} respondió a tu pregunta`,
         body: excerpt(after.response),
+        bodyEs: excerpt(after.response),
         link: `/official/${event.params.officialUid}?q=${event.params.questionId}`,
     }, event.params.officialUid);
 });
@@ -938,6 +1051,9 @@ exports.deleteAccount = (0, https_1.onCall)(APP_CHECK, async (request) => {
     if (identityClaimId) {
         await db.doc(`identityClaims/${identityClaimId}`).delete().catch(() => { });
     }
+    // Unspent verification credits go with the account (the purchase records
+    // in verificationPurchases stay, as the store's ledger does).
+    await db.doc(`verificationCredits/${uid}`).delete().catch(() => { });
     await db.recursiveDelete(db.doc(`users/${uid}`));
     await (0, auth_1.getAuth)().deleteUser(uid);
     return { ok: true };
@@ -1084,37 +1200,51 @@ const VOTING_MILESTONES = [
     {
         date: '2026-10-01',
         title: 'Early voting starts',
+        titleEs: 'La votación anticipada empieza',
         body: 'Any Chicago voter can vote early at 137 S. State St. starting today. Ward sites open October 19.',
+        bodyEs: 'Desde hoy, cualquier votante de Chicago puede votar por anticipado en 137 S. State St. Los sitios de los distritos abren el 19 de octubre.',
     },
     {
         date: '2026-10-06',
         title: 'Last day to register by mail',
+        titleEs: 'Último día para registrarte por correo',
         body: 'Mail registrations must be postmarked today. Online registration stays open through October 18, and in-person registration runs through election day with two forms of ID.',
+        bodyEs: 'El registro por correo debe llevar matasellos de hoy. El registro en línea sigue abierto hasta el 18 de octubre, y el registro en persona sigue hasta el día de la elección con dos formas de identificación.',
     },
     {
         date: '2026-10-18',
         title: 'Last day to register online',
+        titleEs: 'Último día para registrarte en línea',
         body: 'Online registration closes today (needs an Illinois license or state ID). After this, register in person at any early voting site or polling place with two forms of ID.',
+        bodyEs: 'El registro en línea cierra hoy (requiere una licencia o identificación estatal de Illinois). Después, regístrate en persona en cualquier sitio de votación anticipada o lugar de votación con dos formas de identificación.',
     },
     {
         date: '2026-10-19',
         title: 'Early voting opens in every ward',
+        titleEs: 'La votación anticipada abre en cada distrito',
         body: 'One early voting site per ward opens today, and any Chicago voter can use any site.',
+        bodyEs: 'Hoy abre un sitio de votación anticipada en cada distrito, y cualquier votante de Chicago puede usar cualquier sitio.',
     },
     {
         date: '2026-10-29',
         title: 'Last day to apply for a mail ballot',
+        titleEs: 'Último día para pedir una boleta por correo',
         body: 'Mail ballot applications close today. Return your ballot by mail or at any secured drop box; it must be postmarked by November 3.',
+        bodyEs: 'Las solicitudes de boleta por correo cierran hoy. Devuelve tu boleta por correo o en cualquier buzón seguro; debe llevar matasellos a más tardar el 3 de noviembre.',
     },
     {
         date: '2026-11-03',
         title: 'General election day',
+        titleEs: 'Día de la elección general',
         body: 'Polls are open 6 am to 7 pm at your precinct or any vote center in the city. Same-day registration is available with two forms of ID.',
+        bodyEs: 'Las urnas abren de 6 am a 7 pm en tu precinto o en cualquier centro de votación de la ciudad. Puedes registrarte el mismo día con dos formas de identificación.',
     },
     {
         date: '2027-02-23',
         title: 'Municipal election day',
+        titleEs: 'Día de la elección municipal',
         body: 'Mayor, city clerk, city treasurer, your alderman, and your police district council are on the ballot. Polls are open 6 am to 7 pm.',
+        bodyEs: 'En la boleta están la alcaldía, la secretaría y la tesorería de la ciudad, tu concejal y tu consejo de distrito policial. Las urnas abren de 6 am a 7 pm.',
     },
 ];
 /** Whole days from today (Chicago) to an ISO date. */
@@ -1137,12 +1267,15 @@ exports.sendDeadlineReminders = (0, scheduler_1.onSchedule)({ schedule: '0 9 * *
     const users = await db.collection('users').select().get();
     for (const m of due) {
         const title = m.days === 0 ? `Today: ${m.title.toLowerCase()}` : `Tomorrow: ${m.title.toLowerCase()}`;
+        const titleEs = m.days === 0 ? `Hoy: ${m.titleEs.toLowerCase()}` : `Mañana: ${m.titleEs.toLowerCase()}`;
         for (const u of users.docs) {
             try {
                 await sendNotification(u.id, `deadline-${m.date}-${m.days}`, {
                     type: 'deadline',
                     title,
+                    titleEs,
                     body: m.body,
+                    bodyEs: m.bodyEs,
                     link: '/election',
                 });
             }
@@ -1153,6 +1286,25 @@ exports.sendDeadlineReminders = (0, scheduler_1.onSchedule)({ schedule: '0 9 * *
     }
 });
 /** Nightly sweep of every candidate whose platform lives on their own site. */
+/**
+ * Nightly: erase Didit sessions the webhook couldn't (a failed delete), and
+ * any session still undecided after DIDIT_SESSION_MAX_AGE_MS, so no ID or
+ * face data sits at Didit indefinitely.
+ */
+exports.eraseDiditSessions = (0, scheduler_1.onSchedule)({ schedule: '30 3 * * *', timeZone: 'America/Chicago', secrets: [DIDIT_API_KEY] }, async () => {
+    const pending = await db.collection('verificationSessions').where('erased', '==', false).get();
+    const cutoff = Date.now() - DIDIT_SESSION_MAX_AGE_MS;
+    let erased = 0;
+    for (const d of pending.docs) {
+        const s = d.data();
+        const created = s.createdAt?.toMillis?.() ?? 0;
+        if (s.settled || created < cutoff) {
+            if (await eraseDiditSession(d.id))
+                erased += 1;
+        }
+    }
+    console.log(`Erased ${erased} of ${pending.size} unerased Didit sessions.`);
+});
 exports.syncPlatforms = (0, scheduler_1.onSchedule)({ schedule: '0 6 * * *', timeZone: 'America/Chicago' }, async () => {
     const candidates = await db.collection('candidates').where('sourceUrl', '!=', null).get();
     for (const c of candidates.docs) {
@@ -1199,9 +1351,59 @@ exports.devVerify = (0, https_1.onCall)(async (request) => {
     if (!Number.isInteger(wardId) || wardId < WARD_MIN || wardId > WARD_MAX + 1) {
         throw new https_1.HttpsError('invalid-argument', `wardId must be ${WARD_MIN}–${WARD_MAX + 1}.`);
     }
+    // Same moving rules as production, so the emulator exercises them.
+    const reverify = await claimReverify(request.auth.uid);
+    const oldWard = reverify?.wardId ?? null;
     await applyVerification(request.auth.uid, { verified: true, wardId });
+    if (reverify && oldWard !== wardId)
+        await leaveWard(request.auth.uid, oldWard);
     return { ok: true };
 });
+/**
+ * Start a re-verification for an already-verified citizen: enforce the
+ * 90-day window and stamp the clock, in one transaction so two quick taps
+ * can't both pass. Null when the person isn't verified yet (a first
+ * verification, which has no window).
+ */
+async function claimReverify(uid) {
+    const userRef = db.doc(`users/${uid}`);
+    return db.runTransaction(async (tx) => {
+        const u = (await tx.get(userRef)).data();
+        if (!u?.verified)
+            return null;
+        if (u.role !== 'citizen') {
+            throw new https_1.HttpsError('failed-precondition', 'Official and candidate accounts keep the ward they were set up with.');
+        }
+        const prev = u.reverifyAt ?? null;
+        if (prev && Date.now() - prev.toMillis() < REVERIFY_COOLDOWN_MS) {
+            throw new https_1.HttpsError('resource-exhausted', 'You can verify a new address once every 3 months.');
+        }
+        const at = firestore_1.Timestamp.now();
+        tx.update(userRef, { reverifyAt: at });
+        return { at, prev, wardId: u.wardId ?? null };
+    });
+}
+/** Undo a re-verification stamp when no session was actually started. */
+async function releaseReverify(uid, claim) {
+    await db
+        .doc(`users/${uid}`)
+        .update({ reverifyAt: claim.prev ?? firestore_1.FieldValue.delete() })
+        .catch((err) => console.error(`Could not release reverify clock for ${uid}:`, err));
+}
+/**
+ * Someone verified at a new address in another ward: their standing
+ * approval of the old ward's alderman was a constituent's and no longer is,
+ * so it's withdrawn (onApprovalWrite rebalances the grade). Citywide
+ * officials keep theirs. Everything else they cast stays as recorded.
+ */
+async function leaveWard(uid, oldWard) {
+    if (oldWard == null)
+        return;
+    const officials = await db.collection('officials').where('wardId', '==', oldWard).get();
+    for (const o of officials.docs) {
+        await o.ref.collection('approvals').doc(uid).delete();
+    }
+}
 /**
  * Returns a hosted Didit verification session URL for the signed-in user.
  * The uid rides along as vendor_data so the webhook can match the result
@@ -1213,34 +1415,57 @@ exports.createVerificationSession = (0, https_1.onCall)({ ...APP_CHECK, secrets:
     if (!request.auth) {
         throw new https_1.HttpsError('unauthenticated', 'Sign in first.');
     }
+    const uid = request.auth.uid;
     const apiKey = DIDIT_API_KEY.value();
-    const workflowId = DIDIT_WORKFLOW_ID.value();
-    if (!apiKey || !workflowId) {
+    const mainWorkflowId = DIDIT_WORKFLOW_ID.value();
+    if (!apiKey || !mainWorkflowId) {
         throw new https_1.HttpsError('failed-precondition', 'Identity verification is not configured yet.');
     }
-    // Reserve a slot under the monthly cap before spending money with Didit.
+    // A verified citizen starting a session is re-verifying at a new address.
+    const reverify = await claimReverify(uid);
+    const withBill = reverify != null && request.data?.method === 'address';
+    const workflowId = withBill ? process.env.DIDIT_ADDRESS_WORKFLOW_ID : mainWorkflowId;
+    if (!workflowId) {
+        await releaseReverify(uid, reverify);
+        throw new https_1.HttpsError('failed-precondition', 'Verifying with a bill or statement is not set up yet.');
+    }
+    // One transaction decides who pays and counts the session: free inside
+    // Didit's monthly 500 for the main workflow, otherwise one purchased
+    // credit of the right kind. No credit means the app has to sell one first.
+    const creditType = withBill ? 'bill' : 'id';
     const monthKey = verificationMonthKey();
     const monthRef = db.doc(`verificationUsage/${monthKey}`);
-    const sessionNumber = await db.runTransaction(async (tx) => {
-        const snap = await tx.get(monthRef);
-        const sessions = snap.data()?.sessions ?? 0;
-        if (sessions >= VERIFICATION_MONTHLY_CAP)
-            return null;
-        tx.set(monthRef, { sessions: sessions + 1, updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
-        return sessions + 1;
-    });
-    if (sessionNumber === null) {
-        throw new https_1.HttpsError('resource-exhausted', 'Verification is at capacity for this month. Please try again after the 1st.');
+    const creditsRef = db.doc(`verificationCredits/${uid}`);
+    let spent;
+    try {
+        spent = await db.runTransaction(async (tx) => {
+            const month = await tx.get(monthRef);
+            const credits = await tx.get(creditsRef);
+            const checks = month.data()?.sessions ?? 0;
+            let spend = null;
+            if (creditType === 'bill' || checks >= payments_1.FREE_CHECKS_PER_MONTH) {
+                const have = credits.data()?.[creditType] ?? 0;
+                if (have < 1) {
+                    throw new https_1.HttpsError('failed-precondition', 'Verification needs a payment first. Update the app to pay for it.', { paymentRequired: true, productId: (0, payments_1.productFor)(creditType, checks) });
+                }
+                tx.set(creditsRef, { [creditType]: have - 1, updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+                spend = creditType;
+            }
+            tx.set(monthRef, { sessions: checks + 1, updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+            return spend;
+        });
     }
-    if (sessionNumber > VERIFICATION_FREE_TIER) {
-        console.warn(`Verification session ${sessionNumber}/${VERIFICATION_MONTHLY_CAP} this month is past the ${VERIFICATION_FREE_TIER}-session free tier and bills us.`);
+    catch (err) {
+        if (reverify)
+            await releaseReverify(uid, reverify);
+        throw err;
     }
     let url;
     try {
         const resp = await fetch('https://verification.didit.me/v2/session/', {
             method: 'POST',
             headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ workflow_id: workflowId, vendor_data: request.auth.uid }),
+            body: JSON.stringify({ workflow_id: workflowId, vendor_data: uid }),
         });
         if (!resp.ok) {
             console.error('Didit session creation failed:', resp.status, await resp.text());
@@ -1256,10 +1481,15 @@ exports.createVerificationSession = (0, https_1.onCall)({ ...APP_CHECK, secrets:
         // (return it if the link expires unopened, keep it if modules billed).
         if (session.session_id) {
             await db.doc(`verificationSessions/${session.session_id}`).set({
-                uid: request.auth.uid,
+                uid,
                 monthKey,
                 settled: false,
+                erased: false,
                 createdAt: firestore_1.FieldValue.serverTimestamp(),
+                ...(reverify
+                    ? { kind: 'reverify', reverifyAt: reverify.at, prevReverifyAt: reverify.prev }
+                    : {}),
+                ...(spent ? { creditType: spent } : {}),
             });
         }
         else {
@@ -1267,7 +1497,12 @@ exports.createVerificationSession = (0, https_1.onCall)({ ...APP_CHECK, secrets:
         }
     }
     catch (err) {
-        // No session was actually started, so give the slot back.
+        // No session was actually started, so give the slot, the credit, and
+        // the moving window back.
+        if (reverify)
+            await releaseReverify(uid, reverify);
+        if (spent)
+            await refundCredit(uid, spent);
         await monthRef
             .set({ sessions: firestore_1.FieldValue.increment(-1), updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true })
             .catch(() => { });
@@ -1278,6 +1513,107 @@ exports.createVerificationSession = (0, https_1.onCall)({ ...APP_CHECK, secrets:
     }
     return { inquiryUrl: url };
 });
+/** Give back a credit a session spent, when the session never started. */
+async function refundCredit(uid, type) {
+    await db
+        .doc(`verificationCredits/${uid}`)
+        .set({ [type]: firestore_1.FieldValue.increment(1), updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true })
+        .catch((err) => console.error(`Could not refund a ${type} credit to ${uid}:`, err));
+}
+/**
+ * What starting a verification will cost this person right now, shown before
+ * they start: free, covered by a credit they already bought, or the store
+ * product to buy (the price comes from the store). Also hands the app the
+ * account token every purchase must carry.
+ */
+exports.getVerificationQuote = (0, https_1.onCall)(APP_CHECK, async (request) => {
+    if (!request.auth)
+        throw new https_1.HttpsError('unauthenticated', 'Sign in first.');
+    const uid = request.auth.uid;
+    const user = (await db.doc(`users/${uid}`).get()).data();
+    const moving = user?.verified === true;
+    const creditType = moving && request.data?.method === 'address' ? 'bill' : 'id';
+    const [month, credits] = await Promise.all([
+        db.doc(`verificationUsage/${verificationMonthKey()}`).get(),
+        db.doc(`verificationCredits/${uid}`).get(),
+    ]);
+    const checks = month.data()?.sessions ?? 0;
+    const free = creditType === 'id' && checks < payments_1.FREE_CHECKS_PER_MONTH;
+    return {
+        free,
+        creditType,
+        credits: credits.data()?.[creditType] ?? 0,
+        productId: free ? null : (0, payments_1.productFor)(creditType, checks),
+        accountToken: (0, payments_1.accountTokenFor)(uid),
+    };
+});
+/**
+ * Turn a store purchase into a verification credit, after checking it with
+ * the store. Idempotent: the same transaction redeemed again (an app restart
+ * replaying an unfinished purchase) returns the balance without adding to it.
+ */
+exports.redeemVerificationPurchase = (0, https_1.onCall)(APP_CHECK, async (request) => {
+    if (!request.auth)
+        throw new https_1.HttpsError('unauthenticated', 'Sign in first.');
+    const uid = request.auth.uid;
+    const platform = request.data?.platform;
+    const productId = request.data?.productId;
+    const token = request.data?.token;
+    if (typeof productId !== 'string' || typeof token !== 'string' || !token) {
+        throw new https_1.HttpsError('invalid-argument', 'Missing purchase details.');
+    }
+    let purchase;
+    try {
+        if (platform === 'ios') {
+            purchase = await (0, payments_1.verifyApplePurchase)(token, uid);
+        }
+        else if (platform === 'android') {
+            purchase = await (0, payments_1.verifyGooglePurchase)(productId, token, uid);
+        }
+        else if (platform === 'emulator' && process.env.FUNCTIONS_EMULATOR) {
+            purchase = { store: 'emulator', transactionId: token, productId, sandbox: true };
+        }
+        else {
+            throw new https_1.HttpsError('invalid-argument', 'Unknown store.');
+        }
+    }
+    catch (err) {
+        if (err instanceof https_1.HttpsError)
+            throw err;
+        if (err instanceof payments_1.PurchaseRejected)
+            throw new https_1.HttpsError('permission-denied', err.message);
+        console.error(`Purchase check failed for ${uid}:`, err);
+        throw new https_1.HttpsError('unavailable', 'Could not confirm the purchase with the store. Try again shortly.');
+    }
+    const type = (0, payments_1.creditForProduct)(purchase.productId);
+    if (!type)
+        throw new https_1.HttpsError('invalid-argument', `Unknown product ${purchase.productId}.`);
+    const recordRef = db.doc(`verificationPurchases/${purchase.store}-${purchase.transactionId}`);
+    const creditsRef = db.doc(`verificationCredits/${uid}`);
+    const credits = await db.runTransaction(async (tx) => {
+        const record = await tx.get(recordRef);
+        const current = await tx.get(creditsRef);
+        const have = current.data()?.[type] ?? 0;
+        if (record.exists) {
+            if (record.data().uid !== uid) {
+                throw new https_1.HttpsError('permission-denied', 'This purchase was already used by another account.');
+            }
+            return have;
+        }
+        tx.create(recordRef, {
+            uid,
+            store: purchase.store,
+            transactionId: purchase.transactionId,
+            productId: purchase.productId,
+            creditType: type,
+            sandbox: purchase.sandbox,
+            createdAt: firestore_1.FieldValue.serverTimestamp(),
+        });
+        tx.set(creditsRef, { [type]: have + 1, updatedAt: firestore_1.FieldValue.serverTimestamp() }, { merge: true });
+        return have + 1;
+    });
+    return { creditType: type, credits };
+});
 /**
  * Didit webhook - the only writer of `verified` in production.
  *
@@ -1286,16 +1622,25 @@ exports.createVerificationSession = (0, https_1.onCall)({ ...APP_CHECK, secrets:
  * https://docs.didit.me/integration/webhooks: HMAC-SHA256 over the raw body
  * in X-Signature, with X-Timestamp freshness (300s).
  *
- * One verified human, one verified account: the document identity (issuing
- * state + document number + birth date) is hashed and claimed in
- * `identityClaims/{hash}` (no security rule matches that path, so clients
+ * One verified human, one verified account: the document's issuing state
+ * and number become a keyed one-way code (identityCode) claimed in
+ * `identityClaims/{code}` (no security rule matches that path, so clients
  * can never touch it). A document that already verified a different uid is
  * refused. deleteAccount releases the claim.
  *
- * Ward derivation from the verified address is future work; until then
- * production verification grants city-level verified (no ward).
+ * Nothing stays at Didit: once a final result is handled, the session is
+ * erased there, face data included (eraseDiditSession); the nightly sweep
+ * retries failures and erases sessions left undecided for a week.
+ *
+ * Verified always comes with a ward: the address Didit read (proof of
+ * address first, then the ID) is matched to a Chicago ward (see ward.ts).
+ * An address outside Chicago, or none we can read, verifies nothing; the
+ * person gets a notification saying why and how to try again, and their
+ * identity is not claimed, so a second attempt with a current ID can pass.
+ * Someone already verified is moving (Settings): a new ward replaces the old
+ * one, and no ward found leaves them exactly as they were.
  */
-exports.diditWebhook = (0, https_2.onRequest)({ secrets: [DIDIT_WEBHOOK_SECRET] }, async (req, res) => {
+exports.diditWebhook = (0, https_2.onRequest)({ secrets: [DIDIT_WEBHOOK_SECRET, DIDIT_API_KEY, IDENTITY_HASH_KEY] }, async (req, res) => {
     const secret = DIDIT_WEBHOOK_SECRET.value();
     if (!secret) {
         res.status(500).send('Webhook secret not configured.');
@@ -1325,55 +1670,190 @@ exports.diditWebhook = (0, https_2.onRequest)({ secrets: [DIDIT_WEBHOOK_SECRET] 
     // Terminal statuses settle the monthly cost ledger exactly once per
     // session; non-terminal ones (Not Started / In Progress / In Review /
     // Resubmitted) leave the reservation pending.
-    if (sessionId && status && ['Approved', 'Declined', 'Abandoned', 'Expired'].includes(status)) {
+    const terminal = sessionId != null && status != null && ['Approved', 'Declined', 'Abandoned', 'Expired'].includes(status);
+    if (terminal)
         await settleVerificationSlot(sessionId, status);
-    }
+    // Once a final result is handled, everything the app keeps is written, so
+    // Didit's copy of the session (ID images, selfie, extracted fields) is
+    // erased. A 500 keeps it so Didit can deliver again.
+    const reply = async (code, message) => {
+        if (code === 200 && terminal)
+            await eraseDiditSession(sessionId);
+        res.status(code).send(message);
+    };
     // Only a final Approved decision mints verified=true. Everything else
     // (Declined / In Review / Abandoned / Expired / progress events) is
     // acknowledged and ignored.
     if (!uid || status !== 'Approved') {
-        res.status(200).send('Not an approval.');
+        await reply(200, 'Not an approval.');
         return;
     }
-    // Hash the document identity for the one-human-one-account claim.
-    const idv = body.decision?.id_verifications?.[0] ?? {};
-    const docKey = idv.document_number && idv.issuing_state
-        ? crypto
-            .createHash('sha256')
-            .update(`${idv.issuing_state}:${idv.document_number}:${idv.date_of_birth ?? ''}`)
-            .digest('hex')
-        : null;
+    const userRef = db.doc(`users/${uid}`);
+    const userSnap = await userRef.get();
+    if (!userSnap.exists) {
+        // The account may have been deleted between session and webhook. A 200
+        // stops Didit from retrying a verification that can never land.
+        console.warn(`Approved session for missing user ${uid} - profile not found.`);
+        await reply(200, 'No such user.');
+        return;
+    }
+    // Didit can deliver the same approval more than once; the first delivery
+    // that reaches a result records it, and the rest are acknowledged only.
+    const sessionRef = sessionId ? db.doc(`verificationSessions/${sessionId}`) : null;
+    if (sessionRef && (await sessionRef.get()).data()?.outcome) {
+        await reply(200, 'Already applied.');
+        return;
+    }
+    const recordOutcome = async (outcome) => {
+        if (sessionRef)
+            await sessionRef.set({ outcome }, { merge: true });
+    };
+    const current = userSnap.data();
+    // Already verified: this is someone verifying a new address (Settings).
+    const moving = current.verified === true;
+    const oldWard = current.wardId ?? null;
+    // The decision normally rides on the webhook; fetch it when the address
+    // isn't there.
+    let decision = body.decision;
+    if ((0, ward_1.decisionAddresses)(decision).length === 0 && sessionId) {
+        decision = (await fetchDiditDecision(sessionId)) ?? decision;
+    }
+    let ward;
+    try {
+        ward = await (0, ward_1.resolveWard)((0, ward_1.decisionAddresses)(decision));
+    }
+    catch (err) {
+        // The geocoder failed, not the person. A 500 has Didit deliver again.
+        console.error(`Ward lookup failed for session ${sessionId}:`, err);
+        await reply(500, 'Ward lookup unavailable, retry.');
+        return;
+    }
+    const noteKey = `verify-${sessionId ?? uid}`;
+    if (ward.kind !== 'ward') {
+        const outside = ward.kind === 'outside';
+        console.warn(`Approved session ${sessionId} placed in no ward: ${outside ? 'address outside Chicago' : 'no locatable address'}.`);
+        await recordOutcome(outside ? 'outside-chicago' : 'no-address');
+        // Someone already verified keeps what they had; a first verification
+        // grants nothing without a ward.
+        const note = moving
+            ? {
+                title: outside
+                    ? 'The address we read is outside Chicago'
+                    : 'We couldn’t read an address from your ID',
+                titleEs: outside
+                    ? 'La dirección que leímos está fuera de Chicago'
+                    : 'No pudimos leer una dirección en tu identificación',
+                body: oldWard != null
+                    ? `Your verification and your ward (the ${(0, ward_1.wardLabelEn)(oldWard)}) stay as they were.`
+                    : 'Your verification stays as it was.',
+                bodyEs: oldWard != null
+                    ? `Tu verificación y tu distrito (Distrito ${oldWard}) siguen igual.`
+                    : 'Tu verificación sigue igual.',
+            }
+            : outside
+                ? {
+                    title: 'Your ID shows an address outside Chicago',
+                    titleEs: 'Tu identificación muestra una dirección fuera de Chicago',
+                    body: 'Verified status is for Chicago residents. If you live in Chicago now, verify again with an ID that shows your current address.',
+                    bodyEs: 'La verificación es para residentes de Chicago. Si ahora vives en Chicago, verifícate de nuevo con una identificación que muestre tu dirección actual.',
+                }
+                : {
+                    title: 'We couldn’t read a Chicago address from your ID',
+                    titleEs: 'No pudimos leer una dirección de Chicago en tu identificación',
+                    body: 'Verification places you in your ward, so it needs your home address. Verify again with an ID that shows it, like an Illinois driver’s license or state ID.',
+                    bodyEs: 'La verificación te ubica en tu distrito, así que necesita tu domicilio. Verifícate de nuevo con una identificación que lo muestre, como una licencia de conducir o identificación estatal de Illinois.',
+                };
+        await sendNotification(uid, noteKey, {
+            type: 'verification',
+            ...note,
+            link: moving ? '/settings' : '/verify',
+        });
+        await reply(200, 'Approved, but not a Chicago ward address.');
+        return;
+    }
+    // The one-human-one-account code for this document.
+    const idv = decision?.id_verifications?.[0] ?? {};
+    const docKey = identityCode(idv.issuing_state, idv.document_number);
+    const oldClaim = current.identityClaimId ?? null;
     if (docKey) {
         const claimed = await db.runTransaction(async (tx) => {
             const mapRef = db.doc(`identityClaims/${docKey}`);
+            const oldRef = oldClaim && oldClaim !== docKey ? db.doc(`identityClaims/${oldClaim}`) : null;
             const existing = await tx.get(mapRef);
+            const old = oldRef ? await tx.get(oldRef) : null;
             if (existing.exists && existing.data().uid !== uid)
                 return false;
             tx.set(mapRef, { uid, updatedAt: firestore_1.FieldValue.serverTimestamp() });
+            // A new document (a renewed license) replaces the old claim, so the
+            // old one doesn't stay locked to this account forever.
+            if (oldRef && old?.data()?.uid === uid)
+                tx.delete(oldRef);
             return true;
         });
         if (!claimed) {
             console.warn('Duplicate identity: document already verified another uid.');
-            res.status(200).send('Identity already verified on another account.');
+            await recordOutcome('duplicate-identity');
+            await reply(200, 'Identity already verified on another account.');
             return;
         }
     }
     else {
         console.warn('Approved session carried no document identity - dedup not enforced.');
     }
-    try {
-        await db.doc(`users/${uid}`).update({
-            verified: true,
-            identityClaimId: docKey,
+    await userRef.update({
+        verified: true,
+        wardId: ward.wardId,
+        identityClaimId: docKey ?? oldClaim,
+    });
+    await recordOutcome(moving ? 'moved' : 'verified');
+    // A first verification shows up live in the app. Someone who moved left
+    // the app for Didit, so tell them where they landed.
+    if (moving) {
+        const changed = oldWard !== ward.wardId;
+        if (changed)
+            await leaveWard(uid, oldWard);
+        await sendNotification(uid, noteKey, {
+            type: 'verification',
+            title: changed
+                ? `Your ward is now the ${(0, ward_1.wardLabelEn)(ward.wardId)}`
+                : `Your address is still in the ${(0, ward_1.wardLabelEn)(ward.wardId)}`,
+            titleEs: changed
+                ? `Ahora eres del Distrito ${ward.wardId}`
+                : `Tu dirección sigue en el Distrito ${ward.wardId}`,
+            body: changed
+                ? oldWard != null
+                    ? `Moved from the ${(0, ward_1.wardLabelEn)(oldWard)}.`
+                    : ''
+                : 'The address we read is in the same ward as before, so nothing changed. If you moved, your ID may still show your old address.',
+            bodyEs: changed
+                ? oldWard != null
+                    ? `Antes: Distrito ${oldWard}.`
+                    : ''
+                : 'La dirección que leímos está en el mismo distrito que antes, así que nada cambió. Si te mudaste, tu identificación quizá todavía muestra tu dirección anterior.',
+            link: '/settings',
         });
     }
-    catch {
-        // The account may have been deleted between session and webhook. A 200
-        // stops Didit from retrying a verification that can never land.
-        console.warn(`Approved session for missing user ${uid} - profile not found.`);
-        res.status(200).send('No such user.');
-        return;
-    }
-    res.status(200).send('OK');
+    await reply(200, 'OK');
 });
+/**
+ * A session's full decision from Didit's API, for the rare webhook that
+ * arrives without the address on it. Null on any failure.
+ */
+async function fetchDiditDecision(sessionId) {
+    const apiKey = DIDIT_API_KEY.value();
+    if (!apiKey)
+        return null;
+    try {
+        const resp = await fetch(`https://verification.didit.me/v3/session/${encodeURIComponent(sessionId)}/decision/`, { headers: { 'x-api-key': apiKey }, signal: AbortSignal.timeout(10_000) });
+        if (!resp.ok) {
+            console.warn(`Didit decision fetch for ${sessionId} failed: ${resp.status}`);
+            return null;
+        }
+        return await resp.json();
+    }
+    catch (err) {
+        console.warn(`Didit decision fetch for ${sessionId} threw:`, err);
+        return null;
+    }
+}
 //# sourceMappingURL=index.js.map

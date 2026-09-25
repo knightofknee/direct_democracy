@@ -520,7 +520,10 @@ export const ES: Record<string, string> = {
   'Participation counters (votes cast, concerns raised) that power your milestones.': 'Contadores de participación (votos emitidos, preocupaciones planteadas) que impulsan tus logros.',
   'What we never see': 'Qué nunca vemos',
   'Your identity documents. Verification is performed by Didit, a third-party service; documents go to them, and we receive only the verdict.': 'Tus documentos de identidad. La verificación la hace Didit, un servicio independiente; los documentos van a ellos y nosotros recibimos solo el resultado.',
-  'Your address. Didit derives your ward from it and tells us just the ward number.': 'Tu domicilio. Didit deriva tu distrito a partir de él y nos dice solo el número de distrito.',
+  'Your address. It is used only at the moment you verify, to find your ward, and is never saved.':
+    'Tu domicilio. Solo se usa en el momento en que te verificas, para encontrar tu distrito, y nunca se guarda.',
+  'If you pay for a verification: which one you bought, when, and the store’s transaction number. Your payment details stay with Apple or Google.':
+    'Si pagas una verificación: cuál compraste, cuándo y el número de transacción de la tienda. Tus datos de pago se quedan con Apple o Google.',
   'Who can see what': 'Quién puede ver qué',
   'Your profile is readable only by you. Content you post carries your display name and a verified badge - nothing more.': 'Tu perfil solo lo puedes leer tú. El contenido que publicas lleva tu nombre de usuario y una insignia de verificación - nada más.',
   'Your individual ballots and judgments are readable only by you; everyone else sees only aggregate tallies.': 'Tus votos y veredictos individuales solo los puedes leer tú; los demás ven solo conteos agregados.',
@@ -767,4 +770,31 @@ export const ES: Record<string, string> = {
   // Settings
   Language: 'Idioma',
   'Privacy & data': 'Privacidad y datos',
+  Verification: 'Verificación',
+  'Verify a new address': 'Verificar una nueva dirección',
+  'Moved within Chicago? Verify your new address and your ward moves with you. If your ID shows the new address, your ID is enough. If it doesn’t, add a utility bill or bank statement from the last 3 months. You can do this once every 3 months.':
+    '¿Te mudaste dentro de Chicago? Verifica tu nueva dirección y tu distrito se muda contigo. Si tu identificación muestra la nueva dirección, basta con tu identificación. Si no, agrega un recibo de servicios o un estado de cuenta bancario de los últimos 3 meses. Puedes hacerlo una vez cada 3 meses.',
+  'Verify with my ID': 'Verificar con mi identificación',
+  'Pay {price} and start': 'Pagar {price} y empezar',
+  'Payment failed': 'El pago falló',
+  'This month’s free verifications just ran out': 'Las verificaciones gratis de este mes se acaban de agotar',
+  'The price is on the button now.': 'El precio ya aparece en el botón.',
+  'Couldn’t load the price. Check your connection and try again.':
+    'No pudimos cargar el precio. Revisa tu conexión e intenta de nuevo.',
+  'Already paid. This attempt is covered.': 'Ya pagaste. Este intento está cubierto.',
+  'Paying for verification works in the iPhone and Android apps.':
+    'El pago de la verificación funciona en las apps de iPhone y Android.',
+  'Getting the price…': 'Obteniendo el precio…',
+  'Checking a bill or statement costs {price}.': 'Revisar un recibo o estado de cuenta cuesta {price}.',
+  'The first 500 verifications each month are free. This month’s are used up, so this one costs {price}.':
+    'Las primeras 500 verificaciones de cada mes son gratis. Las de este mes ya se usaron, así que esta cuesta {price}.',
+  'If you don’t open the verification link, your payment carries over to your next attempt.':
+    'Si no abres el enlace de verificación, tu pago se guarda para tu próximo intento.',
+  'Verify with a bill or statement': 'Verificar con un recibo o estado de cuenta',
+  'Have your ID and a utility bill or bank statement from the last 3 months showing your name and your new Chicago address. If it’s in a different ward, your ward moves there. If we can’t place it in Chicago, nothing changes. You can do this once every 3 months.':
+    'Ten a la mano tu identificación y un recibo de servicios o estado de cuenta bancario de los últimos 3 meses con tu nombre y tu nueva dirección en Chicago. Si está en otro distrito, tu distrito se cambia a ese. Si no podemos ubicarla en Chicago, nada cambia. Puedes hacerlo una vez cada 3 meses.',
+  'You can verify a new address again on {date}.':
+    'Puedes verificar una nueva dirección de nuevo el {date}.',
+  'Use an ID that shows your new Chicago address. If it’s in a different ward, your ward moves there. If we can’t place it in Chicago, nothing changes. You can do this once every 3 months.':
+    'Usa una identificación que muestre tu nueva dirección en Chicago. Si está en otro distrito, tu distrito se cambia a ese. Si no podemos ubicarla en Chicago, nada cambia. Puedes hacerlo una vez cada 3 meses.',
 };

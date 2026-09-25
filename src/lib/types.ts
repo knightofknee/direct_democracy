@@ -29,6 +29,11 @@ export interface UserProfile {
   verified: boolean;
   /** 1–50 for Chicago wards; null until verified (ward comes from verified address). */
   wardId: number | null;
+  /**
+   * When this person last started verifying a new address (Settings). Written
+   * only by Cloud Functions; opens again REVERIFY_COOLDOWN_DAYS later.
+   */
+  reverifyAt?: Timestamp | null;
   /** Optional for accounts created before stats existed. */
   stats?: UserStats;
   createdAt: Timestamp;
@@ -271,8 +276,11 @@ export interface AppNotification {
   id: string;
   type: string;
   title: string;
+  /** Spanish title; absent on notifications written before 2026-09-24. */
+  titleEs?: string;
   /** One-line excerpt of the thing that happened. */
   body: string;
+  bodyEs?: string;
   /** App route the notification opens. */
   link: string;
   read: boolean;

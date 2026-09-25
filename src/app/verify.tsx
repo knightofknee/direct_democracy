@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import type { FunctionsError } from 'firebase/functions';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/screen';
@@ -9,10 +10,13 @@ import { Button, Card } from '@/components/ui';
 import { WARDS, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useStorePurchase } from '@/hooks/use-store-purchase';
 import { notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import { usingEmulators } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
+import { reverifyOpensAt } from '@/lib/verification';
+import { getVerificationQuote, type VerificationQuote } from '@/services/payments';
 import { startVerification } from '@/services/users';
 
 export default function VerifyScreen() {
@@ -20,8 +24,48 @@ export default function VerifyScreen() {
   const router = useRouter();
   const t = useT();
   const { profile } = useAuth();
+  // ?move=1 (from Settings): someone verified is verifying a new address.
+  // &with=address: the move adds a bill or statement for an ID that still
+  // shows the old address.
+  const {
+    move,
+    with: withParam,
+    previewPrice,
+  } = useLocalSearchParams<{ move?: string; with?: string; previewPrice?: string }>();
+  // Emulator only: ?previewPrice=$0.29 renders the production purchase screen
+  // with that store price (the store has no web or emulator), for App Store
+  // review screenshots. Never reachable against production.
+  const storePreview = usingEmulators && previewPrice ? previewPrice : null;
+  const devMode = usingEmulators && !storePreview;
   const [wardId, setWardId] = useState<number | null>(profile?.wardId ?? null);
   const [busy, setBusy] = useState(false);
+
+  // Price first: free inside Didit's monthly 500, covered by a credit the
+  // person already bought, or a store purchase before the session starts.
+  const store = useStorePurchase();
+  const [quote, setQuote] = useState<VerificationQuote | null>(null);
+  const [quoteFailed, setQuoteFailed] = useState(false);
+  const method: 'id' | 'address' = move === '1' && withParam === 'address' ? 'address' : 'id';
+  const priced = !devMode && profile != null && (!profile.verified || move === '1');
+  const refreshQuote = useCallback(() => {
+    if (!priced) return;
+    getVerificationQuote(method).then(
+      (q) => {
+        setQuote(q);
+        setQuoteFailed(false);
+      },
+      () => setQuoteFailed(true)
+    );
+  }, [priced, method]);
+  useEffect(refreshQuote, [refreshQuote]);
+  const productId = quote?.productId ?? null;
+  useEffect(() => {
+    if (productId) store.loadProducts([productId]);
+    // loadProducts is rebuilt every render; reload only when the product or connection changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productId, store.available]);
+  const mustPay = quote != null && !quote.free && quote.credits < 1;
+  const price = storePreview ?? (productId ? store.priceOf(productId) : null);
 
   if (!profile) {
     return (
@@ -31,7 +75,10 @@ export default function VerifyScreen() {
     );
   }
 
-  if (profile.verified) {
+  const moving = profile.verified && move === '1' && reverifyOpensAt(profile) == null;
+  const withBill = moving && withParam === 'address';
+
+  if (profile.verified && !moving) {
     return (
       <Screen>
         <Card>
@@ -48,13 +95,32 @@ export default function VerifyScreen() {
   }
 
   const begin = async () => {
-    if (usingEmulators && wardId == null) {
+    if (devMode && wardId == null) {
       notify('Pick a ward', 'Choose the ward you live in to simulate verification.');
       return;
     }
+    if (storePreview) return;
+    if (!devMode && mustPay) {
+      if (!price || !productId || !quote) return;
+      setBusy(true);
+      try {
+        if ((await store.buy(productId, quote.accountToken)) === 'cancelled') {
+          setBusy(false);
+          return;
+        }
+      } catch (e) {
+        notify(t('Payment failed'), e instanceof Error ? e.message : t('Something went wrong.'));
+        setBusy(false);
+        refreshQuote();
+        return;
+      }
+    }
     setBusy(true);
     try {
-      const { mode } = await startVerification({ wardId: wardId ?? 1 });
+      const { mode } = await startVerification({
+        wardId: wardId ?? 1,
+        method: moving ? (withBill ? 'address' : 'id') : undefined,
+      });
       if (mode === 'dev') {
         notify('Verified (dev)', 'Simulated a passing Didit inquiry against the emulator.');
         if (router.canGoBack()) router.back();
@@ -63,14 +129,51 @@ export default function VerifyScreen() {
       // In the real Didit flow the webhook flips the profile; the app reacts
       // to the live profile listener, so there's nothing to do here.
     } catch (e) {
-      notify(t('Verification failed'), e instanceof Error ? e.message : t('Something went wrong.'));
+      // The month's free 500 can run out between showing the price and
+      // starting; the refreshed quote puts the price on the button.
+      if ((e as FunctionsError).details && ((e as FunctionsError).details as { paymentRequired?: boolean }).paymentRequired) {
+        notify(t('This month’s free verifications just ran out'), t('The price is on the button now.'));
+      } else {
+        notify(t('Verification failed'), e instanceof Error ? e.message : t('Something went wrong.'));
+      }
     } finally {
       setBusy(false);
+      refreshQuote();
     }
   };
 
+  const priceNote = !priced
+    ? null
+    : quoteFailed
+      ? t('Couldn’t load the price. Check your connection and try again.')
+      : quote == null
+        ? null
+        : !mustPay
+          ? quote.free
+            ? null
+            : t('Already paid. This attempt is covered.')
+          : !store.available && !price
+            ? t('Paying for verification works in the iPhone and Android apps.')
+            : !price
+              ? t('Getting the price…')
+              : `${
+                  quote.creditType === 'bill'
+                    ? t('Checking a bill or statement costs {price}.')
+                    : t('The first 500 verifications each month are free. This month’s are used up, so this one costs {price}.')
+                } ${t('If you don’t open the verification link, your payment carries over to your next attempt.')}`.replace('{price}', price);
+
   return (
     <Screen>
+      {moving && (
+        <Card>
+          <ThemedText type="smallBold">{t('Verify a new address')}</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            {withBill
+              ? t('Have your ID and a utility bill or bank statement from the last 3 months showing your name and your new Chicago address. If it’s in a different ward, your ward moves there. If we can’t place it in Chicago, nothing changes. You can do this once every 3 months.')
+              : t('Use an ID that shows your new Chicago address. If it’s in a different ward, your ward moves there. If we can’t place it in Chicago, nothing changes. You can do this once every 3 months.')}
+          </ThemedText>
+        </Card>
+      )}
       <Card>
         <ThemedText type="smallBold">{t('How verification works')}</ThemedText>
         <Step n={1} text={t('You verify your ID and Chicago address with Didit, a third-party identity service. Your documents go to them, never to us.')} />
@@ -78,7 +181,7 @@ export default function VerifyScreen() {
         <Step n={3} text={t('No name, no address, no document. Your display name stays anonymous, even once verified.')} />
       </Card>
 
-      {usingEmulators && (
+      {devMode && (
         <>
           <Card>
             <ThemedText type="smallBold" style={{ color: theme.warning }}>
@@ -119,10 +222,22 @@ export default function VerifyScreen() {
         </>
       )}
 
+      {priceNote && (
+        <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
+          {priceNote}
+        </ThemedText>
+      )}
       <Button
-        title={usingEmulators ? 'Simulate verification' : t('Start verification with Didit')}
+        title={
+          devMode
+            ? 'Simulate verification'
+            : mustPay && price
+              ? t('Pay {price} and start').replace('{price}', price)
+              : t('Start verification with Didit')
+        }
         onPress={begin}
         loading={busy}
+        disabled={!devMode && (quote == null || (mustPay && !price))}
       />
     </Screen>
   );

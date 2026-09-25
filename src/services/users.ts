@@ -38,17 +38,19 @@ export async function deleteAccount(): Promise<void> {
  */
 export async function startVerification(input: {
   wardId: number;
+  /** For a move: read the address off the ID, or off a bill or statement. */
+  method?: 'id' | 'address';
 }): Promise<{ mode: 'dev' | 'didit' }> {
   if (usingEmulators) {
     const devVerify = httpsCallable(functions, 'devVerify');
-    await devVerify(input);
+    await devVerify({ wardId: input.wardId });
     return { mode: 'dev' };
   }
   const createSession = httpsCallable<
-    Record<string, never>,
+    { method?: 'id' | 'address' },
     { inquiryUrl: string }
   >(functions, 'createVerificationSession');
-  const { data } = await createSession({});
+  const { data } = await createSession(input.method ? { method: input.method } : {});
   // The hosted Didit inquiry is opened in the browser; the webhook finishes
   // the job and the profile listener picks up verified=true when it lands.
   await openLink(data.inquiryUrl);

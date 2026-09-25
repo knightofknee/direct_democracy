@@ -19,9 +19,30 @@ Conventions:
   to production.
 - Every vote is tallied two ways (all / verified) via the `DualTally` type.
   There is NO registered-voter concept; verification means "adult Chicago
-  resident of a ward", nothing more. On ward-scoped items the verified slice
+  resident of a ward", nothing more. Age matters only for verification
+  (both Didit workflows decline under 18); anyone can use the app and count
+  in the all-users tally. On ward-scoped items the verified slice
   counts only verified residents of that ward ("verified for the item's
   area"); ballots snapshot the voter's `wardId` so triggers can scope them.
+  The Didit webhook never grants `verified` without a ward: it geocodes the
+  verified address and matches it to the city's ward boundaries
+  (`functions/src/ward.ts`, boundaries from `npm run build-ward-map`); an
+  address outside Chicago or an unreadable one verifies nothing and sends
+  the person a notification explaining how to retry. Nothing stays at
+  Didit: once a final result is handled the webhook erases the session there
+  (`privacy_erasure`, face data included), and the nightly
+  `eraseDiditSessions` retries failures and erases sessions undecided after
+  7 days; the public privacy policy promises this. The one-account-per-ID
+  code is an HMAC of issuing state + document number keyed by the
+  `IDENTITY_HASH_KEY` secret (no birth date). Moving: a verified
+  citizen can verify a new address from Settings once per 90 days
+  (`users/{uid}.reverifyAt`, stamped server-side at session start, handed
+  back if the link expires unopened; the button is disabled until it opens).
+  A new ward replaces the old and withdraws their approval of the old ward's
+  alderman; no ward found leaves them as they were. `DIDIT_ADDRESS_WORKFLOW_ID`
+  in functions/.env is the "Move: ID + proof of address, 18+" workflow, run
+  when the person picks "Verify with a bill or statement" in Settings;
+  "Verify with my ID" runs the main workflow.
 - No em dashes anywhere in this project (user-facing copy, comments, docs).
   Use a comma, period, or plain hyphen instead.
 - Clients write ONLY their own ballot/comment/judgment docs
@@ -138,6 +159,9 @@ Conventions:
 - Notifications live at `users/{uid}/notifications/{id}`, written ONLY by
   Cloud Functions triggers (question asked/responded, community verdicts,
   comment replies, writing credits); clients read, mark read, and delete.
+  Every notification is written in both languages (`title`/`body` plus
+  `titleEs`/`bodyEs`, required by `sendNotification`) and the app picks by
+  the device's language; people's own quoted words stay as written.
   A notification about one item links to that item, not just its page: AMA
   notifications carry `?q=<questionId>` and `/official/[id]` opens scrolled
   to that question with an outline around it. New notification types follow
@@ -234,6 +258,22 @@ Conventions:
   1.0.12; clear it on the next flip so it never describes the wrong release. The doc is
   world-readable, admin-write-only; a platform with no store URL on the doc
   never nudges.
+- Paid verification (`functions/src/payments.ts`): Didit's first 500 ID
+  checks each month (Chicago time, counted in `verificationUsage`) are free;
+  past them, and for every bill move (proof of address is never free), a
+  session spends one credit from `verificationCredits/{uid}` (`id` or
+  `bill`). Credits come only from `redeemVerificationPurchase`, which checks
+  the purchase with the store (Apple signed transaction against the root
+  certs in functions/data/apple, sandbox accepted for App Review; Google via
+  the Play Developer API as the functions service account, which must stay
+  invited in Play Console) and records it once in `verificationPurchases`.
+  An unopened link that expires refunds its credit. Products are consumables
+  with the same ids on both stores (`verification_standard`,
+  `verification_bill_reduced` inside the 500, `verification_bill_standard`
+  after); prices live on the store products and the app shows the store's
+  price, never a hard-coded one. The verify screen asks `getVerificationQuote`
+  before showing the button. Keep the product list in payments.ts and
+  src/lib/verification.ts in sync.
 - Security posture and accepted limitations are documented in `docs/AUDIT.md`;
   update it when the trust model changes.
 - Typecheck with `npm run typecheck` before finishing.
