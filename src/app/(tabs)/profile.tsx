@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { FlagAccent } from '@/components/flag-accent';
+import { DeclaredWardNote, HomeWardChoice } from '@/components/home-ward-choice';
 import { CandidateRow, OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
@@ -20,11 +21,12 @@ import { isAdminUser } from '@/lib/admin';
 import { db } from '@/lib/firebase';
 import { plural } from '@/lib/format';
 import { randomDisplayName } from '@/lib/names';
-import { confirmDestructive, notify, notifyError } from '@/lib/notify';
+import { confirmDestructive, notify, notifyError, errorMessage } from '@/lib/notify';
 import type { Candidate, Official } from '@/lib/types';
 import { unblockUser } from '@/services/moderation';
 import { updateDisplayName } from '@/services/users';
 import { usePlural, useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 
 export default function ProfileScreen() {
   const theme = useTheme();
@@ -46,6 +48,26 @@ export default function ProfileScreen() {
     () => (profile?.role === 'candidate' ? doc(db, 'candidates', profile.uid) : null),
     [profile?.role, profile?.uid]
   );
+
+  usePageSummary('(tabs)/profile', [
+    !profile
+      ? t('You are signed out.')
+      : t('Signed in as {name}.').replace('{name}', profile.displayName),
+    profile &&
+      (profile.wardId == null
+        ? t('You have no home ward yet.')
+        : t(profile.verified ? 'Your home ward: the {ward}, verified.' : 'Your home ward: the {ward}, set without an ID.').replace(
+            '{ward}',
+            wardLabel(profile.wardId)
+          )),
+    profile &&
+      t('Your record: concerns {concerns}, comments {comments}, votes {votes}, judgments {judgments}.')
+        .replace('{concerns}', String(profile.stats?.concerns ?? 0))
+        .replace('{comments}', String(profile.stats?.comments ?? 0))
+        .replace('{votes}', String(profile.stats?.votes ?? 0))
+        .replace('{judgments}', String(profile.stats?.judgments ?? 0)),
+    blocks.length > 0 && t('People you have blocked: {n}.').replace('{n}', String(blocks.length)),
+  ]);
 
   // Each auth state gets its own ScrollView. A shared one kept the signed-in
   // scroll offset over the much shorter signed-out content, and with bounce
@@ -78,6 +100,15 @@ export default function ProfileScreen() {
             <Button title={t('Sign in or create account')} onPress={() => router.push('/sign-in')} />
           </View>
         </Card>
+        {/* Settings holds the language switch, so it must be reachable before
+            signing in, by someone who can't read the current language. */}
+        <Button
+          title={t('Settings')}
+          variant="secondary"
+          icon={<Ionicons name="settings-sharp" size={16} color={theme.text} />}
+          onPress={() => router.push('/settings')}
+        />
+        <Button title={t('Privacy & data')} variant="ghost" onPress={() => router.push('/privacy')} />
       </Screen>
     );
   }
@@ -106,7 +137,7 @@ export default function ProfileScreen() {
       await updateDisplayName(profile.uid, name);
       setEditingName(null);
     } catch (e) {
-      notify(t('Could not update name'), e instanceof Error ? e.message : t('Something went wrong.'));
+      notify(t('Could not update name'), errorMessage(e));
     } finally {
       setSavingName(false);
     }
@@ -141,7 +172,7 @@ export default function ProfileScreen() {
           <Button title={t('Edit display name')} variant="secondary" onPress={() => setEditingName(profile.displayName)} />
         ) : (
           <View style={{ gap: Spacing.two }}>
-            <Field value={editingName} onChangeText={setEditingName} autoFocus maxLength={30} />
+            <Field value={editingName} onChangeText={setEditingName} autoFocus maxLength={30} accessibilityLabel={t('Edit display name')} />
             <View style={styles.buttonRow}>
               <Button
                 title={t('Shuffle')}
@@ -208,13 +239,12 @@ export default function ProfileScreen() {
                 : t('You’re verified as a Chicago resident. Your votes count in the verified tallies.')}
             </ThemedText>
           </>
+        ) : profile.wardId == null ? (
+          <HomeWardChoice
+            note={t('Take part in your ward: verify your residency with your ID, or set your home ward without one.')}
+          />
         ) : (
-          <>
-            <ThemedText type="small">
-              {t('Verify once to unlock your ward tab and make your votes count in the verified tallies. A third-party service (Didit) checks your ID. We only ever receive a yes/no and your ward. No documents, no address, nothing else.')}
-            </ThemedText>
-            <Button title={t('Verify my identity')} onPress={() => router.push('/verify')} />
-          </>
+          <DeclaredWardNote profile={profile} />
         )}
       </Card>
 
@@ -239,7 +269,7 @@ export default function ProfileScreen() {
                     profile &&
                     unblockUser(profile, b.id).catch((e) => notify(
                       t('Could not unblock'),
-                      e instanceof Error ? e.message : t('Something went wrong.')
+                      errorMessage(e)
                     ))
                   }
                 />

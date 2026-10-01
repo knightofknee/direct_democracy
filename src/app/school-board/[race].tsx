@@ -17,7 +17,9 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { SchoolBoardCandidate } from '@/lib/types';
 import { useLocalized, useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 import { collection, query, where } from 'firebase/firestore';
+import { enter } from '@/lib/motion';
 
 /** One school board race: the nominees a voter picks between on the ballot. */
 export default function SchoolBoardRaceScreen() {
@@ -33,6 +35,19 @@ export default function SchoolBoardRaceScreen() {
       race ? query(collection(db, 'schoolBoardCandidates'), where('race', '==', race)) : null,
     [race]
   );
+
+  const nominees = candidates.filter((c) => !c.writeIn);
+  usePageSummary('school-board/[race]', [
+    info && `${t('School board')}, ${schoolBoardRaceLabel(info.id)}. ${t(info.detail)}.`,
+    !loading &&
+      (nominees.length > 0
+        ? t('Running: {names}.').replace('{names}', nominees.map((c) => c.name).join(', '))
+        : t('No candidates are listed yet.')),
+    candidates.length > nominees.length &&
+      t('Declared write-ins: {w}.').replace('{w}', String(candidates.length - nominees.length)),
+    candidates.find((c) => c.incumbent) &&
+      t('Incumbent: {name}.').replace('{name}', candidates.find((c) => c.incumbent)!.name),
+  ]);
 
   if (!info) {
     return (
@@ -75,7 +90,7 @@ export default function SchoolBoardRaceScreen() {
           {sorted.map((candidate, i) => (
             <Animated.View
               key={candidate.id}
-              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}
+              entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}
               style={{ gap: Spacing.three }}>
               {candidate.id === firstWriteIn && <WriteInHeader />}
               <Card onPress={() => router.push(`/school-board-candidate/${candidate.id}`)}>

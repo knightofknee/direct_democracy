@@ -49,6 +49,34 @@ service cloud.firestore {
         && request.auth.token.email == 'bricarlis@gmail.com';
     }
 
+    // Display names may not pose as an alderman: the app names officials
+    // "Ald. ..." / "Alderman ...". Mirror of validateDisplayName (names.ts).
+    // A name can't open with a space or an invisible character either (the
+    // app trims names), so "\u200bAlderman ..." can't slip past the check.
+    function notAldermanName(name) {
+      return !name.lower().matches('^\\s*(ald\\.|ald\\s|alder(man|woman|person)).*')
+        && !name.matches('^[\\s\\x{00A0}\\x{1680}\\x{180E}\\x{2000}-\\x{200F}\\x{2028}-\\x{202F}\\x{205F}-\\x{206F}\\x{3000}\\x{FEFF}].*');
+    }
+
+    // Source links on a post: at most 10, and a bounded total (join() also
+    // fails on anything that isn't a string, so it doubles as a type check).
+    // Per-element https validation lives in the client writer and every
+    // renderer (see docs/AUDIT.md).
+    function refsOk(d) {
+      return !('references' in d)
+        || (d.references is list
+          && d.references.size() <= 10
+          && d.references.join(' ').size() <= 5100);
+    }
+
+    // A comment's thread is the id of its root comment: a plain document id,
+    // so the trigger can never be steered to another path with it.
+    function threadOk(d) {
+      return !('threadId' in d)
+        || d.threadId == null
+        || (d.threadId is string && d.threadId.matches('^[A-Za-z0-9]{1,40}$'));
+    }
+
     function onlyChanges(keys) {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
     }
@@ -57,7 +85,10 @@ service cloud.firestore {
     // client that could seed nonzero counts or maps would fabricate support
     // that the verified lens displays as real.
     function emptyTally(t) {
-      return t.totalAll == 0
+      return t.keys().hasOnly(['all', 'verified', 'totalAll', 'totalVerified'])
+        && t.all is map
+        && t.verified is map
+        && t.totalAll == 0
         && t.totalVerified == 0
         && t.all.size() == 0
         && t.verified.size() == 0;
@@ -83,22 +114,41 @@ service cloud.firestore {
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() >= 3
         && request.resource.data.displayName.size() <= 30
+        && notAldermanName(request.resource.data.displayName)
         && request.resource.data.stats.keys().hasOnly(['concerns', 'comments', 'votes', 'judgments'])
         && request.resource.data.stats.concerns == 0
         && request.resource.data.stats.comments == 0
         && request.resource.data.stats.votes == 0
         && request.resource.data.stats.judgments == 0;
 
-      // Users may edit their display name - nothing else. verified / wardId /
-      // role are written only by the Admin SDK (Persona
-      // webhook and admin tooling). Account deletion goes through the
-      // deleteAccount callable (Admin SDK), not a client delete.
+      // Users may edit their display name and their phone-notification
+      // settings (which types reach the phone, and this phone's push token)
+      // - nothing else. verified / wardId / role are written only by the
+      // Admin SDK (Didit webhook and admin tooling). Account deletion goes
+      // through the deleteAccount callable (Admin SDK), not a client delete.
       allow update: if signedIn()
         && request.auth.uid == uid
-        && onlyChanges(['displayName'])
-        && request.resource.data.displayName is string
-        && request.resource.data.displayName.size() >= 3
-        && request.resource.data.displayName.size() <= 30;
+        && onlyChanges(['displayName', 'pushPrefs', 'pushTokens'])
+        && (
+          !('displayName' in request.resource.data.diff(resource.data).affectedKeys())
+          || (
+            request.resource.data.displayName is string
+            && request.resource.data.displayName.size() >= 3
+            && request.resource.data.displayName.size() <= 30
+            && notAldermanName(request.resource.data.displayName)
+          )
+        )
+        && (
+          !('pushPrefs' in request.resource.data)
+          || (
+            request.resource.data.pushPrefs is map
+            && request.resource.data.pushPrefs.keys().hasOnly(['deadline', 'answers', 'comments', 'replies', 'credits', 'questions'])
+          )
+        )
+        && (
+          !('pushTokens' in request.resource.data)
+          || (request.resource.data.pushTokens is map && request.resource.data.pushTokens.size() <= 10)
+        );
 
       // In-app notifications, written only by Cloud Functions triggers.
       // The owner reads them, flips the read flag, and may delete - never
@@ -109,6 +159,20 @@ service cloud.firestore {
           && request.auth.uid == uid
           && onlyChanges(['read'])
           && request.resource.data.read is bool;
+      }
+
+      // Recent post times per ward, the basis of the ward posting limits.
+      // Written only by the post triggers (gateWardPost); the owner reads it
+      // so the app can say when their next post there opens.
+      match /wardPosts/{wardId} {
+        allow read: if signedIn() && request.auth.uid == uid;
+      }
+
+      // Recent post times per rate-limit bucket (citywide concerns, election
+      // questions, comments, reports, ward changes). Written only by the
+      // triggers and declareWard; the owner reads it for the app's notices.
+      match /rateLimits/{bucket} {
+        allow read: if signedIn() && request.auth.uid == uid;
       }
 
       // Personal block list - hides the blocked user's content on this
@@ -138,19 +202,27 @@ service cloud.firestore {
           || (type == 'comment' && (
             path.matches('^concerns/[^/]+/comments/[^/]+$')
             || path.matches('^candidates/[^/]+/policies/[^/]+/comments/[^/]+$')
+            || path.matches('^officials/[^/]+/questions/[^/]+/comments/[^/]+$')
           ))
           || (type == 'policy' && path.matches('^candidates/[^/]+/policies/[^/]+$'))
-          || (type in ['question', 'response'] && path.matches('^officials/[^/]+/questions/[^/]+$'));
+          || (type in ['question', 'response'] && path.matches('^officials/[^/]+/questions/[^/]+$'))
+          || (type == 'electionQuestion' && path.matches('^electionQuestions/[^/]+$'));
       }
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly([
           'reporterUid', 'contentPath', 'contentType', 'reason', 'excerpt',
-          'authorUid', 'status', 'createdAt'
+          'authorUid', 'note', 'status', 'createdAt'
         ])
+        // What's wrong, in the reporter's words: the app requires it for
+        // "Other" (binaries before 2026-09-30 send none, so it stays optional here).
+        && (!('note' in request.resource.data)
+          || (request.resource.data.note is string
+            && request.resource.data.note.size() >= 5
+            && request.resource.data.note.size() <= 500))
         && request.resource.data.reporterUid == request.auth.uid
         && request.resource.data.contentPath is string
         && request.resource.data.contentPath.size() <= 300
-        && request.resource.data.contentType in ['concern', 'comment', 'question', 'response', 'policy']
+        && request.resource.data.contentType in ['concern', 'comment', 'question', 'response', 'policy', 'electionQuestion']
         && pathMatchesType(request.resource.data.contentPath, request.resource.data.contentType)
         && request.resource.data.reason in ['spam', 'harassment', 'misleading', 'childSafety', 'other']
         && request.resource.data.excerpt is string
@@ -187,7 +259,7 @@ service cloud.firestore {
         // elements, so per-element https validation lives in the client
         // writer AND every renderer (see docs/AUDIT.md).
         && request.resource.data.references is list
-        && request.resource.data.references.size() <= 10
+        && refsOk(request.resource.data)
         && request.resource.data.createdAt == request.time
         && request.resource.data.commentCount == 0
         && request.resource.data.score == 0
@@ -197,26 +269,22 @@ service cloud.firestore {
           (request.resource.data.scope == 'city' && request.resource.data.wardId == null)
           || (
             request.resource.data.scope == 'ward'
-            && (me().verified == true || me().role == 'official')
-            && request.resource.data.wardId != null
-            && request.resource.data.wardId == me().wardId
+            // Anyone may post in any ward (2026-09-27); the posting limits
+            // (3 a day at home, 1 a week elsewhere) are enforced by
+            // onConcernCreated, which deletes a post over the limit. The
+            // hidden test ward 51 takes only its own residents.
+            && request.resource.data.wardId is int
+            && (
+              (request.resource.data.wardId >= 1 && request.resource.data.wardId <= 50)
+              || request.resource.data.wardId == me().wardId
+            )
           )
         );
 
-      // The author may fix a concern only before anyone engages with it -
-      // editing what people already voted on would change the meaning of
-      // their votes. Tallies, scores, and commentCount stay trigger-only.
-      allow update: if signedIn()
-        && request.auth.uid == resource.data.authorUid
-        && onlyChanges(['title', 'body', 'references'])
-        && request.resource.data.title is string
-        && request.resource.data.title.size() >= 4
-        && request.resource.data.title.size() <= 140
-        && request.resource.data.body.size() <= 4000
-        && request.resource.data.references is list
-        && request.resource.data.references.size() <= 10
-        && resource.data.tallies.totalAll == 0
-        && resource.data.commentCount == 0;
+      // No client updates: authors edit through the editPost callable, which
+      // records every edit in the post's history (and the earlier text, once
+      // anyone had replied), so the history can't be skipped. Tallies,
+      // scores, and commentCount stay trigger-only.
 
       // The author may withdraw their concern (and the admin may take down
       // reported ones); onConcernDeleted cleans up the subcollections.
@@ -243,11 +311,13 @@ service cloud.firestore {
         // threadId/replyToName make a comment a threaded reply (null or
         // absent on top-level comments). Shape-only validation: a bogus
         // threadId just renders as an orphaned thread - it can't move any
-        // count, so no exists() read is spent on it.
+        // count, so no exists() read is spent on it. The concern itself
+        // must exist, so no comment (or comment stats) floats free of one.
         allow create: if signedIn()
+          && exists(/databases/$(database)/documents/concerns/$(concernId))
           && request.resource.data.keys().hasOnly([
             'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt',
-            'threadId', 'replyToName', 'references'
+            'threadId', 'replyToName', 'replyToUid', 'references'
           ])
           && request.resource.data.authorUid == request.auth.uid
           && request.resource.data.authorName == me().displayName
@@ -256,22 +326,16 @@ service cloud.firestore {
           && request.resource.data.body.size() >= 1
           && request.resource.data.body.size() <= 2000
           && request.resource.data.createdAt == request.time
-          && (
-            !('threadId' in request.resource.data)
-            || request.resource.data.threadId == null
-            || (request.resource.data.threadId is string && request.resource.data.threadId.size() <= 40)
-          )
+          && threadOk(request.resource.data)
+          && (!('replyToUid' in request.resource.data) || request.resource.data.replyToUid == null || (request.resource.data.replyToUid is string && request.resource.data.replyToUid.size() <= 128))
           && (
             !('replyToName' in request.resource.data)
             || request.resource.data.replyToName == null
-            || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 30)
+            || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 80)
           )
           // Source links behind the comment's sources button. Per-element
           // https validation is client + render side (see docs/AUDIT.md).
-          && (
-            !('references' in request.resource.data)
-            || (request.resource.data.references is list && request.resource.data.references.size() <= 10)
-          );
+          && refsOk(request.resource.data);
         // Authors may remove their own comments (admin: takedowns);
         // onCommentDeleted keeps the count honest.
         allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
@@ -326,11 +390,12 @@ service cloud.firestore {
           )
         );
 
-      // The author may close their poll; tallies are trigger-only.
+      // The author may close their poll, never reopen it: a closed poll's
+      // result is a public record. Tallies are trigger-only.
       allow update: if signedIn()
         && request.auth.uid == resource.data.authorUid
         && onlyChanges(['open'])
-        && request.resource.data.open is bool;
+        && request.resource.data.open == false;
 
       match /votes/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
@@ -354,10 +419,9 @@ service cloud.firestore {
           && get(/databases/$(database)/documents/polls/$(pollId)).data.open == true
           && (
             get(/databases/$(database)/documents/polls/$(pollId)).data.scope == 'city'
-            || (
-              me().verified == true
-              && me().wardId == get(/databases/$(database)/documents/polls/$(pollId)).data.wardId
-            )
+            // Ward polls: residents of the ward, verified or declared. The
+            // verified snapshot above decides which tally slice they land in.
+            || me().wardId == get(/databases/$(database)/documents/polls/$(pollId)).data.wardId
           );
         // Retract entirely (the trigger removes the ballot from the tallies)
         // - but only while voting is open. A closed poll's result is a public
@@ -400,6 +464,7 @@ service cloud.firestore {
         allow read: if signedIn() && request.auth.uid == voterUid;
         allow create: if signedIn()
           && request.auth.uid == voterUid
+          && get(/databases/$(database)/documents/electionQuestions/$(questionId)).data.authorUid != request.auth.uid
           && request.resource.data.keys().hasOnly(['uid', 'verified', 'createdAt'])
           && request.resource.data.uid == request.auth.uid
           && request.resource.data.verified == me().verified
@@ -509,18 +574,15 @@ service cloud.firestore {
 
       // Approval ballots - one standing approve/disapprove per person,
       // changeable or retractable any time. Aggregated by onApprovalWrite.
-      // VERIFIED residents only is the product rule (a rating anonymous
-      // accounts could stuff would be worthless): the 1.0.8+ client grays
-      // the buttons and links to /verify, and the server gate below backs
-      // it. The gate was held back while the 1.0.7 binary (live buttons
-      // for everyone, a deny shows as a raw error) was the installed base;
-      // re-enabled 2026-09-22 once the store served 1.0.10 with grayed buttons.
+      // Anyone with a home ward (verified or declared once, 2026-09-24) may
+      // rate; the GRADE counts only verified constituents (onApprovalWrite),
+      // so declared-ward ballots show in the all-users count and never move
+      // a report card.
       match /approvals/{voterUid} {
         allow read: if signedIn() && request.auth.uid == voterUid;
         allow create, update: if signedIn()
           && request.auth.uid == voterUid
           && request.auth.uid != officialUid
-          && me().verified == true
           && me().wardId != null
           && request.resource.data.keys().hasOnly(['value', 'verified', 'wardId', 'createdAt'])
           && request.resource.data.value in ['approve', 'disapprove']
@@ -547,8 +609,12 @@ service cloud.firestore {
           && request.resource.data.authorName == me().displayName
           && request.resource.data.authorVerified == me().verified
           && request.resource.data.officialUid == officialUid
+          // Only a real official's AMA takes questions: a made-up officialUid
+          // would otherwise notify whoever holds that uid.
+          && exists(/databases/$(database)/documents/officials/$(officialUid))
           && request.resource.data.status == 'awaitingResponse'
           && request.resource.data.response == null
+          && request.resource.data.get('respondedAt', null) == null
           && request.resource.data.answeredYes == 0
           && request.resource.data.answeredNo == 0
           && request.resource.data.answeredYesVerified == 0
@@ -590,11 +656,57 @@ service cloud.firestore {
           allow create, update: if signedIn()
             && request.auth.uid == judgeUid
             && request.auth.uid != officialUid
-            && request.resource.data.keys().hasOnly(['answered', 'verified', 'createdAt'])
+            && request.resource.data.keys().hasOnly(['answered', 'verified', 'uid', 'wardId', 'createdAt'])
             && request.resource.data.answered is bool
             && request.resource.data.verified == me().verified
+            // Optional: binaries before 2026-09-29 omit them.
+            && request.resource.data.get('uid', request.auth.uid) == request.auth.uid
+            && request.resource.data.get('wardId', me().wardId) == me().wardId
             && get(/databases/$(database)/documents/officials/$(officialUid)/questions/$(questionId)).data.response != null;
           allow delete: if signedIn() && request.auth.uid == judgeUid;
+        }
+
+        // The conversation under an answered question (2026-09-29): same
+        // threaded shape as board comments, open to everyone once the
+        // official has responded. The official posts here as themselves,
+        // so their writes need the confirmed email like every other
+        // act-as-politician write.
+        match /comments/{commentId} {
+          allow read: if true;
+          allow create: if signedIn()
+            && get(/databases/$(database)/documents/officials/$(officialUid)/questions/$(questionId)).data.response != null
+            && (request.auth.uid != officialUid || verifiedEmail())
+            && request.resource.data.keys().hasOnly([
+              'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt',
+              'threadId', 'replyToName', 'replyToUid', 'references'
+            ])
+            && request.resource.data.authorUid == request.auth.uid
+            && request.resource.data.authorName == me().displayName
+            && request.resource.data.authorVerified == me().verified
+            && request.resource.data.body is string
+            && request.resource.data.body.size() >= 1
+            && request.resource.data.body.size() <= 2000
+            && request.resource.data.createdAt == request.time
+            && threadOk(request.resource.data)
+            && (!('replyToUid' in request.resource.data) || request.resource.data.replyToUid == null || (request.resource.data.replyToUid is string && request.resource.data.replyToUid.size() <= 128))
+            && (
+              !('replyToName' in request.resource.data)
+              || request.resource.data.replyToName == null
+              || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 80)
+            )
+            && refsOk(request.resource.data);
+          allow delete: if (signedIn() && request.auth.uid == resource.data.authorUid) || isAdmin();
+
+          match /votes/{voterUid} {
+            allow read: if signedIn() && request.auth.uid == voterUid;
+            allow create, update: if signedIn()
+              && request.auth.uid == voterUid
+              && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'createdAt'])
+              && request.resource.data.uid == request.auth.uid
+              && request.resource.data.verified == me().verified
+              && request.resource.data.value in ['up', 'down'];
+            allow delete: if signedIn() && request.auth.uid == voterUid;
+          }
         }
 
         // Question upvotes: "I want this answered too". Presence is the
@@ -604,16 +716,34 @@ service cloud.firestore {
         // cannot join questions put to themselves.
         match /votes/{voterUid} {
           allow read: if signedIn() && request.auth.uid == voterUid;
+          // wardId (optional: binaries before 2026-09-28 omit it) is pinned to
+          // the voter's ward; with `verified` it decides whether this voter is
+          // a proven resident, whose upvote weighs in the grade. The
+          // question must exist: a vote under a made-up path would still
+          // make the trigger recount the official's card.
           allow create: if signedIn()
             && request.auth.uid == voterUid
             && request.auth.uid != officialUid
-            && request.resource.data.keys().hasOnly(['uid', 'verified', 'createdAt'])
+            // The asker's own question already carries their weight; joining
+            // it would count them twice. get() fails on a missing question.
+            && get(/databases/$(database)/documents/officials/$(officialUid)/questions/$(questionId)).data.authorUid != request.auth.uid
+            && request.resource.data.keys().hasOnly(['uid', 'verified', 'wardId', 'createdAt'])
             && request.resource.data.uid == request.auth.uid
             && request.resource.data.verified == me().verified
+            && request.resource.data.get('wardId', me().wardId) == me().wardId
             && request.resource.data.createdAt == request.time;
           allow delete: if signedIn() && request.auth.uid == voterUid;
         }
       }
+    }
+
+    // ── Moderation ───────────────────────────────────────────────────────
+    // moderation/shadowbanned: accounts hidden pending review (5+ reporters,
+    // onReportCreated). Readable so every app can hide their posts, written
+    // only by the server and the operator's moderation script.
+    match /moderation/{docId} {
+      allow read: if true;
+      allow write: if false;
     }
 
     // ── App config ───────────────────────────────────────────────────────
@@ -756,24 +886,23 @@ service cloud.firestore {
           // One stance per person; the verified/ward snapshot must match the
           // voter's actual profile (candidate platforms are citywide, so the
           // verified slice counts every verified Chicagoan).
-          allow create, update: if signedIn()
-            && request.auth.uid == voterUid
-            && request.resource.data.keys().hasOnly(['uid', 'value', 'verified', 'wardId', 'createdAt'])
-            && request.resource.data.uid == request.auth.uid
-            && request.resource.data.verified == me().verified
-            && request.resource.data.wardId == me().wardId
-            && request.resource.data.value in ['support', 'oppose'];
+          // No stance votes on policies (arguments, not approval ratings): no
+          // app reaches this path, so nothing new is written here. Old
+          // ballots can still be retracted.
+          allow create, update: if false;
           // Retract entirely - the trigger removes the ballot from the tallies.
           allow delete: if signedIn() && request.auth.uid == voterUid;
         }
 
         match /comments/{commentId} {
           allow read: if true;
-          // Same threaded-reply shape as concern comments (see above).
+          // Same threaded-reply shape as concern comments (see above), on a
+          // policy that exists.
           allow create: if signedIn()
+            && exists(/databases/$(database)/documents/candidates/$(candidateUid)/policies/$(policyId))
             && request.resource.data.keys().hasOnly([
               'authorUid', 'authorName', 'authorVerified', 'body', 'createdAt',
-              'threadId', 'replyToName', 'references'
+              'threadId', 'replyToName', 'replyToUid', 'references'
             ])
             && request.resource.data.authorUid == request.auth.uid
             && request.resource.data.authorName == me().displayName
@@ -782,28 +911,24 @@ service cloud.firestore {
             && request.resource.data.body.size() >= 1
             && request.resource.data.body.size() <= 2000
             && request.resource.data.createdAt == request.time
-            && (
-              !('threadId' in request.resource.data)
-              || request.resource.data.threadId == null
-              || (request.resource.data.threadId is string && request.resource.data.threadId.size() <= 40)
-            )
+            && threadOk(request.resource.data)
+            && (!('replyToUid' in request.resource.data) || request.resource.data.replyToUid == null || (request.resource.data.replyToUid is string && request.resource.data.replyToUid.size() <= 128))
             && (
               !('replyToName' in request.resource.data)
               || request.resource.data.replyToName == null
-              || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 30)
+              || (request.resource.data.replyToName is string && request.resource.data.replyToName.size() <= 80)
             )
             // Source links behind the comment's sources button - same accepted
             // limitation as concern references (docs/AUDIT.md).
-            && (
-              !('references' in request.resource.data)
-              || (request.resource.data.references is list && request.resource.data.references.size() <= 10)
-            );
+            && refsOk(request.resource.data);
           // Writing credit: the candidate marks a comment as one that changed
           // their policy - recognition only, retractable, never self-awarded.
           // The author's lifetime credit count is trigger-only.
           allow update: if signedIn()
             && request.auth.uid == candidateUid
+            && isCandidate()
             && verifiedEmail()
+            && exists(/databases/$(database)/documents/candidates/$(candidateUid)/policies/$(policyId))
             && resource.data.authorUid != candidateUid
             && onlyChanges(['credited', 'creditedAt'])
             && request.resource.data.credited is bool
@@ -832,7 +957,27 @@ service cloud.firestore {
     // AMA questions are public (matching the per-official rule above); the
     // group scope lets "my activity" query one user's questions across all
     // officials.
+    // City Council, synced from the Clerk's public legislation API by the
+    // syncCouncil function: public record, read by anyone, written by nobody
+    // but the Admin SDK.
+    match /council/{docId} {
+      allow read: if true;
+    }
+    match /rollCalls/{rollCallId} {
+      allow read: if true;
+    }
+
     match /{path=**}/questions/{questionId} {
+      allow read: if true;
+    }
+
+    // The command center reads an official's own comments across concerns
+    // and a candidate's own answers across election questions. Both are
+    // already public where they live; these open only the group queries.
+    match /{path=**}/comments/{commentId} {
+      allow read: if true;
+    }
+    match /{path=**}/answers/{answerId} {
       allow read: if true;
     }
   }

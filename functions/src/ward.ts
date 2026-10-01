@@ -53,6 +53,78 @@ export function wardForPoint(lon: number, lat: number): number | null {
   return null;
 }
 
+/**
+ * One Chicago address's districts, one of each type. A copy of the app's
+ * type in src/constants/ward-districts.ts (functions can't import from src/).
+ */
+export interface Districts {
+  usHouse: number;
+  ilSenate: number;
+  ilHouse: number;
+  cookCommissioner: number;
+  boardOfReview: number;
+  subcircuit: number;
+  /** '1a'..'10b' */
+  schoolBoard: string;
+  police: number;
+}
+
+type DistrictType = keyof Districts;
+interface DistrictBoundary {
+  n: number | string;
+  /** Each polygon is an outer ring followed by any holes, [lon, lat]. */
+  polygons: Ring[][];
+}
+
+let districtTypes: Record<DistrictType, DistrictBoundary[]> | null = null;
+
+/**
+ * Every district holding a Chicago precinct, clipped to a box around the
+ * city: functions/data/district-boundaries.json, written by
+ * `npm run build-district-map`. About 2 MB, so it loads on first use.
+ */
+function districtBoundaries(): Record<DistrictType, DistrictBoundary[]> {
+  if (!districtTypes) {
+    const file = join(__dirname, '..', 'data', 'district-boundaries.json');
+    districtTypes = (
+      JSON.parse(readFileSync(file, 'utf8')) as { types: Record<DistrictType, DistrictBoundary[]> }
+    ).types;
+  }
+  return districtTypes;
+}
+
+const DISTRICT_TYPES: DistrictType[] = [
+  'usHouse',
+  'ilSenate',
+  'ilHouse',
+  'cookCommissioner',
+  'boardOfReview',
+  'subcircuit',
+  'schoolBoard',
+  'police',
+];
+
+/**
+ * The districts of every type holding a point in Chicago. Null outside the
+ * city, and null when any type has no district there (a point on the
+ * lakefront edge of a map, say), so a caller never works from half an answer.
+ */
+export function districtsForPoint(lon: number, lat: number): Districts | null {
+  if (wardForPoint(lon, lat) == null) return null;
+  const types = districtBoundaries();
+  const out: Partial<Record<DistrictType, number | string>> = {};
+  for (const type of DISTRICT_TYPES) {
+    const hit = types[type].find((d) =>
+      d.polygons.some(
+        ([outer, ...holes]) => inRing(lon, lat, outer) && !holes.some((h) => inRing(lon, lat, h))
+      )
+    );
+    if (!hit) return null;
+    out[type] = hit.n;
+  }
+  return out as Districts;
+}
+
 /** An address as Didit reports it (ID or proof-of-address document). */
 export interface DiditAddress {
   /** Raw OCR line. */
@@ -91,6 +163,19 @@ async function census(path: string, params: Record<string, string>): Promise<Poi
   return c && typeof c.x === 'number' && typeof c.y === 'number' ? { lon: c.x, lat: c.y } : null;
 }
 
+/**
+ * Geocode one typed address line ("121 N LaSalle St, Chicago, IL") with the
+ * Census geocoder. Null when nothing matches; throws when the geocoder
+ * itself fails, so a caller can tell "no such address" from "try again".
+ */
+export async function pointForAddress(
+  oneLine: string
+): Promise<{ lon: number; lat: number } | null> {
+  const address = oneLine.replace(/\s+/g, ' ').trim();
+  if (!address) return null;
+  return census('onelineaddress', { address });
+}
+
 /** Locate one Didit address: structured Census, then one-line, then Didit's point. */
 async function locate(a: DiditAddress): Promise<Point | null> {
   const p = a.parsed ?? {};
@@ -120,7 +205,8 @@ async function locate(a: DiditAddress): Promise<Point | null> {
 }
 
 export type WardResult =
-  | { kind: 'ward'; wardId: number }
+  /** Districts are null only where a boundary file has a gap (rare). */
+  | { kind: 'ward'; wardId: number; districts: Districts | null }
   /** The address was found, and it isn't in Chicago. */
   | { kind: 'outside' }
   /** No address could be read or located. */
@@ -137,12 +223,17 @@ export async function resolveWard(addresses: DiditAddress[]): Promise<WardResult
     if (!point) continue;
     located = true;
     const wardId = wardForPoint(point.lon, point.lat);
-    if (wardId != null) return { kind: 'ward', wardId };
+    if (wardId != null) return { kind: 'ward', wardId, districts: districtsForPoint(point.lon, point.lat) };
   }
   return located ? { kind: 'outside' } : { kind: 'unknown' };
 }
 
-/** Pull the addresses out of a Didit decision, proof of address first. */
+/**
+ * Pull the addresses out of a Didit decision. A decision with a proof of
+ * address (the bill move) is read from the bill only: the ID's address is
+ * the old home by definition, and falling back to it would put a mover back
+ * in the ward they left.
+ */
 export function decisionAddresses(decision: unknown): DiditAddress[] {
   const d = (decision ?? {}) as {
     poa_verifications?: Record<string, unknown>[];
@@ -156,6 +247,7 @@ export function decisionAddresses(decision: unknown): DiditAddress[] {
       parsed: poa.poa_parsed_address as DiditAddress['parsed'],
     });
   }
+  if ((d.poa_verifications ?? []).length > 0) return out.filter((a) => a.raw || a.formatted || a.parsed);
   for (const idv of d.id_verifications ?? []) {
     out.push({
       raw: idv.address as string | null,

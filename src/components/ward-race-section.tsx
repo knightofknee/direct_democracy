@@ -5,6 +5,7 @@ import { collection, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { DistrictCells } from '@/components/district-cells';
 import { ThemedText } from '@/components/themed-text';
 import { Card, SectionHeader } from '@/components/ui';
 import { ordinal, wardLabel } from '@/constants/chicago';
@@ -19,6 +20,7 @@ import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
+import { useMyDistricts } from '@/lib/districts';
 import { db } from '@/lib/firebase';
 import type { ElectionCandidateCard } from '@/lib/types';
 import { usePlural, useT } from '@/lib/i18n';
@@ -37,6 +39,7 @@ export function WardRaceSection() {
   const router = useRouter();
   const theme = useTheme();
   const t = useT();
+  const mine = useMyDistricts();
   const pluralT = usePlural();
   const { profile } = useAuth();
 
@@ -133,7 +136,7 @@ export function WardRaceSection() {
                 key={ward}
                 onPress={() => openWard(ward)}
                 accessibilityRole="button"
-                accessibilityLabel={`${wardLabel(ward)} race`}
+                accessibilityLabel={t('{ward} race').replace('{ward}', wardLabel(ward))}
                 style={({ pressed }) => [
                   styles.wardButton,
                   {
@@ -165,35 +168,18 @@ export function WardRaceSection() {
         </ThemedText>
         {pdcDeclared.length === 0 ? (
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 13, lineHeight: 19 }}>
-            {t('No candidates are on record yet. Filing runs October 19-26, 2026; the districts fill in here as candidates declare.')}
+            {t('No candidates are on record yet. Candidates file October 19-26, 2026; the districts fill in here as they declare.')}
           </ThemedText>
         ) : (
-        <View style={styles.grid}>
-          {POLICE_DISTRICTS.map((district) => {
-            const declared = countByRace.has(`pdc-${district}`);
-            return (
-              <Pressable
-                key={district}
-                onPress={() => router.push(`/election-race/pdc-${district}`)}
-                accessibilityRole="button"
-                accessibilityLabel={`${ordinal(district)} Police District Council race`}
-                style={({ pressed }) => [
-                  styles.wardButton,
-                  {
-                    borderColor: declared ? theme.primary : theme.border,
-                    backgroundColor: theme.background,
-                    opacity: pressed ? 0.7 : 1,
-                  },
-                ]}>
-                <ThemedText
-                  type="smallBold"
-                  style={{ fontSize: 14, color: declared ? theme.primary : theme.text }}>
-                  {district}
-                </ThemedText>
-              </Pressable>
-            );
-          })}
-        </View>
+        <DistrictCells
+          all={POLICE_DISTRICTS}
+          mine={mine.of('police')}
+          exact={mine.exact}
+          onOpen={(d) => router.push(`/election-race/pdc-${d}`)}
+          cellLabel={(d) => t('Police District {n} council race').replace('{n}', String(d))}
+          highlighted={(d) => countByRace.has(`pdc-${d}`)}
+          cellStyle={{ width: '8.5%', flexGrow: 1 }}
+        />
         )}
       </Card>
     </View>

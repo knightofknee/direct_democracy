@@ -360,6 +360,34 @@ function parseDetailsAccordions(html) {
     // A lone <details> is site chrome (cookie prefs, FAQs); a platform has many.
     return policies.length >= 2 ? policies : [];
 }
+// ── Format 8: WordPress post outline (marksuformayor.com) ────────────────
+// One blog post whose content div (td-post-content / entry-content) is an
+// outline: <h2>-<h4 class="wp-block-heading"> policy titles, each followed by
+// paragraphs or a bullet list. Intro text before the first heading is not a
+// policy, and leading "1." numbering is dropped from titles.
+function parseWpPostOutline(html) {
+    const open = /<div[^>]*class="[^"]*\b(?:td-post-content|entry-content)\b[^"]*"[^>]*>/.exec(html);
+    if (!open)
+        return [];
+    const content = divBlock(html, open.index);
+    if (!content)
+        return [];
+    const policies = [];
+    for (const item of content.split(/<h[2-4][^>]*\bwp-block-heading\b[^>]*>/).slice(1)) {
+        const close = /<\/h[2-4]>/.exec(item);
+        if (!close)
+            continue;
+        const title = stripTags(item.slice(0, close.index))
+            .replace(/^\d+[.)]\s*/, '')
+            .slice(0, 140);
+        const bodyHtml = item.slice(close.index + close[0].length);
+        const body = blockText(bodyHtml);
+        if (title && body) {
+            policies.push({ section: '', title, body, links: collectLinks(bodyHtml) });
+        }
+    }
+    return policies.length >= 2 ? policies : [];
+}
 // ── Dispatch ─────────────────────────────────────────────────────────────
 const FORMATS = [
     parseGroupedLists,
@@ -369,6 +397,7 @@ const FORMATS = [
     parseElementorPairs,
     parseGoogleSites,
     parseDetailsAccordions,
+    parseWpPostOutline,
 ];
 /**
  * Parse a platform page. Returns every policy in page order; throws when the

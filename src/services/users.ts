@@ -3,7 +3,7 @@ import { httpsCallable } from 'firebase/functions';
 
 import { db, functions, usingEmulators } from '@/lib/firebase';
 import { validateDisplayName } from '@/lib/names';
-import { openLink } from '@/lib/open-link';
+import { openLinkAfterAwait } from '@/lib/open-link';
 
 export async function updateDisplayName(uid: string, name: string): Promise<void> {
   const error = validateDisplayName(name);
@@ -12,10 +12,11 @@ export async function updateDisplayName(uid: string, name: string): Promise<void
 }
 
 /**
- * Permanently delete the account: auth user, profile, block list, and the
- * user's standing approvals of officials. Runs server-side so the removal is
- * complete even if the client disconnects mid-way. Pseudonymous posts and
- * cast ballots remain (see the deleteAccount function's doc comment).
+ * Permanently delete the account: auth user, profile, block list, and every
+ * ballot, approval, and judgment it cast (the triggers take them out of the
+ * tallies). Runs server-side so the removal is complete even if the client
+ * disconnects mid-way. Posts stay under "[deleted]" (see the deleteAccount
+ * function's doc comment).
  */
 export async function deleteAccount(): Promise<void> {
   const call = httpsCallable(functions, 'deleteAccount');
@@ -53,6 +54,15 @@ export async function startVerification(input: {
   const { data } = await createSession(input.method ? { method: input.method } : {});
   // The hosted Didit inquiry is opened in the browser; the webhook finishes
   // the job and the profile listener picks up verified=true when it lands.
-  await openLink(data.inquiryUrl);
+  await openLinkAfterAwait(data.inquiryUrl);
   return { mode: 'didit' };
+}
+
+/**
+ * Set a home ward without verifying (declareWard in functions): once, then
+ * locked until verification replaces it with the ward on the ID.
+ */
+export async function declareWard(wardId: number): Promise<void> {
+  const call = httpsCallable(functions, 'declareWard');
+  await call({ wardId });
 }

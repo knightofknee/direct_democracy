@@ -1,16 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
 import { useCallback, useRef, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { ShareButton } from '@/components/share-button';
+import { HeaderActions } from '@/components/help-button';
 import { ApprovalWidget } from '@/components/approval-widget';
 import { OfficialAvatar } from '@/components/avatar';
 import { useCelebration } from '@/components/celebration';
-import { ClaimGate } from '@/components/claim-gate';
+import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
-import { GradeBadge, gradeColor } from '@/components/grade-badge';
+import { GradeBadge, GradeBasis, gradeColor } from '@/components/grade-badge';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { TallyResults } from '@/components/tally-results';
@@ -24,25 +26,31 @@ import { useScreenRoom } from '@/hooks/use-screen-room';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { host, timeAgo } from '@/lib/format';
+import { usePageSummary } from '@/lib/page-help';
+import { useRateWindow } from '@/lib/rate-limits';
+import { useWardPostWindow } from '@/lib/ward-posting';
 import { tapHaptic } from '@/lib/haptics';
 import { useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
 import { useOptimistic } from '@/lib/optimistic';
 import { openLink } from '@/lib/open-link';
-import type { AmaQuestion, DualTally, Official } from '@/lib/types';
+import type { AmaQuestion, Comment, DualTally, Official } from '@/lib/types';
 import { UpvotePill, useOptimisticUpvotes } from '@/components/upvote-pill';
+import { EditHistory } from '@/components/edit-history';
+import { VotingRecord } from '@/components/voting-record';
+import { DailyLimitNote, WardPostNote } from '@/components/ward-post-note';
 import {
   askQuestion,
   deleteQuestion,
+  addQuestionComment,
+  deleteQuestionComment,
   judgeResponse,
-  respondToQuestion,
   setQuestionUpvote,
+  voteOnQuestionComment,
 } from '@/services/ama';
-import {
-  computeGrade,
-  DEFAULT_UPVOTE_ALERT_THRESHOLD,
-  updateOfficialCard,
-} from '@/services/officials';
+import { computeGrade } from '@/services/officials';
+import { editPost } from '@/services/posts';
+import { enter } from '@/lib/motion';
 
 const VERDICT_OPTIONS = [
   { key: 'answered', label: 'Answered' },
@@ -52,7 +60,8 @@ const VERDICT_OPTIONS = [
 export default function OfficialAmaScreen() {
   // `q` arrives from a notification: the one question (and its response) the
   // tap was about. The screen opens scrolled to it, not at the grade card.
-  const { id, q: focusId } = useLocalSearchParams<{ id: string; q?: string }>();
+  // `thread=1` (a reply in the conversation) also opens that conversation.
+  const { id, q: focusId, thread } = useLocalSearchParams<{ id: string; q?: string; thread?: string }>();
   const router = useRouter();
   const theme = useTheme();
   const { profile } = useAuth();
@@ -81,6 +90,44 @@ export default function OfficialAmaScreen() {
     [id]
   );
   const { isBlocked } = useBlocks();
+  // A question to an alderman is a post in their ward: 3 a day at home,
+  // once a week anywhere else (enforced by onQuestionCreated).
+  const askWindow = useWardPostWindow(official?.wardId ?? null);
+  // Citywide officials (the mayor) take the citywide question limit instead.
+  const cityAskOpensAt = useRateWindow(official && official.wardId == null ? 'cityQuestions' : null);
+
+  // The help sheet's summary of this official's record as it stands.
+  const summaryGrade = official ? computeGrade(official) : null;
+  usePageSummary(
+    'official/[id]',
+    official && summaryGrade
+      ? [
+          `${official.name}, ${t(official.title)}.`,
+          summaryGrade.overall != null
+            ? t('Overall grade: {letter}.').replace('{letter}', summaryGrade.letter)
+            : t('Not graded yet.'),
+          summaryGrade.approval.constituentPct != null
+            ? t('Approval from verified residents: {pct}%, from {n} ratings.')
+                .replace('{pct}', String(summaryGrade.approval.constituentPct))
+                .replace('{n}', String(summaryGrade.approval.constituentBallots))
+            : t('Approval: not enough verified ratings yet (it takes 5).'),
+          t('Questions: {answered} answered, {dodged} dodged, {ignored} ignored, {pending} waiting.')
+            .replace('{answered}', String(summaryGrade.answers.answered))
+            .replace('{dodged}', String(summaryGrade.answers.dodged))
+            .replace('{ignored}', String(summaryGrade.answers.ignored))
+            .replace('{pending}', String(summaryGrade.answers.pending)),
+          official.claimed
+            ? t('On the platform: they answer questions here.')
+            : t('Not on the platform yet. Their unanswered questions stay waiting, never counted as ignored.'),
+          profile &&
+            questions.some((q) => q.authorUid === profile.uid) &&
+            t('You have asked {n} of these questions.').replace(
+              '{n}',
+              String(questions.filter((q) => q.authorUid === profile.uid).length)
+            ),
+        ]
+      : []
+  );
 
   if (!official) {
     return (
@@ -120,25 +167,25 @@ export default function OfficialAmaScreen() {
 
   return (
     <Screen ref={scrollRef}>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <HeaderActions>
+              <ShareButton path={`/official/${official.uid}`} title={official.name} />
+            </HeaderActions>
+          ),
+        }}
+      />
       <GradeCard official={official} grade={grade} />
 
-      {isThisOfficial ? (
-        <>
-          <ClaimGate claimed={official.claimed} name={official.name} />
-          <EditCard official={official} />
-          <Button
-            title={official.wardId != null ? t('Put a question to your ward or the city') : t('Put a question to the city')}
-            onPress={() => router.push('/new-poll')}
-          />
-        </>
-      ) : (
-        <Card>
-          <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-            {t('Do you approve of the job {name} is doing?').replace('{name}', official.name.split(' ')[0])}
-          </ThemedText>
-          <ApprovalWidget official={official} />
-        </Card>
-      )}
+      {/* The public card, the same for everyone, the official included:
+          their tools live in the command center tab. */}
+      <Card>
+        <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+          {t('Do you approve of the job {name} is doing?').replace('{name}', official.name.split(' ')[0])}
+        </ThemedText>
+        <ApprovalWidget official={official} />
+      </Card>
 
       <SectionHeader
         title="AMA"
@@ -151,8 +198,16 @@ export default function OfficialAmaScreen() {
             value={questionText}
             onChangeText={setQuestionText}
             multiline
+            maxLength={2000}
           />
-          <Button title={t('Ask')} onPress={ask} disabled={!questionText.trim()} loading={asking} />
+          {official.wardId != null && profile && <WardPostNote wardId={official.wardId} window={askWindow} />}
+          {official.wardId == null && <DailyLimitNote bucket="cityQuestions" nextAt={cityAskOpensAt} />}
+          <Button
+            title={t('Ask')}
+            onPress={ask}
+            disabled={!questionText.trim() || askWindow.nextAt != null || cityAskOpensAt != null}
+            loading={asking}
+          />
         </Card>
       )}
 
@@ -178,12 +233,19 @@ export default function OfficialAmaScreen() {
                   ? { borderRadius: 18, borderWidth: 2, borderColor: theme.primary }
                   : undefined
               }>
-              <Animated.View entering={FadeInDown.duration(260).delay(Math.min(i, 8) * 40)}>
-                <QuestionCard question={q} isThisOfficial={isThisOfficial} officialName={official.name} />
+              <Animated.View entering={enter(FadeInDown.duration(260).delay(Math.min(i, 8) * 40))}>
+                <QuestionCard
+                  question={q}
+                  isThisOfficial={isThisOfficial}
+                  officialName={official.name}
+                  openThread={q.id === focusId && thread === '1'}
+                />
               </Animated.View>
             </View>
           ))
       )}
+
+      <VotingRecord official={official} />
     </Screen>
   );
 }
@@ -242,6 +304,7 @@ function GradeCard({
           <ThemedText type="small" themeColor="textSecondary">
             {official.title}
           </ThemedText>
+          <GradeBasis grade={grade} style={{ fontSize: 12, lineHeight: 16 }} />
         </View>
         {tight ? null : overall}
       </View>
@@ -256,6 +319,12 @@ function GradeCard({
             {t('On the platform - this official answers here')}
           </ThemedText>
         </View>
+      ) : official.wardId != null ? (
+        // Aldermen don't have to join to answer: the top questions go to
+        // their ward office.
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          {t('Not on the platform yet. We take the top-rated questions here to {name}’s ward office, so {name} can answer without joining the app.').replaceAll('{name}', official.name.split(' ')[0])}
+        </ThemedText>
       ) : (
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
           {t('Not on the platform yet. This profile is public record; {name} can claim it any time, and unanswered questions stay pending until they do.').replace('{name}', official.name.split(' ')[0])}
@@ -364,92 +433,39 @@ function AxisSummary({
   );
 }
 
-/** Officials manage their own card: bio + externally hosted portrait link. */
-function EditCard({ official }: { official: Official }) {
-  const { profile } = useAuth();
-  const t = useT();
-  const [editing, setEditing] = useState(false);
-  const [bio, setBio] = useState(official.bio ?? '');
-  const [photoUrl, setPhotoUrl] = useState(official.photoUrl ?? '');
-  const [threshold, setThreshold] = useState(
-    String(official.upvoteAlertThreshold ?? DEFAULT_UPVOTE_ALERT_THRESHOLD)
-  );
-  const [saving, setSaving] = useState(false);
-
-  if (!profile) return null;
-
-  const save = async () => {
-    const parsed = Number(threshold.trim());
-    if (!Number.isInteger(parsed) || parsed < 1) {
-      notify(t('Almost there'), t('The question alert threshold must be a whole number, 1 or more.'));
-      return;
-    }
-    setSaving(true);
-    try {
-      await updateOfficialCard(profile, { bio, photoUrl, upvoteAlertThreshold: parsed });
-      setEditing(false);
-    } catch (e) {
-      notifyError(t('Could not save'), e);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (!editing) {
-    return (
-      <Button title={t('Edit my card')} variant="secondary" onPress={() => setEditing(true)} />
-    );
-  }
-
-  return (
-    <Card>
-      <Field label={t('Bio')} value={bio} onChangeText={setBio} multiline maxLength={1000} />
-      <Field
-        label={t('Portrait link (https)')}
-        placeholder="https://your-site.org/portrait.jpg"
-        value={photoUrl}
-        onChangeText={setPhotoUrl}
-        autoCapitalize="none"
-        keyboardType="url"
-      />
-      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {t('Link a photo hosted on your own site or campaign page - direct democracy displays it but never stores the image.')}
-      </ThemedText>
-      <Field
-        label={t('Question alert threshold')}
-        value={threshold}
-        onChangeText={setThreshold}
-        keyboardType="number-pad"
-        maxLength={5}
-      />
-      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {t("You'll get a notification when a question in your AMA reaches this many upvotes.")}
-      </ThemedText>
-      <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-        <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(false)} style={{ flex: 1 }} />
-        <Button title={t('Save')} onPress={save} loading={saving} style={{ flex: 1 }} />
-      </View>
-    </Card>
-  );
-}
-
 function QuestionCard({
   question,
   isThisOfficial,
   officialName,
+  openThread = false,
 }: {
   question: AmaQuestion;
   isThisOfficial: boolean;
   officialName: string;
+  /** Start with the conversation open (arrived from a reply notification). */
+  openThread?: boolean;
 }) {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
   const t = useT();
-  const [responseText, setResponseText] = useState('');
   const [busy, setBusy] = useState(false);
   const [confirmWithdraw, setConfirmWithdraw] = useState(false);
+  const [editing, setEditing] = useState<string | null>(null);
   const isAsker = profile?.uid === question.authorUid;
+  // The asker may edit until the official answers (editPost records it).
+  const saveEdit = async () => {
+    if (editing == null) return;
+    setBusy(true);
+    try {
+      await editPost(`officials/${question.officialUid}/questions/${question.id}`, { body: editing });
+      setEditing(null);
+    } catch (e) {
+      notifyError(t('Could not save'), e);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const { anticipate } = useCelebration();
 
@@ -528,19 +544,6 @@ function QuestionCard({
     dodged: { label: 'Dodged', tone: 'danger' as const },
   }[question.status];
 
-  const respond = async () => {
-    if (!profile) return;
-    setBusy(true);
-    try {
-      await respondToQuestion(profile, question, responseText);
-      setResponseText('');
-    } catch (e) {
-      notifyError(t('Could not respond'), e);
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const judge = (answered: boolean) => {
     if (!profile) {
       router.push('/sign-in');
@@ -581,12 +584,13 @@ function QuestionCard({
         </ThemedText>
         <View style={{ flexGrow: 1 }} />
         {/* The official sees the count too (it is their priority signal),
-            they just cannot join questions put to themselves. */}
+            they just cannot join questions put to themselves; the asker's
+            own question already carries their weight. */}
         <UpvotePill
           count={upvoteCount}
           active={myUpvote != null}
           onPress={toggleUpvote}
-          disabled={isThisOfficial}
+          disabled={isThisOfficial || question.authorUid === profile?.uid}
         />
 
         <ContentActions
@@ -597,27 +601,48 @@ function QuestionCard({
           authorName={question.authorName}
         />
       </View>
-      <ThemedText type="small" style={{ fontSize: 15, lineHeight: 21 }}>
-        {question.body}
-      </ThemedText>
+      {editing != null ? (
+        <View style={{ gap: Spacing.two }}>
+          <Field value={editing} onChangeText={setEditing} multiline maxLength={2000} autoFocus />
+          <View style={styles.judgeRow}>
+            <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(null)} style={{ flex: 1 }} />
+            <Button
+              title={t('Save')}
+              onPress={saveEdit}
+              loading={busy}
+              disabled={editing.trim().length < 10 || editing.trim() === question.body}
+              style={{ flex: 1 }}
+            />
+          </View>
+        </View>
+      ) : (
+        <ThemedText type="small" style={{ fontSize: 15, lineHeight: 21 }}>
+          {question.body}
+        </ThemedText>
+      )}
+      <EditHistory edits={question.edits} />
       {isAsker &&
         question.status === 'awaitingResponse' &&
+        editing == null &&
         (confirmWithdraw ? (
           <View style={styles.judgeRow}>
             <Button title={t('Yes, withdraw')} variant="danger" onPress={withdraw} disabled={busy} />
             <Button title={t('Keep it')} variant="ghost" onPress={() => setConfirmWithdraw(false)} />
           </View>
         ) : (
-          <Button
-            title={t('Withdraw my question')}
-            variant="ghost"
-            onPress={() => setConfirmWithdraw(true)}
-          />
+          <View style={styles.judgeRow}>
+            <Button title={t('Edit')} variant="ghost" onPress={() => setEditing(question.body)} />
+            <Button
+              title={t('Withdraw my question')}
+              variant="ghost"
+              onPress={() => setConfirmWithdraw(true)}
+            />
+          </View>
         ))}
 
       {question.response ? (
         <View style={[styles.response, { backgroundColor: theme.background, borderColor: theme.border }]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
             <Ionicons name="mic" size={13} color={theme.primary} />
             <ThemedText type="smallBold" style={{ fontSize: 12, color: theme.primary }}>
               {t('Official response')} · {timeAgo(question.respondedAt)}
@@ -669,27 +694,73 @@ function QuestionCard({
         </View>
       )}
 
-      {isThisOfficial && !question.response && (
-        <View style={{ gap: Spacing.two }}>
-          <Field
-            placeholder={t('Write your response…')}
-            value={responseText}
-            onChangeText={setResponseText}
-            multiline
-          />
-          <Button
-            title={t('Post response')}
-            onPress={respond}
-            disabled={!responseText.trim()}
-            loading={busy}
-          />
-        </View>
-      )}
+      {question.response ? <QuestionThread question={question} startOpen={openThread} /> : null}
     </Card>
   );
 }
 
+/**
+ * The conversation under an answer: the asker, the official, and anyone
+ * else can keep talking, with the same threaded comments as the boards and
+ * the official's own replies marked. Folded until asked for, so the list
+ * of questions stays scannable.
+ */
+function QuestionThread({ question, startOpen }: { question: AmaQuestion; startOpen: boolean }) {
+  const theme = useTheme();
+  const t = useT();
+  const { profile } = useAuth();
+  const [open, setOpen] = useState(startOpen);
+  const { data: comments } = useLiveQuery<Comment>(
+    () =>
+      open
+        ? query(
+            collection(db, 'officials', question.officialUid, 'questions', question.id, 'comments'),
+            orderBy('createdAt', 'desc')
+          )
+        : null,
+    [open, question.id]
+  );
+  const count = question.commentCount ?? 0;
+  return (
+    <View style={{ gap: Spacing.two }}>
+      <Pressable
+        onPress={() => setOpen((v) => !v)}
+        accessibilityRole="button"
+        accessibilityState={{ expanded: open }}
+        hitSlop={8}
+        style={styles.threadToggle}>
+        <Ionicons name="chatbubbles-outline" size={15} color={theme.primary} />
+        <ThemedText type="smallBold" style={{ fontSize: 13, color: theme.primary, flex: 1 }}>
+          {count > 0
+            ? t('Conversation ({n})').replace('{n}', String(count))
+            : t('Continue the conversation')}
+        </ThemedText>
+        <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={16} color={theme.textSecondary} />
+      </Pressable>
+      {open && (
+        <CommentsSection
+          comments={comments}
+          opUid={question.officialUid}
+          opChipLabel="official"
+          contentPathFor={(comment) =>
+            `officials/${question.officialUid}/questions/${question.id}/comments/${comment.id}`
+          }
+          onSubmit={(body, reply, references) => addQuestionComment(profile!, question, body, reply, references)}
+          onDelete={(comment) => deleteQuestionComment(profile!, question, comment)}
+          onVote={(comment, value) => voteOnQuestionComment(profile!, question, comment.id, value)}
+        />
+      )}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
+  threadToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    paddingTop: Spacing.one,
+  },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -8,34 +8,39 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, {
   Easing,
-  FadeIn,
-  FadeOut,
-  ZoomIn,
+  FadeInDown,
+  FadeOutUp,
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
+  withDelay,
   withTiming,
   type SharedValue,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { Button } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
 import { successHaptic } from '@/lib/haptics';
-import { tr, useT } from '@/lib/i18n';
-import { takeAnticipatedMilestone, takeNewMilestone, type Milestone } from '@/lib/milestones';
+import { tr } from '@/lib/i18n';
+import { markReachedMilestones, takeAnticipatedMilestone, type Milestone } from '@/lib/milestones';
 import type { UserStats } from '@/lib/types';
+import { enter } from '@/lib/motion';
 
 /**
- * Celebration moments: confetti in Chicago-flag colors over a milestone card.
- * The provider watches the signed-in user's server-counted stats and fires
- * each milestone exactly once per account per device; a welcome moment fires
- * on brand-new accounts.
+ * Celebration moments: a few fireworks in Chicago-flag colors over whatever
+ * screen the person is on, and a small note at the top that leaves on its
+ * own. Nothing blocks: the overlay never takes a touch outside the note, so
+ * the tap that earned the moment flows straight into the next one (a tap on
+ * the note just sends it away sooner). The provider watches the signed-in
+ * user's server-counted stats and fires each milestone exactly once per
+ * account per device; a welcome moment fires on brand-new accounts.
  */
 
 const CelebrationContext = createContext<{
@@ -53,9 +58,6 @@ export function useCelebration() {
   if (!ctx) throw new Error('useCelebration must be used inside <CelebrationProvider>');
   return ctx;
 }
-
-const CONFETTI_COLORS = ['#41B6E6', '#C8102E', '#FFD100', '#FFFFFF', '#B3DDF2'];
-const PARTICLE_COUNT = 26;
 
 export function CelebrationProvider({ children }: { children: React.ReactNode }) {
   const { profile } = useAuth();
@@ -109,20 +111,16 @@ export function CelebrationProvider({ children }: { children: React.ReactNode })
       celebrate({
         key: 'welcome',
         title: tr('Welcome to direct democracy'),
-        message: tr(
-          'Your city, your voice. Raise concerns, vote your priorities, and hold officials to real answers.'
-        ),
       });
     });
   }, [uid, createdMs, celebrate]);
 
-  // Milestone watcher - stats are written by Cloud Functions, so they arrive
-  // through the live profile listener a beat after the action.
+  // Server-counted stats only record what's been reached; they never
+  // celebrate. A celebration answers a tap on this device (anticipate), so
+  // a vote made elsewhere, or stats that land at sign-in, fire nothing.
   useEffect(() => {
     if (!uid || !stats) return;
-    takeNewMilestone(uid, stats).then((m) => {
-      if (m) celebrate(m);
-    });
+    markReachedMilestones(uid, stats).catch(() => {});
     // statsKey stands in for the stats object so deep-equal updates don't refire.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid, statsKey, celebrate]);
@@ -131,10 +129,19 @@ export function CelebrationProvider({ children }: { children: React.ReactNode })
     <CelebrationContext.Provider
       value={useMemo(() => ({ celebrate, anticipate }), [celebrate, anticipate])}>
       {children}
-      {active && <CelebrationOverlay milestone={active} onDismiss={dismiss} />}
+      {active && <CelebrationOverlay key={active.key} milestone={active} onDismiss={dismiss} />}
     </CelebrationContext.Provider>
   );
 }
+
+const COLORS = ['#41B6E6', '#C8102E', '#FFD100', '#B3DDF2'];
+const BURSTS = 3;
+const SPARKS_PER_BURST = 14;
+const BURST_MS = 1300;
+const BURST_STAGGER_MS = 260;
+
+/** Long enough to read a short title, never a lingering banner. */
+const NOTE_MS = 3000;
 
 function CelebrationOverlay({
   milestone,
@@ -144,110 +151,123 @@ function CelebrationOverlay({
   onDismiss: () => void;
 }) {
   const theme = useTheme();
-  const t = useT();
-  const progress = useSharedValue(0);
+  const insets = useSafeAreaInsets();
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     successHaptic();
-    progress.value = 0;
-    progress.value = withTiming(1, { duration: 2600, easing: Easing.out(Easing.quad) });
-    const timer = setTimeout(onDismiss, 5000);
+    AccessibilityInfo.announceForAccessibility(milestone.title);
+    const timer = setTimeout(onDismiss, NOTE_MS);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [milestone.key]);
 
   // Deterministic pseudo-randoms (pure for the compiler; varied per milestone).
-  const particles = useMemo(() => {
+  const bursts = useMemo(() => {
     let seed = 2166136261;
     for (const ch of milestone.key) seed = (seed ^ ch.charCodeAt(0)) * 16777619;
     const prand = (i: number, salt: number) => {
       const n = Math.sin(seed + i * 127.1 + salt * 311.7) * 43758.5453;
       return n - Math.floor(n);
     };
-    return Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
-      id: `${milestone.key}-${i}`,
-      x: prand(i, 1),
-      drift: (prand(i, 2) - 0.5) * 140,
-      spin: (prand(i, 3) - 0.5) * 720,
-      size: 6 + prand(i, 4) * 8,
-      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-      delayFactor: prand(i, 5) * 0.35,
-      star: i % 6 === 0,
+    return Array.from({ length: BURSTS }, (_, b) => ({
+      id: `${milestone.key}-${b}`,
+      // Spread across the width, just under the note where the eye already is.
+      x: 0.15 + 0.7 * ((b + 0.2 + prand(b, 1) * 0.6) / BURSTS),
+      y: 0.18 + prand(b, 2) * 0.2,
+      delay: b * BURST_STAGGER_MS,
+      sparks: Array.from({ length: SPARKS_PER_BURST }, (_, i) => ({
+        angle: (i / SPARKS_PER_BURST) * Math.PI * 2 + prand(b * 31 + i, 3) * 0.3,
+        reach: 60 + prand(b * 31 + i, 4) * 50,
+        size: 4 + prand(b * 31 + i, 5) * 4,
+        color: COLORS[(b + i) % COLORS.length],
+        star: i % 5 === 0,
+      })),
     }));
   }, [milestone.key]);
 
   return (
-    <Animated.View
-      entering={FadeIn.duration(200)}
-      exiting={FadeOut.duration(250)}
-      style={[styles.overlay, { backgroundColor: 'rgba(8, 16, 26, 0.72)' }]}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={onDismiss} />
-      {particles.map((p) => (
-        <Particle key={p.id} particle={p} progress={progress} />
-      ))}
+    <View pointerEvents="box-none" style={styles.overlay}>
+      {!reduceMotion && bursts.map((burst) => <Burst key={burst.id} burst={burst} />)}
       <Animated.View
-        entering={ZoomIn.duration(220)}
-        style={[styles.card, { backgroundColor: theme.background, borderColor: theme.border }]}>
-        <View style={[styles.starBubble, { backgroundColor: theme.primarySoft }]}>
-          <Ionicons name="star" size={30} color={theme.accent} />
-        </View>
-        <ThemedText type="smallBold" style={{ fontSize: 22, lineHeight: 28, textAlign: 'center' }}>
-          {milestone.title}
-        </ThemedText>
-        <ThemedText
-          type="small"
-          themeColor="textSecondary"
-          style={{ textAlign: 'center', fontSize: 15, lineHeight: 21 }}>
-          {milestone.message}
-        </ThemedText>
-        <Button title={t('Keep going')} onPress={onDismiss} style={{ alignSelf: 'stretch' }} />
+        entering={enter(FadeInDown.duration(220))}
+        exiting={FadeOutUp.duration(200)}
+        pointerEvents="box-none"
+        style={[styles.noteWrap, { top: insets.top + Spacing.two }]}>
+        <Pressable
+          onPress={onDismiss}
+          accessibilityRole="alert"
+          style={[styles.note, { backgroundColor: theme.background, borderColor: theme.border }]}>
+          <View style={[styles.starBubble, { backgroundColor: theme.primarySoft }]}>
+            <Ionicons name="star" size={16} color={theme.accent} />
+          </View>
+          {/* The title is the whole message: no line of commentary under it. */}
+          <ThemedText type="smallBold" style={{ flexShrink: 1, fontSize: 15, lineHeight: 20 }}>
+            {milestone.title}
+          </ThemedText>
+        </Pressable>
       </Animated.View>
-    </Animated.View>
+    </View>
   );
 }
 
-function Particle({
-  particle,
+type BurstSpec = {
+  x: number;
+  y: number;
+  delay: number;
+  sparks: { angle: number; reach: number; size: number; color: string; star: boolean }[];
+};
+
+/** One firework: sparks fly out from a point, sink a little, and fade. */
+function Burst({ burst }: { burst: BurstSpec }) {
+  const progress = useSharedValue(0);
+  useEffect(() => {
+    progress.value = withDelay(
+      burst.delay,
+      withTiming(1, { duration: BURST_MS, easing: Easing.out(Easing.cubic) })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const { width, height } = Dimensions.get('window');
+  return (
+    <View pointerEvents="none" style={[styles.burst, { left: burst.x * width, top: burst.y * height }]}>
+      {burst.sparks.map((spark, i) => (
+        <Spark key={i} spark={spark} progress={progress} />
+      ))}
+    </View>
+  );
+}
+
+function Spark({
+  spark,
   progress,
 }: {
-  particle: {
-    x: number;
-    drift: number;
-    spin: number;
-    size: number;
-    color: string;
-    delayFactor: number;
-    star: boolean;
-  };
+  spark: BurstSpec['sparks'][number];
   progress: SharedValue<number>;
 }) {
-  const { width, height } = Dimensions.get('window');
   const style = useAnimatedStyle(() => {
-    const local = Math.min(
-      1,
-      Math.max(0, (progress.value - particle.delayFactor) / (1 - particle.delayFactor))
-    );
+    const p = progress.value;
     return {
       transform: [
-        { translateX: particle.x * width + Math.sin(local * Math.PI * 2) * particle.drift },
-        { translateY: -40 + local * (height + 80) },
-        { rotate: `${local * particle.spin}deg` },
+        { translateX: Math.cos(spark.angle) * spark.reach * p },
+        // Gravity: a gentle fall that grows as the burst spends itself.
+        { translateY: Math.sin(spark.angle) * spark.reach * p + 40 * p * p },
+        { scale: 1 - 0.4 * p },
       ],
-      opacity: local > 0.85 ? (1 - local) / 0.15 : 1,
+      opacity: p === 0 ? 0 : p < 0.6 ? 1 : (1 - p) / 0.4,
     };
   });
-
   return (
-    <Animated.View pointerEvents="none" style={[styles.particle, style]}>
-      {particle.star ? (
-        <Ionicons name="star" size={particle.size + 4} color={particle.color} />
+    <Animated.View style={[styles.spark, style]}>
+      {spark.star ? (
+        <Ionicons name="star" size={spark.size + 6} color={spark.color} />
       ) : (
         <View
           style={{
-            width: particle.size,
-            height: particle.size * 1.6,
-            borderRadius: 2,
-            backgroundColor: particle.color,
+            width: spark.size,
+            height: spark.size,
+            borderRadius: spark.size / 2,
+            backgroundColor: spark.color,
           }}
         />
       )}
@@ -262,28 +282,44 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
     zIndex: 1000,
   },
-  particle: {
+  burst: {
     position: 'absolute',
-    top: 0,
-    left: 0,
+    width: 0,
+    height: 0,
   },
-  card: {
-    borderRadius: 20,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: Spacing.four,
-    gap: Spacing.three,
+  spark: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  },
+  noteWrap: {
+    position: 'absolute',
+    left: Spacing.three,
+    right: Spacing.three,
     alignItems: 'center',
-    maxWidth: 340,
-    marginHorizontal: Spacing.four,
+  },
+  note: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    maxWidth: 420,
+    alignSelf: 'center',
+    borderRadius: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingVertical: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
   },
   starBubble: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },

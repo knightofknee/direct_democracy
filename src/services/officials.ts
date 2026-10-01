@@ -2,6 +2,7 @@ import { deleteDoc, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/fir
 
 import { db } from '@/lib/firebase';
 import { pct } from '@/lib/format';
+import { tr } from '@/lib/i18n';
 import type { ApprovalValue, Official, UserProfile } from '@/lib/types';
 import { computeScore, letterFor, type OfficialScore } from '@/services/ama';
 
@@ -110,9 +111,11 @@ export async function setApproval(
   officialUid: string,
   value: ApprovalValue
 ): Promise<void> {
-  if (profile.uid === officialUid) throw new Error('Officials cannot rate themselves.');
-  if (!profile.verified || profile.wardId == null) {
-    throw new Error('Verify your residency to grade officials.');
+  if (profile.uid === officialUid) throw new Error(tr('Officials cannot rate themselves.'));
+  // Any home ward, verified or declared; only verified constituents move
+  // the grade (onApprovalWrite), the rest show in the all-users count.
+  if (profile.wardId == null) {
+    throw new Error(tr('Set or verify your home ward to rate officials.'));
   }
   await setDoc(doc(db, 'officials', officialUid, 'approvals', profile.uid), {
     value,
@@ -135,14 +138,14 @@ export async function updateOfficialCard(
   profile: UserProfile,
   input: { bio: string; photoUrl: string; upvoteAlertThreshold?: number }
 ): Promise<void> {
-  if (profile.role !== 'official') throw new Error('Only officials can edit an official card.');
+  if (profile.role !== 'official') throw new Error(tr('Only officials can edit an official card.'));
   const photoUrl = input.photoUrl.trim();
   if (photoUrl && !photoUrl.startsWith('https://')) {
-    throw new Error('Photo link must be an https:// URL.');
+    throw new Error(tr('Photo link must be an https:// URL.'));
   }
   const threshold = input.upvoteAlertThreshold;
   if (threshold != null && (!Number.isInteger(threshold) || threshold < 1 || threshold > 10000)) {
-    throw new Error('The question alert threshold must be a whole number of upvotes, 1 or more.');
+    throw new Error(tr('The question alert threshold must be a whole number of upvotes, 1 or more.'));
   }
   await updateDoc(doc(db, 'officials', profile.uid), {
     bio: input.bio.trim(),

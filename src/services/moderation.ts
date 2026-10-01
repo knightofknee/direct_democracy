@@ -2,6 +2,7 @@ import { addDoc, collection, deleteDoc, doc, serverTimestamp, setDoc } from 'fir
 
 import { db } from '@/lib/firebase';
 import type { UserProfile } from '@/lib/types';
+import { tr } from '@/lib/i18n';
 
 /**
  * Content moderation, user-side. Reports are write-only for clients (the
@@ -26,13 +27,19 @@ export async function reportContent(
   input: {
     /** Firestore path of the offending document. */
     contentPath: string;
-    contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy';
+    contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy' | 'electionQuestion';
     reason: ReportReason;
     /** Snapshot of the offending text so the report is reviewable even if edited. */
     excerpt: string;
     authorUid?: string;
+    /** What's wrong, in the reporter's words: required for "Other". */
+    note?: string;
   }
 ): Promise<void> {
+  const note = input.note?.trim() ?? '';
+  if (input.reason === 'other' && note.length < 5) {
+    throw new Error(tr('Say what’s wrong with it (at least 5 characters).'));
+  }
   await addDoc(collection(db, 'reports'), {
     reporterUid: profile.uid,
     contentPath: input.contentPath,
@@ -40,6 +47,7 @@ export async function reportContent(
     reason: input.reason,
     excerpt: input.excerpt.slice(0, 300),
     authorUid: input.authorUid ?? null,
+    ...(note ? { note: note.slice(0, 500) } : {}),
     status: 'open',
     createdAt: serverTimestamp(),
   });
@@ -50,7 +58,7 @@ export async function blockUser(
   blockedUid: string,
   displayName: string
 ): Promise<void> {
-  if (profile.uid === blockedUid) throw new Error('You cannot block yourself.');
+  if (profile.uid === blockedUid) throw new Error(tr('You cannot block yourself.'));
   await setDoc(doc(db, 'users', profile.uid, 'blocks', blockedUid), {
     displayName,
     createdAt: serverTimestamp(),

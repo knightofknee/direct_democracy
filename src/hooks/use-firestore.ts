@@ -26,7 +26,12 @@ export function useLiveQuery<T>(makeQuery: () => Query | null, deps: unknown[]):
 } {
   const key = JSON.stringify(deps);
   const [result, setResult] = useState<{ key: string; data: T[] } | null>(null);
-  const [attempt, setAttempt] = useState(0);
+  // Retries count per query: a new key starts from zero, so one failing
+  // query can't use up the retries of the next.
+  const [tries, setTries] = useState<{ key: string; n: number }>({ key: '', n: 0 });
+  const attempt = tries.key === key ? tries.n : 0;
+  const setAttempt = (next: (n: number) => number) =>
+    setTries((cur) => ({ key, n: next(cur.key === key ? cur.n : 0) }));
 
   useEffect(() => {
     const q = makeQuery();
@@ -63,7 +68,12 @@ export function useLiveDoc<T>(makeRef: () => DocumentReference | null, deps: unk
 } {
   const key = JSON.stringify(deps);
   const [result, setResult] = useState<{ key: string; data: T | null } | null>(null);
-  const [attempt, setAttempt] = useState(0);
+  // Retries count per query: a new key starts from zero, so one failing
+  // query can't use up the retries of the next.
+  const [tries, setTries] = useState<{ key: string; n: number }>({ key: '', n: 0 });
+  const attempt = tries.key === key ? tries.n : 0;
+  const setAttempt = (next: (n: number) => number) =>
+    setTries((cur) => ({ key, n: next(cur.key === key ? cur.n : 0) }));
 
   useEffect(() => {
     const ref = makeRef();

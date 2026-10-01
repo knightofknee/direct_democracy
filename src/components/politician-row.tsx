@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { OfficialAvatar } from '@/components/avatar';
-import { GradeBadge } from '@/components/grade-badge';
+import { GradeBadge, GradeBasis } from '@/components/grade-badge';
 import { ThemedText } from '@/components/themed-text';
 import { Card, Chip } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
@@ -38,6 +38,7 @@ export function OfficialRow({ official }: { official: Official }) {
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {official.title} · {t('ask them anything')}
           </ThemedText>
+          <GradeBasis grade={grade} />
         </View>
         <GradeBadge letter={grade.letter} score={grade.overall} />
         {tight ? null : <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />}

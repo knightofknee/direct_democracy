@@ -11,15 +11,14 @@ import type { UserStats } from '@/lib/types';
 
 export interface Milestone {
   key: string;
+  /** The whole celebration: a short title, no commentary under it. */
   title: string;
-  message: string;
 }
 
 interface MilestoneTrack {
   stat: keyof UserStats;
   thresholds: number[];
   title: (n: number) => string;
-  message: (n: number) => string;
 }
 
 const TRACKS: MilestoneTrack[] = [
@@ -28,28 +27,16 @@ const TRACKS: MilestoneTrack[] = [
     thresholds: [1, 10, 50],
     title: (n) =>
       n === 1 ? tr('First concern raised!') : tr('{n} concerns raised!').replace('{n}', String(n)),
-    message: (n) =>
-      n === 1
-        ? tr('Your voice is officially on the board. This is how change starts.')
-        : tr('You keep putting real issues in front of the city. Keep them coming.'),
   },
   {
     stat: 'votes',
     thresholds: [1, 10, 100, 500],
     title: (n) => (n === 1 ? tr('First vote cast!') : tr('{n} votes cast!').replace('{n}', String(n))),
-    message: (n) =>
-      n === 1
-        ? tr('Every tally in this app is made of moments like that one.')
-        : n >= 100
-          ? tr('That is a serious voting record. Chicago hears you.')
-          : tr('Your priorities are shaping the board.'),
   },
   {
     stat: 'judgments',
     thresholds: [1, 25, 100],
     title: (n) => (n === 1 ? tr('First answer judged!') : tr('{n} answers judged!').replace('{n}', String(n))),
-    message: () =>
-      tr('Holding officials to straight answers is the whole point. Thank you.'),
   },
 ];
 
@@ -71,13 +58,6 @@ function reachedKeys(stats: UserStats): Set<string> {
 
 const storageKey = (uid: string) => `dd:celebrated:${uid}`;
 
-/**
- * Diff current stats against what this device has already celebrated.
- * Returns the single best new milestone (highest threshold wins so a burst
- * doesn't queue five popups), after marking everything reached as seen.
- * First call for an account initializes silently - existing users don't get
- * a replay of their whole history.
- */
 /**
  * Celebrate at the moment of the action instead of waiting for the Cloud
  * Functions round trip (a cold start can add many seconds). The caller says
@@ -103,41 +83,23 @@ export async function takeAnticipatedMilestone(
   if (seen.includes(key)) return null;
 
   await AsyncStorage.setItem(storageKey(uid), JSON.stringify([...seen, key]));
-  return { key, title: track.title(value), message: track.message(value) };
+  return { key, title: track.title(value) };
 }
 
-export async function takeNewMilestone(
-  uid: string,
-  stats: UserStats
-): Promise<Milestone | null> {
-  const reached = reachedKeys(stats);
+/**
+ * Record every milestone the server-counted stats have reached, without
+ * celebrating any of them. A celebration is a reaction to something the
+ * person just did on this device (takeAnticipatedMilestone, at the tap);
+ * stats that arrive later, from another device or a sign-in, only mark what
+ * is already behind them, so nothing fires out of the blue.
+ */
+export async function markReachedMilestones(uid: string, stats: UserStats): Promise<void> {
   const raw = await AsyncStorage.getItem(storageKey(uid));
-  const seen: string[] | null = raw ? JSON.parse(raw) : null;
-
-  // Union, never replace: replacing would drop keys the server stats do not
-  // (yet) support - an anticipated milestone whose trigger is still in
-  // flight, or a threshold crossed then un-crossed by a retraction - and a
-  // dropped key means the same celebration fires again later.
-  await AsyncStorage.setItem(storageKey(uid), JSON.stringify([...new Set([...(seen ?? []), ...reached])]));
-
-  if (seen === null) return null; // first sighting of this account on this device
-
-  const fresh = [...reached].filter((k) => !seen.includes(k));
-  if (fresh.length === 0) return null;
-
-  let best: { track: MilestoneTrack; threshold: number } | null = null;
-  for (const key of fresh) {
-    const [stat, thresholdStr] = key.split(':');
-    const track = TRACKS.find((t) => t.stat === stat);
-    const threshold = Number(thresholdStr);
-    if (!track) continue;
-    if (!best || threshold > best.threshold) best = { track, threshold };
-  }
-  if (!best) return null;
-
-  return {
-    key: `${best.track.stat}:${best.threshold}`,
-    title: best.track.title(best.threshold),
-    message: best.track.message(best.threshold),
-  };
+  const seen: string[] = raw ? JSON.parse(raw) : [];
+  // Union, never replace: an anticipated key whose trigger is still in
+  // flight must stay marked, or it would fire again later.
+  await AsyncStorage.setItem(
+    storageKey(uid),
+    JSON.stringify([...new Set([...seen, ...reachedKeys(stats)])])
+  );
 }

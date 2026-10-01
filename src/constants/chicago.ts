@@ -1,4 +1,4 @@
-import { getLocale } from '@/lib/i18n';
+import { getLocale, tr } from '@/lib/i18n';
 
 /**
  * Chicago-only for launch, and we lean into it: the city, its 50 wards, and
@@ -102,6 +102,7 @@ export function ordinal(n: number): string {
 export const TEST_WARD = 51;
 
 export function wardLabel(id: number | null | undefined): string {
-  if (id == null) return getLocale() === 'es' ? 'Toda la ciudad' : 'Citywide';
-  return getLocale() === 'es' ? `Distrito ${id}` : `${ordinal(id)} Ward`;
+  if (id == null) return tr('Citywide');
+  // English says "44th Ward"; every other language uses its "Ward {n}".
+  return getLocale() === 'en' ? `${ordinal(id)} Ward` : tr('Ward {n}').replace('{n}', String(id));
 }

@@ -6,12 +6,12 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ConcernCard } from '@/components/concern-card';
 import { FlagAccent } from '@/components/flag-accent';
-import { LensToggle } from '@/components/lens-toggle';
+import { HomeWardChoice } from '@/components/home-ward-choice';
 import { PollCard } from '@/components/poll-card';
 import { OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
-import { SortToggle, sortConcerns, type ConcernSort } from '@/components/sort-toggle';
+import { ListControls, sortConcerns, type ConcernSort } from '@/components/list-controls';
 import { ThemedText } from '@/components/themed-text';
 import { WardMap } from '@/components/ward-map';
 import { Button, Card, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
@@ -24,12 +24,18 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { Concern, Official, Poll, TallyLens } from '@/lib/types';
 import { useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
+import { computeGrade } from '@/services/officials';
 
 export default function WardScreen() {
   const { profile, loading } = useAuth();
   // Anyone can browse any ward; residents just land on their own by default.
-  const [selected, setSelected] = useState<number | 'picker' | null>(null);
+  // A pick is remembered with the home ward it was made under, so setting or
+  // changing the home ward lands on the new one.
   const homeWard = profile?.wardId ?? null;
+  const [pick, setPick] = useState<{ view: number | 'picker'; home: number | null } | null>(null);
+  const selected = pick && pick.home === homeWard ? pick.view : null;
+  const setSelected = (view: number | 'picker' | null) => setPick(view == null ? null : { view, home: homeWard });
   const view = selected ?? homeWard ?? 'picker';
 
   if (loading)
@@ -55,6 +61,17 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
   const theme = useTheme();
   const { profile } = useAuth();
   const canGoHome = profile?.wardId != null;
+  usePageSummary('(tabs)/ward', [
+    t('Showing all 50 wards to pick from.'),
+    profile?.wardId != null
+      ? t(profile.verified ? 'Your home ward: the {ward}, verified.' : 'Your home ward: the {ward}, set without an ID.').replace(
+          '{ward}',
+          wardLabel(profile.wardId)
+        )
+      : profile
+        ? t('You have no home ward yet.')
+        : t('You are signed out.'),
+  ]);
 
   return (
     <Screen tab>
@@ -81,6 +98,8 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
             <Pressable
               key={w.id}
               onPress={() => onPick(w.id)}
+              accessibilityRole="button"
+              accessibilityLabel={wardLabel(w.id)}
               style={[styles.wardCell, { borderColor: theme.border, backgroundColor: theme.background }]}>
               <ThemedText type="small" style={{ fontSize: 13 }}>
                 {w.id}
@@ -90,23 +109,35 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
         </View>
       </Card>
 
-      {/* One row, not a pitch: the full verification story lives on /verify.
-          Kept compact so the map below clears the fold. */}
-      {!profile?.verified && (
-        <Card onPress={() => router.push(profile ? '/verify' : '/sign-in')}>
-          <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center' }}>
-            <Ionicons name="shield-checkmark" size={22} color={theme.primary} />
-            <View style={{ flex: 1, gap: 2 }}>
-              <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-                {t(profile ? 'Verify your residency' : 'Sign in to verify your residency')}
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {t('Verify to participate in your ward’s board and polls.')}
-              </ThemedText>
-            </View>
-            <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
-          </View>
+      {/* The way into a ward. No ward yet: both doors, verify or set it
+          without an ID. A declared ward: just the verify row. Kept compact
+          so the map below clears the fold. */}
+      {profile && !profile.verified && profile.wardId == null ? (
+        <Card>
+          <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+            {t('Join your ward')}
+          </ThemedText>
+          <HomeWardChoice note={t('Raise concerns, vote on ward polls, and rate your alderman.')} />
         </Card>
+      ) : (
+        !profile?.verified && (
+          <Card onPress={() => router.push(profile ? '/verify' : '/sign-in')}>
+            <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center' }}>
+              <Ionicons name="shield-checkmark" size={22} color={theme.primary} />
+              <View style={{ flex: 1, gap: 2 }}>
+                <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+                  {t(profile ? 'Verify your residency' : 'Sign in to join your ward')}
+                </ThemedText>
+                <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+                  {profile
+                    ? t('Verified residents also count in the verified tallies.')
+                    : t('Raise concerns, vote on ward polls, and rate your alderman.')}
+                </ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
+            </View>
+          </Card>
+        )
       )}
 
       <View style={{ alignItems: 'center', gap: Spacing.one }}>
@@ -169,7 +200,6 @@ function WardHome({
   );
   const alderman = aldermen[0];
 
-  const isWardOfficial = profile?.role === 'official' && profile.wardId === wardId;
   const openPolls = polls.filter((p) => p.open);
   const closedPolls = polls.filter((p) => !p.open);
   const { isBlocked } = useBlocks();
@@ -178,6 +208,24 @@ function WardHome({
   // when the list is displayed by date.
   const rankById = new Map(visibleConcerns.map((c, i) => [c.id, i + 1]));
   const displayConcerns = sortConcerns(visibleConcerns, sort);
+
+  // The help sheet's summary of this ward's board as it stands.
+  const aldermanGrade = alderman ? computeGrade(alderman) : null;
+  usePageSummary('(tabs)/ward', [
+    t(isHomeWard ? 'Showing the {ward}, your home ward.' : 'Showing the {ward}.').replace('{ward}', wardLabel(wardId)),
+    !loading && t('Ward concerns: {n}.').replace('{n}', String(visibleConcerns.length)),
+    visibleConcerns[0] && t('Ranked first: “{title}”.').replace('{title}', visibleConcerns[0].title),
+    alderman &&
+      aldermanGrade &&
+      (aldermanGrade.overall != null
+        ? t('Alderman: {name}, overall grade {letter}.')
+            .replace('{name}', alderman.name)
+            .replace('{letter}', aldermanGrade.letter)
+        : t('Alderman: {name}, not graded yet.').replace('{name}', alderman.name)),
+    openPolls.length > 0
+      ? t('Open ward polls: {n}.').replace('{n}', String(openPolls.length))
+      : t('No ward polls are open.'),
+  ]);
 
   return (
     <Screen tab>
@@ -202,42 +250,36 @@ function WardHome({
         </Pressable>
       </View>
 
-      {/* Residents first: the ward's own concerns lead the page, the
-          alderman and their ballot questions follow. */}
+      {!profile ? (
+        // Signed-out visitors get a door, not a dead end.
+        <Button title={t('Sign in to vote and comment')} variant="secondary" onPress={() => router.push('/sign-in')} />
+      ) : (
+        <>
+          <Button
+            title={t(isHomeWard ? 'Raise a ward concern' : 'Raise a concern in this ward')}
+            variant="secondary"
+            onPress={() =>
+              router.push({ pathname: '/new-concern', params: { scope: 'ward', wardId: String(wardId) } })
+            }
+          />
+          {!isHomeWard && (
+            <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+              {profile.wardId == null
+                ? t('Anyone can post here once a week. With a home ward you can post there up to 3 times a day, vote on its polls, and rate its alderman.')
+                : t('This isn’t your home ward, so you can post here once a week.')}
+            </ThemedText>
+          )}
+          {profile.wardId == null && <HomeWardChoice />}
+        </>
+      )}
+      {/* Residents first: the ward's own concerns lead the page (the way to
+          raise one sits above them, like the big board's), the alderman and
+          their ballot questions follow. */}
       <SectionHeader
         title={t('Ward leaderboard')}
         subtitle={t('Anyone can weigh in. Verified counts are residents of this ward only.')}
       />
-      <LensToggle value={lens} onChange={setLens} />
-      <SortToggle value={sort} onChange={setSort} />
-      {isHomeWard && (profile?.verified || profile?.role === 'official') ? (
-        <Button
-          title={t('Raise a ward concern')}
-          variant="secondary"
-          onPress={() => router.push({ pathname: '/new-concern', params: { scope: 'ward' } })}
-        />
-      ) : !profile ? (
-        // Signed-out visitors get a door, not a dead end.
-        <>
-          <Button title={t('Sign in to vote and comment')} variant="secondary" onPress={() => router.push('/sign-in')} />
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {t('Raising a ward concern takes a verified resident of the ward.')}
-          </ThemedText>
-        </>
-      ) : !profile.verified ? (
-        <>
-          <Button title={t('Verify to unlock your home ward')} variant="secondary" onPress={() => router.push('/verify')} />
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {t('Anyone can vote and comment here; raising a ward concern takes a verified resident.')}
-          </ThemedText>
-        </>
-      ) : (
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          {profile.wardId == null
-            ? t('Anyone can vote and comment here; ward posting unlocks once your verification includes your ward.')
-            : t('Anyone can vote and comment here; you raise ward concerns in your home ward, the {ward}.').replace('{ward}', wardLabel(profile.wardId))}
-        </ThemedText>
-      )}
+      <ListControls lens={lens} onLensChange={setLens} sort={sort} onSortChange={setSort} />
       {loading ? (
         <SkeletonCards />
       ) : visibleConcerns.length === 0 ? (
@@ -259,13 +301,9 @@ function WardHome({
 
       {alderman && <OfficialRow official={alderman} />}
 
-      {isWardOfficial && (
-        <Button title={t('Put a question to your ward')} onPress={() => router.push('/new-poll')} />
-      )}
-
       {openPolls.length > 0 && (
         <>
-          <SectionHeader title={t('On the ballot')} subtitle={t('Open votes from your alderman - verified residents only')} />
+          <SectionHeader title={t('On the ballot')} subtitle={t('Open votes from your alderman, for residents of the ward. Verified residents are counted apart.')} />
           {openPolls.map((poll) => (
             <PollCard key={poll.id} poll={poll} />
           ))}

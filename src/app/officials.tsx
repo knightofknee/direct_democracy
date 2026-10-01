@@ -7,7 +7,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { FlagAccent } from '@/components/flag-accent';
-import { GradeBadge } from '@/components/grade-badge';
+import { GradeBadge, GradeBasis } from '@/components/grade-badge';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
@@ -20,8 +20,10 @@ import { useScreenRoom } from '@/hooks/use-screen-room';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 import type { Official } from '@/lib/types';
 import { computeGrade } from '@/services/officials';
+import { enter } from '@/lib/motion';
 
 export default function AmaScreen() {
   const { profile } = useAuth();
@@ -39,6 +41,16 @@ export default function AmaScreen() {
   // Your own alderman is pinned up top and stays in the full list too, so
   // the ward-ordered list never has a confusing gap.
   const mine = profile?.wardId != null ? sorted.find((o) => o.wardId === profile.wardId) : null;
+
+  usePageSummary('officials', [
+    !loading && t('Officials listed: {n}.').replace('{n}', String(sorted.length)),
+    !loading &&
+      t('On the platform, answering questions here: {n}.').replace(
+        '{n}',
+        String(sorted.filter((o) => o.claimed).length)
+      ),
+    mine && t('Your alderman: {name}.').replace('{name}', mine.name),
+  ]);
 
   return (
     <Screen>
@@ -71,7 +83,7 @@ export default function AmaScreen() {
           {sorted.map((official, i) => (
             <Animated.View
               key={official.uid}
-              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
+              entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}>
               <OfficialRow official={official} />
             </Animated.View>
           ))}
@@ -119,6 +131,7 @@ function OfficialRow({ official, highlighted }: { official: Official; highlighte
               label={grade.answersGraded ? `${t('Answers')} ${grade.answers.grade}` : t('Answers -')}
             />
           </View>
+          <GradeBasis grade={grade} />
         </View>
         <GradeBadge letter={grade.letter} score={grade.overall} />
         {tight ? null : <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />}

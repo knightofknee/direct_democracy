@@ -17,9 +17,12 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { timeAgo } from '@/lib/format';
 import { notifyError } from '@/lib/notify';
+import { notificationLink } from '@/lib/notification-links';
 import type { AppNotification } from '@/lib/types';
 import { markAllNotificationsRead, markNotificationRead } from '@/services/notifications';
 import { useLocalized, useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
+import { enter } from '@/lib/motion';
 
 /**
  * The inbox: answers to your questions, replies to your comments, writing
@@ -44,6 +47,16 @@ export default function NotificationsScreen() {
     [profile?.uid]
   );
   const unread = notifications.filter((n) => !n.read).length;
+  usePageSummary('(tabs)/notifications', [
+    !profile
+      ? t('You are signed out, so there are no notifications.')
+      : !loading &&
+        (notifications.length === 0
+          ? t('You have no notifications yet.')
+          : t('Notifications: {n}, unread: {unread}.')
+              .replace('{n}', String(notifications.length))
+              .replace('{unread}', String(unread))),
+  ]);
 
   return (
     <Screen tab>
@@ -93,7 +106,7 @@ export default function NotificationsScreen() {
           {notifications.map((note, i) => (
             <Animated.View
               key={note.id}
-              entering={FadeInDown.duration(240).delay(Math.min(i, 10) * 25)}>
+              entering={enter(FadeInDown.duration(240).delay(Math.min(i, 10) * 25))}>
               <NotificationRow
                 note={note}
                 onPress={() => {
@@ -101,7 +114,7 @@ export default function NotificationsScreen() {
                   if (!note.read) {
                     markNotificationRead(profile.uid, note.id).catch(() => {});
                   }
-                  router.push(note.link as Href);
+                  router.push(notificationLink(note.link, profile.uid) as Href);
                 }}
               />
             </Animated.View>
@@ -120,6 +133,10 @@ const TYPE_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   comment: 'chatbubbles',
   credit: 'create',
   verification: 'shield-checkmark',
+  postLimit: 'time',
+  reply: 'return-down-forward',
+  electionAnswer: 'chatbox-ellipses',
+  operator: 'construct',
 };
 
 function NotificationRow({ note, onPress }: { note: AppNotification; onPress: () => void }) {

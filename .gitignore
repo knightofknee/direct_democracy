@@ -56,3 +56,9 @@ ui-debug.log
 /ios
 /android
 .firebase/
+
+# Web export for waldgrave.com (npm run export-web)
+dist-web/
+
+# Firebase service account keys (FCM upload for EAS push); never commit
+*-firebase-adminsdk-*.json

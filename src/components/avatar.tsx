@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/themed-text';
 import { useScreenRoom } from '@/hooks/use-screen-room';
 import { useTheme } from '@/hooks/use-theme';
 import type { PhotoFrame } from '@/lib/types';
+import { tr } from '@/lib/i18n';
 
 /**
  * Where a framed photo sits inside a size x size box: scaled to cover the box
@@ -75,7 +76,7 @@ export function OfficialAvatar({
           }
           contentFit="fill"
           transition={150}
-          accessibilityLabel={`Portrait of ${name}`}
+          accessibilityLabel={tr('Portrait of {name}').replace('{name}', name)}
         />
       </View>
     );
@@ -89,7 +90,7 @@ export function OfficialAvatar({
         style={{ width: size, height: size, borderRadius: radius, backgroundColor: theme.backgroundSelected }}
         contentFit="cover"
         transition={150}
-        accessibilityLabel={`Portrait of ${name}`}
+        accessibilityLabel={tr('Portrait of {name}').replace('{name}', name)}
       />
     );
   }

@@ -1,11 +1,4 @@
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
 import { emptyTally } from '@/lib/tally';
@@ -18,6 +11,7 @@ import {
   type UserProfile,
   type VoteValue,
 } from '@/lib/types';
+import { tr } from '@/lib/i18n';
 
 /** Officials and candidates only (enforced again by security rules). */
 export async function createPoll(
@@ -32,7 +26,7 @@ export async function createPoll(
   }
 ): Promise<string> {
   if (profile.role !== 'official' && profile.role !== 'candidate') {
-    throw new Error('Only officials and candidates can create polls.');
+    throw new Error(tr('Only officials and candidates can create polls.'));
   }
 
   const options: PollOption[] =
@@ -45,7 +39,7 @@ export async function createPoll(
         ? SCALE5_OPTIONS.map((o) => ({ key: o.key, label: o.label }))
         : input.options;
 
-  if (options.length < 2) throw new Error('A poll needs at least two options.');
+  if (options.length < 2) throw new Error(tr('A poll needs at least two options.'));
 
   const ref = await addDoc(collection(db, 'polls'), {
     question: input.question.trim(),
@@ -64,6 +58,15 @@ export async function createPoll(
 }
 
 /**
+ * Take back a poll vote while voting is open (rules refuse it after close,
+ * when the result is a public record).
+ */
+export async function retractPollVote(profile: UserProfile, poll: Poll): Promise<void> {
+  if (!poll.open) throw new Error(tr('This poll is closed.'));
+  await deleteDoc(doc(db, 'polls', poll.id, 'votes', profile.uid));
+}
+
+/**
  * Cast (or change) a poll vote. Ward-scoped polls are verified-residents-only
  * (also enforced by rules). The client writes only its own ballot - the
  * onPollVoteWrite Cloud Function aggregates the tallies.
@@ -73,16 +76,15 @@ export async function votePoll(
   poll: Poll,
   value: VoteValue
 ): Promise<void> {
-  if (!poll.open) throw new Error('This poll is closed.');
+  if (!poll.open) throw new Error(tr('This poll is closed.'));
   if (poll.scope === 'ward') {
-    if (!profile.verified) throw new Error('Verify your identity to vote on ward polls.');
-    if (profile.wardId !== poll.wardId) throw new Error('This poll is for residents of its ward.');
+    if (profile.wardId !== poll.wardId) throw new Error(tr('This poll is for residents of its ward.'));
   }
   const valid = new Set(poll.options.map((o) => o.key));
   for (const key of Array.isArray(value) ? value : [value]) {
-    if (!valid.has(key)) throw new Error('Invalid option.');
+    if (!valid.has(key)) throw new Error(tr('Invalid option.'));
   }
-  if (Array.isArray(value) && value.length === 0) throw new Error('Select at least one option.');
+  if (Array.isArray(value) && value.length === 0) throw new Error(tr('Select at least one option.'));
 
   await setDoc(doc(db, 'polls', poll.id, 'votes', profile.uid), {
     uid: profile.uid,
@@ -93,6 +95,6 @@ export async function votePoll(
 }
 
 export async function closePoll(profile: UserProfile, poll: Poll): Promise<void> {
-  if (profile.uid !== poll.authorUid) throw new Error('Only the poll author can close it.');
+  if (profile.uid !== poll.authorUid) throw new Error(tr('Only the poll author can close it.'));
   await updateDoc(doc(db, 'polls', poll.id), { open: false });
 }

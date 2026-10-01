@@ -1,19 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { sendEmailVerification } from 'firebase/auth';
 import type { FunctionsError } from 'firebase/functions';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/screen';
+import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card } from '@/components/ui';
 import { WARDS, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useStorePurchase } from '@/hooks/use-store-purchase';
-import { notify } from '@/lib/notify';
+import { notify, notifyError, errorMessage } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
-import { usingEmulators } from '@/lib/firebase';
+import { auth, usingEmulators } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
 import { reverifyOpensAt } from '@/lib/verification';
 import { getVerificationQuote, type VerificationQuote } from '@/services/payments';
@@ -75,8 +77,19 @@ export default function VerifyScreen() {
     );
   }
 
-  const moving = profile.verified && move === '1' && reverifyOpensAt(profile) == null;
+  // Moving: the 3-month window is open, or a move already started can be
+  // picked up again (the server hands back the same link).
+  const windowClosed = reverifyOpensAt(profile) != null;
+  const moving = profile.verified && move === '1' && (!windowClosed || quote?.resume === true);
   const withBill = moving && withParam === 'address';
+
+  if (profile.verified && move === '1' && windowClosed && quote == null && !quoteFailed) {
+    return (
+      <Screen>
+        <SkeletonCards count={1} />
+      </Screen>
+    );
+  }
 
   if (profile.verified && !moving) {
     return (
@@ -109,7 +122,7 @@ export default function VerifyScreen() {
           return;
         }
       } catch (e) {
-        notify(t('Payment failed'), e instanceof Error ? e.message : t('Something went wrong.'));
+        notify(t('Payment failed'), errorMessage(e));
         setBusy(false);
         refreshQuote();
         return;
@@ -131,10 +144,21 @@ export default function VerifyScreen() {
     } catch (e) {
       // The month's free 500 can run out between showing the price and
       // starting; the refreshed quote puts the price on the button.
-      if ((e as FunctionsError).details && ((e as FunctionsError).details as { paymentRequired?: boolean }).paymentRequired) {
-        notify(t('This month’s free verifications just ran out'), t('The price is on the button now.'));
+      const details = (e as FunctionsError).details as
+        | { paymentRequired?: boolean; reason?: string; emailVerificationRequired?: boolean }
+        | undefined;
+      if (details?.emailVerificationRequired) {
+        // The quote now shows the confirmation step above the button.
+        notify(t('Confirm your email first'), t('Open the confirmation email, then tap I confirmed it.'));
+      } else if (details?.paymentRequired) {
+        notify(
+          details.reason === 'month'
+            ? t('This month’s free verifications just ran out')
+            : t('This verification is no longer free'),
+          t('The price is on the button now.')
+        );
       } else {
-        notify(t('Verification failed'), e instanceof Error ? e.message : t('Something went wrong.'));
+        notify(t('Verification failed'), errorMessage(e));
       }
     } finally {
       setBusy(false);
@@ -149,9 +173,11 @@ export default function VerifyScreen() {
       : quote == null
         ? null
         : !mustPay
-          ? quote.free
-            ? null
-            : t('Already paid. This attempt is covered.')
+          ? quote.resume
+            ? t('Your verification is still open. Continue where you left off.')
+            : quote.free
+              ? null
+              : t('Already paid. This attempt is covered.')
           : !store.available && !price
             ? t('Paying for verification works in the iPhone and Android apps.')
             : !price
@@ -159,7 +185,9 @@ export default function VerifyScreen() {
               : `${
                   quote.creditType === 'bill'
                     ? t('Checking a bill or statement costs {price}.')
-                    : t('The first 500 verifications each month are free. This month’s are used up, so this one costs {price}.')
+                    : quote.reason === 'attempts'
+                      ? t('Each account gets 3 free verification attempts every 3 months. This account has used them, so this one costs {price}.')
+                      : t('The first 500 verifications each month are free. This month’s are used up, so this one costs {price}.')
                 } ${t('If you don’t open the verification link, your payment carries over to your next attempt.')}`.replace('{price}', price);
 
   return (
@@ -177,7 +205,7 @@ export default function VerifyScreen() {
       <Card>
         <ThemedText type="smallBold">{t('How verification works')}</ThemedText>
         <Step n={1} text={t('You verify your ID and Chicago address with Didit, a third-party identity service. Your documents go to them, never to us.')} />
-        <Step n={2} text={t('All we ever save: a verified yes/no, the ward you live in, and a unique identifier that stops one person from verifying twice.')} />
+        <Step n={2} text={t('All we ever save: a verified yes/no, your ward and district numbers, and a unique identifier that stops one person from verifying twice.')} />
         <Step n={3} text={t('No name, no address, no document. Your display name stays anonymous, even once verified.')} />
       </Card>
 
@@ -222,6 +250,8 @@ export default function VerifyScreen() {
         </>
       )}
 
+      {quote?.emailRequired && !devMode && <ConfirmEmailCard onConfirmed={refreshQuote} />}
+
       {priceNote && (
         <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
           {priceNote}
@@ -237,9 +267,72 @@ export default function VerifyScreen() {
         }
         onPress={begin}
         loading={busy}
-        disabled={!devMode && (quote == null || (mustPay && !price))}
+        disabled={!devMode && (quote == null || !!quote.emailRequired || (mustPay && !price))}
       />
     </Screen>
+  );
+}
+
+/**
+ * On a busy day (100+ free checks), a free check needs an account that took
+ * more than a made-up address to create: this sends the confirmation email
+ * and, once it is opened, refreshes the sign-in so the server sees it.
+ */
+function ConfirmEmailCard({ onConfirmed }: { onConfirmed: () => void }) {
+  const t = useT();
+  const theme = useTheme();
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const user = auth.currentUser;
+  if (!user) return null;
+
+  const send = async () => {
+    setSending(true);
+    try {
+      await sendEmailVerification(user);
+      setSent(true);
+    } catch (e) {
+      notifyError(t('Could not send'), e);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const recheck = async () => {
+    setSending(true);
+    try {
+      await user.reload();
+      // The server reads email_verified off the sign-in token: get a fresh one.
+      await user.getIdToken(true);
+      if (auth.currentUser?.emailVerified) onConfirmed();
+      else notify(t('Not confirmed yet'), t('Open the confirmation email first, then tap this again.'));
+    } catch (e) {
+      notifyError(t('Could not check'), e);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <Card style={{ borderColor: theme.warning, borderWidth: 1 }}>
+      <ThemedText type="smallBold" style={{ fontSize: 14 }}>
+        {t('Confirm your email first')}
+      </ThemedText>
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+        {t('A lot of people are verifying today, so free verification needs a confirmed email ({email}). Accounts signed in with Google or Apple skip this.').replace('{email}', user.email ?? '')}
+      </ThemedText>
+      <View style={{ flexDirection: 'row', gap: Spacing.two }}>
+        <Button
+          title={sent ? t('Sent - check your inbox') : t('Send confirmation email')}
+          variant="secondary"
+          onPress={send}
+          loading={sending && !sent}
+          disabled={sent}
+          style={{ flex: 1 }}
+        />
+        {sent && <Button title={t('I confirmed it')} onPress={recheck} loading={sending} style={{ flex: 1 }} />}
+      </View>
+    </Card>
   );
 }
 

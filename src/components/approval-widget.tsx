@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { HomeWardChoice } from '@/components/home-ward-choice';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
@@ -16,15 +17,14 @@ import { notifyError } from '@/lib/notify';
 import { useOptimistic } from '@/lib/optimistic';
 import { emptyTally, withBallotDelta } from '@/lib/tally';
 import type { ApprovalValue, Official } from '@/lib/types';
-import { APPROVAL_MIN_BALLOTS, computeApproval, setApproval } from '@/services/officials';
+import { clearApproval, APPROVAL_MIN_BALLOTS, computeApproval, setApproval } from '@/services/officials';
 
 /**
- * The "how well liked" axis: a standing approve/disapprove any VERIFIED
- * resident can set or flip at any time. The ballot is verified-only (a
- * rating anonymous accounts could stuff would be worthless); unverified
- * users see the buttons grayed with the path to verifying. Constituent
- * approval is the number that grades; the all-users line keeps the
- * pre-gate history honest.
+ * The "how well liked" axis: a standing approve/disapprove anyone with a
+ * home ward (verified or declared) can set or flip at any time; accounts
+ * with no ward see the buttons grayed with the ways in. Only verified
+ * constituents move the grade (onApprovalWrite): the line shown is that
+ * constituent approval.
  */
 export function ApprovalWidget({ official }: { official: Official }) {
   const theme = useTheme();
@@ -50,35 +50,38 @@ export function ApprovalWidget({ official }: { official: Official }) {
   });
   const isSelf = profile?.uid === official.uid;
   // Signed out can still tap (it routes to sign-in); a signed-in account
-  // without a verified ward gets inactive buttons and the verify path.
-  const unverified = profile != null && (!profile.verified || profile.wardId == null);
+  // with no home ward gets inactive buttons and the two ways in. A declared
+  // ward rates like any resident; only verified constituents move the grade.
+  const unverified = profile != null && profile.wardId == null;
 
   const cast = (value: ApprovalValue) => {
     if (!profile) {
       router.push('/sign-in');
       return;
     }
-    if (mine?.value === value) return;
     tapHaptic();
     const prev = mine?.value ?? null;
+    // Tapping your current rating again takes it back.
+    const next = prev === value ? null : value;
     // Mirror of onApprovalWrite: constituents are verified residents of the
     // official's ward (any verified resident for citywide offices).
     const isConstituent =
       !!profile.verified && (official.wardId == null || profile.wardId === official.wardId);
-    const constituents = { ...(official.approvalConstituents ?? { approve: 0, disapprove: 0 }) };
+    // From the numbers on screen, so a quick second tap builds on the first.
+    const constituents = { ...(agg.value.constituents ?? { approve: 0, disapprove: 0 }) };
     if (isConstituent) {
       if (prev) constituents[prev] = Math.max(0, (constituents[prev] ?? 0) - 1);
-      constituents[value] = (constituents[value] ?? 0) + 1;
+      if (next) constituents[next] = (constituents[next] ?? 0) + 1;
     }
     agg.predict({
-      tallies: withBallotDelta(official.approvalTallies ?? emptyTally(), {
+      tallies: withBallotDelta(agg.value.tallies ?? emptyTally(), {
         from: prev,
-        to: value,
+        to: next,
         verified: !!profile.verified,
       }),
       constituents,
     });
-    setApproval(profile, official.uid, value).catch((e) => {
+    (next ? setApproval(profile, official.uid, next) : clearApproval(profile, official.uid)).catch((e) => {
       agg.rollback();
       notifyError(t('Could not record approval'), e);
     });
@@ -108,18 +111,7 @@ export function ApprovalWidget({ official }: { official: Official }) {
               onPress={() => cast('disapprove')}
             />
           </View>
-          {unverified && (
-            <Pressable
-              onPress={() => router.push('/verify')}
-              hitSlop={6}
-              accessibilityRole="link"
-              style={styles.verifyRow}>
-              <Ionicons name="shield-checkmark-outline" size={14} color={theme.primary} />
-              <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
-                {t('Approval votes are for verified residents - verify to grade your officials')}
-              </ThemedText>
-            </Pressable>
-          )}
+          {unverified && <HomeWardChoice note={t('Rating officials takes a home ward.')} />}
         </>
       )}
       {/* Only the graded number: with the ballot verified-only, an all-users
@@ -162,6 +154,9 @@ function ApprovalButton({
     <Pressable
       onPress={onPress}
       disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ selected, disabled: !!disabled }}
       style={({ pressed }) => [
         styles.approvalButton,
         {
@@ -233,11 +228,6 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row',
     gap: Spacing.two,
-  },
-  verifyRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
   },
   approvalButton: {
     flex: 1,

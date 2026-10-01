@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { DistrictCells } from '@/components/district-cells';
 import { ThemedText } from '@/components/themed-text';
 import { Card, SectionHeader } from '@/components/ui';
 import {
@@ -15,6 +16,8 @@ import {
 import { Spacing } from '@/constants/theme';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
+import { useAuth } from '@/hooks/use-auth';
+import { useMyDistricts } from '@/lib/districts';
 import { db } from '@/lib/firebase';
 import { openLink } from '@/lib/open-link';
 import type { SchoolBoardCandidate } from '@/lib/types';
@@ -32,6 +35,8 @@ export function SchoolBoardSection() {
   const theme = useTheme();
   const t = useT();
   const pluralT = usePlural();
+  const { profile } = useAuth();
+  const mine = useMyDistricts();
 
   const { data: candidates } = useLiveQuery<SchoolBoardCandidate & { id: string }>(
     () => query(collection(db, 'schoolBoardCandidates')),
@@ -71,37 +76,26 @@ export function SchoolBoardSection() {
         <ThemedText type="smallBold" style={{ fontSize: 13 }}>
           {t("Your district's seat")}
         </ThemedText>
-        <View style={styles.grid}>
-          {districts.map((race) => (
-            <Pressable
-              key={race.id}
-              onPress={() => router.push(`/school-board/${race.id}`)}
-              accessibilityRole="button"
-              accessibilityLabel={`${t('school board')} ${schoolBoardRaceLabel(race.id)}`}
-              style={({ pressed }) => [
-                styles.districtButton,
-                {
-                  borderColor: theme.border,
-                  backgroundColor: theme.background,
-                  opacity: pressed ? 0.7 : 1,
-                },
-              ]}>
-              <ThemedText type="smallBold" style={{ fontSize: 15 }}>
-                {race.id}
-              </ThemedText>
-            </Pressable>
-          ))}
-        </View>
-        <Pressable
-          onPress={() => openLink(DISTRICT_LOOKUP_URL)}
-          hitSlop={8}
-          accessibilityRole="link"
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-          <Ionicons name="location-outline" size={14} color={theme.primary} />
-          <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
-            {t('Not sure which district? Look up your address')}
-          </ThemedText>
-        </Pressable>
+        <DistrictCells
+          all={districts.map((r) => r.id)}
+          mine={mine.of('schoolBoard')}
+          exact={mine.exact}
+          onOpen={(id) => router.push(`/school-board/${id}`)}
+          cellLabel={(id) => `${t('school board')} ${schoolBoardRaceLabel(id)}`}
+          cellStyle={{ width: '17.6%', flexGrow: 1 }}
+        />
+        {!mine.exact && (
+          <Pressable
+            onPress={() => (profile ? router.push('/my-districts') : openLink(DISTRICT_LOOKUP_URL))}
+            hitSlop={8}
+            accessibilityRole="link"
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <Ionicons name="location-outline" size={14} color={theme.primary} />
+            <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
+              {t('Not sure which district? Look up your address')}
+            </ThemedText>
+          </Pressable>
+        )}
       </Card>
     </View>
   );
@@ -112,18 +106,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.two,
-  },
-  districtButton: {
-    width: '17.6%',
-    flexGrow: 1,
-    alignItems: 'center',
-    borderRadius: 12,
-    borderWidth: 1.5,
-    paddingVertical: 10,
   },
 });

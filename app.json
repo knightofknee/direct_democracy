@@ -2,7 +2,7 @@
   "expo": {
     "name": "direct democracy",
     "slug": "direct-democracy",
-    "version": "1.0.13",
+    "version": "1.0.15",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "directdemocracy",
@@ -13,7 +13,11 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "usesAppleSignIn": true,
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "LSApplicationQueriesSchemes": [
+          "comgooglemaps",
+          "waze"
+        ]
       },
       "associatedDomains": [
         "applinks:www.waldgrave.com"
@@ -38,6 +42,11 @@
               "scheme": "https",
               "host": "www.waldgrave.com",
               "pathPrefix": "/directdemocracy/auth"
+            },
+            {
+              "scheme": "https",
+              "host": "www.waldgrave.com",
+              "pathPrefix": "/directdemocracy/app"
             }
           ],
           "category": [
@@ -74,7 +83,15 @@
       "expo-build-properties",
       "./plugins/with-rnfirebase-no-spm.js",
       "expo-image",
-      "expo-iap"
+      "expo-iap",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#41B6E6",
+          "defaultChannel": "default"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

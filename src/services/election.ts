@@ -9,6 +9,7 @@ import {
 
 import { db } from '@/lib/firebase';
 import type { CommentVoteValue, ElectionQuestion, UserProfile } from '@/lib/types';
+import { tr } from '@/lib/i18n';
 
 /**
  * The election AMA: one question, every candidate on the record. Anyone
@@ -68,10 +69,10 @@ export async function deleteElectionQuestion(
   question: ElectionQuestion
 ): Promise<void> {
   if (profile.uid !== question.authorUid) {
-    throw new Error('Only the asker can withdraw a question.');
+    throw new Error(tr('Only the asker can withdraw a question.'));
   }
   if (question.answerCount > 0) {
-    throw new Error('Questions with answers are part of the public record.');
+    throw new Error(tr('Questions with answers are part of the public record.'));
   }
   await deleteDoc(doc(db, 'electionQuestions', question.id));
 }
@@ -83,7 +84,7 @@ export async function answerElectionQuestion(
   body: string,
   isRevision: boolean
 ): Promise<void> {
-  if (profile.role !== 'candidate') throw new Error('Only candidates can answer here.');
+  if (profile.role !== 'candidate') throw new Error(tr('Only candidates can answer here.'));
   await setDoc(
     doc(db, 'electionQuestions', questionId, 'answers', profile.uid),
     {

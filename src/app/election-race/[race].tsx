@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, query, where } from 'firebase/firestore';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { ShareButton } from '@/components/share-button';
+import { HeaderActions } from '@/components/help-button';
 import { OfficialAvatar } from '@/components/avatar';
-import { RatingChips } from '@/components/rating-chips';
+import { negativeRatingCount, RatingChips } from '@/components/rating-chips';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
@@ -27,6 +29,8 @@ import { db } from '@/lib/firebase';
 import { openLink } from '@/lib/open-link';
 import type { ElectionCandidateCard, ElectionRaceNote } from '@/lib/types';
 import { useT, useLocalized } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
+import { enter } from '@/lib/motion';
 
 /**
  * One race on either upcoming ballot: the candidates a voter picks between,
@@ -61,6 +65,28 @@ export default function ElectionRaceScreen() {
     [race]
   );
 
+  const printed = candidates.filter((c) => !c.writeIn);
+  const writeIns = candidates.length - printed.length;
+  const flagged = candidates.filter((c) => negativeRatingCount(c.ratings) > 0).length;
+  const sitting = candidates.find((c) => c.incumbent);
+  usePageSummary('election-race/[race]', [
+    info && known && `${t(info.label)}.`,
+    info &&
+      known &&
+      t(info.election === GENERAL_ELECTION ? 'On the November 3, 2026 ballot.' : 'On the February 23, 2027 ballot.'),
+    !loading &&
+      (candidates.length === 0
+        ? t('No candidates are listed yet.')
+        : writeIns > 0
+          ? t('On the ballot: {n}. Declared write-ins: {w}.').replace('{n}', String(printed.length)).replace('{w}', String(writeIns))
+          : t('On the ballot: {n}.').replace('{n}', String(printed.length))),
+    printed.length > 0 &&
+      printed.length <= 8 &&
+      t('Running: {names}.').replace('{names}', printed.map((c) => c.name).join(', ')),
+    sitting && !retention && t('Incumbent: {name}.').replace('{name}', sitting.name),
+    judicial && flagged > 0 && t('Judges with a negative bar association rating: {n}.').replace('{n}', String(flagged)),
+  ]);
+
   if (!info || !known) {
     return (
       <Screen>
@@ -86,6 +112,15 @@ export default function ElectionRaceScreen() {
 
   return (
     <Screen>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <HeaderActions>
+              <ShareButton path={`/election-race/${race}`} title={t(info.label)} />
+            </HeaderActions>
+          ),
+        }}
+      />
       <View style={{ gap: Spacing.one }}>
         <ThemedText type="subtitle" style={{ fontSize: 24, lineHeight: 30 }}>
           {t(info.label)}
@@ -133,7 +168,7 @@ export default function ElectionRaceScreen() {
           {sorted.map((candidate, i) => (
             <Animated.View
               key={candidate.id}
-              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}
+              entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}
               style={{ gap: Spacing.three }}>
               {candidate.id === firstWriteIn && <WriteInHeader />}
               <Card onPress={() => router.push(`/election-candidate/${candidate.id}`)}>

@@ -1,18 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider, useRouter } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider, usePathname, useRouter, type Href } from 'expo-router';
+import { reopenAfterRedraw, takeReopenPath } from '@/lib/locale-remount';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import { Pressable, useColorScheme } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Dimensions, Pressable, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 
 import { CelebrationProvider } from '@/components/celebration';
+import { HeaderActions } from '@/components/help-button';
 import { LanguagePrompt } from '@/components/language-prompt';
 import { UpdateModal } from '@/components/update-modal';
 import { Colors } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
+import { useNotificationTaps, usePushTokenSync } from '@/lib/push';
 import { useTheme } from '@/hooks/use-theme';
-import { LocaleProvider, useT } from '@/lib/i18n';
+import { LocaleProvider, tr, useLocale, useT } from '@/lib/i18n';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -51,7 +54,7 @@ function ModalClose() {
       onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
       hitSlop={12}
       accessibilityRole="button"
-      accessibilityLabel="Close">
+      accessibilityLabel={tr('Close')}>
       <Ionicons name="close" size={24} color={theme.text} />
     </Pressable>
   );
@@ -60,7 +63,11 @@ function ModalClose() {
 /** Shared options for every modal screen. */
 const MODAL = {
   presentation: 'modal' as const,
-  headerRight: () => <ModalClose />,
+  headerRight: () => (
+    <HeaderActions>
+      <ModalClose />
+    </HeaderActions>
+  ),
 };
 
 export default function RootLayout() {
@@ -89,7 +96,7 @@ export default function RootLayout() {
         <AuthProvider>
           <SplashGate />
           <CelebrationProvider>
-            <RootStack />
+            <LocaleKeyedStack />
             <LanguagePrompt />
             <UpdateModal />
           </CelebrationProvider>
@@ -101,14 +108,62 @@ export default function RootLayout() {
 }
 
 
+/** Phone notification taps open their item; this phone's token stays current. */
+function PushBridge() {
+  const { profile, loading } = useAuth();
+  const { locale } = useLocale();
+  useNotificationTaps(profile?.uid, !loading);
+  usePushTokenSync(profile, locale);
+  return null;
+}
+
+/**
+ * The navigator, redrawn from scratch when the language changes, so nothing
+ * cached in the old language survives, and when the phone's text size
+ * changes, so no text keeps its old size's box (see locale-remount.ts).
+ */
+function LocaleKeyedStack() {
+  const { locale } = useLocale();
+  const pathname = usePathname();
+  const [fontScale, setFontScale] = useState(() => Dimensions.get('window').fontScale);
+  const here = useRef(pathname);
+  const drawnAt = useRef(fontScale);
+  useEffect(() => {
+    here.current = pathname;
+  }, [pathname]);
+  useEffect(() => {
+    const sub = Dimensions.addEventListener('change', ({ window }) => {
+      if (window.fontScale === drawnAt.current) return;
+      drawnAt.current = window.fontScale;
+      reopenAfterRedraw(here.current);
+      setFontScale(window.fontScale);
+    });
+    return () => sub.remove();
+  }, []);
+  return <RootStack key={`${locale}:${fontScale}`} />;
+}
+
 /** The stack lives below LocaleProvider so its titles can translate. */
 function RootStack() {
   const t = useT();
+  const router = useRouter();
+  const pathname = usePathname();
+  // Back to the screen that changed the language (Settings), once.
+  useEffect(() => {
+    const path = takeReopenPath();
+    if (path && path !== pathname) router.push(path as Href);
+    // Only on the redraw itself.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
+    <>
+    <PushBridge />
       <Stack
         screenOptions={{
           headerShadowVisible: false,
           headerBackButtonDisplayMode: 'minimal',
+          // The help "?" in every header's top-right corner.
+          headerRight: () => <HeaderActions />,
         }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="concern/[id]" options={{ title: t('Concern') }} />
@@ -127,10 +182,18 @@ function RootStack() {
         <Stack.Screen name="new-poll" options={{ title: t('New poll'), ...MODAL }} />
         <Stack.Screen name="edit-policy" options={{ title: t('Platform policy'), ...MODAL }} />
         <Stack.Screen name="verify" options={{ title: t('Verify identity'), ...MODAL }} />
+        <Stack.Screen name="set-ward" options={{ title: t('Set your home ward'), ...MODAL }} />
+        <Stack.Screen name="my-districts" options={{ title: t('Your districts'), ...MODAL }} />
         <Stack.Screen name="my-activity" options={{ title: t('My activity') }} />
         <Stack.Screen name="privacy" options={{ title: t('Privacy & data') }} />
+        <Stack.Screen name="rules" options={{ title: t('Community rules') }} />
         <Stack.Screen name="settings" options={{ title: t('Settings') }} />
+        <Stack.Screen
+          name="help"
+          options={{ title: t('Help'), presentation: 'modal', headerRight: () => <ModalClose /> }}
+        />
         <Stack.Screen name="admin" options={{ title: 'Reports' }} />
       </Stack>
+    </>
   );
 }

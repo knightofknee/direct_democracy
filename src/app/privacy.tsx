@@ -26,14 +26,16 @@ export default function PrivacyScreen() {
         <Bullet text={t('Your email and password hash (for signing in) - never shown to anyone.')} />
         <Bullet text={t("A display name you choose. It's a pseudonym; your real name is never shown, even after verification.")} />
         <Bullet text={t('Your ballots, comments, questions, and judgments - the content you post.')} />
-        <Bullet text={t('If you verify: a yes/no verified flag, your ward, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.')} />
+        <Bullet text={t('If you verify: a yes/no verified flag, your ward and district numbers, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.')} />
         <Bullet text={t('Participation counters (votes cast, concerns raised) that power your milestones.')} />
+        <Bullet text={t('If you look up your districts without verifying: the district numbers only, so the election tab can show your races first.')} />
+        <Bullet text={t('If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.')} />
         <Bullet text={t('If you pay for a verification: which one you bought, when, and the store’s transaction number. Your payment details stay with Apple or Google.')} />
       </Section>
 
       <Section title={t('What we never see')}>
         <Bullet text={t('Your identity documents. Verification is performed by Didit, a third-party service; documents go to them, and we receive only the verdict.')} />
-        <Bullet text={t('Your address. It is used only at the moment you verify, to find your ward, and is never saved.')} />
+        <Bullet text={t('Your address. It is used only at the moment you verify or look up your districts, to find your ward and districts, and is never saved.')} />
       </Section>
 
       <Section title={t('Who can see what')}>
@@ -46,7 +48,7 @@ export default function PrivacyScreen() {
         <Bullet text={t('Change your display name any time.')} />
         <Bullet text={t('Retract any vote while voting is open, withdraw your concerns and unanswered questions, delete your comments. Once a poll closes its result is a public record and ballots are final.')} />
         <Bullet text={t('Block any user to hide their content from your account.')} />
-        <Bullet text={t('Delete your account any time from Settings: your sign-in, profile, verification status, and standing approvals of officials are removed. Anything you posted is re-attributed to [deleted], and votes you cast remain counted in the tallies.')} />
+        <Bullet text={t('Delete your account any time from Settings: your sign-in, profile, verification status, and every vote you cast are removed, and the tallies drop your votes. Anything you posted is re-attributed to [deleted].')} />
       </Section>
     </Screen>
   );

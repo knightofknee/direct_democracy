@@ -93,6 +93,15 @@ function ReportCard({ report }: { report: Report }) {
           {timeAgo(report.createdAt)}
         </ThemedText>
       </View>
+      {report.note ? (
+        <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+          Reporter says: “{report.note}”
+        </ThemedText>
+      ) : report.reason === 'other' ? (
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          Reporter gave no reason.
+        </ThemedText>
+      ) : null}
       <ThemedText type="small" style={{ fontStyle: 'italic' }}>
         “{report.excerpt}”
       </ThemedText>

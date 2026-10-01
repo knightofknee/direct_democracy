@@ -62,6 +62,8 @@ export function ClaimGate({ claimed, name }: { claimed?: boolean; name: string }
         notify(t('Not confirmed yet'), t('Open the confirmation email first, then tap this again.'));
       }
       bump((n) => n + 1);
+    } catch (e) {
+      notifyError(t('Could not check'), e);
     } finally {
       setSending(false);
     }

@@ -18,6 +18,7 @@ import { host } from '@/lib/format';
 import { openLink } from '@/lib/open-link';
 import type { SchoolBoardCandidate } from '@/lib/types';
 import { useLocalized, useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 
 /**
  * A school board nominee's voter-info card: what they say they are running
@@ -33,6 +34,12 @@ export default function SchoolBoardCandidateScreen() {
     () => (id ? doc(db, 'schoolBoardCandidates', id) : null),
     [id]
   );
+
+  usePageSummary('school-board-candidate/[id]', [
+    candidate && `${candidate.name}: ${t('School board')}, ${schoolBoardRaceLabel(candidate.race)}.`,
+    candidate?.incumbent && t('Holds the seat now.'),
+    candidate?.writeIn && t('A declared write-in: the name is not printed on the ballot.'),
+  ]);
 
   if (!candidate) {
     return (

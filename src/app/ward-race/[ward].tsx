@@ -1,10 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, query, where } from 'firebase/firestore';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { ShareButton } from '@/components/share-button';
+import { HeaderActions } from '@/components/help-button';
 import { OfficialAvatar } from '@/components/avatar';
 import { OfficialRow } from '@/components/politician-row';
 import { Screen } from '@/components/screen';
@@ -24,6 +26,9 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { ElectionCandidateCard, ElectionRaceNote, Official } from '@/lib/types';
 import { useT, useLocalized } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
+import { computeGrade } from '@/services/officials';
+import { enter } from '@/lib/motion';
 
 /**
  * One ward's February 2027 aldermanic race: the incumbent's report card
@@ -62,6 +67,26 @@ export default function WardRaceScreen() {
     [race, valid]
   );
 
+  const sittingAlderman = officials[0] ?? null;
+  const sittingGrade = sittingAlderman ? computeGrade(sittingAlderman) : null;
+  const running = candidates.some((c) => c.incumbent);
+  const others = candidates.filter((c) => !c.incumbent);
+  usePageSummary('ward-race/[ward]', [
+    valid && t('The {ward} race for alderman, on the February 23, 2027 ballot.').replace('{ward}', wardLabel(wardId)),
+    sittingAlderman &&
+      sittingGrade &&
+      (sittingGrade.overall != null
+        ? t('Alderman now: {name}, overall grade {letter}.')
+            .replace('{name}', sittingAlderman.name)
+            .replace('{letter}', sittingGrade.letter)
+        : t('Alderman now: {name}, not graded yet.').replace('{name}', sittingAlderman.name)),
+    !loading && sittingAlderman && t(running ? 'They are running again.' : 'They have not said they are running again.'),
+    !loading &&
+      (others.length > 0
+        ? t('Declared challengers: {names}.').replace('{names}', others.map((c) => c.name).join(', '))
+        : t('No challengers have declared yet.')),
+  ]);
+
   if (!valid) {
     return (
       <Screen>
@@ -79,6 +104,15 @@ export default function WardRaceScreen() {
 
   return (
     <Screen>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <HeaderActions>
+              <ShareButton path={`/ward-race/${wardId}`} title={`${wardLabel(wardId)}: ${t('race')}`} />
+            </HeaderActions>
+          ),
+        }}
+      />
       <View style={{ gap: Spacing.one }}>
         <ThemedText type="subtitle" style={{ fontSize: 24, lineHeight: 30 }}>
           {wardLabel(wardId)}: {t('race')}
@@ -134,13 +168,13 @@ export default function WardRaceScreen() {
         <SkeletonCards count={1} />
       ) : challengers.length === 0 ? (
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 13 }}>
-          {t('No declared challengers on record here yet. Petitions are circulating across the city; this page fills in as candidates go public and file.')}
+          {t('No declared challengers on record here yet. Candidates file October 19-26, 2026; this page fills in as they go public and file.')}
         </ThemedText>
       ) : (
         challengers.map((candidate, i) => (
           <Animated.View
             key={candidate.id}
-            entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
+            entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}>
             <Card onPress={() => router.push(`/election-candidate/${candidate.id}`)}>
               <View style={styles.row}>
                 <OfficialAvatar

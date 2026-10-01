@@ -2,12 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { doc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { useCelebration } from '@/components/celebration';
 import { ThemedText } from '@/components/themed-text';
-import { Card, Chip, VerifiedBadge } from '@/components/ui';
-import { wardLabel } from '@/constants/chicago';
+import { Card, VerifiedBadge } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc } from '@/hooks/use-firestore';
@@ -18,13 +18,12 @@ import { useT } from '@/lib/i18n';
 import { notifyError } from '@/lib/notify';
 import { useOptimistic } from '@/lib/optimistic';
 import { PRIORITY_WEIGHTS } from '@/lib/tally';
-import { CONCERN_PRIORITIES, type Concern, type ConcernPriority, type TallyLens, type VoteDoc } from '@/lib/types';
+import { type Concern, type ConcernPriority, type TallyLens, type VoteDoc } from '@/lib/types';
 import { tapHaptic } from '@/lib/haptics';
-import { voteConcernPriority } from '@/services/concerns';
+import { PriorityScale } from '@/components/priority-scale';
+import { voteConcernPriority, retractConcernVote } from '@/services/concerns';
+import { enter } from '@/lib/motion';
 
-const QUICK_PRIORITIES: { key: ConcernPriority; label: string }[] = CONCERN_PRIORITIES.map(
-  (key) => ({ key, label: key })
-);
 
 export function ConcernCard({
   concern,
@@ -38,12 +37,12 @@ export function ConcernCard({
   /** Position in the list - staggers the entrance animation. */
   index?: number;
 }) {
-  const theme = useTheme();
   const router = useRouter();
   const t = useT();
   const { profile } = useAuth();
+  const { anticipate } = useCelebration();
 
-  const { data: myVote } = useLiveDoc<VoteDoc & { id: string }>(
+  const { data: myVote, loading: myVoteLoading } = useLiveDoc<VoteDoc & { id: string }>(
     () => (profile ? doc(db, 'concerns', concern.id, 'votes', profile.uid) : null),
     [concern.id, profile?.uid]
   );
@@ -65,133 +64,217 @@ export function ConcernCard({
       router.push('/sign-in');
       return;
     }
-    if (myPriority === priority) return;
+    // Tapping your own priority again takes the vote back.
+    const retract = myPriority === priority;
     tapHaptic();
+    // Celebrate a first vote at the tap, not after the stats trigger lands.
+    // An account whose server count is still zero has certainly never voted,
+    // so it doesn't wait on this card's vote doc either (takeAnticipated-
+    // Milestone never fires the same milestone twice).
+    if (!retract && ((!myVoteLoading && myVote == null) || (profile.stats?.votes ?? 0) === 0)) anticipate('votes');
     // Mirror of the trigger's areaSlicesOf: the verified slice of a ward
     // concern counts only verified residents of that ward.
     const countsVerified =
       !!profile.verified && (concern.scope !== 'ward' || profile.wardId === concern.wardId);
     const weightDelta =
-      (PRIORITY_WEIGHTS[priority] ?? 0) - (myPriority ? (PRIORITY_WEIGHTS[myPriority] ?? 0) : 0);
-    const firstVote = myVote == null ? 1 : 0;
+      (retract ? 0 : (PRIORITY_WEIGHTS[priority] ?? 0)) - (myPriority ? (PRIORITY_WEIGHTS[myPriority] ?? 0) : 0);
+    const voterDelta = retract ? -1 : myPriority == null ? 1 : 0;
+    // From the numbers on screen: my vote doc updates locally at once, so a
+    // second quick tap is measured against the first one's prediction.
+    const shown = stats.value;
     stats.predict({
-      score: concern.score + weightDelta,
-      scoreVerified: concern.scoreVerified + (countsVerified ? weightDelta : 0),
-      totalAll: concern.tallies.totalAll + firstVote,
-      totalVerified: concern.tallies.totalVerified + (countsVerified ? firstVote : 0),
+      score: shown.score + weightDelta,
+      scoreVerified: shown.scoreVerified + (countsVerified ? weightDelta : 0),
+      totalAll: Math.max(0, shown.totalAll + voterDelta),
+      totalVerified: Math.max(0, shown.totalVerified + (countsVerified ? voterDelta : 0)),
     });
-    voteConcernPriority(profile, concern.id, priority).catch((e) => {
+    (retract ? retractConcernVote(profile, concern.id) : voteConcernPriority(profile, concern.id, priority)).catch((e) => {
       stats.rollback();
       notifyError(t('Vote failed'), e);
     });
   };
 
   return (
-    <Animated.View entering={FadeInDown.duration(280).delay(Math.min(index, 8) * 45)}>
-      <Card onPress={() => router.push(`/concern/${concern.id}`)}>
-        <View style={styles.topRow}>
-          {rank != null && (
-            <ThemedText
-              type="subtitle"
-              style={{ fontSize: 22, lineHeight: 28, color: theme.primary, width: 34 }}>
-              {rank}
-            </ThemedText>
-          )}
-          <View style={{ flex: 1, gap: 4 }}>
-            <ThemedText type="smallBold" style={{ fontSize: 16, lineHeight: 22 }}>
-              {concern.title}
-            </ThemedText>
-            <View style={styles.metaRow}>
-              <Chip label={wardLabel(concern.wardId)} tone={concern.scope === 'city' ? 'primary' : 'neutral'} />
-              {concern.authorVerified && <VerifiedBadge compact />}
-              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {concern.authorName} · {timeAgo(concern.createdAt)}
-              </ThemedText>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.statsRow}>
-          <View style={styles.stat}>
-            <Ionicons name="flame" size={14} color={theme.accent} />
-            <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {score} · {plural(voters, 'vote')}
-            </ThemedText>
-          </View>
-          <View style={styles.stat}>
-            <Ionicons name="chatbubble-outline" size={14} color={theme.textSecondary} />
-            <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {concern.commentCount}
-            </ThemedText>
-          </View>
-        </View>
+    <Animated.View entering={enter(FadeInDown.duration(280).delay(Math.min(index, 8) * 45))}>
+      <Card onPress={() => router.push(`/concern/${concern.id}`)} style={styles.card}>
+        {/* One left edge for every line: the rank rides in the byline as a
+            small tag instead of a wide number column the rest of the card
+            has to line up around. */}
+        <ConcernByline concern={concern} rank={rank} />
+        <ThemedText type="smallBold" style={styles.title}>
+          {concern.title}
+        </ThemedText>
+        <ConcernStats score={score} voters={voters} comments={concern.commentCount} createdAt={concern.createdAt} />
 
         {/* One-tap priority voting right from the board. */}
-        <View style={styles.quickRow}>
-          {QUICK_PRIORITIES.map((p) => {
-            const selected = myPriority === p.key;
-            return (
-              <Pressable
-                key={p.key}
-                onPress={() => quickVote(p.key)}
-                hitSlop={4}
-                style={({ pressed }) => [
-                  styles.quickPill,
-                  {
-                    borderColor: selected ? theme.primary : theme.border,
-                    backgroundColor: selected ? theme.backgroundSelected : theme.background,
-                    opacity: pressed ? 0.8 : 1,
-                  },
-                ]}>
-                <ThemedText
-                  type="small"
-                  style={{
-                    fontSize: 12,
-                    lineHeight: 16,
-                    color: selected ? theme.primary : theme.textSecondary,
-                    fontWeight: selected ? '700' : '500',
-                  }}>
-                  {p.label}
-                </ThemedText>
-              </Pressable>
-            );
-          })}
-        </View>
+        <PriorityScale compact value={myPriority} onSelect={quickVote} />
       </Card>
     </Animated.View>
   );
 }
 
+/**
+ * Rank tag and who raised it, as one line of small print. No ward label:
+ * every list of these cards is one ward's or all citywide, so it would say
+ * the same thing on every card (the concern's own page names it). The time
+ * sits at the end of the stats row so this line stays short.
+ */
+function ConcernByline({ concern, rank }: { concern: Concern; rank?: number }) {
+  const theme = useTheme();
+  return (
+    <View style={styles.byline}>
+      {rank != null && (
+        <View style={[styles.rank, { backgroundColor: theme.primarySoft }]}>
+          <ThemedText type="smallBold" style={{ fontSize: 12, lineHeight: 16, color: theme.primary }}>
+            {`#${rank}`}
+          </ThemedText>
+        </View>
+      )}
+      <ThemedText type="small" themeColor="textSecondary" style={styles.bylineText}>
+        {concern.authorName}
+      </ThemedText>
+      {concern.authorVerified && <VerifiedBadge compact />}
+    </View>
+  );
+}
+
+function ConcernStats({
+  score,
+  voters,
+  comments,
+  createdAt,
+}: {
+  score: number;
+  voters: number;
+  comments: number;
+  createdAt: Concern['createdAt'];
+}) {
+  const theme = useTheme();
+  return (
+    <View style={styles.statsRow}>
+      <View style={styles.stat}>
+        <Ionicons name="flame" size={14} color={theme.accent} />
+        <ThemedText type="small" themeColor="textSecondary" style={styles.bylineText}>
+          {score} · {plural(voters, 'vote')}
+        </ThemedText>
+      </View>
+      <View style={styles.stat}>
+        <Ionicons name="chatbubble-outline" size={13} color={theme.textSecondary} />
+        <ThemedText type="small" themeColor="textSecondary" style={styles.bylineText}>
+          {comments}
+        </ThemedText>
+      </View>
+      <ThemedText type="small" themeColor="textSecondary" style={[styles.bylineText, { marginLeft: 'auto' }]}>
+        {timeAgo(createdAt)}
+      </ThemedText>
+    </View>
+  );
+}
+
+/**
+ * A concern in the command center's issue list: read-only, in rank order,
+ * no voting. The ones the official has already commented on fold down to
+ * the byline and title (still a tap away); the rest show their opening
+ * lines so the official can triage without opening each.
+ */
+export function IssueRow({
+  concern,
+  rank,
+  commented,
+}: {
+  concern: Concern;
+  rank: number;
+  commented: boolean;
+}) {
+  const router = useRouter();
+  const theme = useTheme();
+  const t = useT();
+  if (commented) {
+    return (
+      <Card
+        onPress={() => router.push(`/concern/${concern.id}`)}
+        style={[styles.folded, { backgroundColor: theme.background }]}>
+        <View style={styles.byline}>
+          <ThemedText type="small" themeColor="textSecondary" style={styles.bylineText}>
+            {`#${rank}`}
+          </ThemedText>
+          <ThemedText type="small" themeColor="textSecondary" style={styles.bylineText}>
+            {'· '}
+            {concern.authorName}
+          </ThemedText>
+          <View style={styles.stat}>
+            <Ionicons name="checkmark-circle" size={13} color={theme.verified} />
+            <ThemedText type="small" style={[styles.bylineText, { color: theme.verified }]}>
+              {t('You commented')}
+            </ThemedText>
+          </View>
+        </View>
+        <ThemedText type="small" style={{ fontSize: 14, lineHeight: 20 }}>
+          {concern.title}
+        </ThemedText>
+      </Card>
+    );
+  }
+  return (
+    <Card onPress={() => router.push(`/concern/${concern.id}`)} style={styles.card}>
+      <ConcernByline concern={concern} rank={rank} />
+      <ThemedText type="smallBold" style={styles.title}>
+        {concern.title}
+      </ThemedText>
+      {concern.body ? (
+        // A teaser: the whole concern is one tap away.
+        <ThemedText type="small" themeColor="textSecondary" numberOfLines={3} style={{ fontSize: 14, lineHeight: 20 }}>
+          {concern.body}
+        </ThemedText>
+      ) : null}
+      <ConcernStats
+        score={concern.scoreVerified}
+        voters={concern.tallies.totalVerified}
+        comments={concern.commentCount}
+        createdAt={concern.createdAt}
+      />
+    </Card>
+  );
+}
+
 const styles = StyleSheet.create({
-  topRow: {
-    flexDirection: 'row',
-    gap: Spacing.two,
-    alignItems: 'flex-start',
+  card: {
+    gap: 10,
   },
-  metaRow: {
+  folded: {
+    gap: 4,
+    paddingVertical: Spacing.two,
+  },
+  title: {
+    fontSize: 17,
+    lineHeight: 23,
+  },
+  byline: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.two,
     flexWrap: 'wrap',
+    columnGap: 6,
+    rowGap: 2,
+  },
+  bylineText: {
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  rank: {
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
   },
   statsRow: {
     flexDirection: 'row',
-    gap: Spacing.three,
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    columnGap: Spacing.three,
+    rowGap: 2,
   },
   stat: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  quickRow: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  quickPill: {
-    flex: 1,
-    alignItems: 'center',
-    borderRadius: 999,
-    borderWidth: 1.5,
-    paddingVertical: 5,
   },
 });

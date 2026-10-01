@@ -5,7 +5,7 @@ import { View } from 'react-native';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { CopyLinkButton } from '@/components/copy-link';
-import { RatingChips } from '@/components/rating-chips';
+import { negativeRatingCount, RatingChips } from '@/components/rating-chips';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
@@ -19,6 +19,7 @@ import { host } from '@/lib/format';
 import { openLink } from '@/lib/open-link';
 import type { ElectionCandidateCard } from '@/lib/types';
 import { useT, useLocalized } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 
 /**
  * A ballot candidate's voter-info card: what they say they are running on,
@@ -35,6 +36,21 @@ export default function ElectionCandidateScreen() {
     () => (id ? doc(db, 'electionCandidates', id) : null),
     [id]
   );
+
+  usePageSummary('election-candidate/[id]', [
+    candidate &&
+      `${candidate.name}: ${
+        candidate.election === GENERAL_ELECTION ? generalRaceLabel(candidate.race) : municipalRaceLabel(candidate.race)
+      }.`,
+    candidate?.incumbent && t('Holds the seat now.'),
+    candidate?.writeIn && t('A declared write-in: the name is not printed on the ballot.'),
+    candidate?.party && t('Party: {party}.').replace('{party}', t(candidate.party)),
+    candidate?.ratings &&
+      candidate.ratings.length > 0 &&
+      t('Ratings listed: {n}, negative: {neg}.')
+        .replace('{n}', String(candidate.ratings.length))
+        .replace('{neg}', String(negativeRatingCount(candidate.ratings))),
+  ]);
 
   if (!candidate) {
     return (

@@ -12,9 +12,9 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc } from '@/hooks/use-firestore';
 import { db } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
-import { notify, notifyError } from '@/lib/notify';
+import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import type { Policy, PolicyLink, UserProfile } from '@/lib/types';
-import { createPolicy, updatePolicy } from '@/services/candidates';
+import { createPolicy, deletePolicy, setPolicyArchived, updatePolicy } from '@/services/candidates';
 
 /**
  * Write or edit one plank of the platform. Creating: pass nextOrder so the
@@ -136,7 +136,7 @@ function PolicyForm({
   return (
     <Screen>
       <ThemedText type="small" themeColor="textSecondary">
-        {t('One plank of your platform: a clear title, and all the space you need to make the case. Voters weigh in with support or opposition and argue it out in the comments.')}
+        {t('One plank of your platform: a clear title, and all the space you need to make the case. Voters argue it out in the comments.')}
       </ThemedText>
 
       <Field
@@ -175,7 +175,7 @@ function PolicyForm({
       <View style={{ gap: Spacing.two }}>
         {existing?.source === 'site' && (
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {t('This policy was imported from your campaign site. Saving takes it over: it becomes yours to manage here, its votes and comments stay, and the site no longer updates it.')}
+            {t('This policy was imported from your campaign site. Saving takes it over: it becomes yours to manage here, its comments stay, and the site no longer updates it.')}
           </ThemedText>
         )}
         <Button
@@ -184,6 +184,77 @@ function PolicyForm({
           loading={saving}
         />
       </View>
+      {existing && existing.source !== 'site' && <PolicyManagement profile={profile} policy={existing} />}
     </Screen>
+  );
+}
+
+/**
+ * Hide or delete an in-app policy. These used to sit on the public policy
+ * page; the candidate reaches them from the command center now, and the
+ * public page reads the same for everyone.
+ */
+function PolicyManagement({ profile, policy }: { profile: UserProfile; policy: Policy }) {
+  const router = useRouter();
+  const t = useT();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const toggleArchived = async () => {
+    setBusy(true);
+    try {
+      await setPolicyArchived(profile, policy, !policy.archived);
+    } catch (e) {
+      notifyError(t('Could not update'), e);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const remove = async () => {
+    // Third gate on top of the inline two-step - deleting a plank takes the
+    // whole debate with it, so it must be hard to do by accident.
+    const sure = await confirmDestructive(
+      t('Delete this policy?'),
+      t('This permanently removes the policy and its comments. It cannot be undone.'),
+      t('Delete forever')
+    );
+    if (!sure) return;
+    setBusy(true);
+    try {
+      await deletePolicy(profile, policy);
+      notify(t('Policy withdrawn'), t('The policy and its comments were removed.'));
+      if (router.canGoBack()) router.back();
+      else router.replace('/command');
+    } catch (e) {
+      notifyError(t('Could not delete'), e);
+      setBusy(false);
+    }
+  };
+
+  return (
+    <View style={{ gap: Spacing.two, marginTop: Spacing.three }}>
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+        {policy.archived
+          ? t('Hidden: this policy is off your public platform. Its comments are kept.')
+          : t('Hiding takes this policy off your public platform and keeps its comments. Deleting removes it and its comments for good.')}
+      </ThemedText>
+      <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap' }}>
+        <Button
+          title={policy.archived ? t('Unhide') : t('Hide')}
+          variant="secondary"
+          disabled={busy}
+          onPress={toggleArchived}
+        />
+        {confirmDelete ? (
+          <>
+            <Button title={t('Yes, delete')} variant="danger" onPress={remove} disabled={busy} />
+            <Button title={t('Keep it')} variant="ghost" onPress={() => setConfirmDelete(false)} />
+          </>
+        ) : (
+          <Button title={t('Delete')} variant="ghost" onPress={() => setConfirmDelete(true)} />
+        )}
+      </View>
+    </View>
   );
 }

@@ -1,37 +1,35 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, orderBy, query, where } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 
+import { ShareButton } from '@/components/share-button';
+import { HeaderActions } from '@/components/help-button';
 import { OfficialAvatar } from '@/components/avatar';
-import { ClaimGate } from '@/components/claim-gate';
 import { CopyLinkButton } from '@/components/copy-link';
 import { policyPreview } from '@/components/policy-body';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, Chip, EmptyState, Field, SectionHeader } from '@/components/ui';
+import { Button, Card, Chip, EmptyState, SectionHeader } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
-import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { host, plural, timeAgo } from '@/lib/format';
-import { useLocale, useLocalized, useT } from '@/lib/i18n';
-import { notify, notifyError } from '@/lib/notify';
+import { host, plural } from '@/lib/format';
+import { dateLocale, useLocale, useLocalized, useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 import { openLink } from '@/lib/open-link';
 import type { Candidate, PlatformSummary, Policy, Poll } from '@/lib/types';
-import { syncMyPlatform, updateCandidateCard } from '@/services/candidates';
+import { enter } from '@/lib/motion';
 
 
 /** A candidate's public page: who they are, and the more perfect platform. */
 export default function CandidateScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
-  const { profile } = useAuth();
   const t = useT();
   const loc = useLocalized();
 
@@ -51,6 +49,18 @@ export default function CandidateScreen() {
     [id]
   );
 
+  const shownPolicies = policies.filter((p) => !p.archived);
+  usePageSummary('candidate/[id]', [
+    candidate && `${candidate.name}, ${t(candidate.office)}.`,
+    candidate &&
+      t('Policies on the platform: {n}. Comments on them: {comments}.')
+        .replace('{n}', String(shownPolicies.length))
+        .replace('{comments}', String(shownPolicies.reduce((sum, p) => sum + (p.commentCount ?? 0), 0))),
+    candidate && candidate.sourceUrl && t('The platform is imported from their campaign site.'),
+    polls.some((p) => p.open) &&
+      t('Open polls from this candidate: {n}.').replace('{n}', String(polls.filter((p) => p.open).length)),
+  ]);
+
   if (!candidate) {
     return (
       <Screen>
@@ -63,13 +73,22 @@ export default function CandidateScreen() {
     );
   }
 
-  const isThisCandidate = profile?.uid === candidate.uid;
-  const visiblePolicies = policies.filter((p) => !p.archived || isThisCandidate);
-  const nextOrder = policies.reduce((max, p) => Math.max(max, p.order + 1), 0);
+  // The public page is the same for everyone, the candidate included: their
+  // tools (and their hidden policies) live in the command center tab.
+  const visiblePolicies = policies.filter((p) => !p.archived);
   const openPolls = polls.filter((p) => p.open);
 
   return (
     <Screen>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <HeaderActions>
+              <ShareButton path={`/candidate/${candidate.uid}`} title={candidate.name} />
+            </HeaderActions>
+          ),
+        }}
+      />
       <Card>
         <View style={styles.headerRow}>
           {/* A portrait earns the space; an initials tile does not. With no
@@ -102,30 +121,6 @@ export default function CandidateScreen() {
           </View>
         ) : null}
       </Card>
-
-      {isThisCandidate && (
-        <>
-          <ClaimGate claimed={candidate.claimed} name={candidate.name} />
-          <EditCard candidate={candidate} />
-          <SyncCard candidate={candidate} />
-          <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-            <Button
-              title={t('Add a policy')}
-              variant="secondary"
-              style={{ flex: 1 }}
-              onPress={() =>
-                router.push({ pathname: '/edit-policy', params: { nextOrder: String(nextOrder) } })
-              }
-            />
-            <Button
-              title={t('New poll')}
-              variant="secondary"
-              style={{ flex: 1 }}
-              onPress={() => router.push('/new-poll')}
-            />
-          </View>
-        </>
-      )}
 
       {candidate.platformNote ? (
         <PlatformNote
@@ -236,7 +231,7 @@ function AiSummary({ summary }: { summary: PlatformSummary }) {
   const [open, setOpen] = useState(false);
   const written = summary.generatedAt
     ?.toDate()
-    .toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    .toLocaleDateString(dateLocale(locale), { month: 'long', day: 'numeric', year: 'numeric' });
   return (
     // A solid orange bar, not another quiet card: this is the tap the page
     // most wants, the fast way into a platform nobody has time to read.
@@ -256,7 +251,7 @@ function AiSummary({ summary }: { summary: PlatformSummary }) {
         <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color="#FFFFFF" />
       </Pressable>
       {open ? (
-        <Animated.View entering={FadeIn.duration(180)} style={{ gap: Spacing.three, padding: Spacing.three }}>
+        <Animated.View entering={enter(FadeIn.duration(180))} style={{ gap: Spacing.three, padding: Spacing.three }}>
           <SummaryChunks label={t('The platform')} text={loc(summary.summary, summary.summaryEs) ?? ''} />
           <SummaryChunks
             label={t('Next to the other candidates')}
@@ -355,7 +350,7 @@ function PlatformList({
       );
     }
     rows.push(
-      <Animated.View key={policy.id} entering={FadeInDown.duration(240).delay(Math.min(i, 10) * 25)}>
+      <Animated.View key={policy.id} entering={enter(FadeInDown.duration(240).delay(Math.min(i, 10) * 25))}>
         <Card onPress={() => router.push(`/candidate/${candidateUid}/${policy.id}`)}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
             <ThemedText type="smallBold" style={{ fontSize: 15, flex: 1 }}>
@@ -379,107 +374,6 @@ function PlatformList({
     );
   });
   return <>{rows}</>;
-}
-
-/** Candidates manage their own card: bio, portrait link, website link. */
-function EditCard({ candidate }: { candidate: Candidate }) {
-  const { profile } = useAuth();
-  const t = useT();
-  const [editing, setEditing] = useState(false);
-  const [bio, setBio] = useState(candidate.bio ?? '');
-  const [photoUrl, setPhotoUrl] = useState(candidate.photoUrl ?? '');
-  const [websiteUrl, setWebsiteUrl] = useState(candidate.websiteUrl ?? '');
-  const [saving, setSaving] = useState(false);
-
-  if (!profile) return null;
-
-  const save = async () => {
-    setSaving(true);
-    try {
-      await updateCandidateCard(profile, { bio, photoUrl, websiteUrl });
-      setEditing(false);
-    } catch (e) {
-      notifyError(t('Could not save'), e);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (!editing) {
-    return <Button title={t('Edit my card')} variant="secondary" onPress={() => setEditing(true)} />;
-  }
-
-  return (
-    <Card>
-      <Field label={t('Bio')} value={bio} onChangeText={setBio} multiline maxLength={1000} />
-      <Field
-        label={t('Portrait link (https)')}
-        placeholder="https://your-site.org/portrait.jpg"
-        value={photoUrl}
-        onChangeText={setPhotoUrl}
-        autoCapitalize="none"
-        keyboardType="url"
-      />
-      <Field
-        label={t('Campaign website (https)')}
-        placeholder="https://your-campaign.org"
-        value={websiteUrl}
-        onChangeText={setWebsiteUrl}
-        autoCapitalize="none"
-        keyboardType="url"
-      />
-      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {t('Link a photo hosted on your own site or campaign page - direct democracy displays it but never stores the image.')}
-      </ThemedText>
-      <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-        <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(false)} style={{ flex: 1 }} />
-        <Button title={t('Save')} onPress={save} loading={saving} style={{ flex: 1 }} />
-      </View>
-    </Card>
-  );
-}
-
-/**
- * Shown only to candidates whose platform syncs from their campaign site:
- * the site is the source of truth, this button pulls it in on demand.
- */
-function SyncCard({ candidate }: { candidate: Candidate }) {
-  const t = useT();
-  const [syncing, setSyncing] = useState(false);
-
-  if (!candidate.sourceUrl) return null;
-
-  const sync = async () => {
-    setSyncing(true);
-    try {
-      const result = await syncMyPlatform();
-      notify(
-        t('Platform synced'),
-        t('{count} pulled from your site').replace('{count}', plural(result.synced, 'policy', 'policies')) +
-          (result.archived > 0 ? t(', {n} no longer on it (hidden).').replace('{n}', String(result.archived)) : '.')
-      );
-    } catch (e) {
-      notifyError(t('Sync failed'), e);
-    } finally {
-      setSyncing(false);
-    }
-  };
-
-  return (
-    <Card>
-      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {t('Your platform syncs from your campaign site (nightly, or right now with the button).')}
-        {candidate.lastSyncedAt ? ` ${t('Last synced')} ${timeAgo(candidate.lastSyncedAt)}.` : ''}
-      </ThemedText>
-      <Button
-        title={t('Sync from my site')}
-        variant="secondary"
-        icon={<Ionicons name="refresh" size={15} />}
-        onPress={sync}
-        loading={syncing}
-      />
-    </Card>
-  );
 }
 
 const styles = StyleSheet.create({

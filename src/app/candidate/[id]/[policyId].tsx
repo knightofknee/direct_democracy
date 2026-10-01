@@ -1,32 +1,31 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
-import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { ShareButton } from '@/components/share-button';
+import { HeaderActions } from '@/components/help-button';
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
 import { CopyLinkButton } from '@/components/copy-link';
 import { PolicyBody } from '@/components/policy-body';
 import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, Chip, EmptyState, SectionHeader } from '@/components/ui';
+import { Card, Chip, EmptyState, SectionHeader } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
-import { host } from '@/lib/format';
+import { host, timeAgo } from '@/lib/format';
+import { usePageSummary } from '@/lib/page-help';
 import { useT } from '@/lib/i18n';
-import { confirmDestructive, notify, notifyError } from '@/lib/notify';
 import { openLink } from '@/lib/open-link';
 import type { Candidate, Comment, Policy } from '@/lib/types';
 import {
   addPolicyComment,
-  deletePolicy,
   deletePolicyComment,
   setCommentCredit,
-  setPolicyArchived,
   voteOnPolicyComment,
 } from '@/services/candidates';
 
@@ -57,6 +56,19 @@ export default function PolicyScreen() {
     [id, policyId]
   );
 
+  usePageSummary('candidate/[id]/[policyId]', [
+    policy &&
+      (candidate
+        ? t('“{title}”, from the platform of {name}.').replace('{title}', policy.title).replace('{name}', candidate.name)
+        : `“${policy.title}”`),
+    policy && policy.links.length > 0 && t('Sources listed: {n}.').replace('{n}', String(policy.links.length)),
+    comments.length > 0
+      ? t('Comments: {n}, newest {ago}.')
+          .replace('{n}', String(comments.length))
+          .replace('{ago}', timeAgo(comments[0].createdAt))
+      : t('No comments yet.'),
+  ]);
+
   if (!policy) {
     return (
       <Screen>
@@ -65,13 +77,21 @@ export default function PolicyScreen() {
     );
   }
 
-  const isThisCandidate = profile?.uid === policy.candidateUid;
   // Directory entries are people, not policies: readable and linkable, but
   // not commentable or reportable - the debate belongs on real platforms.
   const isDirectory = !!candidate?.directory;
 
   return (
     <Screen>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <HeaderActions>
+              <ShareButton path={`/candidate/${policy.candidateUid}/${policy.id}`} title={policy.title} />
+            </HeaderActions>
+          ),
+        }}
+      />
       <View style={{ gap: Spacing.two }}>
         <View style={styles.metaRow}>
           {policy.section ? <Chip label={policy.section} /> : null}
@@ -122,7 +142,6 @@ export default function PolicyScreen() {
         <Receipts links={policy.links} title={isDirectory ? t('Links') : t('Receipts')} />
       )}
 
-      {isThisCandidate && <CandidateTools policy={policy} />}
 
       {/* Until the candidate doc has loaded we cannot know whether this is a
           directory entry - render no comment surface rather than risk one. */}
@@ -176,101 +195,6 @@ function Receipts({ links, title }: { links: Policy['links']; title: string }) {
         </View>
       ))}
     </Card>
-  );
-}
-
-/** The candidate's own controls on an in-app policy. */
-function CandidateTools({ policy }: { policy: Policy }) {
-  const router = useRouter();
-  const { profile } = useAuth();
-  const t = useT();
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [busy, setBusy] = useState(false);
-
-  if (!profile) return null;
-
-  if (policy.source === 'site') {
-    return (
-      <View style={{ gap: Spacing.two }}>
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          {t('This policy syncs from your campaign site. Edit it there and it updates on the next sync - or edit it here to take it over, after which the site no longer updates it.')}
-        </ThemedText>
-        <View style={{ flexDirection: 'row' }}>
-          <Button
-            title={t('Edit here and take over')}
-            variant="secondary"
-            onPress={() =>
-              router.push({
-                pathname: '/edit-policy',
-                params: { candidateId: policy.candidateUid, policyId: policy.id },
-              })
-            }
-          />
-        </View>
-      </View>
-    );
-  }
-
-  const toggleArchived = async () => {
-    setBusy(true);
-    try {
-      await setPolicyArchived(profile, policy, !policy.archived);
-    } catch (e) {
-      notifyError(t('Could not update'), e);
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const remove = async () => {
-    // Third gate on top of the inline two-step - deleting a plank takes the
-    // whole debate with it, so it must be hard to do by accident.
-    const sure = await confirmDestructive(
-      t('Delete this policy?'),
-      t('This permanently removes the policy, everyone’s votes on it, and its comments. It cannot be undone.'),
-      t('Delete forever')
-    );
-    if (!sure) return;
-    setBusy(true);
-    try {
-      await deletePolicy(profile, policy);
-      notify(t('Policy withdrawn'), t('The policy and its votes were removed.'));
-      if (router.canGoBack()) router.back();
-      else router.replace(`/candidate/${policy.candidateUid}`);
-    } catch (e) {
-      notifyError(t('Could not delete'), e);
-      setBusy(false);
-    }
-  };
-
-  return (
-    <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap' }}>
-      <Button
-        title={t('Edit')}
-        variant="secondary"
-        disabled={busy}
-        onPress={() =>
-          router.push({
-            pathname: '/edit-policy',
-            params: { candidateId: policy.candidateUid, policyId: policy.id },
-          })
-        }
-      />
-      <Button
-        title={policy.archived ? t('Unhide') : t('Hide')}
-        variant="secondary"
-        disabled={busy}
-        onPress={toggleArchived}
-      />
-      {confirmDelete ? (
-        <>
-          <Button title={t('Yes, delete')} variant="danger" onPress={remove} disabled={busy} />
-          <Button title={t('Keep it')} variant="ghost" onPress={() => setConfirmDelete(false)} />
-        </>
-      ) : (
-        <Button title={t('Delete')} variant="ghost" onPress={() => setConfirmDelete(true)} />
-      )}
-    </View>
   );
 }
 

@@ -5,7 +5,6 @@ import {
   doc,
   serverTimestamp,
   setDoc,
-  updateDoc,
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
@@ -18,6 +17,7 @@ import {
   type Scope,
   type UserProfile,
 } from '@/lib/types';
+import { tr } from '@/lib/i18n';
 
 export const MAX_REFERENCES = 10;
 
@@ -31,23 +31,25 @@ export function cleanReferences(references: string[]): string[] {
   const refs = references.map((r) => r.trim());
   while (refs.length && refs[refs.length - 1] === '') refs.pop();
   refs.forEach((r, i) => {
-    if (!r) throw new Error(`Reference ${i + 1} is blank - fill it in or remove it.`);
-    if (!r.startsWith('https://')) throw new Error(`Reference ${i + 1} must be an https:// link.`);
-    if (r.length > 500) throw new Error(`Reference ${i + 1} is too long (500 characters max).`);
+    if (!r) throw new Error(tr('Reference {n} is blank - fill it in or remove it.').replace('{n}', String(i + 1)));
+    if (!r.startsWith('https://')) throw new Error(tr('Reference {n} must be an https:// link.').replace('{n}', String(i + 1)));
+    if (r.length > 500) throw new Error(tr('Reference {n} is too long (500 characters max).').replace('{n}', String(i + 1)));
   });
   if (refs.length > MAX_REFERENCES) {
-    throw new Error(`At most ${MAX_REFERENCES} references per concern.`);
+    throw new Error(tr('At most {n} references per concern.').replace('{n}', String(MAX_REFERENCES)));
   }
   return refs;
 }
 
 export async function createConcern(
   profile: UserProfile,
-  input: { title: string; body: string; scope: Scope; references?: string[] }
+  input: { title: string; body: string; scope: Scope; wardId?: number | null; references?: string[] }
 ): Promise<string> {
-  const wardId = input.scope === 'ward' ? profile.wardId : null;
+  // Any ward, not just home (2026-09-27); onConcernCreated holds each post
+  // to the ward posting limits.
+  const wardId = input.scope === 'ward' ? (input.wardId ?? profile.wardId) : null;
   if (input.scope === 'ward' && wardId == null) {
-    throw new Error('Ward concerns require a verified ward.');
+    throw new Error(tr('Pick the ward this concern belongs to.'));
   }
   const ref = await addDoc(collection(db, 'concerns'), {
     title: input.title.trim(),
@@ -77,7 +79,7 @@ export async function voteConcernPriority(
   concernId: string,
   priority: ConcernPriority
 ): Promise<void> {
-  if (!CONCERN_PRIORITIES.includes(priority)) throw new Error('Invalid priority.');
+  if (!CONCERN_PRIORITIES.includes(priority)) throw new Error(tr('Invalid priority.'));
   await setDoc(doc(db, 'concerns', concernId, 'votes', profile.uid), {
     uid: profile.uid,
     value: priority,
@@ -87,21 +89,9 @@ export async function voteConcernPriority(
   });
 }
 
-/**
- * Authors may fix a concern only before anyone votes or comments - after
- * that, edits would change what people already voted on (rules enforce it).
- */
-export async function updateConcern(
-  profile: UserProfile,
-  concern: { id: string; authorUid: string },
-  input: { title: string; body: string; references?: string[] }
-): Promise<void> {
-  if (profile.uid !== concern.authorUid) throw new Error('Only the author can edit a concern.');
-  await updateDoc(doc(db, 'concerns', concern.id), {
-    title: input.title.trim(),
-    body: input.body.trim(),
-    references: cleanReferences(input.references ?? []),
-  });
+/** Take back a priority vote (tap it again); the trigger drops it from the tally. */
+export async function retractConcernVote(profile: UserProfile, concernId: string): Promise<void> {
+  await deleteDoc(doc(db, 'concerns', concernId, 'votes', profile.uid));
 }
 
 /** Withdraw a concern entirely; the onConcernDeleted trigger cleans up. */
@@ -109,7 +99,7 @@ export async function deleteConcern(
   profile: UserProfile,
   concern: { id: string; authorUid: string }
 ): Promise<void> {
-  if (profile.uid !== concern.authorUid) throw new Error('Only the author can delete a concern.');
+  if (profile.uid !== concern.authorUid) throw new Error(tr('Only the author can delete a concern.'));
   await deleteDoc(doc(db, 'concerns', concern.id));
 }
 
@@ -142,7 +132,7 @@ export async function deleteComment(
   concernId: string,
   comment: { id: string; authorUid: string }
 ): Promise<void> {
-  if (profile.uid !== comment.authorUid) throw new Error('Only the author can delete a comment.');
+  if (profile.uid !== comment.authorUid) throw new Error(tr('Only the author can delete a comment.'));
   await deleteDoc(doc(db, 'concerns', concernId, 'comments', comment.id));
 }
 
@@ -162,6 +152,7 @@ export async function addComment(
     references: cleanReferences(references ?? []),
     threadId: reply?.threadId ?? null,
     replyToName: reply?.replyToName ?? null,
+    replyToUid: reply?.replyToUid ?? null,
     createdAt: serverTimestamp(),
   });
 }

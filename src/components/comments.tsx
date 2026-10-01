@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { doc } from 'firebase/firestore';
 
 import { ContentActions } from '@/components/content-actions';
+import { EditHistory } from '@/components/edit-history';
 import { ReferencedBody, ReferenceEditor, SourcesButton } from '@/components/references';
 import { SkeletonButton } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
@@ -20,6 +21,7 @@ import { timeAgo } from '@/lib/format';
 import { useT } from '@/lib/i18n';
 import { notifyError } from '@/lib/notify';
 import type { Comment, CommentReply, CommentSort, CommentVoteValue } from '@/lib/types';
+import { editPost } from '@/services/posts';
 
 const SORTS: { key: CommentSort; label: string }[] = [
   { key: 'newest', label: 'Newest' },
@@ -67,6 +69,7 @@ export function CommentsSection({
     threadId: string;
     commentId: string;
     name: string;
+    uid: string;
   } | null>(null);
   const [sources, setSources] = useState<string[]>([]);
   // The "..." button reveals composer extras (sources, for now) on demand.
@@ -130,6 +133,7 @@ export function CommentsSection({
       threadId: comment.threadId ?? comment.id,
       commentId: comment.id,
       name: comment.authorName,
+      uid: comment.authorUid,
     });
   };
 
@@ -144,7 +148,7 @@ export function CommentsSection({
     try {
       await onSubmit(
         body,
-        replyTo ? { threadId: replyTo.threadId, replyToName: replyTo.name } : null,
+        replyTo ? { threadId: replyTo.threadId, replyToName: replyTo.name, replyToUid: replyTo.uid } : null,
         sources
       );
       setText('');
@@ -180,6 +184,7 @@ export function CommentsSection({
         onChangeText={setText}
         autoFocus={replyTo != null}
         multiline
+        maxLength={2000}
       />
       {(showExtras || sources.length > 0) && (
         <ReferenceEditor
@@ -336,8 +341,11 @@ function CommentRow({
   const t = useT();
   const { profile } = useAuth();
   const [confirmRemove, setConfirmRemove] = useState(false);
+  const [removing, setRemoving] = useState(false);
   const [crediting, setCrediting] = useState(false);
   const [voting, setVoting] = useState(false);
+  const [editing, setEditing] = useState<string | null>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
   const isMine = profile?.uid === comment.authorUid;
   const isOp = opUid != null && comment.authorUid === opUid;
   const canCredit = onCredit != null && profile?.uid === opUid && !isOp;
@@ -380,10 +388,28 @@ function CommentRow({
     comment.replyToName && comment.replyToName !== rootAuthorName ? comment.replyToName : null;
 
   const remove = async () => {
+    if (removing) return;
+    setRemoving(true);
     try {
       await onDelete(comment);
     } catch (e) {
+      setRemoving(false);
       notifyError(t('Could not delete comment'), e);
+    }
+  };
+
+  // Authors edit any time; editPost records it (and keeps the earlier text
+  // once someone has replied in the thread).
+  const saveEdit = async () => {
+    if (editing == null || !editing.trim()) return;
+    setSavingEdit(true);
+    try {
+      await editPost(contentPathFor(comment), { body: editing, references: comment.references ?? [] });
+      setEditing(null);
+    } catch (e) {
+      notifyError(t('Could not save'), e);
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -421,16 +447,40 @@ function CommentRow({
           </ThemedText>
         </View>
       )}
-      <ReferencedBody body={comment.body} references={comment.references} type="small" />
+      {editing != null ? (
+        <View style={{ gap: Spacing.two }}>
+          <Field value={editing} onChangeText={setEditing} multiline maxLength={2000} autoFocus />
+          <View style={{ flexDirection: 'row', gap: Spacing.two }}>
+            <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(null)} style={{ flex: 1 }} />
+            <Button
+              title={t('Save')}
+              onPress={saveEdit}
+              loading={savingEdit}
+              disabled={!editing.trim() || editing.trim() === comment.body}
+              style={{ flex: 1 }}
+            />
+          </View>
+        </View>
+      ) : (
+        <ReferencedBody body={comment.body} references={comment.references} type="small" />
+      )}
+      <EditHistory edits={comment.edits} />
       {/* Frequent actions live on the RIGHT, votes in the outermost thumb
           corner; each target is padded to ~38pt so up/down can't be
           fat-fingered. Remove (rare, own comments) stays quiet on the left. */}
       <View style={styles.actionsRow}>
         <SourcesButton references={comment.references} />
+        {isMine && editing == null && !confirmRemove && (
+          <Pressable onPress={() => setEditing(comment.body)} hitSlop={8} style={styles.action}>
+            <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+              {t('Edit')}
+            </ThemedText>
+          </Pressable>
+        )}
         {isMine &&
           (confirmRemove ? (
             <View style={{ flexDirection: 'row', gap: Spacing.two, alignItems: 'center' }}>
-              <Button title={t('Yes, remove')} variant="danger" onPress={remove} />
+              <Button title={t('Yes, remove')} variant="danger" onPress={remove} loading={removing} />
               <Button title={t('Keep')} variant="ghost" onPress={() => setConfirmRemove(false)} />
             </View>
           ) : (

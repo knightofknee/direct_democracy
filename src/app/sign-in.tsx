@@ -49,7 +49,9 @@ export default function SignInScreen() {
   const done = () => {
     // Always land on the big board, wherever sign-in was opened from.
     // Dismiss the modal first - a bare replace() from inside a native modal
-    // can pop to whatever screen sat under it instead of the target.
+    // can pop to whatever screen sat under it instead of the target. The
+    // keyboard goes first so its inset lets go of the board underneath.
+    Keyboard.dismiss();
     if (router.canDismiss()) router.dismiss();
     router.replace('/');
   };
@@ -124,6 +126,12 @@ export default function SignInScreen() {
       await sendPasswordResetEmail(auth, email.trim());
       notify(t('Reset email sent'), t('Check your inbox for a link to set a new password.'));
     } catch (e) {
+      // An address with no account reads exactly like one with an account,
+      // as production's email enumeration protection already answers it.
+      if (e instanceof Error && e.message.includes('auth/user-not-found')) {
+        notify(t('Reset email sent'), t('Check your inbox for a link to set a new password.'));
+        return;
+      }
       setError(e instanceof Error ? friendlyAuthError(e.message) : 'Something went wrong.');
     } finally {
       setSendingEmail(false);
@@ -211,6 +219,7 @@ export default function SignInScreen() {
                 ]}
                 placeholder="you@example.com"
                 placeholderTextColor={theme.textSecondary}
+                maxFontSizeMultiplier={2}
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="email-address"
@@ -241,6 +250,7 @@ export default function SignInScreen() {
                   style={{ flex: 1, color: theme.text, padding: 0 }}
                   placeholder={mode === 'signUp' ? t('At least 6 characters') : '••••••••'}
                   placeholderTextColor={theme.textSecondary}
+                  maxFontSizeMultiplier={2}
                   secureTextEntry={!showPassword}
                   value={password}
                   editable={!anyLoading}
@@ -402,7 +412,14 @@ export default function SignInScreen() {
 }
 
 function friendlyAuthError(message: string): string {
-  if (message.includes('auth/invalid-credential') || message.includes('auth/wrong-password')) {
+  // One answer for a wrong password and an unknown email alike, so the form
+  // never tells anyone whether an address has an account.
+  if (
+    message.includes('auth/invalid-credential') ||
+    message.includes('auth/wrong-password') ||
+    message.includes('auth/user-not-found') ||
+    message.includes('auth/missing-password')
+  ) {
     return 'Email or password is incorrect.';
   }
   if (message.includes('auth/email-already-in-use')) {
@@ -420,7 +437,9 @@ function friendlyAuthError(message: string): string {
   if (message.includes('auth/network-request-failed')) {
     return 'Network problem. Check your connection and try again.';
   }
-  return message;
+  // Firebase's own text ("Firebase: Error (auth/...)") means nothing to a
+  // person and isn't in their language.
+  return message.includes('auth/') ? 'Something went wrong.' : message;
 }
 
 const styles = StyleSheet.create({

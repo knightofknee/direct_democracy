@@ -21,6 +21,7 @@ import {
   type PolicyStance,
   type UserProfile,
 } from '@/lib/types';
+import { tr } from '@/lib/i18n';
 
 /**
  * The more perfect platform, client-side. Candidates write their own card and
@@ -36,14 +37,14 @@ export async function updateCandidateCard(
   profile: UserProfile,
   input: { bio: string; photoUrl: string; websiteUrl: string }
 ): Promise<void> {
-  if (profile.role !== 'candidate') throw new Error('Only candidates can edit a candidate card.');
+  if (profile.role !== 'candidate') throw new Error(tr('Only candidates can edit a candidate card.'));
   const photoUrl = input.photoUrl.trim();
   const websiteUrl = input.websiteUrl.trim();
   if (photoUrl && !photoUrl.startsWith('https://')) {
-    throw new Error('Photo link must be an https:// URL.');
+    throw new Error(tr('Photo link must be an https:// URL.'));
   }
   if (websiteUrl && !websiteUrl.startsWith('https://')) {
-    throw new Error('Website link must be an https:// URL.');
+    throw new Error(tr('Website link must be an https:// URL.'));
   }
   await updateDoc(doc(db, 'candidates', profile.uid), {
     bio: input.bio.trim(),
@@ -57,7 +58,7 @@ export async function createPolicy(
   profile: UserProfile,
   input: { section: string; title: string; body: string; links: PolicyLink[]; order: number }
 ): Promise<string> {
-  if (profile.role !== 'candidate') throw new Error('Only candidates can add policies.');
+  if (profile.role !== 'candidate') throw new Error(tr('Only candidates can add policies.'));
   const ref = await addDoc(collection(db, 'candidates', profile.uid, 'policies'), {
     candidateUid: profile.uid,
     section: input.section.trim(),
@@ -85,7 +86,7 @@ export async function updatePolicy(
   policy: Policy,
   input: { section: string; title: string; body: string; links: PolicyLink[] }
 ): Promise<void> {
-  if (profile.uid !== policy.candidateUid) throw new Error('Only the candidate can edit a policy.');
+  if (profile.uid !== policy.candidateUid) throw new Error(tr('Only the candidate can edit a policy.'));
   await updateDoc(doc(db, 'candidates', policy.candidateUid, 'policies', policy.id), {
     section: input.section.trim(),
     title: input.title.trim(),
@@ -102,9 +103,9 @@ export async function setPolicyArchived(
   policy: Policy,
   archived: boolean
 ): Promise<void> {
-  if (profile.uid !== policy.candidateUid) throw new Error('Only the candidate can edit a policy.');
+  if (profile.uid !== policy.candidateUid) throw new Error(tr('Only the candidate can edit a policy.'));
   if (policy.source !== 'app') {
-    throw new Error('This policy still syncs from the campaign site - edit it first to take it over.');
+    throw new Error(tr('This policy still syncs from the campaign site - edit it first to take it over.'));
   }
   await updateDoc(doc(db, 'candidates', policy.candidateUid, 'policies', policy.id), {
     archived,
@@ -115,10 +116,10 @@ export async function setPolicyArchived(
 /** Withdraw an in-app policy; the onPolicyWrite trigger cleans up. */
 export async function deletePolicy(profile: UserProfile, policy: Policy): Promise<void> {
   if (profile.uid !== policy.candidateUid) {
-    throw new Error('Only the candidate can delete a policy.');
+    throw new Error(tr('Only the candidate can delete a policy.'));
   }
   if (policy.source !== 'app') {
-    throw new Error('This policy still syncs from the campaign site - edit it first to take it over.');
+    throw new Error(tr('This policy still syncs from the campaign site - edit it first to take it over.'));
   }
   await deleteDoc(doc(db, 'candidates', policy.candidateUid, 'policies', policy.id));
 }
@@ -133,7 +134,7 @@ export async function votePolicy(
   policyId: string,
   stance: PolicyStance
 ): Promise<void> {
-  if (!POLICY_STANCES.includes(stance)) throw new Error('Invalid stance.');
+  if (!POLICY_STANCES.includes(stance)) throw new Error(tr('Invalid stance.'));
   await setDoc(doc(db, 'candidates', candidateUid, 'policies', policyId, 'votes', profile.uid), {
     uid: profile.uid,
     value: stance,
@@ -160,6 +161,7 @@ export async function addPolicyComment(
     references: cleanReferences(references ?? []),
     threadId: reply?.threadId ?? null,
     replyToName: reply?.replyToName ?? null,
+    replyToUid: reply?.replyToUid ?? null,
     createdAt: serverTimestamp(),
   });
 }
@@ -177,10 +179,10 @@ export async function setCommentCredit(
   credited: boolean
 ): Promise<void> {
   if (profile.uid !== candidateUid) {
-    throw new Error('Only the candidate can award writing credits on their platform.');
+    throw new Error(tr('Only the candidate can award writing credits on their platform.'));
   }
   if (comment.authorUid === candidateUid) {
-    throw new Error('You cannot credit your own comment.');
+    throw new Error(tr('You cannot credit your own comment.'));
   }
   await updateDoc(
     doc(db, 'candidates', candidateUid, 'policies', policyId, 'comments', comment.id),
@@ -229,7 +231,7 @@ export async function deletePolicyComment(
   policyId: string,
   comment: { id: string; authorUid: string }
 ): Promise<void> {
-  if (profile.uid !== comment.authorUid) throw new Error('Only the author can delete a comment.');
+  if (profile.uid !== comment.authorUid) throw new Error(tr('Only the author can delete a comment.'));
   await deleteDoc(
     doc(db, 'candidates', candidateUid, 'policies', policyId, 'comments', comment.id)
   );

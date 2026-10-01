@@ -20,8 +20,10 @@ import React, { createContext, useContext, useEffect, useMemo, useRef, useState 
 import { Platform } from 'react-native';
 
 import { auth, db } from '@/lib/firebase';
+import { tr } from '@/lib/i18n';
 import { randomDisplayName } from '@/lib/names';
 import { notifyError } from '@/lib/notify';
+import { forgetThisPhone } from '@/lib/push';
 import type { UserProfile } from '@/lib/types';
 
 /** Where the device remembers which address a sign-in link was sent to. */
@@ -123,7 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       let email = await AsyncStorage.getItem(EMAIL_LINK_KEY);
       if (!email && Platform.OS === 'web') {
         // Link opened on a different device than the one that requested it.
-        email = window.prompt('Confirm your email address to finish signing in');
+        email = window.prompt(tr('Confirm your email address to finish signing in'));
       }
       if (!email) return;
       try {
@@ -138,7 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // looks like the link failed. Land on the big board instead.
         router.replace('/');
       } catch (e) {
-        notifyError('Sign-in link failed', e);
+        notifyError(tr('Sign-in link failed'), e);
       }
     };
 
@@ -183,7 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // A terminal listener error while signed in means the app would
         // otherwise silently show signed-out UI to an authed user (this is
         // how the Android App Check outage surfaced). Say so instead.
-        notifyError('Signed in, but your account data could not be loaded', err);
+        notifyError(tr('Signed in, but your account data could not be loaded'), err);
         setProfileSettled(true);
       }
     );
@@ -213,7 +215,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // refuse), so the handler hop is the path.
         const continueUrl =
           Platform.OS === 'web'
-            ? `${window.location.origin}/sign-in`
+            ? // The hosted web app lives under a base path (/directdemocracy/app).
+              `${window.location.origin}${process.env.EXPO_BASE_URL ?? ''}/sign-in`
             : (process.env.EXPO_PUBLIC_AUTH_CONTINUE_URL ??
               'https://www.waldgrave.com/directdemocracy/auth');
         await sendSignInLinkToEmail(auth, email.trim(), {
@@ -278,6 +281,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         );
       },
       signOut: async () => {
+        // This phone stops getting the account's notifications.
+        if (auth.currentUser) await forgetThisPhone(auth.currentUser.uid);
         await firebaseSignOut(auth);
       },
     }),

@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.wardForPoint = wardForPoint;
+exports.districtsForPoint = districtsForPoint;
+exports.pointForAddress = pointForAddress;
 exports.resolveWard = resolveWard;
 exports.decisionAddresses = decisionAddresses;
 exports.wardLabelEn = wardLabelEn;
@@ -48,6 +50,47 @@ function wardForPoint(lon, lat) {
     }
     return null;
 }
+let districtTypes = null;
+/**
+ * Every district holding a Chicago precinct, clipped to a box around the
+ * city: functions/data/district-boundaries.json, written by
+ * `npm run build-district-map`. About 2 MB, so it loads on first use.
+ */
+function districtBoundaries() {
+    if (!districtTypes) {
+        const file = (0, path_1.join)(__dirname, '..', 'data', 'district-boundaries.json');
+        districtTypes = JSON.parse((0, fs_1.readFileSync)(file, 'utf8')).types;
+    }
+    return districtTypes;
+}
+const DISTRICT_TYPES = [
+    'usHouse',
+    'ilSenate',
+    'ilHouse',
+    'cookCommissioner',
+    'boardOfReview',
+    'subcircuit',
+    'schoolBoard',
+    'police',
+];
+/**
+ * The districts of every type holding a point in Chicago. Null outside the
+ * city, and null when any type has no district there (a point on the
+ * lakefront edge of a map, say), so a caller never works from half an answer.
+ */
+function districtsForPoint(lon, lat) {
+    if (wardForPoint(lon, lat) == null)
+        return null;
+    const types = districtBoundaries();
+    const out = {};
+    for (const type of DISTRICT_TYPES) {
+        const hit = types[type].find((d) => d.polygons.some(([outer, ...holes]) => inRing(lon, lat, outer) && !holes.some((h) => inRing(lon, lat, h))));
+        if (!hit)
+            return null;
+        out[type] = hit.n;
+    }
+    return out;
+}
 const CENSUS = 'https://geocoding.geo.census.gov/geocoder/locations';
 /**
  * One Census geocoder request. Returns the first match, null when the
@@ -63,6 +106,17 @@ async function census(path, params) {
     const body = (await resp.json());
     const c = body.result?.addressMatches?.[0]?.coordinates;
     return c && typeof c.x === 'number' && typeof c.y === 'number' ? { lon: c.x, lat: c.y } : null;
+}
+/**
+ * Geocode one typed address line ("121 N LaSalle St, Chicago, IL") with the
+ * Census geocoder. Null when nothing matches; throws when the geocoder
+ * itself fails, so a caller can tell "no such address" from "try again".
+ */
+async function pointForAddress(oneLine) {
+    const address = oneLine.replace(/\s+/g, ' ').trim();
+    if (!address)
+        return null;
+    return census('onelineaddress', { address });
 }
 /** Locate one Didit address: structured Census, then one-line, then Didit's point. */
 async function locate(a) {
@@ -106,11 +160,16 @@ async function resolveWard(addresses) {
         located = true;
         const wardId = wardForPoint(point.lon, point.lat);
         if (wardId != null)
-            return { kind: 'ward', wardId };
+            return { kind: 'ward', wardId, districts: districtsForPoint(point.lon, point.lat) };
     }
     return located ? { kind: 'outside' } : { kind: 'unknown' };
 }
-/** Pull the addresses out of a Didit decision, proof of address first. */
+/**
+ * Pull the addresses out of a Didit decision. A decision with a proof of
+ * address (the bill move) is read from the bill only: the ID's address is
+ * the old home by definition, and falling back to it would put a mover back
+ * in the ward they left.
+ */
 function decisionAddresses(decision) {
     const d = (decision ?? {});
     const out = [];
@@ -121,6 +180,8 @@ function decisionAddresses(decision) {
             parsed: poa.poa_parsed_address,
         });
     }
+    if ((d.poa_verifications ?? []).length > 0)
+        return out.filter((a) => a.raw || a.formatted || a.parsed);
     for (const idv of d.id_verifications ?? []) {
         out.push({
             raw: idv.address,

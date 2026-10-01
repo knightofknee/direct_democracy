@@ -5,6 +5,236 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-09-29: moderation
+
+- **Shadowban:** 5 distinct accounts with open reports against a citizen hide
+  that citizen's posts from everyone else until the weekly review. This is
+  a client-side filter over a public list of uids (`moderation/shadowbanned`),
+  like the block list: it hides, it doesn't delete. Anyone reading the
+  database can see who is on the list (pseudonymous uids only).
+- **Accepted:** 5 throwaway accounts could hide someone for up to a week.
+  The review is weekly, officials and candidates are exempt, and clearing
+  restores everything (nothing is deleted until Brian decides).
+- **Operator actions** run only through the Admin SDK (`scripts/moderate.ts`,
+  `moderationActions`); no client can write either. A deleted account's
+  verified ID is marked banned and can't verify another account.
+
+## Update - 2026-09-29: full review (five parallel reviewers), fixes deployed
+
+- **Fixed (security):** an AMA question could be created under any uid,
+  dropping a notification into that person's inbox. Rules now require the
+  official to exist, and the trigger deletes an orphan. Comment `threadId`
+  must be a plain document id (it was joined into a path). Tallies at
+  create are key-pinned, and references have a total size cap. Concern
+  comments need the concern. The asker can't join their own question.
+  Display names can't open with spaces or invisible characters. Policy
+  stance votes are closed (no app reaches them).
+- **Fixed (integrity):** verdicts are decided only by the official's own
+  verified residents. Edits keep the old text once a post is backed (votes,
+  joins, credits). Council "losing side" comes from the action's outcome,
+  not the vote counts, and a tie has none. A bill move is read from the bill
+  only.
+- **Fixed (reliability):**
+  - Deadline reminders run in parallel chunks with a 30-minute timeout and
+    retries.
+  - Didit calls time out before the function does, so refunds always run,
+    and a started session never refunds twice.
+  - The webhook writes the profile and the session outcome together and
+    takes "moving" from the session.
+  - The erase sweep keeps an approved-but-unapplied session until the
+    outcome is recorded.
+  - A failing Council matter no longer stalls the roll-call sync.
+- **Fixed (privacy):** deleted accounts receive no notifications. A phone's
+  push token belongs to one account at a time. The delete-account screen
+  now says votes are removed (it said the opposite).
+- **Accepted:** judgments from binaries before this date carry no ward and
+  count only for citywide officials until those users update.
+
+## Update - 2026-09-29: phone notifications, AMA threads, Council data, districts
+
+- **Push tokens:** `users/{uid}.pushTokens` and `pushPrefs` are the only new
+  client-writable profile fields (rules allowlist). A token is a phone's
+  Expo address, not a secret; the server sends only the kinds the owner
+  switched on, drops tokens Expo reports as unregistered, and sign-out
+  removes this phone's token. Verdicts, verification results, and posting
+  limit notices never go to the phone.
+- **AMA threads:** anyone signed in may comment on an answered question
+  (rules require a response); the counts, replies, and notices are
+  trigger-written like every other comment thread, and comments share the
+  comments rate limit.
+- **Council data:** `council/*` and `rollCalls/*` are public-read,
+  Admin-only-write, synced from the City Clerk's eLMS API twice a day. The
+  app shows the Clerk's words and votes and never scores them.
+- **Districts:** `users/{uid}.districts` (numbers plus the ward they were
+  found in) is written only by the Didit webhook and the `findMyDistricts`
+  callable; clients can't write it. A typed address goes to the Census
+  geocoder and is dropped, never stored or logged. Lookups are capped at 5
+  a day per account (`rateLimits/addressLookups`). An address in a ward
+  other than the person's home ward is refused, and declaring another ward
+  deletes districts from the old one, so a person's districts always match
+  their ward screens. Districts decide only what the election tab shows
+  first; they never touch a tally.
+- **Accepted:** someone can type an address that isn't theirs in their
+  own ward and see that address's districts. That shows them different
+  races first and changes nothing else.
+
+## Update - 2026-09-28: audit follow-through
+
+- **Fixed:** deleting an account now deletes every ballot it cast (the
+  triggers take each out of its tallies), so a freed identity can't vote
+  verified twice; election questions keep their text under "[deleted]"
+  too; `verificationLimits` goes with the account.
+- **Fixed:** election questions can be reported and their authors
+  blocked; `onReportCreated` replaces the reporter's excerpt with the real
+  document's text, so a forged quote can't get an innocent post removed.
+- **Fixed:** display names may not start with "Ald." / "Alderman".
+- **Fixed:** question upvotes require the question to exist and pin the
+  voter's `wardId`; the recount skips missing questions and writes the
+  official's `answerWeights` only on a change.
+- **Fixed:** a Didit decision without a document number no longer verifies
+  a first-time account (no one-account-per-ID check was possible).
+- **Fixed:** closed polls can't be reopened; writing credits need a
+  candidate on an existing policy; policy comments need an existing policy.
+- **Fixed:** platform sync fetches only https pages on the campaign's own
+  host (after redirects), within 15 s and 5 MB. Every live candidate still
+  parses identically (checked read-only against production).
+- **Fixed:** edits go through `editPost` only, with a kept history.
+- **Fixed:** the emulator can no longer reach Didit. During testing it read
+  the real secrets from Secret Manager and created one real, unopened Didit
+  session (77846b6e-8ce0-410f-9ab5-0427d120d81d, 2026-09-28); unopened, it
+  holds no personal data and expires on its own.
+- **Still open, by decision:** webhook `X-Timestamp` isn't covered by the
+  signature (replays are mostly harmless given outcome records); Apple
+  sandbox purchases grant real credits (fine while TestFlight is private).
+
+## Update - 2026-09-28: audit fixes (account deletion, concern body)
+
+- **Found and fixed:** `deleteAccount` failed for every account in
+  production. Its `collectionGroup('questions').where('authorUid')` lookup
+  had no collection-group index (FAILED_PRECONDITION, confirmed with a
+  read-only probe), so no account could be deleted. Added the
+  `questions.authorUid` field override; the probe now succeeds.
+- **Found and fixed:** the concern update rule checked `body.size()` but
+  not `body is string`, so an author could turn an unengaged concern's body
+  into a map and crash every feed that rendered the card. The update rule
+  now requires a string, like create.
+- **Open from the same audit** (not yet fixed): deleting an account frees
+  the identity claim while the account's verified ballots stay counted, so
+  one person can verify again and vote verified twice; election questions
+  have no report / block path; any display name can imitate an official's
+  on comments; an upvote under a nonexistent question path still triggers a
+  full answer-weight recount and card write; a Didit decision without a
+  document number verifies with no identity dedup.
+
+## Update - 2026-09-28: abuse limits (verification, posting, reports)
+
+- **Found:** nothing limited how often an account could start a free Didit
+  session. An opened session that is abandoned or declined keeps its slot
+  in Didit's free 500, so one person starting and quitting in a loop (or a
+  handful of throwaway accounts) could spend the month's free checks and
+  leave every real resident paying. Also unlimited: citywide concerns,
+  questions to citywide officials, election questions, comments (each one
+  can notify two people), reports (the review queue), and declared ward
+  changes (each one runs a withdrawal sweep).
+- **Fixed, verification:** one open session per account (a repeat request
+  within 24 hours gets the same link, nothing new is counted), 3 free
+  sessions per account per 90 days, and a one-minute start lock against
+  double taps; past those a check is paid, never refused. No daily cap (a
+  real surge is welcome): after 100 free sessions in a Chicago day, a free
+  check needs a confirmed email or Google / Apple sign-in, since a made-up
+  address is the cheapest account there is, and the operator is notified.
+  Enforced in `createVerificationSession`'s transaction; state in
+  `verificationLimits/{uid}` (no rule matches). An unopened link that
+  expires gives back its free attempt; the webhook settles the rest.
+- **Fixed, posting:** `gateRate` holds those posts to per-account limits
+  in the create triggers (2 citywide concerns a day; 3 citywide-official
+  questions and 3 election questions a day; 20 comments an hour and 100 a day; 10
+  reports a day) and deletes anything over, before any notification goes
+  out. `declareWard` refuses a 6th change in a day. A declared ward change
+  no longer withdraws anything (approval or poll votes); it moves the
+  person's limits and screens only. Verified moves still withdraw the old
+  alderman's approval (it counted the person as a constituent).
+- **Tested in the emulator:** every limit above at its boundary; a failed
+  Didit start gives back its slot, day count, free attempt, and lock; an
+  open session is handed back; the attempt and daily caps turn the quote
+  and the start into a payment; signed webhooks for Expired (attempt given
+  back) and Abandoned (kept) settle the new state correctly.
+- **Still open (not code):** every per-account limit multiplies with the
+  number of accounts. The backstops are App Check (confirm it is ENFORCED,
+  not just monitored, for Firestore, Authentication, and Cloud Functions in
+  the Firebase console), Firebase Authentication's sign-up quota per IP,
+  and a billing budget alert. Vote, upvote, and rating toggles cannot be
+  rate limited in rules; each toggle is one trigger run on the voter's own
+  ballot and cannot inflate a count.
+
+## Update - 2026-09-27: 5-ward cap, command center reads
+
+- **5-ward cap:** besides the per-ward limits, one account may post in at
+  most 5 wards other than its home ward in a rolling week, judged in the
+  same trigger transaction from `users/{uid}.recentPostWards` (Admin SDK
+  writes only). Wards that were home when posted in count once they no
+  longer are, so switching home wards does not reset it. Tested in the
+  emulator: five other wards pass, a sixth is deleted with a notification,
+  a home post still passes.
+- **New read rules:** collection-group reads on `comments` and `answers`
+  (`{path=**}`), for the command center's "you commented" and "you
+  answered" lookups. Both documents were already world-readable where they
+  live, so no data is newly exposed. Owner controls moved off the public
+  pages; that changes presentation only, the write rules are unchanged.
+
+## Update - 2026-09-27: posting in any ward, posting limits, ward switching
+
+- **Change:** ward concerns may be posted in any ward (rules check only
+  that `wardId` is a real ward, 1-50, or the author's own test ward), and
+  questions to aldermen were already open to all. Both now count as ward
+  posts under limits enforced in the create triggers: 3 per rolling day in
+  the home ward, 1 per week per other ward. A post over the limit is
+  deleted in the same transaction that judges it, before the alderman is
+  notified of a question; counters it bumped are taken back by the delete
+  triggers. The ledger (`users/{uid}/wardPosts/{ward}`) and the lock fields
+  (`homeWardPosts`, `wardLockedUntil`) are Admin SDK writes only; the users
+  rule still allows clients to change only `displayName`.
+- **Declared wards can now change:** freely until the owner posts there,
+  locked a week after the 2nd home post and 3 months after the 3rd.
+  `declareWard` enforces the lock in a transaction and, on a switch,
+  withdraws the old ward's approval ballot and open-poll ballots, so a
+  switcher's say-so vote never counts in two wards.
+- **Tested in the emulator:** a no-ward account may post in ward 5 and a
+  second ward-5 post in the week is deleted with a notification; the ledger
+  is owner-readable, unreadable to others, unwritable by its owner; a
+  client cannot clear its own lock; ward 99 is refused; switching is free
+  with 0-1 home posts, locked ~7 days after 2 and ~90 after 3; a 4th home
+  post in a day is deleted; switching away withdrew a ward-poll ballot; a
+  second away question to an alderman is deleted and the alderman is
+  notified only of the first.
+- **Accepted risk:** a post over the limit exists for the second or two
+  before its trigger runs (only reachable by bypassing the app, which
+  checks first). One account may still post once a week in each of the 50
+  wards, and several email accounts multiply every limit; App Check,
+  reports, and verified-first lenses remain the backstops. Citywide
+  concerns and comments are not rate limited.
+
+## Update - 2026-09-24: declared home ward
+
+- **Change:** unverified accounts may declare a home ward once
+  (`declareWard`, Admin SDK write, transaction refuses a second set or a
+  verified account; clients still cannot write `wardId`, rules-tested).
+  Ward concerns, ward poll ballots, and approval ballots now require a home
+  ward (`me().wardId`) instead of `verified`. Tested in the emulator: no
+  ward is denied all three; a declared ward allows its own ward and denies
+  others; a second declare and a direct `wardId` write are refused; a ballot
+  claiming `verified: true` is refused.
+- **Trust model unchanged where it counts:** ballots snapshot `verified`
+  (rules pin it to the profile), so declared residents land only in the
+  all-users slice. Report cards (constituent approval, verdicts, answer
+  weights) count verified people only. Verification later replaces the
+  declared ward and withdraws the approval ballot left in the old ward.
+- **Accepted risk:** one person can make several email accounts and declare
+  a ward on each, inflating all-users counts and posting on a ward board.
+  Verified lenses and grades are unaffected, App Check keeps it to the real
+  app, and reports cover spam. Revisit with rate limits or verified-first
+  sorting if it shows up.
+
 ## Update - 2026-09-24: nothing kept at Didit, keyed identity code
 
 - **Found:** Didit's retention was the default, unlimited: ID images,
@@ -49,6 +279,14 @@ honest, and every failure must be visible.
 - **Accepted:** a purchase Apple or Google refunds after its credit was
   spent is not clawed back (the check already ran). Sandbox purchases grant
   real credits so App Review can test; that costs a few Didit checks.
+- **App Review pricing (2026-09-29):** `verificationLimits/{uid}.reviewPricing`
+  makes one account price as if the month were inside or past the free 500
+  and skips its free-attempt count, 90-day move window, open-session reuse,
+  and email gate, so a reviewer can reach all three products. It matches
+  no security rule (Admin SDK only, `npm run review-account`), so no client
+  can grant it to itself. Purchases on those accounts are still checked with
+  the store; a `within500` account gets free checks without the attempt cap,
+  so only operator-held review accounts should carry it.
 - **Privacy:** purchase records hold uid, product, store transaction id,
   and time; payment details never reach us. The public policy and the
   in-app privacy screen say so.

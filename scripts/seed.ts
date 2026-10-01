@@ -43,7 +43,8 @@ function tally(all: Record<string, number>, verified: Record<string, number>): S
   return { all, verified, totalAll: sum(all), totalVerified: sum(verified) };
 }
 
-const PRIORITY_WEIGHTS: Record<string, number> = { critical: 3, high: 2, medium: 1, low: 0 };
+// Same weights as PRIORITY_WEIGHTS in functions/src/tally.ts (1 to 5).
+const PRIORITY_WEIGHTS: Record<string, number> = { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5 };
 const score = (counts: Record<string, number>) =>
   Object.entries(counts).reduce((acc, [k, v]) => acc + (PRIORITY_WEIGHTS[k] ?? 0) * v, 0);
 
@@ -285,32 +286,32 @@ async function main() {
       title: 'Fix the winter potholes faster',
       body: 'Every spring the same craters open up on arterial streets and take months to patch. Other cold-weather cities patch within two weeks. Why can’t we?',
       t: tally(
-        { critical: 82, high: 64, medium: 21, low: 6 },
-        { critical: 41, high: 30, medium: 9, low: 2 }
+        { '5': 82, '4': 64, '3': 13, '2': 8, '1': 6 },
+        { '5': 41, '4': 30, '3': 6, '2': 3, '1': 2 }
       ),
     },
     {
       title: 'More frequent CTA service on the Blue Line',
       body: 'Off-peak waits regularly hit 20+ minutes. Reliable frequency is the difference between a city you can live in without a car and one you can’t.',
       t: tally(
-        { critical: 58, high: 71, medium: 30, low: 8 },
-        { critical: 27, high: 35, medium: 12, low: 3 }
+        { '5': 58, '4': 71, '3': 18, '2': 12, '1': 8 },
+        { '5': 27, '4': 35, '3': 8, '2': 4, '1': 3 }
       ),
     },
     {
       title: 'Keep public libraries open on Sundays',
       body: 'Sunday hours were cut years ago and never came back. Libraries are the last truly public indoor spaces in the city.',
       t: tally(
-        { critical: 25, high: 48, medium: 39, low: 12 },
-        { critical: 11, high: 22, medium: 17, low: 5 }
+        { '5': 25, '4': 48, '3': 24, '2': 15, '1': 12 },
+        { '5': 11, '4': 22, '3': 11, '2': 6, '1': 5 }
       ),
     },
     {
       title: 'Streetlight outages in the neighborhoods',
       body: '311 reports for dark blocks sit for weeks. Lighting is the cheapest public-safety investment there is.',
       t: tally(
-        { critical: 44, high: 39, medium: 18, low: 5 },
-        { critical: 19, high: 17, medium: 8, low: 2 }
+        { '5': 44, '4': 39, '3': 11, '2': 7, '1': 5 },
+        { '5': 19, '4': 17, '3': 5, '2': 3, '1': 2 }
       ),
     },
   ];
@@ -362,16 +363,16 @@ async function main() {
       title: 'Protected bike lane on Milwaukee Ave',
       body: 'The painted lane disappears exactly where traffic is worst. A curb-protected lane through the ward would connect the whole Northwest Side.',
       t: tally(
-        { critical: 31, high: 24, medium: 9, low: 4 },
-        { critical: 31, high: 24, medium: 9, low: 4 }
+        { '5': 31, '4': 24, '3': 6, '2': 3, '1': 4 },
+        { '5': 31, '4': 24, '3': 6, '2': 3, '1': 4 }
       ),
     },
     {
       title: 'Restore the Damen bus after 10pm',
       body: 'Service ends too early for restaurant and hospital workers coming home late.',
       t: tally(
-        { critical: 14, high: 22, medium: 11, low: 2 },
-        { critical: 14, high: 22, medium: 11, low: 2 }
+        { '5': 14, '4': 22, '3': 7, '2': 4, '1': 2 },
+        { '5': 14, '4': 22, '3': 7, '2': 4, '1': 2 }
       ),
     },
   ];

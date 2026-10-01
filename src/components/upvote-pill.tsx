@@ -77,7 +77,9 @@ export function useOptimisticUpvotes(serverCount: number) {
   const { value, predict, rollback } = useOptimistic(serverCount);
   return {
     count: value,
-    bump: (d: 1 | -1) => predict(Math.max(0, serverCount + d)),
+    // From what's on screen: join then leave within a second must land back
+    // where it started, since the server count never moves for that pair.
+    bump: (d: 1 | -1) => predict(Math.max(0, value + d)),
     settle: rollback,
   };
 }
@@ -113,7 +115,9 @@ export function ElectionQuestionJoin({ question }: { question: ElectionQuestion 
     }
   };
 
-  return <UpvotePill count={count} active={myUpvote != null} onPress={toggle} />;
+  // The asker's own question already carries their weight.
+  const mine = profile != null && profile.uid === question.authorUid;
+  return <UpvotePill count={count} active={myUpvote != null} onPress={toggle} disabled={mine} />;
 }
 
 const styles = StyleSheet.create({

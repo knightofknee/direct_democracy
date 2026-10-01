@@ -1,4 +1,14 @@
-import { ordinal } from '@/constants/chicago';
+import { ordinal, wardLabel } from '@/constants/chicago';
+import { getLocale, tr } from '@/lib/i18n';
+
+/**
+ * A numbered district's name in the app's language: English says "7th
+ * District", every other language uses its keyed template with the plain
+ * number (the same approach as wardLabel).
+ */
+function numbered(en: string, template: string, n: number): string {
+  return getLocale() === 'en' ? en : tr(template).replace('{n}', String(n));
+}
 
 /**
  * The upcoming elections a Chicago voter faces, and the fixed facts about
@@ -33,21 +43,59 @@ export const HOW_TO_VOTE_2026 = {
     online: 'online through October 18 (needs an Illinois license or state ID)',
     mail: 'by mail through October 6',
     inPerson:
-      'in person through election day itself, at any early voting site or polling place, with two forms of ID (one showing your address)',
+      'in person through election day itself (starting October 7 at any open early voting site, and at your polling place on election day), with two forms of ID (one showing your address)',
     url: 'https://chicagoelections.gov/voting/register-votechange-name-or-address',
   },
   voteByMail: {
     applyBy: 'apply by October 29',
     detail:
-      'ballots start mailing September 24; return by mail or at any secured drop box (one at every ward early voting site)',
+      'ballots have been mailing since September 24; mail yours back postmarked by November 3 (it must arrive by November 17), or leave it in the secured drop box at any open early voting site',
     url: 'https://chicagoelections.gov/voting/vote-mail',
   },
   earlyVoting: {
-    starts: 'downtown from October 1 (137 S. State St.), all 50 wards from October 19',
+    starts: 'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19',
     detail: 'any Chicago voter can use any site',
     url: 'https://chicagoelections.gov/voting/early-voting',
   },
 } as const;
+
+/**
+ * Help that makes voting possible for people the basics don't cover. Every
+ * line verified on chicagoelections.gov, 2026-09-29 (accessibility,
+ * language access, vote by mail, election judges, register pages).
+ */
+export const VOTING_HELP_2026 = [
+  {
+    key: 'accessible',
+    icon: 'accessibility-outline',
+    text: 'Voting with a disability: an accessible mail ballot you mark online and print, curbside voting (request it by 5 pm the day before election day), and help at 312-269-7976.',
+    url: 'https://chicagoelections.gov/voting/accessibilityvoters-disabilities',
+  },
+  {
+    key: 'language',
+    icon: 'language-outline',
+    text: 'Help in your language: early voting ballots come in 12 languages, many sites have bilingual officials, and you may bring someone to interpret.',
+    url: 'https://chicagoelections.gov/voting/language-access-resources',
+  },
+  {
+    key: 'permanent',
+    icon: 'repeat-outline',
+    text: 'Get a mail ballot for every future election by joining the permanent vote by mail roster.',
+    url: 'https://chicagoelections.gov/elections/vote-by-mail/permanent-roster',
+  },
+  {
+    key: 'preregister',
+    icon: 'school-outline',
+    text: 'Under 18? You can pre-register online at 16.',
+    url: 'https://chicagoelections.gov/voting/register-votechange-name-or-address',
+  },
+  {
+    key: 'judge',
+    icon: 'ribbon-outline',
+    text: 'Work the polls: election judges are paid $170 to $230 for the day. High school juniors and seniors can serve too.',
+    url: 'https://chicagoelections.gov/poll-workers/election-day-judges',
+  },
+] as const;
 
 /**
  * Voting milestones as dates, for the countdown at the top of the election
@@ -56,15 +104,56 @@ export const HOW_TO_VOTE_2026 = {
  * working after November. Local midnight, Chicago.
  */
 // Labels are verb phrases so they read as one sentence with the countdown
-// appended: "Early voting starts in 22 days", "Election day is today".
-export const VOTING_MILESTONES: { date: string; label: string; election: string }[] = [
-  { date: '2026-10-01', label: 'Early voting starts', election: '2026-11-03' },
-  { date: '2026-10-06', label: 'Mail registration closes', election: '2026-11-03' },
-  { date: '2026-10-18', label: 'Online registration closes', election: '2026-11-03' },
-  { date: '2026-10-19', label: 'Early voting opens in every ward', election: '2026-11-03' },
-  { date: '2026-10-29', label: 'Mail ballot applications close', election: '2026-11-03' },
-  { date: '2026-11-03', label: 'General election day is', election: '2026-11-03' },
-  { date: '2027-02-23', label: 'Municipal election day is', election: '2027-02-23' },
+// appended: "Early voting opens downtown in 22 days", "Election day is today".
+/**
+ * The countdown on the election tab: `label` + "today" / "tomorrow" / "in N
+ * days", then `detail`, which says who and where the date applies to (a
+ * date that's true for one site or one way of voting must never read as
+ * true for all of them). Dates checked on chicagoelections.gov 2026-09-30.
+ */
+export const VOTING_MILESTONES: { date: string; label: string; detail: string; election: string }[] = [
+  {
+    date: '2026-10-01',
+    label: 'Early voting opens downtown',
+    detail: 'At 137 S. State St. and 69 W. Washington St. Sites in every ward open October 19.',
+    election: '2026-11-03',
+  },
+  {
+    date: '2026-10-06',
+    label: 'Registering with a paper form by mail closes',
+    detail: 'Online registration stays open through October 18, and in-person registration through election day.',
+    election: '2026-11-03',
+  },
+  {
+    date: '2026-10-18',
+    label: 'Online registration closes',
+    detail: 'You can still register in person at an early voting site or at your polling place on election day, with two forms of ID.',
+    election: '2026-11-03',
+  },
+  {
+    date: '2026-10-19',
+    label: 'Early voting opens in every ward',
+    detail: 'One site per ward, plus the two downtown. Any Chicago voter can use any site.',
+    election: '2026-11-03',
+  },
+  {
+    date: '2026-10-29',
+    label: 'Mail ballot applications close',
+    detail: 'Already have a mail ballot? Mail it back postmarked by November 3, or use a drop box at an early voting site.',
+    election: '2026-11-03',
+  },
+  {
+    date: '2026-11-03',
+    label: 'General election day is',
+    detail: 'Polls are open 6 am to 7 pm. Mail ballots must be postmarked by November 3.',
+    election: '2026-11-03',
+  },
+  {
+    date: '2027-02-23',
+    label: 'Municipal election day is',
+    detail: 'Mayor, city clerk and treasurer, alderman, and police district council.',
+    election: '2027-02-23',
+  },
 ];
 
 function localDate(iso: string): Date {
@@ -81,13 +170,14 @@ export function daysUntil(iso: string, now: Date): number {
 /** The first milestone that is today or later, with days to its election. */
 export function nextMilestone(
   now: Date
-): { date: string; label: string; election: string; electionDays: number | null } | null {
+): { date: string; label: string; detail: string; election: string; electionDays: number | null } | null {
   const next = VOTING_MILESTONES.find((m) => daysUntil(m.date, now) >= 0);
   if (!next) return null;
   const electionDays = daysUntil(next.election, now);
   return {
     date: next.date,
     label: next.label,
+    detail: next.detail,
     election: next.election,
     electionDays: electionDays > 0 ? electionDays : null,
   };
@@ -214,7 +304,7 @@ export const JUDICIAL_2026 = {
   detail:
     'Every Cook County judge up for retention needs a yes from 60 percent of voters to keep the job. Bar associations screen each one; Injustice Watch reports on their records.',
   guideLabel: 'Injustice Watch judicial guide',
-  guideUrl: 'https://www.injusticewatch.org/judges/judicial-elections/2026-retention/',
+  guideUrl: 'https://2026retention.injusticewatch.org/',
   cbaLabel: 'Chicago Bar Association evaluations',
   cbaUrl: 'https://www.chicagobar.org/votejudges',
 } as const;
@@ -251,37 +341,38 @@ export const DISTRICT_FAMILIES: {
     prefix: 'us-house',
     label: 'US House of Representatives',
     detail: 'Chicago is split across nine congressional districts.',
-    districtLabel: (n) => `US House, ${ordinal(n)} District`,
+    districtLabel: (n) => numbered(`US House, ${ordinal(n)} District`, 'US House, District {n}', n),
   },
   {
     prefix: 'il-senate',
     label: 'Illinois Senate',
     detail: 'Only some Senate seats are up this year.',
-    districtLabel: (n) => `Illinois Senate, ${ordinal(n)} District`,
+    districtLabel: (n) => numbered(`Illinois Senate, ${ordinal(n)} District`, 'Illinois Senate, District {n}', n),
   },
   {
     prefix: 'il-house',
     label: 'Illinois House',
     detail: 'Every House seat is up.',
-    districtLabel: (n) => `Illinois House, ${ordinal(n)} District`,
+    districtLabel: (n) => numbered(`Illinois House, ${ordinal(n)} District`, 'Illinois House, District {n}', n),
   },
   {
     prefix: 'cook-commissioner',
     label: 'Cook County Commissioner',
     detail: 'The county board; every district is up.',
-    districtLabel: (n) => `Cook County Commissioner, ${ordinal(n)} District`,
+    districtLabel: (n) =>
+      numbered(`Cook County Commissioner, ${ordinal(n)} District`, 'Cook County Commissioner, District {n}', n),
   },
   {
     prefix: 'cook-board-of-review',
     label: 'Cook County Board of Review',
     detail: 'Hears property assessment appeals.',
-    districtLabel: (n) => `Board of Review, ${ordinal(n)} District`,
+    districtLabel: (n) => numbered(`Board of Review, ${ordinal(n)} District`, 'Board of Review, District {n}', n),
   },
   {
     prefix: 'judicial-subcircuit',
     label: 'Circuit Court, subcircuit vacancies',
     detail: 'Trial judges elected by one part of the county.',
-    districtLabel: (n) => `Circuit Court, ${ordinal(n)} Subcircuit`,
+    districtLabel: (n) => numbered(`Circuit Court, ${ordinal(n)} Subcircuit`, 'Circuit Court, Subcircuit {n}', n),
   },
 ];
 
@@ -316,9 +407,12 @@ export const MUNICIPAL_2027_FILING = 'Candidates file October 19-26, 2026';
 /** 'ward-25' → '25th Ward'; 'pdc-12' → '12th Police District Council'. */
 export function municipalRaceLabel(race: string): string {
   const ward = race.match(/^ward-(\d+)$/);
-  if (ward) return `${ordinal(Number(ward[1]))} Ward`;
+  if (ward) return wardLabel(Number(ward[1]));
   const pdc = race.match(/^pdc-(\d+)$/);
-  if (pdc) return `${ordinal(Number(pdc[1]))} Police District Council`;
+  if (pdc) {
+    const n = Number(pdc[1]);
+    return numbered(`${ordinal(n)} Police District Council`, 'Police District {n} Council', n);
+  }
   return MUNICIPAL_2027_CITYWIDE.find((r) => r.id === race)?.label ?? race;
 }
 

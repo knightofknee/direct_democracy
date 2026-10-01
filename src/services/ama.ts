@@ -9,7 +9,9 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
-import type { AmaQuestion, QuestionStatus, UserProfile } from '@/lib/types';
+import type { AmaQuestion, CommentReply, CommentVoteValue, QuestionStatus, UserProfile } from '@/lib/types';
+import { cleanReferences } from '@/services/concerns';
+import { tr } from '@/lib/i18n';
 
 /**
  * AMAs are ongoing, per-official. Anyone signed in can ask, and anyone can
@@ -77,6 +79,8 @@ export async function setQuestionUpvote(
   await setDoc(ref, {
     uid: profile.uid,
     verified: profile.verified,
+    // With `verified`, marks a proven resident, whose upvote weighs in the grade.
+    wardId: profile.wardId,
     createdAt: serverTimestamp(),
   });
 }
@@ -86,9 +90,9 @@ export async function setQuestionUpvote(
  * (or dodged) question is part of the official's public record.
  */
 export async function deleteQuestion(profile: UserProfile, question: AmaQuestion): Promise<void> {
-  if (profile.uid !== question.authorUid) throw new Error('Only the asker can withdraw a question.');
+  if (profile.uid !== question.authorUid) throw new Error(tr('Only the asker can withdraw a question.'));
   if (question.status !== 'awaitingResponse') {
-    throw new Error('Questions with a response are part of the public record.');
+    throw new Error(tr('Questions with a response are part of the public record.'));
   }
   await deleteDoc(doc(db, 'officials', question.officialUid, 'questions', question.id));
 }
@@ -100,9 +104,9 @@ export async function respondToQuestion(
   response: string
 ): Promise<void> {
   if (profile.uid !== question.officialUid) {
-    throw new Error('Only the official can respond to their AMA questions.');
+    throw new Error(tr('Only the official can respond to their AMA questions.'));
   }
-  if (question.response) throw new Error('This question already has a response.');
+  if (question.response) throw new Error(tr('This question already has a response.'));
   await updateDoc(doc(db, 'officials', question.officialUid, 'questions', question.id), {
     response: response.trim(),
     respondedAt: serverTimestamp(),
@@ -121,12 +125,14 @@ export async function judgeResponse(
   answered: boolean
 ): Promise<void> {
   if (profile.uid === question.officialUid) {
-    throw new Error('Officials cannot judge their own responses.');
+    throw new Error(tr('Officials cannot judge their own responses.'));
   }
-  if (!question.response) throw new Error('No response to judge yet.');
+  if (!question.response) throw new Error(tr('No response to judge yet.'));
   await setDoc(
     doc(db, 'officials', question.officialUid, 'questions', question.id, 'judgments', profile.uid),
-    { answered, verified: profile.verified, createdAt: serverTimestamp() }
+    // uid finds it on account deletion; wardId decides whether it counts in
+    // the verdict (only the official's own verified residents decide).
+    { answered, verified: profile.verified, uid: profile.uid, wardId: profile.wardId, createdAt: serverTimestamp() }
   );
 }
 
@@ -212,4 +218,55 @@ export function computeScore(
   if (graded <= 0) return { score: null, grade: '-', ...counts };
   const score = Math.round((answered / graded) * 100);
   return { score, grade: letterFor(score), ...counts };
+}
+
+// ── The conversation under an answered question ─────────────────────────
+// officials/{o}/questions/{q}/comments, same shape as board comments; the
+// counts and notifications are trigger-written (onQuestionCommentCreated).
+
+function questionComments(question: { officialUid: string; id: string }) {
+  return collection(db, 'officials', question.officialUid, 'questions', question.id, 'comments');
+}
+
+export async function addQuestionComment(
+  profile: UserProfile,
+  question: { officialUid: string; id: string },
+  body: string,
+  reply?: CommentReply | null,
+  references?: string[]
+): Promise<void> {
+  await addDoc(questionComments(question), {
+    authorUid: profile.uid,
+    authorName: profile.displayName,
+    authorVerified: profile.verified,
+    body: body.trim(),
+    references: cleanReferences(references ?? []),
+    threadId: reply?.threadId ?? null,
+    replyToName: reply?.replyToName ?? null,
+    replyToUid: reply?.replyToUid ?? null,
+    createdAt: serverTimestamp(),
+  });
+}
+
+export async function deleteQuestionComment(
+  profile: UserProfile,
+  question: { officialUid: string; id: string },
+  comment: { id: string; authorUid: string }
+): Promise<void> {
+  if (profile.uid !== comment.authorUid) throw new Error(tr('Only the author can delete a comment.'));
+  await deleteDoc(doc(questionComments(question), comment.id));
+}
+
+export async function voteOnQuestionComment(
+  profile: UserProfile,
+  question: { officialUid: string; id: string },
+  commentId: string,
+  value: CommentVoteValue | null
+): Promise<void> {
+  const ref = doc(questionComments(question), commentId, 'votes', profile.uid);
+  if (value === null) {
+    await deleteDoc(ref);
+    return;
+  }
+  await setDoc(ref, { uid: profile.uid, value, verified: profile.verified, createdAt: serverTimestamp() });
 }

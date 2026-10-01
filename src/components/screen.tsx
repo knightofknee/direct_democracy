@@ -4,6 +4,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { HelpButton } from '@/components/help-button';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -55,7 +56,16 @@ export const Screen = React.forwardRef<
         automaticallyAdjustKeyboardInsets
         bounces={false}
         overScrollMode="never">
-        <View style={styles.inner}>{children}</View>
+        <View style={styles.inner}>
+          {children}
+          {tab && (
+            // Tab screens have no header, so their help "?" sits in the
+            // same top-right corner every other screen's header puts it.
+            <View style={styles.help}>
+              <HelpButton />
+            </View>
+          )}
+        </View>
       </ScrollView>
       {tab && (
         // Tab screens have no native header, so scrolled content would sit
@@ -85,5 +95,10 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
     alignSelf: 'center',
     gap: Spacing.three,
+  },
+  help: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
   },
 });

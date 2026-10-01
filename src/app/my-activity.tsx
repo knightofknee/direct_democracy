@@ -14,6 +14,7 @@ import { useLiveQuery } from '@/hooks/use-firestore';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
 import { useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 import type { AmaQuestion, Concern } from '@/lib/types';
 
 /** Everything you've put on the record, in one place. */
@@ -45,6 +46,18 @@ export default function MyActivityScreen() {
         : null,
     [profile?.uid]
   );
+
+  const awaiting = questions.filter((q) => q.status === 'awaitingResponse').length;
+  usePageSummary('my-activity', [
+    !profile
+      ? t('You are signed out.')
+      : !concernsLoading &&
+        !questionsLoading &&
+        t('Concerns you raised: {concerns}. Questions you asked: {questions}.')
+          .replace('{concerns}', String(concerns.length))
+          .replace('{questions}', String(questions.length)),
+    profile && awaiting > 0 && t('Still waiting for a response: {n}.').replace('{n}', String(awaiting)),
+  ]);
 
   if (authLoading)
     return (

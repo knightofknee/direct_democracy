@@ -80,6 +80,11 @@ export function Button({
     <Pressable
       onPress={onPress}
       disabled={disabled || loading}
+      // A screen reader hears a button, its name even while the spinner
+      // shows, and whether it's off (posting limits) or working.
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{ disabled: !!(disabled || loading), busy: !!loading }}
       style={({ pressed }) => [
         styles.button,
         {
@@ -115,6 +120,10 @@ export function Field(props: TextInputProps & { label?: string }) {
       ) : null}
       <TextInput
         placeholderTextColor={theme.textSecondary}
+        // Typed text follows the phone's text size as far as body text does
+        // (ThemedText's 2x); uncapped it reached 3x and a placeholder filled
+        // the screen.
+        maxFontSizeMultiplier={2}
         style={[
           styles.field,
           {

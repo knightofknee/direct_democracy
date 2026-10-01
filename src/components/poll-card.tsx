@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useCelebration } from '@/components/celebration';
+import { HomeWardChoice } from '@/components/home-ward-choice';
 import { SkeletonButton } from '@/components/skeleton';
 import { TallyResults } from '@/components/tally-results';
 import { ThemedText } from '@/components/themed-text';
@@ -14,12 +15,13 @@ import { useAuth } from '@/hooks/use-auth';
 import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
+import { plural } from '@/lib/format';
 import { tapHaptic } from '@/lib/haptics';
 import { useT } from '@/lib/i18n';
-import { notify } from '@/lib/notify';
+import { errorMessage, notify } from '@/lib/notify';
 import { withBallotDelta, type BallotDelta } from '@/lib/tally';
 import type { Poll, VoteDoc } from '@/lib/types';
-import { closePoll, votePoll } from '@/services/polls';
+import { closePoll, retractPollVote, votePoll } from '@/services/polls';
 
 const TYPE_LABELS: Record<Poll['type'], string> = {
   yesNo: 'Yes / No',
@@ -28,7 +30,14 @@ const TYPE_LABELS: Record<Poll['type'], string> = {
   scale5: 'How strongly do you feel?',
 };
 
-export function PollCard({ poll }: { poll: Poll }) {
+export function PollCard({
+  poll,
+  manage = false,
+}: {
+  poll: Poll;
+  /** The author's controls (close voting): only in their command center. */
+  manage?: boolean;
+}) {
   const theme = useTheme();
   const router = useRouter();
   const t = useT();
@@ -78,32 +87,41 @@ export function PollCard({ poll }: { poll: Poll }) {
   // that changes - "change your vote" starts from what you actually voted for
   // rather than a blank slate, with no effect needed to keep them in step.
   const pending = draft?.from === myKeysJson ? draft.keys : myKeys;
-  const wardLocked = poll.scope === 'ward' && (!profile?.verified || profile.wardId !== poll.wardId);
-  const canVote = !!profile && poll.open && !wardLocked;
+  // Ward polls take a home ward in that ward, verified or declared.
+  const wardLocked = poll.scope === 'ward' && profile?.wardId !== poll.wardId;
+  // The author watches their own poll rather than voting in it: live
+  // results from the first ballot, open or closed.
+  const isAuthor = profile?.uid === poll.authorUid;
+  const canVote = !!profile && poll.open && !wardLocked && !isAuthor;
 
   // Optimistic: the tap counts NOW (tally overlay + milestone), because the
   // tally-trigger round trip is seconds and that reads as a broken button.
   // On failure we roll back and say so.
-  const cast = (value: string | string[]) => {
+  // `null` takes the vote back (allowed while voting is open).
+  const cast = (value: string | string[] | null) => {
     if (!profile) return;
     tapHaptic();
     // "First" only once the vote doc has actually loaded (see milestones.ts).
-    const firstCast = !myVoteLoading && recordedKeys.length === 0;
-    if (firstCast) anticipate('votes');
+    // A server count of zero means certainly first, loaded or not.
+    const firstCast =
+      (!myVoteLoading && recordedKeys.length === 0) || (profile.stats?.votes ?? 0) === 0;
+    if (value != null && firstCast) anticipate('votes');
     setOptimistic({
       delta: {
-        from: recordedKeys.length > 0 ? recordedKeys : null,
+        // The ballot the server tally holds: while an earlier tap is still in
+        // flight, the overlay's own starting ballot, not the cached new one.
+        from: optimistic ? optimistic.delta.from : recordedKeys.length > 0 ? recordedKeys : null,
         to: value,
-        // Ward polls only accept ward-resident verified voters (rules), so a
-        // voter who can cast at all counts in the verified slice iff verified.
+        // Ward polls only accept residents of the ward (rules), so a voter
+        // who can cast at all counts in the verified slice iff verified.
         verified: !!profile.verified && (poll.scope !== 'ward' || profile.wardId === poll.wardId),
       },
       baseline: JSON.stringify(poll.tallies),
     });
     setDraft(null); // fall back to the ballot now on record
-    votePoll(profile, poll, value).catch((e) => {
+    (value == null ? retractPollVote(profile, poll) : votePoll(profile, poll, value)).catch((e) => {
       setOptimistic(null);
-      notify(t('Vote failed'), e instanceof Error ? e.message : t('Something went wrong.'));
+      notify(t('Vote failed'), errorMessage(e));
     });
   };
 
@@ -137,10 +155,23 @@ export function PollCard({ poll }: { poll: Poll }) {
           <TallyResults tally={shownTallies} options={shownOptions} highlightKeys={myKeys} />
           {hasVoted && poll.open && (
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-              {t('You voted - tap an option below to change it.')}
+              {t(poll.type === 'approval'
+                ? 'You voted. Change your picks below, or clear them all to take your vote back.'
+                : 'You voted. Tap another option to change it, or yours again to take it back.')}
             </ThemedText>
           )}
         </View>
+      ) : null}
+
+      {canVote && !hasVoted ? (
+        // Everyone sees how many have taken part; the breakdown is the
+        // reward for taking part yourself.
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          {t('{votes} so far. Vote to see the results.').replace(
+            '{votes}',
+            `${plural(shownTallies.totalAll, 'vote')} · ${plural(shownTallies.totalVerified, 'verified vote')}`
+          )}
+        </ThemedText>
       ) : null}
 
       {canVote ? (
@@ -152,8 +183,13 @@ export function PollCard({ poll }: { poll: Poll }) {
               <Pressable
                 key={option.key}
                 disabled={saving}
+                accessibilityRole={poll.type === 'approval' ? 'checkbox' : 'radio'}
+                accessibilityLabel={option.label}
+                accessibilityState={{ selected, checked: poll.type === 'approval' ? selected : undefined }}
                 onPress={() =>
-                  poll.type === 'approval' ? toggleApproval(option.key) : cast(option.key)
+                  poll.type === 'approval'
+                    ? toggleApproval(option.key)
+                    : cast(myKeys.includes(option.key) ? null : option.key)
                 }
                 style={[
                   styles.option,
@@ -170,16 +206,16 @@ export function PollCard({ poll }: { poll: Poll }) {
           })}
           {poll.type === 'approval' && (
             <Button
-              title={hasVoted ? t('Update votes') : t('Cast votes')}
-              onPress={() => cast(pending)}
-              disabled={pending.length === 0}
+              title={hasVoted ? (pending.length === 0 ? t('Take back my vote') : t('Update votes')) : t('Cast votes')}
+              onPress={() => cast(pending.length === 0 ? null : pending)}
+              disabled={pending.length === 0 && !hasVoted}
               loading={saving}
             />
           )}
         </View>
       ) : null}
 
-      {profile?.uid === poll.authorUid && poll.open && (
+      {manage && profile?.uid === poll.authorUid && poll.open && (
         <Button
           title={t('Close voting')}
           variant="secondary"
@@ -189,7 +225,7 @@ export function PollCard({ poll }: { poll: Poll }) {
             try {
               await closePoll(profile, poll);
             } catch (e) {
-              notify(t('Could not close poll'), e instanceof Error ? e.message : t('Something went wrong.'));
+              notify(t('Could not close poll'), errorMessage(e));
             } finally {
               setSaving(false);
             }
@@ -197,13 +233,15 @@ export function PollCard({ poll }: { poll: Poll }) {
         />
       )}
 
-      {wardLocked && (
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          {profile?.verified
-            ? t('Only residents of this ward can vote on this poll.')
-            : t('Verify your identity to vote on ward polls.')}
-        </ThemedText>
-      )}
+      {wardLocked &&
+        profile &&
+        (profile.wardId == null ? (
+          <HomeWardChoice note={t('Ward polls are for residents of the ward.')} />
+        ) : (
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+            {t('Only residents of this ward can vote on this poll.')}
+          </ThemedText>
+        ))}
       {!profile &&
         (authLoading ? (
           <SkeletonButton />

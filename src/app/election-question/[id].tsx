@@ -1,27 +1,34 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { ShareButton } from '@/components/share-button';
+import { HeaderActions } from '@/components/help-button';
 import { useCelebration } from '@/components/celebration';
+import { ElectionAnswerComposer } from '@/components/election-answer-composer';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card, EmptyState, Field, SectionHeader, VerifiedBadge } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { plural, timeAgo } from '@/lib/format';
 import { tapHaptic } from '@/lib/haptics';
 import { useT } from '@/lib/i18n';
+import { usePageSummary } from '@/lib/page-help';
 import { notify, notifyError } from '@/lib/notify';
-import type { CommentVoteValue, ElectionAnswer, ElectionQuestion, UserProfile } from '@/lib/types';
+import type { CommentVoteValue, ElectionAnswer, ElectionQuestion } from '@/lib/types';
+import { ContentActions } from '@/components/content-actions';
+import { EditHistory } from '@/components/edit-history';
 import { ElectionQuestionJoin } from '@/components/upvote-pill';
+import { editPost } from '@/services/posts';
 import {
-  answerElectionQuestion,
   deleteElectionQuestion,
   voteElectionAnswer,
 } from '@/services/election';
@@ -39,6 +46,7 @@ export default function ElectionQuestionScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { profile } = useAuth();
+  const { isShadowbanned } = useBlocks();
   const t = useT();
 
   const { data: question, loading } = useLiveDoc<ElectionQuestion>(
@@ -50,8 +58,28 @@ export default function ElectionQuestionScreen() {
       id ? query(collection(db, 'electionQuestions', id, 'answers'), orderBy('createdAt')) : null,
     [id]
   );
+  const [editing, setEditing] = useState<string | null>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [confirmWithdraw, setConfirmWithdraw] = useState(false);
+  const [withdrawing, setWithdrawing] = useState(false);
 
-  if (!question) {
+  usePageSummary('election-question/[id]', [
+    question &&
+      t('Asked by {name} {ago}.').replace('{name}', question.authorName).replace('{ago}', timeAgo(question.createdAt)),
+    question &&
+      (answers.length > 0
+        ? t('Candidates who have answered: {n} ({names}).')
+            .replace('{n}', String(answers.length))
+            .replace('{names}', answers.map((a) => a.candidateName).join(', '))
+        : t('No candidate has answered yet.')),
+    question &&
+      t('People who joined it: {n}, verified: {verified}.')
+        .replace('{n}', String(question.upvotes ?? 0))
+        .replace('{verified}', String(question.upvotesVerified ?? 0)),
+    question && profile?.uid === question.authorUid && t('You asked this.'),
+  ]);
+
+  if (!question || isShadowbanned(question.authorUid)) {
     return (
       <Screen>
         {loading ? (
@@ -75,24 +103,66 @@ export default function ElectionQuestionScreen() {
   );
 
   const isAsker = profile?.uid === question.authorUid;
+  // The asker may edit until a candidate answers (editPost records it).
+  const saveEdit = async () => {
+    if (editing == null) return;
+    setSavingEdit(true);
+    try {
+      await editPost(`electionQuestions/${question.id}`, { body: editing });
+      setEditing(null);
+    } catch (e) {
+      notifyError(t('Could not save'), e);
+    } finally {
+      setSavingEdit(false);
+    }
+  };
 
   const withdraw = async () => {
+    if (withdrawing) return;
+    setWithdrawing(true);
     try {
       await deleteElectionQuestion(profile!, question);
       notify(t('Question withdrawn'), t('Your question was removed.'));
       if (router.canGoBack()) router.back();
       else router.replace('/election');
     } catch (e) {
+      setWithdrawing(false);
       notifyError(t('Could not withdraw'), e);
     }
   };
 
   return (
     <Screen>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <HeaderActions>
+              <ShareButton path={`/election-question/${question.id}`} title={question.body} />
+            </HeaderActions>
+          ),
+        }}
+      />
       <View style={{ gap: Spacing.two }}>
-        <ThemedText type="subtitle" style={{ fontSize: 22, lineHeight: 28 }}>
-          {question.body}
-        </ThemedText>
+        {editing != null ? (
+          <View style={{ gap: Spacing.two }}>
+            <Field value={editing} onChangeText={setEditing} multiline maxLength={1000} autoFocus />
+            <View style={{ flexDirection: 'row', gap: Spacing.two }}>
+              <Button title={t('Cancel')} variant="ghost" onPress={() => setEditing(null)} style={{ flex: 1 }} />
+              <Button
+                title={t('Save')}
+                onPress={saveEdit}
+                loading={savingEdit}
+                disabled={editing.trim().length < 10 || editing.trim() === question.body}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </View>
+        ) : (
+          <ThemedText type="subtitle" style={{ fontSize: 22, lineHeight: 28 }}>
+            {question.body}
+          </ThemedText>
+        )}
+        <EditHistory edits={question.edits} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {t('Asked by {name}').replace('{name}', question.authorName)} · {timeAgo(question.createdAt)}
@@ -100,16 +170,34 @@ export default function ElectionQuestionScreen() {
           {question.authorVerified && <VerifiedBadge compact />}
           <View style={{ flex: 1 }} />
           <ElectionQuestionJoin question={question} />
+          <ContentActions
+            contentPath={`electionQuestions/${question.id}`}
+            contentType="electionQuestion"
+            excerpt={question.body}
+            authorUid={question.authorUid}
+            authorName={question.authorName}
+          />
         </View>
-        {isAsker && question.answerCount === 0 && (
-          <View style={{ flexDirection: 'row' }}>
-            <Button title={t('Withdraw question')} variant="ghost" onPress={withdraw} />
+        {isAsker && question.answerCount === 0 && editing == null && (
+          // Two steps, like withdrawing a question to an official.
+          <View style={{ flexDirection: 'row', gap: Spacing.two }}>
+            {confirmWithdraw ? (
+              <>
+                <Button title={t('Yes, withdraw')} variant="danger" onPress={withdraw} loading={withdrawing} />
+                <Button title={t('Keep it')} variant="ghost" onPress={() => setConfirmWithdraw(false)} />
+              </>
+            ) : (
+              <>
+                <Button title={t('Edit')} variant="ghost" onPress={() => setEditing(question.body)} />
+                <Button title={t('Withdraw question')} variant="ghost" onPress={() => setConfirmWithdraw(true)} />
+              </>
+            )}
           </View>
         )}
       </View>
 
       {profile?.role === 'candidate' && (
-        <AnswerComposer profile={profile} questionId={question.id} />
+        <ElectionAnswerComposer profile={profile} questionId={question.id} />
       )}
 
       <SectionHeader
@@ -127,57 +215,6 @@ export default function ElectionQuestionScreen() {
         ))
       )}
     </Screen>
-  );
-}
-
-/** The candidate's one answer: post it once, revise it any time. */
-function AnswerComposer({ profile, questionId }: { profile: UserProfile; questionId: string }) {
-  const t = useT();
-  const { data: mine } = useLiveDoc<ElectionAnswer>(
-    () => doc(db, 'electionQuestions', questionId, 'answers', profile.uid),
-    [questionId, profile.uid]
-  );
-  const [draft, setDraft] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-  const text = draft ?? mine?.body ?? '';
-
-  const save = async () => {
-    setSaving(true);
-    try {
-      await answerElectionQuestion(profile, questionId, text, mine != null);
-      setDraft(null);
-      notify(t(mine ? 'Answer updated' : 'Answer posted'), t('Voters see every answer side by side.'));
-    } catch (e) {
-      notifyError(t('Could not save your answer'), e);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <Card>
-      <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-        {mine ? t('Your answer (one per candidate - edits replace it)') : t('Your answer')}
-      </ThemedText>
-      <Field
-        placeholder={t('Answer the city yourself, on the record…')}
-        value={text}
-        onChangeText={setDraft}
-        multiline
-        maxLength={4000}
-      />
-      <Button
-        title={mine ? t('Update answer') : t('Post answer')}
-        onPress={save}
-        loading={saving}
-        disabled={!text.trim() || (mine != null && text.trim() === mine.body)}
-      />
-      {mine && (
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-          {t('Answers are part of the public record; revise the text, but it cannot be taken down.')}
-        </ThemedText>
-      )}
-    </Card>
   );
 }
 
@@ -205,12 +242,13 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
     }
     // "First" only once the vote doc has actually loaded - a null from a
     // still-loading doc would mark future milestones seen and skip them.
-    const firstCast = !myVoteLoading && myVote == null;
+    const firstCast = (!myVoteLoading && myVote == null) || (profile.stats?.votes ?? 0) === 0;
     const next = myVote?.value === value ? null : value;
     tapHaptic();
+    // Celebrate at the tap (assume success), not after the write returns.
+    if (firstCast && next) anticipate('votes');
     try {
       await voteElectionAnswer(profile, questionId, answer.candidateUid, next);
-      if (firstCast && next) anticipate('votes');
     } catch (e) {
       notifyError(t('Could not record your vote'), e);
     }

@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useTheme } from '@/hooks/use-theme';
 import { pct, plural } from '@/lib/format';
 import { useT } from '@/lib/i18n';
@@ -12,6 +13,8 @@ import type { DualTally } from '@/lib/types';
 /**
  * Result bars for one tally, all users and verified side by side - the
  * "all users vs verified" contrast is the product, no toggle to hunt for.
+ * Every option shows its count beside its percentage, so a small turnout
+ * never passes for a landslide.
  */
 export function TallyResults({
   tally,
@@ -28,6 +31,9 @@ export function TallyResults({
 }) {
   const theme = useTheme();
   const t = useT();
+  // Dark mode's soft blue is darker than the track it would fill, so the
+  // bars there are the primary blue at half strength instead.
+  const fill = useColorScheme() === 'dark' ? `${theme.primary}80` : theme.primarySoft;
   const { counts, total } = tallyFor(tally, 'all');
   const verified = tallyFor(tally, 'verified');
 
@@ -36,17 +42,27 @@ export function TallyResults({
       {options.map((option) => {
         const count = counts[option.key] ?? 0;
         const percent = pct(count, total);
-        const verifiedPercent = pct(verified.counts[option.key] ?? 0, verified.total);
+        const verifiedCount = verified.counts[option.key] ?? 0;
+        const verifiedPercent = pct(verifiedCount, verified.total);
         const mine = highlightKeys?.includes(option.key);
         return (
-          <View key={option.key} style={{ gap: 3 }}>
+          <View
+            key={option.key}
+            style={{ gap: 3 }}
+            accessible
+            accessibilityLabel={`${option.label}${mine ? `, ${t('your choice')}` : ''}: ${percent}% (${count}), ${t('verified')} ${verifiedPercent}% (${verifiedCount})`}>
             <View style={styles.labelRow}>
-              <ThemedText type="small" style={mine ? { color: theme.primary, fontWeight: '700' } : undefined}>
+              <ThemedText
+                type="small"
+                style={[{ flexShrink: 1 }, mine ? { color: theme.primary, fontWeight: '700' } : null]}>
                 {option.label}
                 {mine ? '  ✓' : ''}
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-                {`${percent}% · ${t('verified')} ${verifiedPercent}%`}
+                <ThemedText type="small" style={{ fontSize: 12, fontWeight: '700' }}>
+                  {`${percent}%`}
+                </ThemedText>
+                {` (${count.toLocaleString()}) · ${t('verified')} ${verifiedPercent}% (${verifiedCount.toLocaleString()})`}
               </ThemedText>
             </View>
             <View style={[styles.barTrack, { backgroundColor: theme.backgroundSelected }]}>
@@ -55,7 +71,7 @@ export function TallyResults({
                   styles.barFill,
                   {
                     width: `${percent}%`,
-                    backgroundColor: mine ? theme.primary : theme.primarySoft,
+                    backgroundColor: mine ? theme.primary : fill,
                   },
                 ]}
               />
@@ -71,11 +87,15 @@ export function TallyResults({
 }
 
 const styles = StyleSheet.create({
+  // Wraps on a narrow phone: the numbers drop under a long option label
+  // rather than squeezing it.
   labelRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: Spacing.two,
+    columnGap: Spacing.two,
+    rowGap: 2,
   },
   barTrack: {
     height: 8,

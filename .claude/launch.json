@@ -37,6 +37,19 @@
         "8086"
       ],
       "port": 8086
+    },
+    {
+      "name": "expo-native-emulators",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "EXPO_PUBLIC_USE_EMULATORS=1",
+        "npx",
+        "expo",
+        "start",
+        "--port",
+        "8081"
+      ],
+      "port": 8081
     }
   ]
 }

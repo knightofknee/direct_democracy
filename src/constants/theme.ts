@@ -28,6 +28,11 @@ export const Colors = {
     // The one call to action that should out-shout everything near it (the
     // AI summary). Dark enough for white bold text in both themes.
     highlight: '#C8570A',
+    // The election tab's two ballots, each a band of its own color so the
+    // November races never blend into February's: the flag's blue for
+    // November 3, its star red, softened, for February 23.
+    novemberBand: '#E1EFF9',
+    februaryBand: '#F9E7EA',
   },
   dark: {
     text: '#F2F6FA',
@@ -46,6 +51,8 @@ export const Colors = {
     danger: '#FF4D66',
     dangerSoft: '#3D1620',
     highlight: '#C8570A',
+    novemberBand: '#0E2638',
+    februaryBand: '#2A1219',
   },
 } as const;
 

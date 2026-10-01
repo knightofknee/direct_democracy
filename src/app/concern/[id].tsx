@@ -1,11 +1,16 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { PriorityScale } from '@/components/priority-scale';
+import { ShareButton } from '@/components/share-button';
+import { HeaderActions } from '@/components/help-button';
 import { useCelebration } from '@/components/celebration';
 import { CommentsSection } from '@/components/comments';
 import { ContentActions } from '@/components/content-actions';
+import { EditHistory } from '@/components/edit-history';
 import { ReferenceEditor, ReferenceList, ReferencedBody } from '@/components/references';
 import { Screen } from '@/components/screen';
 import { TallyResults } from '@/components/tally-results';
@@ -14,14 +19,18 @@ import { Button, Chip, EmptyState, Field, SectionHeader, VerifiedBadge } from '@
 import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useBlocks } from '@/hooks/use-blocks';
 import { useLiveDoc, useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { tapHaptic } from '@/lib/haptics';
 import { useT } from '@/lib/i18n';
-import { confirmDestructive, notify, notifyError } from '@/lib/notify';
+import { confirmDestructive, errorMessage, notify, notifyError } from '@/lib/notify';
 import { withBallotDelta, type BallotDelta } from '@/lib/tally';
-import { timeAgo } from '@/lib/format';
+import { pct, timeAgo } from '@/lib/format';
+import { usePageSummary } from '@/lib/page-help';
+import { openLink } from '@/lib/open-link';
+import { editPost } from '@/services/posts';
 import {
   CONCERN_PRIORITIES,
   type Comment,
@@ -33,8 +42,8 @@ import {
   addComment,
   deleteComment,
   deleteConcern,
-  updateConcern,
   voteConcernPriority,
+  retractConcernVote,
   voteOnComment,
 } from '@/services/concerns';
 
@@ -45,6 +54,7 @@ export default function ConcernScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { profile } = useAuth();
+  const { isShadowbanned } = useBlocks();
   const { anticipate } = useCelebration();
   const t = useT();
   const [optimistic, setOptimistic] = useState<{
@@ -82,7 +92,47 @@ export default function ConcernScreen() {
     }
   }, [talliesJson, optimistic]);
 
-  if (!concern) {
+  // The help sheet's summary of this concern as it stands.
+  const urgentShare = (counts: Record<string, number>, total: number) =>
+    pct((counts['4'] ?? 0) + (counts['5'] ?? 0), total);
+  const tallied = concern?.tallies;
+  const myRecorded = (myVote?.value as string | undefined) ?? null;
+  usePageSummary(
+    'concern/[id]',
+    concern
+      ? [
+          t('{place}, posted by {name} {ago}.')
+            .replace('{place}', wardLabel(concern.wardId))
+            .replace('{name}', concern.authorName)
+            .replace('{ago}', timeAgo(concern.createdAt)),
+          tallied && tallied.totalAll > 0
+            ? t('Votes: {all} from all users, {verified} verified.')
+                .replace('{all}', String(tallied.totalAll))
+                .replace('{verified}', String(tallied.totalVerified))
+            : t('No one has voted on it yet.'),
+          tallied && tallied.totalAll > 0 && tallied.totalVerified > 0
+            ? t('Rated 4 or 5: {all}% of all votes, {verified}% of verified votes.')
+                .replace('{all}', String(urgentShare(tallied.all, tallied.totalAll)))
+                .replace('{verified}', String(urgentShare(tallied.verified, tallied.totalVerified)))
+            : tallied && tallied.totalAll > 0
+              ? t('Rated 4 or 5: {all}% of votes.').replace(
+                  '{all}',
+                  String(urgentShare(tallied.all, tallied.totalAll))
+                )
+              : null,
+          profile && (myRecorded ? t('Your vote: {n}.').replace('{n}', myRecorded) : t('You haven’t voted on it.')),
+          comments.length > 0
+            ? t('Comments: {n}, newest {ago}.')
+                .replace('{n}', String(comments.length))
+                .replace('{ago}', timeAgo(comments[0].createdAt))
+            : t('No comments yet.'),
+          profile?.uid === concern.authorUid && t('You posted this.'),
+        ]
+      : []
+  );
+
+  // A shadowbanned author's concern reads as gone to everyone but them.
+  if (!concern || isShadowbanned(concern.authorUid)) {
     return (
       <Screen>
         {loading ? null : <EmptyState icon="alert-circle-outline" message={t('Concern not found.')} />}
@@ -92,13 +142,14 @@ export default function ConcernScreen() {
 
   const recordedPriority = (myVote?.value as ConcernPriority | undefined) ?? null;
   // The overlayed choice wins while in flight so the tap highlights NOW.
-  const myPriority = (optimistic?.delta.to as ConcernPriority | undefined) ?? recordedPriority;
+  const myPriority = optimistic ? ((optimistic.delta.to as ConcernPriority | null) ?? null) : recordedPriority;
   const shownTallies = optimistic
     ? withBallotDelta(concern.tallies, optimistic.delta)
     : concern.tallies;
   const isAuthor = profile?.uid === concern.authorUid;
-  // Editing is only possible before anyone engages (rules enforce the same).
-  const canEdit = isAuthor && concern.tallies.totalAll === 0 && concern.commentCount === 0;
+  // Authors edit any time; editPost keeps the history (and the earlier
+  // text, once anyone has replied).
+  const canEdit = isAuthor;
 
   const saveEdit = async () => {
     if (!profile || !editing) return;
@@ -108,7 +159,11 @@ export default function ConcernScreen() {
     }
     setSavingEdit(true);
     try {
-      await updateConcern(profile, concern, editing);
+      await editPost(`concerns/${concern.id}`, {
+        title: editing.title,
+        body: editing.body,
+        references: editing.references,
+      });
       setEditing(null);
     } catch (e) {
       notifyError(t('Could not save'), e);
@@ -147,15 +202,19 @@ export default function ConcernScreen() {
       return;
     }
     tapHaptic();
+    // Tapping your own priority again takes the vote back.
+    const to = myPriority === priority ? null : priority;
     // "First" only once the vote doc has actually loaded (see milestones.ts).
-    const firstCast = !myVoteLoading && myVote == null;
-    if (firstCast) anticipate('votes');
+    // A server count of zero means certainly first, loaded or not.
+    const firstCast = (!myVoteLoading && myVote == null) || (profile.stats?.votes ?? 0) === 0;
+    if (to && firstCast) anticipate('votes');
     setOptimistic({
       delta: {
-        // The RECORDED ballot, not the overlayed one - rapid re-taps must
-        // each diff against what the server will actually replace.
-        from: recordedPriority,
-        to: priority,
+        // The ballot the SERVER tally holds. While an earlier tap is still in
+        // flight that is the overlay's own starting ballot (the local cache
+        // already shows the in-flight one, which the tally doesn't have yet).
+        from: optimistic ? optimistic.delta.from : recordedPriority,
+        to,
         // Mirror of the trigger's areaSlicesOf: the verified slice of a ward
         // concern counts only verified residents of that ward.
         verified:
@@ -163,14 +222,23 @@ export default function ConcernScreen() {
       },
       baseline: JSON.stringify(concern.tallies),
     });
-    voteConcernPriority(profile, concern.id, priority).catch((e) => {
+    (to ? voteConcernPriority(profile, concern.id, to) : retractConcernVote(profile, concern.id)).catch((e) => {
       setOptimistic(null);
-      notify(t('Vote failed'), e instanceof Error ? e.message : t('Something went wrong.'));
+      notify(t('Vote failed'), errorMessage(e));
     });
   };
 
   return (
     <Screen>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <HeaderActions>
+              <ShareButton path={`/concern/${concern.id}`} title={concern.title} />
+            </HeaderActions>
+          ),
+        }}
+      />
       <View style={{ gap: Spacing.two }}>
         <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap', alignItems: 'center' }}>
           <Chip label={wardLabel(concern.wardId)} tone={concern.scope === 'city' ? 'primary' : 'neutral'} />
@@ -213,6 +281,7 @@ export default function ConcernScreen() {
             </ThemedText>
             <ReferencedBody body={concern.body} references={concern.references} />
             <ReferenceList references={concern.references} />
+            <EditHistory edits={concern.edits} />
           </>
         )}
         {isAuthor && !editing && (
@@ -243,29 +312,7 @@ export default function ConcernScreen() {
       </View>
 
       <SectionHeader title={t('How much does this matter?')} />
-      <View style={styles.priorityRow}>
-        {PRIORITY_OPTIONS.map((option) => {
-          const selected = myPriority === option.key;
-          return (
-            <Pressable
-              key={option.key}
-              onPress={() => castVote(option.key)}
-              style={[
-                styles.priorityButton,
-                {
-                  borderColor: selected ? theme.primary : theme.border,
-                  backgroundColor: selected ? theme.backgroundSelected : theme.backgroundElement,
-                },
-              ]}>
-              <ThemedText
-                type="smallBold"
-                style={selected ? { color: theme.primary } : undefined}>
-                {option.label}
-              </ThemedText>
-            </Pressable>
-          );
-        })}
-      </View>
+      <PriorityScale value={myPriority} onSelect={castVote} />
 
       <SectionHeader title={t('Results')} />
       <TallyResults
@@ -282,20 +329,37 @@ export default function ConcernScreen() {
         onDelete={(comment) => deleteComment(profile!, concern.id, comment)}
         onVote={(comment, value) => voteOnComment(profile!, concern.id, comment.id, value)}
       />
+
+      {/* Ward issues are often city services too. One person raises it here;
+          each neighbor who also files with 311 tells the city it's bigger
+          than one report. 311 has its own app and portal, so just a quiet
+          way out. */}
+      {concern.scope === 'ward' && (
+        <Pressable
+          onPress={() => void openLink(CHI_311_URL)}
+          accessibilityRole="link"
+          hitSlop={8}
+          style={styles.link311}>
+          <Ionicons name="call-outline" size={14} color={theme.textSecondary} />
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+            {t('Also a city service problem? Report it to 311')}
+          </ThemedText>
+          <Ionicons name="open-outline" size={12} color={theme.textSecondary} />
+        </Pressable>
+      )}
     </Screen>
   );
 }
 
+/** Chicago's 311 service request portal (it also has its own app). */
+const CHI_311_URL = 'https://311.chicago.gov/';
+
 const styles = StyleSheet.create({
-  priorityRow: {
+  link311: {
     flexDirection: 'row',
-    gap: Spacing.two,
-  },
-  priorityButton: {
-    flex: 1,
     alignItems: 'center',
-    borderRadius: 12,
-    borderWidth: 1.5,
-    paddingVertical: 10,
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: Spacing.three,
   },
 });

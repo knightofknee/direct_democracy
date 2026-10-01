@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -9,7 +9,7 @@ import { wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useT } from '@/lib/i18n';
-import { notify } from '@/lib/notify';
+import { errorMessage, notify } from '@/lib/notify';
 import { useTheme } from '@/hooks/use-theme';
 import type { PollType, Scope } from '@/lib/types';
 import { createPoll } from '@/services/polls';
@@ -29,8 +29,12 @@ export default function NewPollScreen() {
   const [question, setQuestion] = useState('');
   const [detail, setDetail] = useState('');
   const [type, setType] = useState<PollType>('yesNo');
-  // Citywide officials (the mayor) have no ward - their only audience is the city.
-  const [scope, setScope] = useState<Scope>(profile?.wardId != null ? 'ward' : 'city');
+  // The command center opens this for the ward or the city. Citywide
+  // officials (the mayor) have no ward - their only audience is the city.
+  const params = useLocalSearchParams<{ scope?: string }>();
+  const [scope, setScope] = useState<Scope>(
+    profile?.wardId != null && params.scope !== 'city' ? 'ward' : 'city'
+  );
   const [optionsText, setOptionsText] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -56,9 +60,13 @@ export default function NewPollScreen() {
       .split('\n')
       .map((s) => s.trim())
       .filter(Boolean)
-      .map((label, i) => ({ key: `opt${i}`, label }));
+      .map((label, i) => ({ key: `opt${i}`, label: label.slice(0, 200) }));
     if (needsOptions && options.length < 2) {
       notify(t('Almost there'), t('List at least two options, one per line.'));
+      return;
+    }
+    if (needsOptions && options.length > 12) {
+      notify(t('Almost there'), t('A poll can have up to 12 options.'));
       return;
     }
     setSaving(true);
@@ -73,9 +81,9 @@ export default function NewPollScreen() {
         wardId: profile.wardId,
       });
       if (router.canGoBack()) router.back();
-      else router.replace('/ward');
+      else router.replace('/command');
     } catch (e) {
-      notify(t('Could not create poll'), e instanceof Error ? e.message : t('Something went wrong.'));
+      notify(t('Could not create poll'), errorMessage(e));
       setSaving(false);
     }
   };
@@ -88,16 +96,17 @@ export default function NewPollScreen() {
   return (
     <Screen>
       <ThemedText type="small" themeColor="textSecondary">
-        {t('Put a question directly to your constituents. Ward polls are votable only by verified residents of your ward; citywide polls are open to everyone, with verified results alongside.')}
+        {t('Put a question directly to your constituents. Ward polls take votes from people whose home ward is yours, with verified residents counted apart; citywide polls are open to everyone, with verified results alongside.')}
       </ThemedText>
 
-      <Field label={t('Question')} placeholder={t('Should the ward…')} value={question} onChangeText={setQuestion} />
+      <Field label={t('Question')} placeholder={t('Should the ward…')} value={question} onChangeText={setQuestion} maxLength={280} />
       <Field
         label={t('Context (optional)')}
         placeholder={t('Background, tradeoffs, links…')}
         value={detail}
         onChangeText={setDetail}
         multiline
+        maxLength={4000}
         style={{ minHeight: 80 }}
       />
 
@@ -107,7 +116,7 @@ export default function NewPollScreen() {
         </ThemedText>
         <View style={styles.wrapRow}>
           {TYPES.map((ty) => (
-            <Pressable key={ty.key} onPress={() => setType(ty.key)} style={[styles.choice, choice(type === ty.key)]}>
+            <Pressable key={ty.key} onPress={() => setType(ty.key)} accessibilityRole="radio" accessibilityState={{ selected: type === ty.key }} style={[styles.choice, choice(type === ty.key)]}>
               <ThemedText type="small" style={type === ty.key ? { color: theme.primary, fontWeight: '700' } : undefined}>
                 {t(ty.label)}
               </ThemedText>
@@ -136,13 +145,13 @@ export default function NewPollScreen() {
         </ThemedText>
         <View style={styles.wrapRow}>
           {profile.wardId != null && (
-            <Pressable onPress={() => setScope('ward')} style={[styles.choice, choice(scope === 'ward')]}>
+            <Pressable onPress={() => setScope('ward')} accessibilityRole="radio" accessibilityState={{ selected: scope === 'ward' }} style={[styles.choice, choice(scope === 'ward')]}>
               <ThemedText type="small" style={scope === 'ward' ? { color: theme.primary, fontWeight: '700' } : undefined}>
-                {wardLabel(profile.wardId)} ({t('verified residents')})
+                {wardLabel(profile.wardId)} ({t('residents')})
               </ThemedText>
             </Pressable>
           )}
-          <Pressable onPress={() => setScope('city')} style={[styles.choice, choice(scope === 'city')]}>
+          <Pressable onPress={() => setScope('city')} accessibilityRole="radio" accessibilityState={{ selected: scope === 'city' }} style={[styles.choice, choice(scope === 'city')]}>
             <ThemedText type="small" style={scope === 'city' ? { color: theme.primary, fontWeight: '700' } : undefined}>
               {t('Citywide (everyone)')}
             </ThemedText>

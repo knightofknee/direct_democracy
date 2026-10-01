@@ -4,7 +4,7 @@ import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { useLocale } from '@/lib/i18n';
+import { LANGUAGES, useLocale } from '@/lib/i18n';
 
 /**
  * Asked once, ever, on first launch: which language. Both languages appear
@@ -30,22 +30,19 @@ export function LanguagePrompt() {
           <ThemedText type="small" themeColor="textSecondary" style={styles.body}>
             You can change this any time in Settings. · Puedes cambiarlo cuando quieras en Ajustes.
           </ThemedText>
-          <Pressable
-            onPress={() => setLocale('en')}
-            accessibilityRole="button"
-            style={[styles.choice, { backgroundColor: theme.primary }]}>
-            <ThemedText type="smallBold" style={styles.choiceText}>
-              English
-            </ThemedText>
-          </Pressable>
-          <Pressable
-            onPress={() => setLocale('es')}
-            accessibilityRole="button"
-            style={[styles.choice, { backgroundColor: theme.primary }]}>
-            <ThemedText type="smallBold" style={styles.choiceText}>
-              Español
-            </ThemedText>
-          </Pressable>
+          {/* Each language named in itself, so nobody has to read the wrong
+              one to find the right one. */}
+          {LANGUAGES.map((l) => (
+            <Pressable
+              key={l.code}
+              onPress={() => setLocale(l.code)}
+              accessibilityRole="button"
+              style={[styles.choice, { backgroundColor: theme.primary }]}>
+              <ThemedText type="smallBold" style={styles.choiceText}>
+                {l.name}
+              </ThemedText>
+            </Pressable>
+          ))}
         </View>
       </View>
     </Modal>

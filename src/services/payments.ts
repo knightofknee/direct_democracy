@@ -9,6 +9,19 @@ import { functions } from '@/lib/firebase';
  */
 export interface VerificationQuote {
   free: boolean;
+  /** An open session this account can pick up again (at no cost). */
+  resume?: boolean;
+  /**
+   * Why it isn't free: the month's 500 are used ('month'), this account's
+   * free attempts are ('attempts'), or it is a bill check ('bill'). Absent
+   * from servers before 2026-09-28.
+   */
+  reason?: 'month' | 'attempts' | 'bill' | null;
+  /**
+   * On a busy day (100+ free checks), a free check needs a confirmed email
+   * first, unless the account signed in with Google or Apple.
+   */
+  emailRequired?: boolean;
   creditType: 'id' | 'bill';
   /** Purchased verifications not yet used, of this kind. */
   credits: number;

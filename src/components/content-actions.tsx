@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
+import { Button, Field } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
@@ -25,7 +26,7 @@ export function ContentActions({
   authorName,
 }: {
   contentPath: string;
-  contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy';
+  contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy' | 'electionQuestion';
   excerpt: string;
   authorUid: string;
   authorName: string;
@@ -36,6 +37,9 @@ export function ContentActions({
   const { profile } = useAuth();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  // "Other" asks what's wrong before it sends: a report that doesn't say
+  // what the problem is gives the review nothing to go on.
+  const [otherNote, setOtherNote] = useState<string | null>(null);
 
   if (profile?.uid === authorUid) return null;
 
@@ -47,13 +51,18 @@ export function ContentActions({
     return profile;
   };
 
-  const report = async (reason: (typeof REPORT_REASONS)[number]['key']) => {
+  const report = async (reason: (typeof REPORT_REASONS)[number]['key'], note?: string) => {
     const me = requireAuth();
     if (!me) return;
+    if (reason === 'other' && note == null) {
+      setOtherNote('');
+      return;
+    }
     setBusy(true);
     try {
-      await reportContent(me, { contentPath, contentType, reason, excerpt, authorUid });
+      await reportContent(me, { contentPath, contentType, reason, excerpt, authorUid, note });
       setOpen(false);
+      setOtherNote(null);
       notify(t('Report sent'), t('Thank you - the operators will review it.'));
     } catch (e) {
       notifyError(t('Could not send report'), e);
@@ -82,7 +91,12 @@ export function ContentActions({
 
   if (!open) {
     return (
-      <Pressable onPress={() => setOpen(true)} hitSlop={8} style={styles.flagButton}>
+      <Pressable
+        onPress={() => setOpen(true)}
+        hitSlop={8}
+        accessibilityRole="button"
+        accessibilityLabel={t('Report or block')}
+        style={styles.flagButton}>
         <Ionicons name="flag-outline" size={14} color={theme.textSecondary} />
       </Pressable>
     );
@@ -91,13 +105,36 @@ export function ContentActions({
   return (
     <View style={[styles.sheet, { borderColor: theme.border, backgroundColor: theme.background }]}>
       <ThemedText type="smallBold" style={{ fontSize: 12 }}>
-        {t('Report this {type}').replace('{type}', t(contentType))}
+        {t('Report this {type}').replace('{type}', t(contentType === 'electionQuestion' ? 'question' : contentType))}
       </ThemedText>
+      {otherNote != null ? (
+        <View style={{ gap: Spacing.two }}>
+          <Field
+            value={otherNote}
+            onChangeText={setOtherNote}
+            placeholder={t('What’s wrong with it?')}
+            accessibilityLabel={t('What’s wrong with it?')}
+            multiline
+            maxLength={500}
+            autoFocus
+          />
+          <View style={styles.reasonRow}>
+            <Button
+              title={t('Send report')}
+              onPress={() => void report('other', otherNote)}
+              disabled={otherNote.trim().length < 5}
+              loading={busy}
+            />
+            <Button title={t('Back')} variant="ghost" onPress={() => setOtherNote(null)} />
+          </View>
+        </View>
+      ) : (
       <View style={styles.reasonRow}>
         {REPORT_REASONS.map((r) => (
           <Pressable
             key={r.key}
             disabled={busy}
+            accessibilityRole="button"
             onPress={() => report(r.key)}
             style={[styles.chip, { borderColor: theme.border, backgroundColor: theme.backgroundElement }]}>
             <ThemedText type="small" style={{ fontSize: 12 }}>
@@ -106,16 +143,26 @@ export function ContentActions({
           </Pressable>
         ))}
       </View>
+      )}
       <View style={styles.reasonRow}>
         <Pressable
           disabled={busy}
+          accessibilityRole="button"
           onPress={block}
           style={[styles.chip, { borderColor: theme.danger, backgroundColor: theme.dangerSoft }]}>
           <ThemedText type="small" style={{ fontSize: 12, color: theme.danger }}>
             {t('Block {name}').replace('{name}', authorName)}
           </ThemedText>
         </Pressable>
-        <Pressable disabled={busy} onPress={() => setOpen(false)} style={styles.chip} hitSlop={4}>
+        <Pressable
+          disabled={busy}
+          accessibilityRole="button"
+          onPress={() => {
+            setOpen(false);
+            setOtherNote(null);
+          }}
+          style={styles.chip}
+          hitSlop={4}>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {t('Cancel')}
           </ThemedText>
@@ -130,7 +177,10 @@ const styles = StyleSheet.create({
     padding: 2,
     alignSelf: 'flex-start',
   },
+  // Open, the sheet takes its own full-width line in the meta row it sits in
+  // (those rows wrap) instead of shrinking to its contents.
   sheet: {
+    width: '100%',
     borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     padding: Spacing.three,

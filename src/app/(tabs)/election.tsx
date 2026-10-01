@@ -7,10 +7,13 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { CandidateRow } from '@/components/politician-row';
 import { DistrictsSection } from '@/components/districts-section';
+import { ElectionBand, type Ballot } from '@/components/election-band';
 import { JudgesSection } from '@/components/judges-section';
 import { NovemberSection } from '@/components/november-section';
 import { SchoolBoardSection } from '@/components/school-board-section';
+import { ContentActions } from '@/components/content-actions';
 import { ElectionQuestionJoin } from '@/components/upvote-pill';
+import { useBlocks } from '@/hooks/use-blocks';
 import { WardRaceSection } from '@/components/ward-race-section';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
@@ -24,36 +27,82 @@ import { useScreenRoom } from '@/hooks/use-screen-room';
 import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { timeAgo } from '@/lib/format';
-import { notify } from '@/lib/notify';
+import { errorMessage, notify } from '@/lib/notify';
 import type { Candidate, ElectionQuestion } from '@/lib/types';
 import { askElectionQuestion } from '@/services/election';
+import { DailyLimitNote } from '@/components/ward-post-note';
+import { useRateWindow } from '@/lib/rate-limits';
 import { useLocale, usePlural, useT } from '@/lib/i18n';
+import { enter } from '@/lib/motion';
+import { usePageSummary } from '@/lib/page-help';
+import { useMyDistricts } from '@/lib/districts';
+import { wardLabel } from '@/constants/chicago';
 
 /**
  * The election tab: the voter's guide to the next two ballots. The race for
- * mayor leads (every candidate's full platform), then the mayoral AMA, the
- * school board, the rest of the November 3 ballot with how to vote, and the
- * February 2027 ward races. A 2x2 jump grid under the header, framed by the
- * flag's stripes, reaches each section.
+ * mayor leads (every candidate's full platform) with the mayoral AMA, then
+ * the November 3 ballot (your races, how to vote, the citywide offices, the
+ * school board, judges, every district), then the February 2027 ward races.
+ * Each ballot is a band of its own color (ElectionBand), and the jump grid
+ * under the header, framed by the flag's stripes, wears the same colors.
  */
 export default function ElectionScreen() {
   const theme = useTheme();
   const t = useT();
   const scrollRef = useRef<ScrollView>(null);
-  const amaY = useRef(0);
-  const schoolBoardY = useRef(0);
-  const novemberY = useRef(0);
-  const judgesY = useRef(0);
-  const districtsY = useRef(0);
-  const wardRacesY = useRef(0);
+  // Jump targets are measured when tapped, relative to the wrapper that
+  // holds the whole tab: a position stored from onLayout goes stale on the
+  // web, which only reports size changes, once content above it loads. The
+  // wrapper sits at contentContainer paddingTop (insets.top + spacing), so
+  // offset + spacing puts a section just under the status bar instead of
+  // behind it.
+  const contentRef = useRef<View>(null);
+  const amaRef = useRef<View>(null);
+  const novRef = useRef<View>(null);
+  const schoolBoardRef = useRef<View>(null);
+  const judgesRef = useRef<View>(null);
+  const districtsRef = useRef<View>(null);
+  const wardsRef = useRef<View>(null);
+  const jumpTo = (target: React.RefObject<View | null>) => {
+    const content = contentRef.current;
+    if (!content) return;
+    target.current?.measureLayout(content, (_x, y) =>
+      scrollRef.current?.scrollTo({ y: y + Spacing.three, animated: true })
+    );
+  };
 
   const { data: candidates, loading } = useLiveQuery<Candidate & { id: string }>(
     () => query(collection(db, 'candidates'), orderBy('name')),
     []
   );
 
+  // The help sheet's summary of the tab as it stands for this person.
+  const { profile } = useAuth();
+  const mine = useMyDistricts();
+  const next = nextMilestone(new Date());
+  const nextIn = next ? daysUntil(next.date, new Date()) : null;
+  usePageSummary('(tabs)/election', [
+    next &&
+      nextIn != null &&
+      `${t(next.label)} ${
+        nextIn === 0 ? t('today') : nextIn === 1 ? t('tomorrow') : t('in {n} days').replace('{n}', String(nextIn))
+      }. ${t(next.detail)}`,
+    mine.exact && profile?.districts
+      ? t('Your races are listed first, from your address in the {ward}.').replace(
+          '{ward}',
+          wardLabel(profile.districts.wardId)
+        )
+      : t('No address on file, so your own races are not listed first yet.'),
+    !loading &&
+      t('Mayoral candidates on the platform: {n}.').replace(
+        '{n}',
+        String(candidates.filter((c) => !c.directory).length)
+      ),
+  ]);
+
   return (
     <Screen tab ref={scrollRef}>
+      <View ref={contentRef} style={{ gap: Spacing.three }}>
       <View style={{ gap: Spacing.one, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
@@ -73,117 +122,95 @@ export default function ElectionScreen() {
               label={t('nov 3 ballot')}
               caption={t('state & county races')}
               hint="the November 3 ballot"
-              target={novemberY}
-              scrollRef={scrollRef}
+              ballot="november"
+              onPress={() => jumpTo(novRef)}
             />
             <GridCell
               label={t('school board')}
               caption={t('21 seats on nov 3')}
               hint="the school board races"
-              target={schoolBoardY}
-              scrollRef={scrollRef}
+              ballot="november"
+              onPress={() => jumpTo(schoolBoardRef)}
             />
             <GridCell
               label={t('judges')}
               caption={t('retention & vacancies')}
               hint="the judicial ballot"
-              target={judgesY}
-              scrollRef={scrollRef}
+              ballot="november"
+              onPress={() => jumpTo(judgesRef)}
             />
             <GridCell
               label={t('your districts')}
               caption={t('congress & state')}
               hint="the district races"
-              target={districtsY}
-              scrollRef={scrollRef}
+              ballot="november"
+              onPress={() => jumpTo(districtsRef)}
             />
             <GridCell
               label={t('mayoral ama')}
               caption={t('ask every candidate')}
               hint="the mayoral candidate AMA"
-              target={amaY}
-              scrollRef={scrollRef}
+              ballot="february"
+              onPress={() => jumpTo(amaRef)}
             />
             <GridCell
               label={t('ward races')}
               caption={t('aldermen & police')}
               hint="the February 2027 ward races"
-              target={wardRacesY}
-              scrollRef={scrollRef}
+              ballot="february"
+              onPress={() => jumpTo(wardsRef)}
             />
           </View>
           <View style={[styles.flagStripe, { backgroundColor: theme.primarySoft }]} />
         </View>
-        <NextDeadline onPress={() => scrollRef.current?.scrollTo({ y: novemberY.current, animated: true })} />
+        <NextDeadline onPress={() => jumpTo(novRef)} />
       </View>
 
-      <SectionHeader
-        title={t('race for mayor')}
-        subtitle={t("Every candidate's full platform, debated plank by plank.")}
-      />
+      <ElectionBand ballot="february">
+        <SectionHeader
+          title={t('race for mayor')}
+          subtitle={t("Every candidate's full platform, debated plank by plank.")}
+        />
 
-      {loading ? (
-        <SkeletonCards />
-      ) : candidates.length === 0 ? (
-        <EmptyState icon="ribbon-outline" message={t('No candidates on the platform yet.')} />
-      ) : (
-        // Real candidates first (alphabetical), the declared-candidates
-        // directory entry at the end.
-        [...candidates.filter((c) => !c.directory), ...candidates.filter((c) => c.directory)].map(
-          (candidate, i) => (
-            <Animated.View
-              key={candidate.uid}
-              entering={FadeInDown.duration(280).delay(Math.min(i, 8) * 45)}>
-              <CandidateRow candidate={candidate} />
-            </Animated.View>
+        {loading ? (
+          <SkeletonCards />
+        ) : candidates.length === 0 ? (
+          <EmptyState icon="ribbon-outline" message={t('No candidates on the platform yet.')} />
+        ) : (
+          // Real candidates first (alphabetical), the declared-candidates
+          // directory entry at the end.
+          [...candidates.filter((c) => !c.directory), ...candidates.filter((c) => c.directory)].map(
+            (candidate, i) => (
+              <Animated.View
+                key={candidate.uid}
+                entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}>
+                <CandidateRow candidate={candidate} />
+              </Animated.View>
+            )
           )
-        )
-      )}
+        )}
 
-      <View
-        onLayout={(e) => {
-          // layout.y is relative to the Screen shell's inner view, which sits
-          // at contentContainer paddingTop (insets.top + spacing). Landing at
-          // layout.y + spacing puts the section header just under the status
-          // bar instead of behind it.
-          amaY.current = e.nativeEvent.layout.y + Spacing.three;
-        }}>
-        <ElectionAma />
-      </View>
+        <View ref={amaRef}>
+          <ElectionAma />
+        </View>
+      </ElectionBand>
 
-      <View
-        onLayout={(e) => {
-          schoolBoardY.current = e.nativeEvent.layout.y + Spacing.three;
-        }}>
-        <SchoolBoardSection />
-      </View>
-
-      <View
-        onLayout={(e) => {
-          novemberY.current = e.nativeEvent.layout.y + Spacing.three;
-        }}>
+      <ElectionBand ballot="november" ref={novRef}>
         <NovemberSection />
-      </View>
+        <View ref={schoolBoardRef}>
+          <SchoolBoardSection />
+        </View>
+        <View ref={judgesRef}>
+          <JudgesSection />
+        </View>
+        <View ref={districtsRef}>
+          <DistrictsSection />
+        </View>
+      </ElectionBand>
 
-      <View
-        onLayout={(e) => {
-          judgesY.current = e.nativeEvent.layout.y + Spacing.three;
-        }}>
-        <JudgesSection />
-      </View>
-
-      <View
-        onLayout={(e) => {
-          districtsY.current = e.nativeEvent.layout.y + Spacing.three;
-        }}>
-        <DistrictsSection />
-      </View>
-
-      <View
-        onLayout={(e) => {
-          wardRacesY.current = e.nativeEvent.layout.y + Spacing.three;
-        }}>
+      <ElectionBand ballot="february" ref={wardsRef}>
         <WardRaceSection />
+      </ElectionBand>
       </View>
     </Screen>
   );
@@ -192,7 +219,7 @@ export default function ElectionScreen() {
 /**
  * The next voting deadline, counted down from today, so the dates buried in
  * the how-to-vote card have a presence at the top of the tab. Two centered
- * lines, each a complete sentence with units ("Early voting starts in 22
+ * lines, each a complete sentence with units ("Early voting opens downtown in 22
  * days" over "55 days until election day") - never a wrapping fragment.
  * Tapping lands on that card. Renders nothing once every milestone is past.
  */
@@ -204,7 +231,7 @@ function NextDeadline({ onPress }: { onPress: () => void }) {
   if (!next) return null;
   const days = daysUntil(next.date, new Date());
   const when =
-    days === 0 ? t('today') : days === 1 ? t('tomorrow') : locale === 'es' ? `en ${days} días` : `in ${days} days`;
+    days === 0 ? t('today') : days === 1 ? t('tomorrow') : t('in {n} days').replace('{n}', String(days));
   const headline = `${t(next.label)} ${when}`;
   // The second line only exists when the milestone isn't election day
   // itself, and names which election it counts to.
@@ -226,7 +253,7 @@ function NextDeadline({ onPress }: { onPress: () => void }) {
       onPress={onPress}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel={`${headline}. ${electionLine ?? ''}`}
+      accessibilityLabel={`${headline}. ${t(next.detail)} ${electionLine ?? ''}`}
       style={{ alignSelf: 'stretch', alignItems: 'center', gap: 2, marginTop: Spacing.one }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
         <Ionicons name="time-outline" size={14} color={theme.primary} />
@@ -236,6 +263,14 @@ function NextDeadline({ onPress }: { onPress: () => void }) {
           {headline}
         </ThemedText>
       </View>
+      {/* Who and where the date applies to, so "early voting opens
+          tomorrow" can't be read as every site. */}
+      <ThemedText
+        type="small"
+        themeColor="textSecondary"
+        style={{ fontSize: 12, lineHeight: 16, textAlign: 'center' }}>
+        {t(next.detail)}
+      </ThemedText>
       {electionLine && (
         <ThemedText
           type="small"
@@ -253,16 +288,19 @@ function GridCell({
   label,
   caption,
   hint,
-  target,
-  scrollRef,
+  ballot,
+  onPress,
 }: {
   label: string;
   caption: string;
   hint: string;
-  target: React.MutableRefObject<number>;
-  scrollRef: React.RefObject<ScrollView | null>;
+  /** Which ballot's band it jumps into; the cell wears that band's color. */
+  ballot: Ballot;
+  /** Scrolls to the section. */
+  onPress: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   // Small phones and large system text (an older phone usually has both)
   // leave a cell about 60pt of text width. Nothing here is ever cut off:
   // both lines wrap. Before they have to, the decoration gives way: the
@@ -272,19 +310,19 @@ function GridCell({
   const { tight, roomy: chevron } = useScreenRoom();
   return (
     <Pressable
-      onPress={() => scrollRef.current?.scrollTo({ y: target.current, animated: true })}
+      onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`Jump to ${hint}`}
+      accessibilityLabel={t('Jump to {section}').replace('{section}', t(hint))}
       style={({ pressed }) => [
         styles.gridCell,
         tight && { paddingHorizontal: Spacing.two + 2, gap: 7 },
         {
-          backgroundColor: theme.backgroundElement,
+          backgroundColor: ballot === 'november' ? theme.novemberBand : theme.februaryBand,
           borderColor: theme.border,
           opacity: pressed ? 0.7 : 1,
         },
       ]}>
-      <Ionicons name="star" size={14} color={theme.accent} />
+      <Ionicons name="star" size={14} color={ballot === 'november' ? theme.primary : theme.accent} />
       <View style={{ flex: 1, gap: 1 }}>
         <ThemedText type="smallBold" style={{ fontSize: 14, lineHeight: 18 }}>
           {label}
@@ -325,6 +363,8 @@ function ElectionAma() {
   const { profile, loading: authLoading } = useAuth();
   const [draft, setDraft] = useState('');
   const [saving, setSaving] = useState(false);
+  const askOpensAt = useRateWindow('electionQuestions');
+  const { isBlocked } = useBlocks();
 
   const { data: questions, loading } = useLiveQuery<ElectionQuestion>(
     () => query(collection(db, 'electionQuestions'), orderBy('createdAt', 'desc')),
@@ -342,7 +382,7 @@ function ElectionAma() {
       setDraft('');
       router.push(`/election-question/${id}`);
     } catch (e) {
-      notify('Could not post the question', e instanceof Error ? e.message : 'Something went wrong.');
+      notify(t('Could not post the question'), errorMessage(e));
     } finally {
       setSaving(false);
     }
@@ -364,12 +404,15 @@ function ElectionAma() {
           maxLength={1000}
         />
         {profile || authLoading ? (
-          <Button
-            title={t('Put it to the candidates')}
-            onPress={ask}
-            loading={saving}
-            disabled={draft.trim().length < 10}
-          />
+          <>
+            <DailyLimitNote bucket="electionQuestions" nextAt={askOpensAt} />
+            <Button
+              title={t('Put it to the candidates')}
+              onPress={ask}
+              loading={saving}
+              disabled={draft.trim().length < 10 || askOpensAt != null}
+            />
+          </>
         ) : (
           <Button
             title={t('Sign in to ask')}
@@ -391,6 +434,7 @@ function ElectionAma() {
         // the stable sort over the newest-first query): upvoting an existing
         // question beats re-asking it.
         [...questions]
+          .filter((q) => !isBlocked(q.authorUid))
           .sort((a, b) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
           .map((q) => (
             <Card key={q.id} onPress={() => router.push(`/election-question/${q.id}`)}>
@@ -406,6 +450,13 @@ function ElectionAma() {
                 {q.authorVerified && <VerifiedBadge compact />}
                 <View style={{ flexGrow: 1 }} />
                 <ElectionQuestionJoin question={q} />
+                <ContentActions
+                  contentPath={`electionQuestions/${q.id}`}
+                  contentType="electionQuestion"
+                  excerpt={q.body}
+                  authorUid={q.authorUid}
+                  authorName={q.authorName}
+                />
               </View>
               {q.answerCount > 0 && (
                 <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 12 }}>

@@ -1,3 +1,5 @@
+import { tr } from '@/lib/i18n';
+
 /**
  * Default display names: a random adjective + noun pair, no numbers -
  * "Steadfast Heron", "Amiable Tugboat". Users can change theirs any time.
@@ -49,9 +51,22 @@ export function randomDisplayName(): string {
 
 export const DISPLAY_NAME_MAX = 30;
 
+/**
+ * Names that pose as an alderman ("Ald. ...", "Alderman ..."). The app
+ * names officials this way, so nobody else may start a name with it; the
+ * rules refuse the same pattern (firestore.rules, users). It can't catch
+ * every impersonation, only keep ours from being borrowed.
+ */
+// Leading spaces and invisible characters (zero-width, joiners, BOM) are
+// skipped, so they can't hide the prefix.
+const ALDERMAN_PREFIX = /^[\s\u180e\u200b-\u200f\u2060-\u206f\ufeff]*(ald\.|ald\s|alder(man|woman|person))/i;
+
 export function validateDisplayName(name: string): string | null {
   const trimmed = name.trim();
-  if (trimmed.length < 3) return 'Display name must be at least 3 characters.';
-  if (trimmed.length > DISPLAY_NAME_MAX) return `Display name must be ${DISPLAY_NAME_MAX} characters or fewer.`;
+  if (trimmed.length < 3) return tr('Display name must be at least 3 characters.');
+  if (trimmed.length > DISPLAY_NAME_MAX) {
+    return tr('Display name must be {max} characters or fewer.').replace('{max}', String(DISPLAY_NAME_MAX));
+  }
+  if (ALDERMAN_PREFIX.test(trimmed)) return tr('Display names can’t start with “Ald.” or “Alderman”.');
   return null;
 }

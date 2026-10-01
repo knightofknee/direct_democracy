@@ -1,3 +1,4 @@
+import type { Districts } from '@/constants/ward-districts';
 import type { Timestamp } from 'firebase/firestore';
 
 /**
@@ -27,8 +28,32 @@ export interface UserProfile {
   displayName: string;
   role: Role;
   verified: boolean;
-  /** 1–50 for Chicago wards; null until verified (ward comes from verified address). */
+  /**
+   * Home ward, 1–50. Verified accounts get the ward on their ID; others may
+   * declare one (declareWard) and change it until they post there.
+   */
   wardId: number | null;
+  /** When a declared ward was last set. Written only by declareWard. */
+  wardDeclaredAt?: Timestamp | null;
+  /** Posts in the home ward since it was set. Trigger-written. */
+  homeWardPosts?: number;
+  /**
+   * A declared ward cannot be changed before this: 2 home-ward posts lock
+   * it for a week, 3 for 3 months. Trigger-written (see ward-posting.ts).
+   */
+  wardLockedUntil?: Timestamp | null;
+  /**
+   * This person's districts, from their verified address or one they typed
+   * (findMyDistricts). Numbers only, with the ward they were found in; the
+   * address is never kept. Written only by Cloud Functions.
+   */
+  districts?: (Districts & { wardId: number }) | null;
+  /** Which notification kinds reach the phone (Settings switches). */
+  pushPrefs?: Partial<Record<'deadline' | 'answers' | 'comments' | 'replies' | 'credits' | 'questions', boolean>>;
+  /** This person's phones: Expo push token -> the language it shows notices in. */
+  pushTokens?: Record<string, { locale?: string; platform?: string }>;
+  /** Last post time per ward in the past week (the 5-other-wards cap). Trigger-written. */
+  recentPostWards?: Record<string, Timestamp>;
   /**
    * When this person last started verifying a new address (Settings). Written
    * only by Cloud Functions; opens again REVERIFY_COOLDOWN_DAYS later.
@@ -41,6 +66,8 @@ export interface UserProfile {
 
 export interface Official {
   uid: string;
+  /** The City Clerk's id for this alderman (syncCouncil), keying their roll-call votes. */
+  elmsPersonId?: string;
   name: string;
   title: string; // e.g. "Alderman, 1st Ward" or "Mayor"
   wardId: number | null; // null for citywide offices
@@ -305,6 +332,9 @@ export interface PolicyLink {
  * their votes and comments survive a site reshuffle.
  */
 export interface Policy {
+  /** The newest comment, trigger-written, for the candidate's command center. */
+  lastComment?: { authorName: string; excerpt: string };
+  lastCommentAt?: Timestamp | null;
   id: string;
   candidateUid: string;
   /** Grouping header, e.g. "Health & Home". */
@@ -350,7 +380,20 @@ export const CONCERN_PRIORITIES = ['1', '2', '3', '4', '5'] as const;
 export type ConcernPriority = (typeof CONCERN_PRIORITIES)[number];
 // Priority → board-score weights live server-side in functions/src/tally.ts.
 
+/**
+ * One edit to a post. `title` / `body` hold the text as it was BEFORE this
+ * edit, kept only when someone had already replied; otherwise just the time.
+ */
+export interface PostEdit {
+  at: Timestamp;
+  title?: string;
+  body?: string;
+}
+
 export interface Concern {
+  /** Edit history, oldest first (editPost in functions). */
+  edits?: PostEdit[];
+  editedAt?: Timestamp | null;
   id: string;
   title: string;
   body: string;
@@ -375,6 +418,9 @@ export interface Concern {
 }
 
 export interface Comment {
+  /** Edit history, oldest first (editPost in functions). */
+  edits?: PostEdit[];
+  editedAt?: Timestamp | null;
   id: string;
   authorUid: string;
   authorName: string;
@@ -416,6 +462,8 @@ export type CommentSort = 'newest' | 'best';
 export interface CommentReply {
   threadId: string;
   replyToName: string;
+  /** Who is being answered, so they hear about it (not just the thread's starter). */
+  replyToUid?: string | null;
 }
 
 /** Poll formats officials can choose from - deliberately not just up/down. */
@@ -469,6 +517,15 @@ export interface VoteDoc {
 export type QuestionStatus = 'awaitingResponse' | 'underReview' | 'answered' | 'dodged';
 
 export interface AmaQuestion {
+  /** Comments in the conversation under the answer (trigger-written). */
+  commentCount?: number;
+  /** The asker was a proven resident when asking (trigger-written): doubles the weight. */
+  authorResident?: boolean;
+  /** Verified residents who joined the question (trigger-written). */
+  upvotesResident?: number;
+  /** Edit history, oldest first (editPost in functions). */
+  edits?: PostEdit[];
+  editedAt?: Timestamp | null;
   id: string;
   officialUid: string;
   authorUid: string;
@@ -502,6 +559,9 @@ export interface AmaQuestion {
  * up/down scores - placement only, never displayed.
  */
 export interface ElectionQuestion {
+  /** Edit history, oldest first (editPost in functions). */
+  edits?: PostEdit[];
+  editedAt?: Timestamp | null;
   id: string;
   authorUid: string;
   authorName: string;
@@ -526,4 +586,35 @@ export interface ElectionAnswer {
   scoreVerified?: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+}
+
+/** A City Council or committee meeting in the next two weeks (council/upcoming). */
+export interface CouncilMeeting {
+  meetingId: string;
+  body: string;
+  date: Timestamp;
+  cancelled: boolean;
+  location: string | null;
+  publicCommentDeadline: Timestamp | null;
+  agendaUrl: string | null;
+  noticeUrl: string | null;
+}
+
+/** One roll call with at least one No, from the City Clerk (rollCalls/{historyId}). */
+export interface RollCall {
+  id: string;
+  recordNumber: string;
+  title: string;
+  actionName: string;
+  /** "City Council" or the committee that voted. */
+  body: string;
+  council: boolean;
+  date: Timestamp;
+  yes: number;
+  no: number;
+  divided: boolean;
+  minorityVoters: string[];
+  /** eLMS person id -> "yes" | "no" | "Absent" | "Not Voting" | "Present" | "Recused". */
+  votes: Record<string, string>;
+  url: string;
 }

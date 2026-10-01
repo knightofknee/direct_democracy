@@ -47,7 +47,7 @@ const ENTRIES: Entry[] = [
     title: 'Danielle Carter-Walters',
     body: [
       'Small business owner, wife of a retired Chicago police officer, and co-founder of Chicago Flips Red, running as a law-and-order outsider.',
-      "Her site's platform section is a single sentence about safe streets, schools that teach, and a revitalized business climate, with no policies behind it.",
+      'Her site lists 19 issue areas, from public safety and a "Chicago DOGE" audit to immigration and sanctuary city policy, each a heading with a one-line slogan and no policy text behind it.',
     ].join('\n\n'),
     links: [{ label: 'dannicformayor.com', url: 'https://www.dannicformayor.com/' }],
   },
@@ -68,15 +68,6 @@ const ENTRIES: Entry[] = [
       'Her three campaign themes, affordability, safety, and fiscal responsibility, appear only as homepage messaging; the site has no platform page, and its issues and platform links redirect back to the homepage.',
     ].join('\n\n'),
     links: [{ label: 'lisaneeforchicago.com', url: 'https://www.lisaneeforchicago.com/' }],
-  },
-  {
-    slug: 'mark-su',
-    title: 'Mark Su',
-    body: [
-      'Software engineer and CPS parent activist, simultaneously a 2026 candidate for Congress in the 9th district while collecting mayoral petitions.',
-      'His only site is his repurposed congressional campaign site, with a banner announcing the mayoral run; its issues section mixes national congressional content with Chicago items and contains no mayoral platform.',
-    ].join('\n\n'),
-    links: [{ label: 'site.marksuforcongress.com', url: 'https://site.marksuforcongress.com/' }],
   },
 ];
 
