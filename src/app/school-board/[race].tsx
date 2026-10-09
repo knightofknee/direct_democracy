@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { OfficialAvatar } from '@/components/avatar';
+import { CtuChip } from '@/components/ctu-chip';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
@@ -45,6 +46,11 @@ export default function SchoolBoardRaceScreen() {
         : t('No candidates are listed yet.')),
     candidates.length > nominees.length &&
       t('Declared write-ins: {w}.').replace('{w}', String(candidates.length - nominees.length)),
+    candidates.some((c) => c.ctuEndorsed) &&
+      t('Endorsed by the Chicago Teachers Union: {names}.').replace(
+        '{names}',
+        candidates.filter((c) => c.ctuEndorsed).map((c) => c.name).join(', ')
+      ),
     candidates.find((c) => c.incumbent) &&
       t('Incumbent: {name}.').replace('{name}', candidates.find((c) => c.incumbent)!.name),
   ]);
@@ -106,6 +112,7 @@ export default function SchoolBoardRaceScreen() {
                       <ThemedText type="smallBold" style={{ fontSize: 15 }}>
                         {candidate.name}
                       </ThemedText>
+                      {candidate.ctuEndorsed && <CtuChip />}
                       {candidate.incumbent && <Chip label={t('Incumbent')} tone="primary" />}
                       {candidate.writeIn && <WriteInChip />}
                     </View>

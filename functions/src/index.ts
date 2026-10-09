@@ -81,6 +81,9 @@ import {
 } from './ward';
 import { judgeRate, judgeWardPost, RATE_LIMITS, type RateBucket } from './posting';
 import { syncCouncilMembers, syncRollCalls, syncUpcomingMeetings } from './council';
+import { syncCivicMeetings } from './civic';
+import { syncZoning } from './zoning';
+import { syncNews } from './news';
 
 initializeApp();
 const db = getFirestore();
@@ -2649,6 +2652,38 @@ export const syncCouncil = onSchedule(
         console.error(`Council ${name} sync failed:`, err);
       }
     }
+  }
+);
+
+/**
+ * What a ward page needs for taking part beyond the Council: zoning changes
+ * and their hearings (zoning.ts) and police district council meetings
+ * (civic.ts). Twice a day, since a hearing agenda can land a few days out.
+ */
+export const syncWardCivics = onSchedule(
+  { schedule: '30 5,14 * * *', timeZone: 'America/Chicago', timeoutSeconds: 540, memory: '1GiB' },
+  async () => {
+    for (const [name, run] of [
+      ['zoning', () => syncZoning(db)],
+      ['civic meetings', () => syncCivicMeetings(db)],
+    ] as const) {
+      try {
+        console.log(`Ward civics ${name}: ${await run()}`);
+      } catch (err) {
+        console.error(`Ward civics ${name} sync failed:`, err);
+      }
+    }
+  }
+);
+
+/**
+ * The news tab's headlines (news.ts): every source's feed, every 20
+ * minutes, around the clock, since stories land at any hour.
+ */
+export const syncNewsFeeds = onSchedule(
+  { schedule: 'every 20 minutes', timeZone: 'America/Chicago', timeoutSeconds: 300, memory: '512MiB' },
+  async () => {
+    console.log(`News: ${await syncNews(db)}`);
   }
 );
 

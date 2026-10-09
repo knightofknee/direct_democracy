@@ -15,6 +15,8 @@ import { ListControls, sortConcerns, type ConcernSort } from '@/components/list-
 import { ThemedText } from '@/components/themed-text';
 import { WardMap } from '@/components/ward-map';
 import { Button, Card, ChicagoStar, EmptyState, SectionHeader } from '@/components/ui';
+import { WardTakePart } from '@/components/ward-take-part';
+import { InTheNews } from '@/components/news';
 import { WARDS, wardById, wardLabel } from '@/constants/chicago';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
@@ -300,6 +302,10 @@ function WardHome({
       )}
 
       {alderman && <OfficialRow official={alderman} />}
+
+      <WardTakePart wardId={wardId} alderman={alderman} />
+
+      <InTheNews wardId={wardId} />
 
       {openPolls.length > 0 && (
         <>

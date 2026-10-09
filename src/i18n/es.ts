@@ -1541,8 +1541,6 @@ export const ES: Record<string, string> = {
     'Comentarios: {n}, el más reciente {ago}.',
   'Compare candidates on this page. Each card shows their party, an "Incumbent" chip if they hold the seat, and a preview of what they are running on.':
     'Compara a los candidatos en esta página. Cada tarjeta muestra su partido, una etiqueta “Titular” si ocupa el puesto y un adelanto de lo que propone.',
-  'Compare nominees on this page by the preview of what each is running on and the "Incumbent" chip.':
-    'Compara a los candidatos en esta página por el adelanto de lo que propone cada uno y la etiqueta “Titular”.',
   'Compare the challengers under "Declared challengers" by background and a preview of what each is running on. Tap one to see their full card.':
     'Compara a los retadores en “Retadores declarados” por su trayectoria y un adelanto de lo que propone cada uno. Toca uno para ver su tarjeta completa.',
   'Concerns on the big board: {n}.':
@@ -2063,8 +2061,8 @@ export const ES: Record<string, string> = {
     'Tu distrito: el {ward}, fijado sin identificación.',
   'Your home ward: the {ward}, verified.':
     'Tu distrito: el {ward}, verificado.',
-  'Your next two ballots, each in its own color band. The red bands hold the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race.':
-    'Tus próximas dos boletas, cada una en su propia franja de color. Las franjas rojas tienen las contiendas del 23 de febrero de 2027: alcaldía, preguntas a todos los candidatos a la alcaldía y las contiendas de concejales. La franja azul tiene la boleta del 3 de noviembre: tus contiendas, cómo votar y cada contienda estatal, del condado, del consejo escolar, judicial y por distrito.',
+  'Your next two ballots, each in its own color band, the sooner one first. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race. The red band below it holds the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. Mayoral candidates are listed in random order, so no one is always first.':
+    'Tus próximas dos boletas, cada una en su propia franja de color, la más cercana primero. La franja azul tiene la boleta del 3 de noviembre: tus contiendas, cómo votar y cada contienda estatal, del condado, del consejo escolar, judicial y por distrito. La franja roja debajo tiene las contiendas del 23 de febrero de 2027: alcaldía, preguntas a todos los candidatos a la alcaldía y las contiendas de concejales. Los candidatos a la alcaldía aparecen en orden aleatorio, para que nadie quede siempre primero.',
   'Your profile is not claimed yet.':
     'Tu perfil aún no está reclamado.',
   'Your races are listed first, from your address in the {ward}.':
@@ -2083,4 +2081,206 @@ export const ES: Record<string, string> = {
     '{place}, publicado por {name} {ago}.',
   '“{title}”, from the platform of {name}.':
     '“{title}”, de la plataforma de {name}.',
+  'CTU endorsed':
+    'Respaldo del CTU',
+  'Endorsed by the Chicago Teachers Union: {names}.':
+    'Con el respaldo del Chicago Teachers Union: {names}.',
+  'Endorsed by the Chicago Teachers Union.':
+    'Cuenta con el respaldo del Chicago Teachers Union.',
+  'Compare nominees on this page by the preview of what each is running on and the "CTU endorsed" and "Incumbent" chips.':
+    'Compara a los candidatos en esta página por el adelanto de lo que propone cada uno y las etiquetas “Respaldo del CTU” y “Titular”.',
+  'A "CTU endorsed" chip means the Chicago Teachers Union endorsed them. The union\'s slate is listed under "Compiled from public sources:".':
+    'Una etiqueta “Respaldo del CTU” significa que el Chicago Teachers Union le dio su respaldo. La lista del sindicato aparece en “Compilado de fuentes públicas:”.',
+  'Ward newsletter':
+    'Boletín del distrito',
+  'Tap "Ward newsletter" to read the ward office\'s past newsletters or sign up for them.':
+    'Toca “Boletín del distrito” para leer los boletines anteriores de la oficina del distrito o suscribirte.',
+  'Take part':
+    'Participa',
+  'Where decisions about this ward get made, and when you can be heard.':
+    'Dónde se toman las decisiones sobre este distrito y cuándo puedes hacerte oír.',
+  'Ward meetings':
+    'Reuniones del distrito',
+  'Development':
+    'Desarrollo',
+  'Online':
+    'En línea',
+  'As announced in the ward office’s newsletter. Tap a meeting for its details or RSVP.':
+    'Según el boletín de la oficina del distrito. Toca una reunión para ver los detalles o confirmar asistencia.',
+  'Development and zoning':
+    'Desarrollo y zonificación',
+  'No zoning changes or development hearings are pending in this ward right now.':
+    'Por ahora no hay cambios de zonificación ni audiencias de desarrollo pendientes en este distrito.',
+  'Show fewer':
+    'Mostrar menos',
+  'Show all {n}':
+    'Mostrar los {n}',
+  'Committee on Zoning hearings: anyone may speak for up to 3 minutes in the public comment period, or send written comment by the deadline.':
+    'Audiencias del Comité de Zonificación: cualquier persona puede hablar hasta 3 minutos en el periodo de comentarios del público, o enviar un comentario por escrito antes de la fecha límite.',
+  'Zoning Board of Appeals: anyone may comment by signing in on the day. Owners within 100 feet (variations) or 250 feet (special uses) can register by 9 AM the Tuesday before to question the applicant.':
+    'Junta de Apelaciones de Zonificación: cualquier persona puede comentar si se registra ese día. Los propietarios a menos de 100 pies (variaciones) o 250 pies (usos especiales) pueden inscribirse antes de las 9 AM del martes anterior para interrogar al solicitante.',
+  'Zoning Board of Appeals participation rules':
+    'Reglas de participación de la Junta de Apelaciones de Zonificación',
+  'Plan Commission hearing page':
+    'Página de la audiencia de la Comisión de Planificación',
+  'Planned Development':
+    'Desarrollo planificado',
+  'Special use':
+    'Uso especial',
+  'Variation':
+    'Variación',
+  'Zoning change':
+    'Cambio de zonificación',
+  'Hearing: {body}, {when}':
+    'Audiencia: {body}, {when}',
+  'Filed {date}. No hearing set yet.':
+    'Presentado el {date}. Aún no hay audiencia programada.',
+  'No hearing set yet.':
+    'Aún no hay audiencia programada.',
+  'Written comment deadline: {date}':
+    'Fecha límite para comentarios por escrito: {date}',
+  'This ward is in police district {list}. Its elected council holds public meetings on policing in the district.':
+    'Este distrito está en el distrito policial {list}. Su concejo electo celebra reuniones públicas sobre la labor policial en el distrito.',
+  'This ward spans police districts {list}. Each has an elected council that holds public meetings on policing in the district.':
+    'Este distrito abarca los distritos policiales {list}. Cada uno tiene un concejo electo que celebra reuniones públicas sobre la labor policial en el distrito.',
+  'District {n} council':
+    'Concejo del distrito {n}',
+  'Place to be announced':
+    'Lugar por anunciar',
+  'Beat meetings with your district’s officers (CPD calendar)':
+    'Reuniones de sector con los agentes de tu distrito (calendario de CPD)',
+  'Ward office':
+    'Oficina del distrito',
+  'AI summary of the {date} newsletter':
+    'Resumen con IA del boletín del {date}',
+  'Read the newsletter':
+    'Leer el boletín',
+  'Report a city service problem to 311':
+    'Reportar un problema de servicios de la ciudad al 311',
+  'Committee on Zoning':
+    'Comité de Zonificación',
+  'Zoning Board of Appeals':
+    'Junta de Apelaciones de Zonificación',
+  'Plan Commission':
+    'Comisión de Planificación',
+  'Under "Take part", tap a ward meeting, a zoning item, or a police district council meeting to open it at its source. Ward meetings come from the ward office\'s newsletter; zoning items and police meetings come from the city.':
+    'En “Participa”, toca una reunión del distrito, un caso de zonificación o una reunión de un concejo de distrito policial para abrirlo en su fuente. Las reuniones del distrito vienen del boletín de la oficina del distrito; los casos de zonificación y las reuniones policiales vienen de la ciudad.',
+  'Under "Ward office", tap the address for directions, the phone number to call, or "Ward newsletter" to read past issues or sign up.':
+    'En “Oficina del distrito”, toca la dirección para ver cómo llegar, el número para llamar o “Boletín del distrito” para leer números anteriores o suscribirte.',
+  'This week in the wards':
+    'Esta semana en los distritos',
+  'What aldermen told residents in their newsletters, the week of {date}.':
+    'Lo que los concejales dijeron a los residentes en sus boletines, la semana del {date}.',
+  'Each ward’s latest newsletter is summarized on its ward page.':
+    'El boletín más reciente de cada distrito está resumido en la página de su distrito.',
+  'newsletter':
+    'boletín',
+  'newsletters':
+    'boletines',
+  'ward office':
+    'oficina de distrito',
+  'ward offices':
+    'oficinas de distrito',
+  'Under "This week in the wards", read an AI summary of what ward offices told residents in their newsletters this week. Tap "Show more" for all of it.':
+    'En “Esta semana en los distritos”, lee un resumen con IA de lo que las oficinas de distrito dijeron a los residentes en sus boletines esta semana. Toca “Mostrar más” para verlo completo.',
+
+  // News tab and the notifications bell (2026-10-07)
+  "If you turn news sources or story languages off while signed in: which ones, so the choice follows your account.":
+    "Si apagas fuentes o idiomas de noticias con tu sesión iniciada: cuáles, para que tu elección te acompañe en tu cuenta.",
+  "Newsrooms included: {n}. Turned off by you: {off}.":
+    "Medios incluidos: {n}. Apagados por ti: {off}.",
+  "Headlines showing: {n}.":
+    "Titulares a la vista: {n}.",
+  "Showing only stories that name your ward.":
+    "Solo se muestran las noticias que nombran tu distrito.",
+  "Not included: {names}.":
+    "No incluidos: {names}.",
+  "All Chicago":
+    "Todo Chicago",
+  "news":
+    "noticias",
+  "Headlines from {n} newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "Titulares de {n} medios que cubren Chicago, los más recientes primero. Toca uno para leerlo en el sitio del medio.",
+  "Headlines from newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "Titulares de medios que cubren Chicago, los más recientes primero. Toca uno para leerlo en el sitio del medio.",
+  "Sources ({n} off)":
+    "Fuentes ({n} apagadas)",
+  "You have turned every source off.":
+    "Apagaste todas las fuentes.",
+  "Show every source":
+    "Mostrar todas las fuentes",
+  "No story in the past two weeks names your ward, its alderman, or its neighborhoods.":
+    "Ninguna noticia de las últimas dos semanas nombra tu distrito, a su concejal ni a sus vecindarios.",
+  "No headlines yet.":
+    "Todavía no hay titulares.",
+  "See why":
+    "Ver por qué",
+  "Your choices are saved to your account.":
+    "Tus elecciones se guardan en tu cuenta.",
+  "Your choices are saved on this device.":
+    "Tus elecciones se guardan en este dispositivo.",
+  "Every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites (the Tranco list) is here. Every one is on until you turn it off. Stories are listed newest first. The app never ranks them or hides any.":
+    "Aquí está cada medio que cubre Chicago o el gobierno de Illinois, tiene un feed público y está entre el millón de sitios web más populares (la lista Tranco). Todos están encendidos hasta que apagues alguno. Las noticias aparecen de la más reciente a la más antigua. La app nunca las ordena por importancia ni oculta ninguna.",
+  "Newsrooms":
+    "Medios",
+  "Its feed is not answering right now.":
+    "Su feed no responde en este momento.",
+  "Story languages":
+    "Idiomas de las noticias",
+  "Headlines stay in the language the newsroom wrote them in.":
+    "Los titulares se quedan en el idioma en que los escribió el medio.",
+  "Not included":
+    "No incluidos",
+  "Opens the story on {source}'s site":
+    "Abre la noticia en el sitio de {source}",
+  "In the news":
+    "En las noticias",
+  "Stories from the past two weeks that name this ward, its alderman, or one of its neighborhoods.":
+    "Noticias de las últimas dos semanas que nombran este distrito, a su concejal o uno de sus vecindarios.",
+  "Stories from the past two weeks that name them.":
+    "Noticias de las últimas dos semanas que lo nombran.",
+  "Notifications, {n} unread":
+    "Avisos, {n} sin leer",
+  "Notifications":
+    "Avisos",
+  "Could not save your news choices":
+    "No se pudieron guardar tus elecciones de noticias",
+  "News sources":
+    "Fuentes de noticias",
+  "Its site turns away automated feed readers, so its headlines can't be included without its permission.":
+    "Su sitio rechaza los lectores automáticos de feeds, así que sus titulares no se pueden incluir sin su permiso.",
+  "Its site turns away automated feed readers. We've asked for permission to include its headlines.":
+    "Su sitio rechaza los lectores automáticos de feeds. Le pedimos permiso para incluir sus titulares.",
+  "We asked to include its headlines, and it declined.":
+    "Le pedimos incluir sus titulares y dijo que no.",
+  "Tap the bell at the top to see your notifications. A number on it counts the ones you haven't opened.":
+    "Toca la campana de arriba para ver tus avisos. El número sobre ella cuenta los que no has abierto.",
+  "Under \"In the news\", tap a headline to read a recent story that names this ward, its alderman, or one of its neighborhoods.":
+    "En “En las noticias”, toca un titular para leer una noticia reciente que nombra este distrito, a su concejal o uno de sus vecindarios.",
+  "Headlines from every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites, newest first. The app never ranks them or hides any. Below the list are the newsrooms that are not included, and why.":
+    "Titulares de cada medio que cubre Chicago o el gobierno de Illinois, tiene un feed público y está entre el millón de sitios web más populares, los más recientes primero. La app nunca los ordena por importancia ni oculta ninguno. Debajo de la lista están los medios no incluidos y por qué.",
+  "Tap a headline to read the story on the newsroom's own site.":
+    "Toca un titular para leer la noticia en el sitio del propio medio.",
+  "Tap your ward to see only stories that name your home ward, its alderman, or one of its neighborhoods. Tap \"All Chicago\" to see everything again. A \"Your ward\" tag marks those stories in the full list.":
+    "Toca tu distrito para ver solo las noticias que nombran tu distrito, a su concejal o uno de sus vecindarios. Toca “Todo Chicago” para volver a ver todo. Una etiqueta “Tu distrito” marca esas noticias en la lista completa.",
+  "Tap \"Sources\" to turn newsrooms or story languages off or back on.":
+    "Toca “Fuentes” para apagar o volver a encender medios o idiomas de las noticias.",
+  "Tap \"Show more\" at the bottom to load 30 more headlines.":
+    "Toca “Mostrar más” abajo para cargar 30 titulares más.",
+  "Tap \"See why\" to read why a newsroom is not included.":
+    "Toca “Ver por qué” para leer por qué un medio no está incluido.",
+  "Which newsrooms and story languages your news tab shows, and the newsrooms that are not included, with why. Every included newsroom is on until you turn it off.":
+    "Qué medios e idiomas de noticias muestra tu pestaña de noticias, y los medios no incluidos, con el porqué. Cada medio incluido está encendido hasta que lo apagues.",
+  "Turn a newsroom's switch off to hide its headlines, or back on to show them again.":
+    "Apaga el interruptor de un medio para ocultar sus titulares, o vuelve a encenderlo para mostrarlos otra vez.",
+  "Under \"Story languages\", turn off a language to hide stories written in it. Headlines are never translated.":
+    "En “Idiomas de las noticias”, apaga un idioma para ocultar las noticias escritas en él. Los titulares nunca se traducen.",
+  "Tap \"Show every source\" to turn everything back on.":
+    "Toca “Mostrar todas las fuentes” para volver a encender todo.",
+  "Under \"Not included\", tap a newsroom's name to visit its site.":
+    "En “No incluidos”, toca el nombre de un medio para visitar su sitio.",
+  "Signed in, your choices are saved to your account and follow you to other devices. Signed out, they are saved on this device.":
+    "Con sesión iniciada, tus elecciones se guardan en tu cuenta y te acompañan en otros dispositivos. Sin sesión, se guardan en este dispositivo.",
+  "Under \"In the news\", tap a headline to read a recent story that names them.":
+    "En “En las noticias”, toca un titular para leer una noticia reciente que lo nombra.",
 };

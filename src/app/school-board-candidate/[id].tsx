@@ -5,6 +5,7 @@ import { View } from 'react-native';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { CopyLinkButton } from '@/components/copy-link';
+import { CtuChip } from '@/components/ctu-chip';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
@@ -38,6 +39,7 @@ export default function SchoolBoardCandidateScreen() {
   usePageSummary('school-board-candidate/[id]', [
     candidate && `${candidate.name}: ${t('School board')}, ${schoolBoardRaceLabel(candidate.race)}.`,
     candidate?.incumbent && t('Holds the seat now.'),
+    candidate?.ctuEndorsed && t('Endorsed by the Chicago Teachers Union.'),
     candidate?.writeIn && t('A declared write-in: the name is not printed on the ballot.'),
   ]);
 
@@ -69,6 +71,7 @@ export default function SchoolBoardCandidateScreen() {
             </ThemedText>
             <View style={{ flexDirection: 'row', gap: Spacing.two, flexWrap: 'wrap' }}>
               <Chip label={schoolBoardRaceLabel(candidate.race)} />
+              {candidate.ctuEndorsed && <CtuChip />}
               {candidate.incumbent && <Chip label={t('Incumbent')} tone="primary" />}
               {candidate.writeIn && <WriteInChip />}
             </View>

@@ -38,6 +38,7 @@ import type { AmaQuestion, Comment, DualTally, Official } from '@/lib/types';
 import { UpvotePill, useOptimisticUpvotes } from '@/components/upvote-pill';
 import { EditHistory } from '@/components/edit-history';
 import { VotingRecord } from '@/components/voting-record';
+import { InTheNews } from '@/components/news';
 import { DailyLimitNote, WardPostNote } from '@/components/ward-post-note';
 import {
   askQuestion,
@@ -245,6 +246,8 @@ export default function OfficialAmaScreen() {
           ))
       )}
 
+      <InTheNews officialUid={official.uid} />
+
       <VotingRecord official={official} />
     </Screen>
   );
@@ -331,13 +334,20 @@ function GradeCard({
         </ThemedText>
       )}
 
-      {(official.websiteUrl || official.contactEmail || official.phone) && (
+      {(official.websiteUrl || official.newsletterUrl || official.contactEmail || official.phone) && (
         <View style={{ gap: Spacing.one }}>
           {official.websiteUrl ? (
             <ContactRow
               icon="globe-outline"
               label={host(official.websiteUrl)}
               onPress={() => void openLink(official.websiteUrl!)}
+            />
+          ) : null}
+          {official.newsletterUrl ? (
+            <ContactRow
+              icon="newspaper-outline"
+              label={t('Ward newsletter')}
+              onPress={() => void openLink(official.newsletterUrl!)}
             />
           ) : null}
           {official.contactEmail ? (

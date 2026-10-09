@@ -1,0 +1,390 @@
+{
+ "Albany Park": [
+  33,
+  39
+ ],
+ "Andersonville": [
+  40,
+  48
+ ],
+ "Archer Heights": [
+  14,
+  23
+ ],
+ "Armour Square": [
+  3,
+  11
+ ],
+ "Ashburn": [
+  18
+ ],
+ "Auburn Gresham": [
+  17,
+  18,
+  21
+ ],
+ "Austin": [
+  29,
+  37
+ ],
+ "Avalon Park": [
+  8
+ ],
+ "Avondale": [
+  30,
+  31,
+  35
+ ],
+ "Back of the Yards": [
+  15,
+  16,
+  20
+ ],
+ "Belmont Cragin": [
+  30,
+  31,
+  36
+ ],
+ "Beverly": [
+  19
+ ],
+ "Boystown": [
+  44,
+  46
+ ],
+ "Bridgeport": [
+  11
+ ],
+ "Brighton Park": [
+  12
+ ],
+ "Bronzeville": [
+  3,
+  4
+ ],
+ "Bucktown": [
+  32
+ ],
+ "Burnside": [
+  8
+ ],
+ "Calumet Heights": [
+  7,
+  8
+ ],
+ "Chatham": [
+  6,
+  8
+ ],
+ "Chicago Lawn": [
+  14,
+  15,
+  16
+ ],
+ "Chinatown": [
+  11
+ ],
+ "Dunning": [
+  38
+ ],
+ "East Village": [
+  1,
+  36
+ ],
+ "Edgewater": [
+  48
+ ],
+ "Edison Park": [
+  41
+ ],
+ "Englewood": [
+  16,
+  17
+ ],
+ "Forest Glen": [
+  39,
+  45
+ ],
+ "Fuller Park": [
+  3,
+  20
+ ],
+ "Gage Park": [
+  14,
+  15
+ ],
+ "Galewood": [
+  29
+ ],
+ "Garfield Park": [
+  24,
+  28
+ ],
+ "Garfield Ridge": [
+  13,
+  22,
+  23
+ ],
+ "Gold Coast": [
+  2,
+  43
+ ],
+ "Grand Boulevard": [
+  3,
+  4
+ ],
+ "Grand Crossing": [
+  6
+ ],
+ "Grant Park": [
+  4,
+  42
+ ],
+ "Greektown": [
+  34
+ ],
+ "Hegewisch": [
+  10
+ ],
+ "Hermosa": [
+  26,
+  31,
+  35
+ ],
+ "Humboldt Park": [
+  26,
+  27,
+  36,
+  37
+ ],
+ "Hyde Park": [
+  5
+ ],
+ "Irving Park": [
+  30,
+  33,
+  39
+ ],
+ "Jackson Park": [
+  5
+ ],
+ "Jefferson Park": [
+  45
+ ],
+ "Kenwood": [
+  4,
+  5
+ ],
+ "Lake View": [
+  44,
+  46
+ ],
+ "Lakeview": [
+  44,
+  46
+ ],
+ "Lincoln Park": [
+  32,
+  43
+ ],
+ "Lincoln Square": [
+  40,
+  47
+ ],
+ "Little Italy": [
+  28,
+  34
+ ],
+ "Little Village": [
+  22,
+  24,
+  25
+ ],
+ "Logan Square": [
+  1,
+  26,
+  35
+ ],
+ "Lower West Side": [
+  25
+ ],
+ "Magnificent Mile": [
+  42
+ ],
+ "McKinley Park": [
+  11,
+  12
+ ],
+ "Millennium Park": [
+  42
+ ],
+ "Montclare": [
+  29,
+  36
+ ],
+ "Morgan Park": [
+  19,
+  21
+ ],
+ "Mount Greenwood": [
+  19
+ ],
+ "Museum Campus": [
+  4
+ ],
+ "Near South Side": [
+  3
+ ],
+ "New City": [
+  15,
+  16,
+  20
+ ],
+ "North Center": [
+  32,
+  47
+ ],
+ "North Lawndale": [
+  24
+ ],
+ "North Park": [
+  39,
+  50
+ ],
+ "Norwood Park": [
+  41
+ ],
+ "Old Town": [
+  2,
+  27,
+  43
+ ],
+ "Pilsen": [
+  25
+ ],
+ "Portage Park": [
+  30,
+  38,
+  45
+ ],
+ "Printers Row": [
+  4
+ ],
+ "Pullman": [
+  8,
+  9
+ ],
+ "Ravenswood": [
+  32,
+  40,
+  47
+ ],
+ "River North": [
+  2,
+  27,
+  42
+ ],
+ "Riverdale": [
+  9,
+  10
+ ],
+ "Rogers Park": [
+  49
+ ],
+ "Roseland": [
+  9,
+  21
+ ],
+ "Sauganash": [
+  39,
+  45
+ ],
+ "South Chicago": [
+  7,
+  10
+ ],
+ "South Deering": [
+  7,
+  10
+ ],
+ "South Lawndale": [
+  22,
+  24,
+  25
+ ],
+ "South Loop": [
+  3,
+  4
+ ],
+ "South Shore": [
+  5,
+  7,
+  8
+ ],
+ "Streeterville": [
+  2,
+  42
+ ],
+ "the Loop": [
+  4,
+  34,
+  42
+ ],
+ "Ukrainian Village": [
+  1,
+  36
+ ],
+ "Uptown": [
+  46,
+  47
+ ],
+ "Washington Heights": [
+  9,
+  21
+ ],
+ "Washington Park": [
+  3,
+  20
+ ],
+ "West Elsdon": [
+  13,
+  23
+ ],
+ "West Lawn": [
+  13,
+  23
+ ],
+ "West Loop": [
+  27,
+  34
+ ],
+ "West Pullman": [
+  9,
+  21
+ ],
+ "West Ridge": [
+  40,
+  50
+ ],
+ "West Rogers Park": [
+  40,
+  50
+ ],
+ "West Town": [
+  1,
+  27,
+  36
+ ],
+ "Wicker Park": [
+  1,
+  32
+ ],
+ "Woodlawn": [
+  5,
+  20
+ ],
+ "Wrigleyville": [
+  44,
+  46
+ ]
+}

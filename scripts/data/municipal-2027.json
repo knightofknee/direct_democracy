@@ -93,7 +93,12 @@
         "https://www.yepezforchicago.com/meet",
         "https://www.cookcountydems.com/ward_commttee_people/1st-ward/"
       ],
-      "photoUrl": null,
+      "photoUrl": "https://www.cookcountydems.com/wp-content/uploads/2020/08/Screenshot-2024-04-21-at-7.44.03%E2%80%AFPM-Laura-Yepez.png",
+      "photoFrame": {
+        "x": 0.562,
+        "y": 0.327,
+        "zoom": 1.63
+      },
       "runningOnEs": "Lanzó su campaña en mayo de 2026 para desafiar al concejal Daniel La Spata. Su campaña la describe como una progresista a favor de los sindicatos, comprometida con proteger los derechos de las mujeres, los inmigrantes, los trabajadores y los chicagoenses LGBTQIA+, y dice que el progreso duradero requiere un liderazgo fiscalmente responsable. La página de temas de su sitio pide a los residentes que compartan sus prioridades en lugar de presentar una plataforma detallada.",
       "priorCareerEs": "Committeeperson demócrata del Distrito 1 desde 2024 y propietaria desde hace años del Wicker Park Inn; presidenta de la Chicago Bed and Breakfast Association y vicepresidenta de operaciones de personal en una startup de tecnología publicitaria. Ex asistente legislativa en la Cámara de Representantes de Illinois y ex presidenta del consejo escolar local de Lincoln Park High School; egresada de estudios urbanos de Brown University."
     },
@@ -254,15 +259,16 @@
       "race": "ward-19",
       "party": null,
       "incumbent": false,
-      "website": null,
-      "runningOn": "Running for the open seat with the endorsement of retiring Ald. Matt O'Shea, who announced in September 2026 that he will not seek a fifth term. She says she wants to work more closely with community groups, create more opportunities for community engagement and gatherings, and support first responders at a time of reduced police staffing. No campaign website or detailed platform found yet.",
+      "website": "https://www.erinross19.com/",
+      "runningOn": "Running for the open seat with the endorsement of retiring Ald. Matt O'Shea, who announced in September 2026 that he will not seek a fifth term. She says she wants to work more closely with community groups, create more opportunities for community engagement and gatherings, and support first responders at a time of reduced police staffing. Her campaign site's slogan is \"Safe streets. Strong schools. Thriving businesses.\" and it does not yet publish a detailed platform.",
       "priorCareer": "Chief of staff in the 19th Ward office since 2024; previously executive director of the 95th Street Business Association for more than a decade. Lifelong Beverly resident.",
       "sourceUrls": [
         "https://blockclubchicago.org/2026/09/10/matt-oshea-wont-run-for-19th-ward-alderman-again-after-4-terms/",
-        "https://abc7chicago.com/post/chicago-alderman-michael-rodriguez-not-running-election-22nd-ward/19814542/"
+        "https://abc7chicago.com/post/chicago-alderman-michael-rodriguez-not-running-election-22nd-ward/19814542/",
+        "https://www.erinross19.com/"
       ],
-      "photoUrl": null,
-      "runningOnEs": "Se postula por el escaño abierto con el respaldo del concejal saliente Matt O'Shea, quien anunció en septiembre de 2026 que no buscará un quinto periodo. Dice que quiere trabajar más de cerca con los grupos comunitarios, crear más oportunidades de participación y encuentros comunitarios, y apoyar al personal de primeros auxilios y emergencias en un momento de menos policías. Aún no se encontró un sitio web de campaña ni una plataforma detallada.",
+      "photoUrl": "https://erinross19.com/wp-content/uploads/erin-ross-alderman-photo-768x960.webp",
+      "runningOnEs": "Se postula por el escaño abierto con el respaldo del concejal saliente Matt O'Shea, quien anunció en septiembre de 2026 que no buscará un quinto periodo. Dice que quiere trabajar más de cerca con los grupos comunitarios, crear más oportunidades de participación y encuentros comunitarios, y apoyar al personal de primeros auxilios y emergencias en un momento de menos policías. El lema de su sitio de campaña es \"Safe streets. Strong schools. Thriving businesses.\" y todavía no publica una plataforma detallada.",
       "priorCareerEs": "Jefa de gabinete de la oficina del Distrito 19 desde 2024; antes fue directora ejecutiva de la 95th Street Business Association por más de una década. Residente de Beverly de toda la vida."
     },
     {
@@ -797,7 +803,12 @@
         "https://www.just48.org/",
         "https://www.just48.org/campaign-priorities"
       ],
-      "photoUrl": null,
+      "photoUrl": "https://static.wixstatic.com/media/4acae2_6d645c2877cf44cc95c691af75bb6a40~mv2.jpg",
+      "photoFrame": {
+        "x": 0.65,
+        "y": 0.446,
+        "zoom": 1.6
+      },
       "runningOnEs": "Compite contra la concejala Leni Manaa-Hoppenworth con lo que llama \"progressivism 2.0\" (progresismo 2.0), que busca metas progresistas mediante un gobierno que funcione mejor. Sus prioridades incluyen desarrollo orientado al transporte público alrededor de las nuevas estaciones de la Línea Roja, estabilidad de vivienda con herramientas contra el desplazamiento y un fondo de riqueza urbana basado en los bienes públicos, reuniones policiales CAPS revitalizadas y una carta constitucional para Chicago.",
       "priorCareerEs": "Diseñador de comunicaciones en la Government Finance Officers Association; presidente de la Edgewater Beach Neighborhood Association desde 2024. Se mudó al Distrito 48 en 2021."
     },
@@ -877,7 +888,12 @@
         "https://www.politico.com/newsletters/illinois-playbook/2026/09/15/trump-im-all-for-bailey-01076202",
         "https://www.19thtogether.com/"
       ],
-      "photoUrl": null,
+      "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/Ridge_Knapp_2026.jpg",
+      "photoFrame": {
+        "x": 0.407,
+        "y": 0.364,
+        "zoom": 1.0
+      },
       "runningOnEs": "Lanzó su campaña en septiembre de 2026 como recién llegado en una planilla con los integrantes actuales del consejo Jenny Schaffer y Sam Schoenburg. Los objetivos declarados de la planilla son modernizar el enfoque de la seguridad pública, mejorar la transparencia y la rendición de cuentas de la policía, promover una labor policial responsable, justa y eficaz, elevar la voz de la comunidad y apoyar una Comisión Comunitaria de Seguridad Pública y Rendición de Cuentas sólida.",
       "priorCareerEs": "Recién llegado; el sitio de campaña de la planilla aún no publica su biografía."
     }

@@ -50,6 +50,23 @@ honest, and every failure must be visible.
 - **Accepted:** judgments from binaries before this date carry no ward and
   count only for citywide officials until those users update.
 
+## Update - 2026-10-07: the news tab
+
+- **Headlines:** `newsSources` and `newsItems` are world-readable and
+  written only by the Admin SDK (`syncNewsFeeds`, every 20 minutes). Only a
+  headline, its link, its time, and the wards and officials it names are
+  kept; the story text is read once for that matching and never stored.
+  Feeds are fetched with a user agent that names the app; an outlet that
+  refuses it is listed as not included rather than worked around.
+- **News choices:** `users/{uid}.newsPrefs` (`hiddenSources`, `hiddenLangs`,
+  lists of at most 50 and 5) is the one new client-writable profile field.
+  It says which sources a person turned off and nothing else; signed out,
+  the choice stays on the device.
+- **Accepted:** a story is matched to wards and aldermen by text rules
+  (names, "25th Ward", neighborhood names), so an occasional story about
+  a namesake elsewhere can show on a ward page. Neighborhood names count
+  only in Chicago-only newsrooms or stories that say "Chicago".
+
 ## Update - 2026-09-29: phone notifications, AMA threads, Council data, districts
 
 - **Push tokens:** `users/{uid}.pushTokens` and `pushPrefs` are the only new

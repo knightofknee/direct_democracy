@@ -5,11 +5,10 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { FlagAccent } from '@/components/flag-accent';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
-import { Button, Card, ChicagoStar, EmptyState } from '@/components/ui';
+import { Button, Card, EmptyState } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
@@ -25,7 +24,8 @@ import { usePageSummary } from '@/lib/page-help';
 import { enter } from '@/lib/motion';
 
 /**
- * The inbox: answers to your questions, replies to your comments, writing
+ * The inbox, opened from the bell at the top of every tab (it was a tab of
+ * its own until the news tab took its place, 2026-10-07): answers to your questions, replies to your comments, writing
  * credits - and for officials and candidates, the questions and comments
  * waiting on them. Things to respond to and people responding to you; vote
  * outcomes (community verdicts) deliberately don't notify. The 'verdict'
@@ -47,7 +47,7 @@ export default function NotificationsScreen() {
     [profile?.uid]
   );
   const unread = notifications.filter((n) => !n.read).length;
-  usePageSummary('(tabs)/notifications', [
+  usePageSummary('notifications', [
     !profile
       ? t('You are signed out, so there are no notifications.')
       : !loading &&
@@ -59,20 +59,7 @@ export default function NotificationsScreen() {
   ]);
 
   return (
-    <Screen tab>
-      <View style={{ gap: Spacing.one, alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
-          <ChicagoStar size={18} />
-          <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
-            {t('notifications')}
-          </ThemedText>
-        </View>
-        <ThemedText type="small" themeColor="textSecondary" style={{ textAlign: 'center' }}>
-          {t('Answers, replies, and credits, as they land.')}
-        </ThemedText>
-        <FlagAccent />
-      </View>
-
+    <Screen>
       {authLoading ? (
         <SkeletonCards />
       ) : !profile ? (

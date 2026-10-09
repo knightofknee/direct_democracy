@@ -6,6 +6,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ConcernCard } from '@/components/concern-card';
 import { CouncilSection } from '@/components/council-section';
+import { NewsletterDigestSection } from '@/components/newsletter-digest';
 import { FlagAccent } from '@/components/flag-accent';
 import { PollCard } from '@/components/poll-card';
 import { Screen } from '@/components/screen';
@@ -176,6 +177,7 @@ export default function BigBoardScreen() {
       )}
 
       <CouncilSection />
+      <NewsletterDigestSection />
 
       <VerifiedInfo />
     </Screen>

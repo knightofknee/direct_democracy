@@ -39,10 +39,11 @@ import { useMyDistricts } from '@/lib/districts';
 import { wardLabel } from '@/constants/chicago';
 
 /**
- * The election tab: the voter's guide to the next two ballots. The race for
- * mayor leads (every candidate's full platform) with the mayoral AMA, then
- * the November 3 ballot (your races, how to vote, the citywide offices, the
- * school board, judges, every district), then the February 2027 ward races.
+ * The election tab: the voter's guide to the next two ballots, the sooner
+ * one first. The November 3 ballot leads (your races, how to vote, the
+ * citywide offices, the school board, judges, every district), then the
+ * February 2027 ballot: the race for mayor (every candidate's full platform,
+ * in random order), the mayoral AMA, and the ward races.
  * Each ballot is a band of its own color (ElectionBand), and the jump grid
  * under the header, framed by the flag's stripes, wears the same colors.
  */
@@ -71,6 +72,9 @@ export default function ElectionScreen() {
     );
   };
 
+  // Fixed for as long as the tab is mounted, so the list doesn't reshuffle
+  // under the reader whenever a candidate's doc changes.
+  const [shuffleSeed] = useState(() => Math.floor(Math.random() * 0x7fffffff));
   const { data: candidates, loading } = useLiveQuery<Candidate & { id: string }>(
     () => query(collection(db, 'candidates'), orderBy('name')),
     []
@@ -166,35 +170,6 @@ export default function ElectionScreen() {
         <NextDeadline onPress={() => jumpTo(novRef)} />
       </View>
 
-      <ElectionBand ballot="february">
-        <SectionHeader
-          title={t('race for mayor')}
-          subtitle={t("Every candidate's full platform, debated plank by plank.")}
-        />
-
-        {loading ? (
-          <SkeletonCards />
-        ) : candidates.length === 0 ? (
-          <EmptyState icon="ribbon-outline" message={t('No candidates on the platform yet.')} />
-        ) : (
-          // Real candidates first (alphabetical), the declared-candidates
-          // directory entry at the end.
-          [...candidates.filter((c) => !c.directory), ...candidates.filter((c) => c.directory)].map(
-            (candidate, i) => (
-              <Animated.View
-                key={candidate.uid}
-                entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}>
-                <CandidateRow candidate={candidate} />
-              </Animated.View>
-            )
-          )
-        )}
-
-        <View ref={amaRef}>
-          <ElectionAma />
-        </View>
-      </ElectionBand>
-
       <ElectionBand ballot="november" ref={novRef}>
         <NovemberSection />
         <View ref={schoolBoardRef}>
@@ -208,8 +183,43 @@ export default function ElectionScreen() {
         </View>
       </ElectionBand>
 
-      <ElectionBand ballot="february" ref={wardsRef}>
-        <WardRaceSection />
+
+      <ElectionBand ballot="february">
+        <SectionHeader
+          title={t('race for mayor')}
+          subtitle={t("Every candidate's full platform, debated plank by plank.")}
+        />
+
+        {loading ? (
+          <SkeletonCards />
+        ) : candidates.length === 0 ? (
+          <EmptyState icon="ribbon-outline" message={t('No candidates on the platform yet.')} />
+        ) : (
+          // Real candidates in a random order (no one is always first), the
+          // declared-candidates directory entry at the end.
+          [
+            ...shuffled(
+              candidates.filter((c) => !c.directory),
+              shuffleSeed
+            ),
+            ...candidates.filter((c) => c.directory),
+          ].map(
+            (candidate, i) => (
+              <Animated.View
+                key={candidate.uid}
+                entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}>
+                <CandidateRow candidate={candidate} />
+              </Animated.View>
+            )
+          )
+        )}
+
+        <View ref={amaRef}>
+          <ElectionAma />
+        </View>
+        <View ref={wardsRef}>
+          <WardRaceSection />
+        </View>
       </ElectionBand>
       </View>
     </Screen>
@@ -334,6 +344,21 @@ function GridCell({
       {chevron ? <Ionicons name="chevron-forward" size={14} color={theme.textSecondary} /> : null}
     </Pressable>
   );
+}
+
+/**
+ * The mayoral candidates in a random order, so no one is always listed first
+ * (the app must not read as favoring anyone; Brian is on this ballot). Each
+ * candidate's place comes from a hash of the seed and their uid, so a
+ * candidate joining or an update arriving never moves the others.
+ */
+function shuffled<T extends { uid: string }>(list: T[], seed: number): T[] {
+  const rank = (uid: string) => {
+    let h = seed ^ 0x811c9dc5;
+    for (let i = 0; i < uid.length; i++) h = Math.imul(h ^ uid.charCodeAt(i), 0x01000193);
+    return h >>> 0;
+  };
+  return [...list].sort((a, b) => rank(a.uid) - rank(b.uid));
 }
 
 const styles = StyleSheet.create({

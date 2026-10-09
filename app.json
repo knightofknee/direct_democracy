@@ -25,7 +25,7 @@
     },
     "android": {
       "package": "com.briancarlisle.directdemocracy",
-      "versionCode": 7,
+      "versionCode": 9,
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

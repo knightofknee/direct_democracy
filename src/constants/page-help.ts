@@ -24,7 +24,9 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap a concern to read it in full and comment. Tap "Show more" to load 20 more.',
       'Vote on a poll under "Citywide votes". You see the full results once you vote, and tapping your choice again takes your vote back.',
       'Under "City Council", check meeting times and public comment deadlines, open agendas, tap "How to give public comment", or open a recent split vote.',
+      'Under "This week in the wards", read an AI summary of what ward offices told residents in their newsletters this week. Tap "Show more" for all of it.',
       'Tap the info icon at the bottom to read what verified means and what Didit shares with the app.',
+      'Tap the bell at the top to see your notifications. A number on it counts the ones you haven\'t opened.',
     ],
   },
   '(tabs)/ward': {
@@ -34,13 +36,17 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap "Raise a ward concern" to post in your home ward, up to 3 times a day. In other wards, tap "Raise a concern in this ward" to post once a week, in up to 5 wards a week.',
       'Tap 1 to 5 on a concern to rate its priority, and tap yours again to take it back. Here the verified count includes only verified residents of this ward.',
       'Tap the alderman to see their grade and ask them a question.',
+      'Under "Take part", tap a ward meeting, a zoning item, or a police district council meeting to open it at its source. Ward meetings come from the ward office\'s newsletter; zoning items and police meetings come from the city.',
+      'Under "Ward office", tap the address for directions, the phone number to call, or "Ward newsletter" to read past issues or sign up.',
+      'Under "In the news", tap a headline to read a recent story that names this ward, its alderman, or one of its neighborhoods.',
       'Vote on polls under "On the ballot" if this is your home ward. Results show after you vote. "Past votes" shows the results of closed polls.',
       'Without a home ward, tap "Verify your residency" (with an ID, your votes count in the verified tallies) or "Set your home ward" (no ID needed).',
       'Signed out, tap "Sign in to vote and comment".',
+      'Tap the bell at the top to see your notifications. A number on it counts the ones you haven\'t opened.',
     ],
   },
   '(tabs)/election': {
-    what: 'Your next two ballots, each in its own color band. The red bands hold the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race.',
+    what: 'Your next two ballots, each in its own color band, the sooner one first. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race. The red band below it holds the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. Mayoral candidates are listed in random order, so no one is always first.',
     can: [
       'Tap a box under the header, such as "judges" or "ward races", to jump to that section. Tap the countdown line to jump to the November ballot.',
       'Tap "Find my races" and enter your address once to see the races on your ballot first. Only the district numbers are kept, never the address.',
@@ -49,9 +55,31 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap a race, a district number, or a ward number to see who is running. "Your ward" shows your alderman\'s record next to their challengers.',
       'Use the "When and where to vote" links to register, apply for or track a mail ballot, find early voting sites, or find your polling place.',
       'Tap "Open the guide" for Injustice Watch\'s reporting on every judge on the ballot.',
+      'Tap the bell at the top to see your notifications. A number on it counts the ones you haven\'t opened.',
     ],
   },
-  '(tabs)/notifications': {
+  '(tabs)/news': {
+    what: 'Headlines from every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites, newest first. The app never ranks them or hides any. Below the list are the newsrooms that are not included, and why.',
+    can: [
+      'Tap a headline to read the story on the newsroom\'s own site.',
+      'Tap your ward to see only stories that name your home ward, its alderman, or one of its neighborhoods. Tap "All Chicago" to see everything again. A "Your ward" tag marks those stories in the full list.',
+      'Tap "Sources" to turn newsrooms or story languages off or back on.',
+      'Tap "Show more" at the bottom to load 30 more headlines.',
+      'Tap "See why" to read why a newsroom is not included.',
+      'Tap the bell at the top to see your notifications. A number on it counts the ones you haven\'t opened.',
+    ],
+  },
+  'news-sources': {
+    what: 'Which newsrooms and story languages your news tab shows, and the newsrooms that are not included, with why. Every included newsroom is on until you turn it off.',
+    can: [
+      'Turn a newsroom\'s switch off to hide its headlines, or back on to show them again.',
+      'Under "Story languages", turn off a language to hide stories written in it. Headlines are never translated.',
+      'Tap "Show every source" to turn everything back on.',
+      'Under "Not included", tap a newsroom\'s name to visit its site.',
+      'Signed in, your choices are saved to your account and follow you to other devices. Signed out, they are saved on this device.',
+    ],
+  },
+  'notifications': {
     what: 'Things sent to you, newest first: answers to your questions, comments on your posts, replies to your comments, writing credits, voting deadline reminders, and notices about verification or posting limits. Officials also get new questions here.',
     can: [
       'Tap a notification to open the exact item it is about. Opening it marks it read.',
@@ -71,6 +99,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap "Unblock" next to anyone under "Blocked users" to see their posts again.',
       'Tap "Settings" (the gear) for language, phone notifications, and account options. Tap "Sign out" and confirm to leave.',
       'Signed out, tap "Sign in or create account", or open "Settings" or "Privacy & data".',
+      'Tap the bell at the top to see your notifications. A number on it counts the ones you haven\'t opened.',
     ],
   },
   '(tabs)/command#official': {
@@ -83,6 +112,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap "Edit my card" to change your bio, your portrait link, and the "Question alert threshold", the number of joins at which a question sends you an alert.',
       'If asked, tap "Send confirmation email" and then "I confirmed it". Until then you can read but not respond, post, or edit.',
       'Tap "View your public page" to see it exactly as voters do.',
+      'Tap the bell at the top to see your notifications. A number on it counts the ones you haven\'t opened.',
     ],
   },
   '(tabs)/command#candidate': {
@@ -95,6 +125,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap "Add a policy", or tap any policy to edit it. A policy you added yourself, not imported from your site, can also be hidden or deleted there.',
       'If your platform comes from your campaign site, tap "Sync from my site" to update it now instead of waiting for the nightly sync. Editing an imported policy stops future syncs from changing it.',
       'If asked, tap "Send confirmation email" and then "I confirmed it". Until then you can read but not answer, post, or edit.',
+      'Tap the bell at the top to see your notifications. A number on it counts the ones you haven\'t opened.',
     ],
   },
   'concern/[id]': {
@@ -119,6 +150,8 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Under an answered question, tap "Continue the conversation" to reply to the official and other readers.',
       'On your own question, tap "Edit" or "Withdraw my question". Both are available until the official responds.',
       'Tap the info icon by "Answers" to see how grading works, or a vote under "Voting record" to see it at the Clerk. The flag icon reports or blocks, and the share icon sends a web link.',
+      'Tap "Ward newsletter" to read the ward office\'s past newsletters or sign up for them.',
+      'Under "In the news", tap a headline to read a recent story that names them.',
     ],
   },
   'officials': {
@@ -201,7 +234,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
     what: 'One Chicago school board race on the November 3, 2026 ballot. It lists each nominee with the first lines of what they are running on. The line under the title tells you who votes in this race: every Chicagoan, or only that district\'s residents.',
     can: [
       'Tap a nominee\'s card to open their full card, with what they are running on, their background, their campaign site and the sources.',
-      'Compare nominees on this page by the preview of what each is running on and the "Incumbent" chip.',
+      'Compare nominees on this page by the preview of what each is running on and the "CTU endorsed" and "Incumbent" chips.',
       'Look under "Write-in candidates" for declared write-ins, whose names are not printed on the ballot, and read how to write one in.',
       'Find your school board district with "Find my races" on the election tab. School board districts do not follow ward lines.',
     ],
@@ -213,6 +246,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Read "Running on" for what they say they will do, and "Background" for their work history.',
       'Tap a link under "Compiled from public sources:" to see where this card\'s text came from.',
       'If they have a "Write-in" chip, tap "How to mark your ballot (Board of Elections)" to learn how to write in a name.',
+      'A "CTU endorsed" chip means the Chicago Teachers Union endorsed them. The union\'s slate is listed under "Compiled from public sources:".',
     ],
   },
   'ward-race/[ward]': {

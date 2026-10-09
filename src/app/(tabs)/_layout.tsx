@@ -1,13 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { collection, limit, query, where } from 'firebase/firestore';
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
 
 import { useAuth } from '@/hooks/use-auth';
-import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
-import { db } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
 
 export default function TabsLayout() {
@@ -15,21 +12,7 @@ export default function TabsLayout() {
   const theme = useTheme();
   const t = useT();
   const { profile } = useAuth();
-  // Unread count for the notifications tab badge. Capped at 10 reads; the
-  // badge shows "9+" past that.
-  const { data: unread } = useLiveQuery<{ id: string }>(
-    () =>
-      profile
-        ? query(
-            collection(db, 'users', profile.uid, 'notifications'),
-            where('read', '==', false),
-            limit(10)
-          )
-        : null,
-    [profile?.uid]
-  );
   const isPolitician = profile?.role === 'official' || profile?.role === 'candidate';
-  const badge = unread.length === 0 ? undefined : unread.length > 9 ? '9+' : unread.length;
   return (
     <Tabs
       screenOptions={{
@@ -38,10 +21,10 @@ export default function TabsLayout() {
         // Android resizes the window for the keyboard; without this the tab
         // bar rides up and sits on top of it. No effect on iOS.
         tabBarHideOnKeyboard: true,
-        // Five labels (six for politicians) share the width, and
-        // "notifications" is the long one:
-        // on a 320pt phone, or with large system text, it was cut to
-        // "notificati...". Labels stay at their designed size (tab bars do
+        // Five labels (six for politicians) share the width. When
+        // "notifications" was a tab, a 320pt phone or large system text cut
+        // it to "notificati..." (it is the bell at the top since 2026-10-07).
+        // Labels stay at their designed size (tab bars do
         // not follow the text-size setting on either platform) and step down
         // a point on narrow screens so every word fits whole.
         tabBarAllowFontScaling: false,
@@ -76,22 +59,20 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="news"
+        options={{
+          title: t('news'),
+          tabBarIcon: ({ color, size }) => <Ionicons name="newspaper" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="election"
         options={{
           title: t('election'),
           tabBarIcon: ({ color, size }) => <Ionicons name="ribbon" size={size} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="notifications"
-        options={{
-          title: t('notifications'),
-          tabBarBadge: badge,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="notifications" size={size} color={color} />
-          ),
-        }}
-      />
+
       {/* Only officials and candidates have a command center; for everyone
           else the tab is not there at all. */}
       <Tabs.Screen

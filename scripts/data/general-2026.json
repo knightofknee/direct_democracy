@@ -1137,7 +1137,7 @@
       "party": null,
       "incumbent": true,
       "website": null,
-      "photoUrl": null,
+      "photoUrl": "https://cookcountyjudges.org/wp-content/uploads/2026/08/Headshot-Carroll-520x650.jpg",
       "court": "Circuit Court of Cook County",
       "seat": null,
       "runningOn": "Appointed to the Circuit Court in 2011 and elected in 2014; a supervising judge in the misdemeanor section at the Markham courthouse. Injustice Watch reports that he was one of three judges who withdrew from 2012 primary races against candidates favored by the Cook County Democratic Party and were then reappointed by the Illinois Supreme Court, and that his exit cleared a path for Daniel R. Degnan. It also reports that he has family ties to former Ald. Ed Burke, whose wife, Anne, sat on the Supreme Court at the time. A judge stays on the bench with a yes from 60 percent of voters.",
@@ -2889,13 +2889,8 @@
       "race": "judicial-circuit",
       "party": "Democratic",
       "incumbent": false,
-      "website": "https://toledoforjudge.com/",
-      "photoUrl": "https://toledoforjudge.com/wp-content/uploads/2025/08/LMT-Hero.png",
-      "photoFrame": {
-        "x": 0.339,
-        "y": 0.292,
-        "zoom": 1.91
-      },
+      "website": null,
+      "photoUrl": "https://wbaillinois.org/wp-content/uploads/2025/09/Luz-Maria-Toledo-1.jpg",
       "seat": "Vacancy of Hon. Cynthia Y. Cobbs",
       "court": null,
       "runningOn": "Cook County assistant state's attorney since 2007, now in the civil bureau after 11 years prosecuting criminal cases; defeated appointed judge Linda Sackey in the primary, 56.83% to 43.17%.",
@@ -5278,7 +5273,7 @@
       "runningOn": "Has not published a platform for this race that we could find.",
       "priorCareer": null,
       "sourceUrls": [
-        "https://test.ivoterguide.com/voter-guide/state/Illinois/?canK=39301&elecK=545&primarypartyk=R&raceK=1350"
+        "https://ivoterguide.com/candidate/89284/race/29723/election/1443"
       ],
       "runningOnEs": "No ha publicado una plataforma para esta contienda que pudiéramos encontrar.",
       "priorCareerEs": null

@@ -25,6 +25,19 @@ import { useT } from '@/lib/i18n';
  * scripts/build-ward-map.ts.
  */
 
+/**
+ * A ward shape's tap. On the web, react-native-svg turns onPress into a
+ * click AND hands touch-responder props to the DOM <path>, which React
+ * reports as unknown (six console errors per map). A plain click does the
+ * job there; onPress must be null, not absent, or the library overwrites
+ * the click with undefined.
+ */
+function pickHandler(pick: () => void): { onPress: () => void } {
+  return Platform.OS === 'web'
+    ? ({ onPress: null, onClick: pick } as unknown as { onPress: () => void })
+    : { onPress: pick };
+}
+
 const MAX_SCALE = 8;
 const ZOOM_STEP = 2;
 const TIMING = { duration: 220, easing: Easing.out(Easing.cubic) };
@@ -136,7 +149,7 @@ export function WardMap({
                     stroke={w.id === homeWard ? theme.primary : theme.border}
                     strokeWidth={w.id === homeWard ? 3 : 1.5}
                     fillRule="evenodd"
-                    onPress={() => onPick(w.id)}
+                    {...pickHandler(() => onPick(w.id))}
                   />
                 ))}
                 {shapes.map((w) => (

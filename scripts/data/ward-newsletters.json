@@ -1,0 +1,497 @@
+[
+  {
+    "ward": 1,
+    "alderman": "Daniel La Spata",
+    "url": "https://us4.campaign-archive.com/home/?u=e4d2e8115e36fe98f1fbf8f5f&id=218af5f0b5",
+    "sourceUrl": "https://www.the1stward.com/newsletter",
+    "rssUrl": "https://us4.campaign-archive.com/feed?u=e4d2e8115e36fe98f1fbf8f5f&id=218af5f0b5",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 2,
+    "alderman": "Brian Hopkins",
+    "url": "https://us11.campaign-archive.com/home/?u=936879b99e79c41d6215b423f&id=3a38d3733c",
+    "sourceUrl": "https://www.aldermanhopkins.com/past-newsletters",
+    "rssUrl": "https://us11.campaign-archive.com/feed?u=936879b99e79c41d6215b423f&id=3a38d3733c",
+    "note": "Mailchimp weekly",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 3,
+    "alderman": "Pat Dowell",
+    "url": "https://ward03chicago.com/newsletters/",
+    "sourceUrl": "https://ward03chicago.com/newsletters/",
+    "rssUrl": null,
+    "archiveUrl": "https://ward03chicago.com/newsletters/",
+    "note": "Constant Contact monthly",
+    "inbox": "receiving since 2026-10-07",
+    "checked": "2026-10-05",
+    "senders": [
+      "brifred4-gmail.com@shared1.ccsend.com",
+      "ward03@cityofchicago.org"
+    ]
+  },
+  {
+    "ward": 4,
+    "alderman": "Lamont J. Robinson",
+    "url": "https://www.robinson4thward.com/newsletters",
+    "sourceUrl": "https://www.robinson4thward.com/newsletters",
+    "rssUrl": null,
+    "note": "Google Form signup on the ward site, biweekly, no archive",
+    "inbox": "signed up 2026-10-05; no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 5,
+    "alderman": "Desmon C. Yancy",
+    "url": null,
+    "sourceUrl": null,
+    "rssUrl": null,
+    "note": "Constant Contact newsletter exists; no public signup (email ward05@cityofchicago.org); dataset website is now spam",
+    "inbox": "to request by email from the inbox",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 6,
+    "alderman": "William E. Hall",
+    "url": "https://www.6wardchicago.com/general-5",
+    "sourceUrl": "https://www.6wardchicago.com/",
+    "rssUrl": null,
+    "archiveUrl": "https://www.6wardchicago.com/general-5",
+    "archiveOldestFirst": true,
+    "note": "Constant Contact monthly archive",
+    "inbox": "signed up 2026-10-05; no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 7,
+    "alderman": "Gregory I. Mitchell",
+    "url": "https://www.gregmitchell7thward.org/news-letter-sign-up-form",
+    "sourceUrl": "https://www.gregmitchell7thward.org/news-letter-sign-up-form",
+    "rssUrl": null,
+    "note": "Jotform signup; may have no issues yet",
+    "inbox": "form submitted 2026-10-05 (Jotform receipt); no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 8,
+    "alderman": "Michelle A. Harris",
+    "url": null,
+    "sourceUrl": null,
+    "rssUrl": null,
+    "note": "only list found is on a likely campaign site (aldermanmichelleharris.com); left out",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 9,
+    "alderman": "Anthony Beale",
+    "url": "https://lp.constantcontactpages.com/sl/dHU8ciL",
+    "sourceUrl": "https://www.ward09.com/",
+    "rssUrl": null,
+    "note": "Constant Contact signup behind bot check, linked from ward homepage",
+    "inbox": "subscribed 2026-10-05 (welcome email received)",
+    "checked": "2026-10-05",
+    "senders": [
+      "09th.ward-gmail.com@shared1.ccsend.com"
+    ]
+  },
+  {
+    "ward": 10,
+    "alderman": "Peter Chico",
+    "url": "https://us21.campaign-archive.com/home/?u=b920346c78f4bf621c51f1999&id=9e680ec8aa",
+    "sourceUrl": "https://www.aldermanchico.org/",
+    "rssUrl": "https://us21.campaign-archive.com/feed?u=b920346c78f4bf621c51f1999&id=9e680ec8aa",
+    "note": "Mailchimp, archive found via issue footer",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 11,
+    "alderman": "Nicole T. Lee",
+    "url": "https://visitor.constantcontact.com/d.jsp?m=zsabxyiab&p=oi",
+    "sourceUrl": "https://www.nwnachicago.org/knowledge_hub__ward_newsletters.php",
+    "rssUrl": null,
+    "note": "Constant Contact signup titled for Alderman Nicole T. Lee; no ward site",
+    "inbox": "subscribed, confirmed by Brian by 2026-10-07",
+    "checked": "2026-10-05",
+    "senders": [
+      "nicolelee11thwardchi-gmail.com@shared1.ccsend.com",
+      "ward11@cityofchicago.org"
+    ]
+  },
+  {
+    "ward": 12,
+    "alderman": "Julia M. Ramirez",
+    "url": "https://us9.campaign-archive.com/home/?u=10838c7fa3fe9c9630d1f137e&id=0f14214e36",
+    "sourceUrl": "https://www.the12thward.org/community-engagement",
+    "rssUrl": "https://us9.campaign-archive.com/feed?u=10838c7fa3fe9c9630d1f137e&id=0f14214e36",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 13,
+    "alderman": "Marty Quinn",
+    "url": null,
+    "sourceUrl": null,
+    "rssUrl": null,
+    "note": "none found",
+    "inbox": "to request by email from the inbox",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 14,
+    "alderman": "Jeylu B. Gutierrez",
+    "url": null,
+    "sourceUrl": null,
+    "rssUrl": null,
+    "note": "ward site chicago14.com down; recheck",
+    "inbox": "to request by email from the inbox",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 15,
+    "alderman": "Raymond A. Lopez",
+    "url": "https://us13.campaign-archive.com/home/?u=6b19864f9881e59e2ce9cc061&id=7006c8a18d",
+    "sourceUrl": "https://www.the15thward.org",
+    "rssUrl": "https://us13.campaign-archive.com/feed?u=6b19864f9881e59e2ce9cc061&id=7006c8a18d",
+    "note": "Mailchimp, quiet since 2026-08-14",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 16,
+    "alderman": "Stephanie D. Coleman",
+    "url": "https://www.16thward.org/media",
+    "sourceUrl": "https://www.16thward.org/media",
+    "rssUrl": null,
+    "archiveUrl": "https://www.16thward.org/media",
+    "note": "Constant Contact, current issue embedded, popup signup",
+    "inbox": "signed up 2026-10-05; no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 17,
+    "alderman": "David H. Moore",
+    "url": "https://lp.constantcontactpages.com/sl/3CSCBmx",
+    "sourceUrl": "https://www.17thwardalderman.com/",
+    "rssUrl": null,
+    "note": "Constant Contact signup behind bot check",
+    "inbox": "signed up 2026-10-05; no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 18,
+    "alderman": "Derrick G. Curtis",
+    "url": "https://www.chicago.gov/content/dam/city/about/wards/18/2021/Join-Newsletter.pdf",
+    "sourceUrl": "https://www.chicago.gov/content/dam/city/about/wards/18/2021/Join-Newsletter.pdf",
+    "rssUrl": null,
+    "note": "text Ward18 to 22828; city flyer",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 19,
+    "alderman": "Matthew J. O'Shea",
+    "url": "https://www.19thwardmobile.com/communitynewspaper/",
+    "sourceUrl": "https://www.19thwardmobile.com/quarterly/",
+    "rssUrl": null,
+    "note": "printed 19th Ward Quarterly PDFs; email list is campaign's, left out",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 20,
+    "alderman": "Jeanette B. Taylor",
+    "url": "https://www.ward20th.com/",
+    "sourceUrl": "https://www.ward20th.com/",
+    "rssUrl": null,
+    "note": "Wix signup on homepage",
+    "inbox": "receiving since 2026-10-06",
+    "checked": "2026-10-05",
+    "senders": [
+      "20thwardmikiya@164150218.mailchimpapp.com"
+    ]
+  },
+  {
+    "ward": 21,
+    "alderman": "Ronnie L. Mosley",
+    "url": "https://lp.constantcontactpages.com/sl/W9vuH3b",
+    "sourceUrl": "https://www.aldmosley21.com/in21",
+    "rssUrl": null,
+    "note": "Constant Contact signup (unlisted page) does not work (tried 2026-10-05); subscription requested by email to Ward21@cityofchicago.org",
+    "inbox": "signup form failed 2026-10-05; retry, else email the office",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 22,
+    "alderman": "Michael D. Rodriguez",
+    "url": "https://us8.campaign-archive.com/home/?u=2c0d261178255fd4187387663&id=3dd1066fc2",
+    "sourceUrl": "https://www.22ndward.org/newsletter-signup-archive",
+    "rssUrl": "https://us8.campaign-archive.com/feed?u=2c0d261178255fd4187387663&id=3dd1066fc2",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 23,
+    "alderman": "Silvana Tabares",
+    "url": "https://us21.campaign-archive.com/home/?u=81460381e362d23f978cc4424&id=9dfe1b0fd8",
+    "sourceUrl": "https://www.ward23.org/subscribe.html",
+    "rssUrl": "https://us21.campaign-archive.com/feed?u=81460381e362d23f978cc4424&id=9dfe1b0fd8",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 24,
+    "alderman": "Monique L. Scott",
+    "url": null,
+    "sourceUrl": null,
+    "rssUrl": null,
+    "note": "only a Wix mailing-list box on a site with campaign links and no issues ever found; left out",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 25,
+    "alderman": "Byron Sigcho-Lopez",
+    "url": "https://us9.campaign-archive.com/home/?u=0651e58ec8448097c60b58b42&id=6aa1410b4b",
+    "sourceUrl": "https://25thward.org/news/newsletter/",
+    "rssUrl": "https://us9.campaign-archive.com/feed?u=0651e58ec8448097c60b58b42&id=6aa1410b4b",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 26,
+    "alderman": "Jessie Fuentes",
+    "url": "https://us22.campaign-archive.com/home/?u=bf08a3dd2f90bb68ee9f90ce7&id=23f2f00458",
+    "sourceUrl": "https://www.the26thward.org/newsletter",
+    "rssUrl": "https://us22.campaign-archive.com/feed?u=bf08a3dd2f90bb68ee9f90ce7&id=23f2f00458",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 27,
+    "alderman": "Walter Burnett",
+    "url": "https://building27together.com/blog",
+    "sourceUrl": "https://building27together.com/",
+    "rssUrl": null,
+    "note": "own site, 2 issues posted, latest 2026-06-15",
+    "inbox": "signed up 2026-10-05; no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 28,
+    "alderman": "Jason C. Ervin",
+    "url": "https://api.leadconnectorhq.com/widget/form/KFbXjJ7ROtjE4TbedG6a",
+    "sourceUrl": "https://www.aldermanervin.com/",
+    "rssUrl": null,
+    "note": "LeadConnector signup form from site footer",
+    "inbox": "signed up 2026-10-05; no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 29,
+    "alderman": "Chris Taliaferro",
+    "url": "https://us3.campaign-archive.com/home/?u=e5a8ec59957fdde111c4b0b83&id=b1416506a2",
+    "sourceUrl": "https://aldtaliaferro.com/",
+    "rssUrl": "https://us3.campaign-archive.com/feed?u=e5a8ec59957fdde111c4b0b83&id=b1416506a2",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 30,
+    "alderman": "Ruth Cruz",
+    "url": "https://us21.campaign-archive.com/home/?u=a3dd4bebd8f73bbc76ca91dd9&id=31003aea06",
+    "sourceUrl": "https://www.30thward.org/news-and-events/newsletter-archive",
+    "rssUrl": "https://us21.campaign-archive.com/feed?u=a3dd4bebd8f73bbc76ca91dd9&id=31003aea06",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 31,
+    "alderman": "Felix Cardona Jr.",
+    "url": "https://www.ward31.org/blank-2",
+    "sourceUrl": "https://www.ward31.org/blank-2",
+    "rssUrl": null,
+    "archiveUrl": "https://www.ward31.org/blank-2",
+    "note": "Constant Contact archive, newest linked issue May 2025",
+    "inbox": "signup form failed 2026-10-05; retry, else email the office",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 32,
+    "alderman": "Scott Waguespack",
+    "url": "https://www.ward32.org/newsletter-archives",
+    "sourceUrl": "https://www.ward32.org/",
+    "rssUrl": null,
+    "archiveUrl": "https://www.ward32.org/newsletter-archives",
+    "note": "Constant Contact weekly",
+    "inbox": "signup form failed 2026-10-05; retry, else email the office",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 33,
+    "alderman": "Rossana Rodriguez Sanchez",
+    "url": "https://33rdward.org/subscribe/",
+    "sourceUrl": "https://33rdward.org/subscribe/",
+    "rssUrl": "https://us18.campaign-archive.com/feed?u=ac478f7a600f8adae5ddc719b&id=eb65a17eb7",
+    "note": "Mailchimp weekly",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 34,
+    "alderman": "Bill Conway",
+    "url": "https://www.ward34.org/newsletter/",
+    "sourceUrl": "https://www.ward34.org/newsletter/",
+    "rssUrl": "https://www.ward34.org/newsletter/feed/",
+    "note": "WordPress posts, Indigov signup",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 35,
+    "alderman": "Anthony Quezada",
+    "url": "https://www.ward35.org/newsletter-archive",
+    "sourceUrl": "https://www.ward35.org/",
+    "rssUrl": "https://us12.campaign-archive.com/feed?u=950c3409d0f7bccd5248e442e&id=1434e33d83",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 36,
+    "alderman": "Gilbert Villegas",
+    "url": "https://us17.campaign-archive.com/home/?u=aa980507f4a24eaeedfa0789c&id=f119d0fe55",
+    "sourceUrl": "https://36thward.org/sign-up/",
+    "rssUrl": "https://us17.campaign-archive.com/feed?u=aa980507f4a24eaeedfa0789c&id=f119d0fe55",
+    "note": "Mailchimp monthly, archive from the site's signup form list id",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 37,
+    "alderman": "Emma Mitts",
+    "url": null,
+    "sourceUrl": null,
+    "rssUrl": null,
+    "note": "none found; email ward37@cityofchicago.org",
+    "inbox": "to request by email from the inbox",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 38,
+    "alderman": "Nicholas Sposato",
+    "url": null,
+    "sourceUrl": "https://aldermansposato.com/",
+    "rssUrl": null,
+    "note": "Constant Contact, signup button broken, no public archive",
+    "inbox": "to request by email from the inbox",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 39,
+    "alderman": "Samantha Nugent",
+    "url": "https://us20.campaign-archive.com/home/?u=b3086b1a32a22354c9c6ae858&id=5691c1a572",
+    "sourceUrl": "https://www.aldermannugent.com/newsletter",
+    "rssUrl": "https://us20.campaign-archive.com/feed?u=b3086b1a32a22354c9c6ae858&id=5691c1a572",
+    "note": "Mailchimp biweekly",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 40,
+    "alderman": "Andre Vasquez",
+    "url": "https://us20.campaign-archive.com/home/?u=15bbb3d16e48313aee73541bb&id=2196cdf991",
+    "sourceUrl": "https://40thward.org/",
+    "rssUrl": "https://us20.campaign-archive.com/feed?u=15bbb3d16e48313aee73541bb&id=2196cdf991",
+    "note": "Mailchimp weekly",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 41,
+    "alderman": "Anthony Napolitano",
+    "url": "https://visitor.r20.constantcontact.com/d.jsp?llr=zcyk7suab&p=oi&m=1121620156505&sit=8jmkgc9jb&f=3b3519ca-a4af-4d02-9ed6-33a92b1c3554",
+    "sourceUrl": "https://www.chicago41.com/",
+    "rssUrl": null,
+    "note": "Constant Contact signup paid for by the campaign committee; the only list the ward site offers",
+    "inbox": "signup form failed 2026-10-05; retry, else email the office",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 42,
+    "alderman": "Brendan Reilly",
+    "url": "https://ward42chicago.com/reilly-reports/",
+    "sourceUrl": "https://ward42chicago.com/reilly-reports/",
+    "rssUrl": null,
+    "archiveUrl": "https://ward42chicago.com/reilly-reports/",
+    "note": "Reilly Reports weekly, Constant Contact",
+    "inbox": "signup form failed 2026-10-05; retry, else email the office",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 43,
+    "alderman": "Timmy Knudsen",
+    "url": null,
+    "sourceUrl": null,
+    "rssUrl": null,
+    "note": "Indigov newsletter exists; site's newsletter links all broken",
+    "inbox": "to request by email from the inbox",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 44,
+    "alderman": "Bennett Lawson",
+    "url": "https://us14.campaign-archive.com/home/?u=8b318f91a566aafb49537c87f&id=ca354e8f65",
+    "sourceUrl": "https://www.44thward.org/news/newsletter-archive/",
+    "rssUrl": "https://us14.campaign-archive.com/feed?u=8b318f91a566aafb49537c87f&id=ca354e8f65",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 45,
+    "alderman": "James M. Gardiner",
+    "url": "https://www.aldermangardiner.com/",
+    "sourceUrl": "https://www.aldermangardiner.com/",
+    "rssUrl": null,
+    "note": "popup signup on homepage, Constant Contact",
+    "inbox": "signed up 2026-10-05; no mail yet",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 46,
+    "alderman": "Angela Clay",
+    "url": "https://us14.campaign-archive.com/home/?u=f168517d7959ad4004b872f59&id=ddd7304b94",
+    "sourceUrl": "https://www.46thward.com/newsletter",
+    "rssUrl": "https://us14.campaign-archive.com/feed?u=f168517d7959ad4004b872f59&id=ddd7304b94",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 47,
+    "alderman": "Matt Martin",
+    "url": "https://www.aldermanmartin.com/",
+    "sourceUrl": "https://www.aldermanmartin.com/current-business",
+    "rssUrl": null,
+    "note": "footer subscribe form; newest public issue 2023",
+    "inbox": "subscribed, confirmed by Brian by 2026-10-07",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 48,
+    "alderman": "Leni Manaa-Hoppenworth",
+    "url": "https://us17.campaign-archive.com/home/?u=659f51a084e844199c9a94275&id=f38d0d9246",
+    "sourceUrl": "https://the48thward.org/newsletter",
+    "rssUrl": "https://us17.campaign-archive.com/feed?u=659f51a084e844199c9a94275&id=f38d0d9246",
+    "note": "Mailchimp weekly",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 49,
+    "alderman": "Maria Hadden",
+    "url": "https://us18.campaign-archive.com/home/?u=74fbef47485a9e61dfb381788&id=3f880bff9b",
+    "sourceUrl": "https://www.49thward.org/newsletter-archive",
+    "rssUrl": "https://us18.campaign-archive.com/feed?u=74fbef47485a9e61dfb381788&id=3f880bff9b",
+    "note": "Mailchimp",
+    "checked": "2026-10-05"
+  },
+  {
+    "ward": 50,
+    "alderman": "Debra Silverstein",
+    "url": "https://us2.campaign-archive.com/home/?u=fe0fd833e900e534be0deac93&id=d9b54b7a4e",
+    "sourceUrl": "https://50thward.org/",
+    "rssUrl": "https://us2.campaign-archive.com/feed?u=fe0fd833e900e534be0deac93&id=d9b54b7a4e",
+    "note": "Mailchimp weekly",
+    "checked": "2026-10-05"
+  }
+]

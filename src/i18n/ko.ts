@@ -1168,8 +1168,6 @@ export const KO: Record<string, string> = {
     '댓글: {n}개, 최신 댓글 {ago}.',
   'Compare candidates on this page. Each card shows their party, an "Incumbent" chip if they hold the seat, and a preview of what they are running on.':
     '이 페이지에서 후보를 비교하세요. 각 카드에는 정당, 현재 의석을 가진 경우 “현직” 표시, 주요 공약 미리보기가 나와요.',
-  'Compare nominees on this page by the preview of what each is running on and the "Incumbent" chip.':
-    '이 페이지에서 각 후보의 주요 공약 미리보기와 “현직” 표시로 후보를 비교하세요.',
   'Compare the challengers under "Declared challengers" by background and a preview of what each is running on. Tap one to see their full card.':
     '“출마 선언한 도전자”에서 도전자들의 배경과 주요 공약 미리보기를 비교하세요. 한 명을 누르면 전체 카드를 볼 수 있어요.',
   'Concerns on the big board: {n}.':
@@ -1690,8 +1688,8 @@ export const KO: Record<string, string> = {
     '내 거주 선거구: {ward}, 신분증 없이 설정함.',
   'Your home ward: the {ward}, verified.':
     '내 거주 선거구: {ward}, 인증됨.',
-  'Your next two ballots, each in its own color band. The red bands hold the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race.':
-    '다음 두 번의 선거를 각각 색 띠로 보여줘요. 빨간 띠에는 2027년 2월 23일 선거가 있어요: 시장, 모든 시장 후보에게 하는 질문, 선거구 선거. 파란 띠에는 11월 3일 선거가 있어요: 내 선거, 투표 방법, 모든 주, 카운티, 교육위원회, 판사, 선거구역 선거.',
+  'Your next two ballots, each in its own color band, the sooner one first. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race. The red band below it holds the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. Mayoral candidates are listed in random order, so no one is always first.':
+    '다음 두 번의 선거를 각각 색 띠로, 가까운 선거부터 보여줘요. 파란 띠에는 11월 3일 선거가 있어요: 내 선거, 투표 방법, 모든 주, 카운티, 교육위원회, 판사, 선거구역 선거. 그 아래 빨간 띠에는 2027년 2월 23일 선거가 있어요: 시장, 모든 시장 후보에게 하는 질문, 선거구 선거. 시장 후보는 아무도 늘 맨 앞에 오지 않도록 무작위 순서로 보여줘요.',
   'Your profile is not claimed yet.':
     '아직 프로필 소유권을 확인하지 않았어요.',
   'Your races are listed first, from your address in the {ward}.':
@@ -1710,4 +1708,206 @@ export const KO: Record<string, string> = {
     '{place}, {name}님이 {ago}에 게시.',
   '“{title}”, from the platform of {name}.':
     '“{title}”, {name}의 공약에서.',
+  'CTU endorsed':
+    'CTU 지지',
+  'Endorsed by the Chicago Teachers Union: {names}.':
+    '시카고 교사 노조(CTU) 지지: {names}.',
+  'Endorsed by the Chicago Teachers Union.':
+    '시카고 교사 노조(CTU)의 지지를 받습니다.',
+  'Compare nominees on this page by the preview of what each is running on and the "CTU endorsed" and "Incumbent" chips.':
+    '이 페이지에서 각 후보의 주요 공약 미리보기와 “CTU 지지”, “현직” 표시로 후보를 비교하세요.',
+  'A "CTU endorsed" chip means the Chicago Teachers Union endorsed them. The union\'s slate is listed under "Compiled from public sources:".':
+    '“CTU 지지” 표시는 시카고 교사 노조가 이 후보를 지지했다는 뜻입니다. 노조의 지지 명단은 “공개 자료를 바탕으로 정리:” 아래에 있습니다.',
+  'Ward newsletter':
+    '선거구 소식지',
+  'Tap "Ward newsletter" to read the ward office\'s past newsletters or sign up for them.':
+    '“선거구 소식지”를 눌러 선거구 사무실의 지난 소식지를 읽거나 구독하세요.',
+  'Take part':
+    '참여하기',
+  'Where decisions about this ward get made, and when you can be heard.':
+    '이 선거구에 관한 결정이 어디서 내려지는지, 언제 의견을 낼 수 있는지 알려 드립니다.',
+  'Ward meetings':
+    '선거구 회의',
+  'Development':
+    '개발',
+  'Online':
+    '온라인',
+  'As announced in the ward office’s newsletter. Tap a meeting for its details or RSVP.':
+    '선거구 사무실 소식지에 공지된 내용입니다. 회의를 누르면 세부 정보나 참석 신청을 볼 수 있습니다.',
+  'Development and zoning':
+    '개발 및 용도지역',
+  'No zoning changes or development hearings are pending in this ward right now.':
+    '현재 이 선거구에 대기 중인 용도지역 변경이나 개발 청문회가 없습니다.',
+  'Show fewer':
+    '접기',
+  'Show all {n}':
+    '{n}개 모두 보기',
+  'Committee on Zoning hearings: anyone may speak for up to 3 minutes in the public comment period, or send written comment by the deadline.':
+    '용도지역 위원회 청문회: 누구나 공개 의견 시간에 최대 3분간 발언하거나, 마감 전에 서면 의견을 낼 수 있습니다.',
+  'Zoning Board of Appeals: anyone may comment by signing in on the day. Owners within 100 feet (variations) or 250 feet (special uses) can register by 9 AM the Tuesday before to question the applicant.':
+    '용도지역 항소위원회: 누구나 당일 서명하고 의견을 낼 수 있습니다. 100피트(예외 허가) 또는 250피트(특별 용도) 이내의 소유주는 직전 화요일 오전 9시까지 등록하면 신청인에게 질문할 수 있습니다.',
+  'Zoning Board of Appeals participation rules':
+    '용도지역 항소위원회 참여 규칙',
+  'Plan Commission hearing page':
+    '도시계획위원회 청문회 페이지',
+  'Planned Development':
+    '계획 개발',
+  'Special use':
+    '특별 용도',
+  'Variation':
+    '예외 허가',
+  'Zoning change':
+    '용도지역 변경',
+  'Hearing: {body}, {when}':
+    '청문회: {body}, {when}',
+  'Filed {date}. No hearing set yet.':
+    '{date} 제출. 아직 청문회 일정이 없습니다.',
+  'No hearing set yet.':
+    '아직 청문회 일정이 없습니다.',
+  'Written comment deadline: {date}':
+    '서면 의견 마감: {date}',
+  'This ward is in police district {list}. Its elected council holds public meetings on policing in the district.':
+    '이 선거구는 경찰 관할구 {list}에 속합니다. 선출된 관할구 위원회가 관할구 치안에 관한 공개 회의를 엽니다.',
+  'This ward spans police districts {list}. Each has an elected council that holds public meetings on policing in the district.':
+    '이 선거구는 경찰 관할구 {list}에 걸쳐 있습니다. 관할구마다 선출된 위원회가 관할구 치안에 관한 공개 회의를 엽니다.',
+  'District {n} council':
+    '{n}관할구 위원회',
+  'Place to be announced':
+    '장소 추후 공지',
+  'Beat meetings with your district’s officers (CPD calendar)':
+    '내 관할구 경찰관과의 순찰구역 회의(CPD 일정표)',
+  'Ward office':
+    '선거구 사무실',
+  'AI summary of the {date} newsletter':
+    '{date} 소식지 AI 요약',
+  'Read the newsletter':
+    '소식지 읽기',
+  'Report a city service problem to 311':
+    '311에 시 서비스 문제 신고',
+  'Committee on Zoning':
+    '용도지역 위원회',
+  'Zoning Board of Appeals':
+    '용도지역 항소위원회',
+  'Plan Commission':
+    '도시계획위원회',
+  'Under "Take part", tap a ward meeting, a zoning item, or a police district council meeting to open it at its source. Ward meetings come from the ward office\'s newsletter; zoning items and police meetings come from the city.':
+    '“참여하기”에서 선거구 회의, 용도지역 안건, 경찰 관할구 위원회 회의를 누르면 원래 출처에서 열립니다. 선거구 회의는 선거구 사무실 소식지에서, 용도지역 안건과 경찰 회의는 시에서 가져옵니다.',
+  'Under "Ward office", tap the address for directions, the phone number to call, or "Ward newsletter" to read past issues or sign up.':
+    '“선거구 사무실”에서 주소를 누르면 길 안내, 전화번호를 누르면 전화, “선거구 소식지”를 누르면 지난 호를 읽거나 구독할 수 있습니다.',
+  'This week in the wards':
+    '이번 주 선거구 소식',
+  'What aldermen told residents in their newsletters, the week of {date}.':
+    '시의원들이 소식지로 주민에게 전한 내용, {date} 주간.',
+  'Each ward’s latest newsletter is summarized on its ward page.':
+    '각 선거구의 최신 소식지 요약은 해당 선거구 페이지에 있습니다.',
+  'newsletter':
+    '개 소식지',
+  'newsletters':
+    '개 소식지',
+  'ward office':
+    '개 선거구 사무실',
+  'ward offices':
+    '개 선거구 사무실',
+  'Under "This week in the wards", read an AI summary of what ward offices told residents in their newsletters this week. Tap "Show more" for all of it.':
+    '“이번 주 선거구 소식”에서 선거구 사무실들이 이번 주 소식지로 주민에게 전한 내용의 AI 요약을 읽으세요. 전체를 보려면 “더 보기”를 누르세요.',
+
+  // News tab and the notifications bell (2026-10-07)
+  "If you turn news sources or story languages off while signed in: which ones, so the choice follows your account.":
+    "로그인한 상태에서 뉴스 출처나 기사 언어를 끄면: 어떤 것을 껐는지, 선택이 계정을 따라가도록 저장해요.",
+  "Newsrooms included: {n}. Turned off by you: {off}.":
+    "포함된 언론사: {n}곳. 내가 끈 곳: {off}곳.",
+  "Headlines showing: {n}.":
+    "보이는 헤드라인: {n}개.",
+  "Showing only stories that name your ward.":
+    "내 선거구가 언급된 기사만 보여 줘요.",
+  "Not included: {names}.":
+    "포함되지 않음: {names}.",
+  "All Chicago":
+    "시카고 전체",
+  "news":
+    "뉴스",
+  "Headlines from {n} newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "시카고를 취재하는 언론사 {n}곳의 헤드라인을 최신순으로 보여 줘요. 누르면 해당 언론사 사이트에서 기사를 읽을 수 있어요.",
+  "Headlines from newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "시카고를 취재하는 언론사의 헤드라인을 최신순으로 보여 줘요. 누르면 해당 언론사 사이트에서 기사를 읽을 수 있어요.",
+  "Sources ({n} off)":
+    "출처 ({n}개 끔)",
+  "You have turned every source off.":
+    "모든 출처를 껐어요.",
+  "Show every source":
+    "모든 출처 보기",
+  "No story in the past two weeks names your ward, its alderman, or its neighborhoods.":
+    "지난 2주 동안 내 선거구, 그 시의원, 그 동네를 언급한 기사가 없어요.",
+  "No headlines yet.":
+    "아직 헤드라인이 없어요.",
+  "See why":
+    "이유 보기",
+  "Your choices are saved to your account.":
+    "선택한 내용은 계정에 저장돼요.",
+  "Your choices are saved on this device.":
+    "선택한 내용은 이 기기에 저장돼요.",
+  "Every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites (the Tranco list) is here. Every one is on until you turn it off. Stories are listed newest first. The app never ranks them or hides any.":
+    "시카고나 일리노이 정부를 취재하고, 공개 피드가 있으며, 가장 인기 있는 웹사이트 100만 곳(Tranco 목록)에 드는 언론사는 모두 여기 있어요. 직접 끄기 전까지 모두 켜져 있어요. 기사는 최신순으로 나와요. 앱은 기사 순위를 매기거나 숨기지 않아요.",
+  "Newsrooms":
+    "언론사",
+  "Its feed is not answering right now.":
+    "지금 이 언론사의 피드가 응답하지 않아요.",
+  "Story languages":
+    "기사 언어",
+  "Headlines stay in the language the newsroom wrote them in.":
+    "헤드라인은 언론사가 쓴 언어 그대로 보여요.",
+  "Not included":
+    "포함되지 않음",
+  "Opens the story on {source}'s site":
+    "{source} 사이트에서 기사를 열어요",
+  "In the news":
+    "뉴스에서",
+  "Stories from the past two weeks that name this ward, its alderman, or one of its neighborhoods.":
+    "지난 2주 동안 이 선거구, 그 시의원, 또는 그 동네 중 한 곳을 언급한 기사예요.",
+  "Stories from the past two weeks that name them.":
+    "지난 2주 동안 이 공직자를 언급한 기사예요.",
+  "Notifications, {n} unread":
+    "알림, 읽지 않음 {n}개",
+  "Notifications":
+    "알림",
+  "Could not save your news choices":
+    "뉴스 설정을 저장하지 못했어요",
+  "News sources":
+    "뉴스 출처",
+  "Its site turns away automated feed readers, so its headlines can't be included without its permission.":
+    "이 언론사 사이트는 자동 피드 리더를 막아서, 허락 없이는 헤드라인을 넣을 수 없어요.",
+  "Its site turns away automated feed readers. We've asked for permission to include its headlines.":
+    "이 언론사 사이트는 자동 피드 리더를 막아요. 헤드라인을 넣어도 되는지 허락을 요청했어요.",
+  "We asked to include its headlines, and it declined.":
+    "헤드라인을 넣어도 되는지 요청했지만 거절했어요.",
+  "Tap the bell at the top to see your notifications. A number on it counts the ones you haven't opened.":
+    "위쪽의 종을 누르면 알림을 볼 수 있어요. 종 위의 숫자는 아직 열지 않은 알림 수예요.",
+  "Under \"In the news\", tap a headline to read a recent story that names this ward, its alderman, or one of its neighborhoods.":
+    "“뉴스에서”에서 헤드라인을 누르면 이 선거구, 그 시의원, 또는 그 동네를 언급한 최근 기사를 읽을 수 있어요.",
+  "Headlines from every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites, newest first. The app never ranks them or hides any. Below the list are the newsrooms that are not included, and why.":
+    "시카고나 일리노이 정부를 취재하고, 공개 피드가 있으며, 가장 인기 있는 웹사이트 100만 곳에 드는 모든 언론사의 헤드라인을 최신순으로 보여 줘요. 앱은 순위를 매기거나 숨기지 않아요. 목록 아래에는 포함되지 않은 언론사와 그 이유가 있어요.",
+  "Tap a headline to read the story on the newsroom's own site.":
+    "헤드라인을 누르면 언론사 사이트에서 기사를 읽을 수 있어요.",
+  "Tap your ward to see only stories that name your home ward, its alderman, or one of its neighborhoods. Tap \"All Chicago\" to see everything again. A \"Your ward\" tag marks those stories in the full list.":
+    "내 선거구를 누르면 내 선거구, 그 시의원, 또는 그 동네를 언급한 기사만 보여요. “시카고 전체”를 누르면 다시 전부 보여요. 전체 목록에서는 그런 기사에 “내 선거구” 표시가 붙어요.",
+  "Tap \"Sources\" to turn newsrooms or story languages off or back on.":
+    "“출처”를 누르면 언론사나 기사 언어를 끄거나 다시 켤 수 있어요.",
+  "Tap \"Show more\" at the bottom to load 30 more headlines.":
+    "아래의 “더 보기”를 누르면 헤드라인 30개를 더 불러와요.",
+  "Tap \"See why\" to read why a newsroom is not included.":
+    "“이유 보기”를 누르면 언론사가 포함되지 않은 이유를 읽을 수 있어요.",
+  "Which newsrooms and story languages your news tab shows, and the newsrooms that are not included, with why. Every included newsroom is on until you turn it off.":
+    "뉴스 탭에 어떤 언론사와 기사 언어가 보이는지, 그리고 포함되지 않은 언론사와 그 이유를 보여 줘요. 포함된 언론사는 직접 끄기 전까지 모두 켜져 있어요.",
+  "Turn a newsroom's switch off to hide its headlines, or back on to show them again.":
+    "언론사 스위치를 끄면 그 헤드라인이 숨겨지고, 다시 켜면 다시 보여요.",
+  "Under \"Story languages\", turn off a language to hide stories written in it. Headlines are never translated.":
+    "“기사 언어”에서 언어를 끄면 그 언어로 쓴 기사가 숨겨져요. 헤드라인은 번역하지 않아요.",
+  "Tap \"Show every source\" to turn everything back on.":
+    "“모든 출처 보기”를 누르면 전부 다시 켜져요.",
+  "Under \"Not included\", tap a newsroom's name to visit its site.":
+    "“포함되지 않음”에서 언론사 이름을 누르면 그 사이트로 가요.",
+  "Signed in, your choices are saved to your account and follow you to other devices. Signed out, they are saved on this device.":
+    "로그인하면 선택한 내용이 계정에 저장되어 다른 기기에서도 그대로예요. 로그아웃 상태에서는 이 기기에 저장돼요.",
+  "Under \"In the news\", tap a headline to read a recent story that names them.":
+    "“뉴스에서”에서 헤드라인을 누르면 이 공직자를 언급한 최근 기사를 읽을 수 있어요.",
 };

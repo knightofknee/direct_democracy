@@ -4,7 +4,7 @@
  * alert bar) open their command center instead, where they answer, since
  * their public page reads the same for them as for everyone. A reply in the
  * conversation under an answer stays on the public page, where the
- * conversation lives. Used by the notifications tab and by phone
+ * conversation lives. Used by the notifications screen and by phone
  * notification taps alike.
  */
 export function notificationLink(link: string, uid: string | null | undefined): string {

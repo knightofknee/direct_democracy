@@ -50,6 +50,8 @@ export interface UserProfile {
   districts?: (Districts & { wardId: number }) | null;
   /** Which notification kinds reach the phone (Settings switches). */
   pushPrefs?: Partial<Record<'deadline' | 'answers' | 'comments' | 'replies' | 'credits' | 'questions', boolean>>;
+  /** What the news tab leaves out for this person: source ids and story languages. */
+  newsPrefs?: NewsPrefs;
   /** This person's phones: Expo push token -> the language it shows notices in. */
   pushTokens?: Record<string, { locale?: string; platform?: string }>;
   /** Last post time per ward in the past week (the 5-other-wards cap). Trigger-written. */
@@ -79,8 +81,17 @@ export interface Official {
   photoUrl?: string | null;
   /** The official's public website, shown as a link. */
   websiteUrl?: string | null;
+  /**
+   * The ward office's newsletter (its archive of past issues where one is
+   * public, else the signup page). Operator-written by set-newsletters.
+   */
+  newsletterUrl?: string | null;
   /** Public ward-office contact info, as published by the city. */
   contactEmail?: string | null;
+  /** Aldermen: the ward office(s), street address with city and zip (seed-aldermen). */
+  officeAddresses?: string[];
+  /** Aldermen: regular office hours and ward night, as the ward's newsletter last stated them. */
+  officeHours?: { text: string; textEs: string; sourceUrl: string; sentAt: Timestamp } | null;
   phone?: string | null;
   /**
    * True once the person proved control of their published email (password
@@ -218,6 +229,8 @@ export interface SchoolBoardCandidate {
   incumbent: boolean;
   /** A declared write-in: votes count, but the name is not on the ballot. */
   writeIn?: boolean;
+  /** On the Chicago Teachers Union's published endorsement slate. */
+  ctuEndorsed?: boolean;
   /** Official campaign site (https), if the campaign has one. */
   website: string | null;
   /** Externally hosted headshot (https), rendered by link, never stored. */
@@ -617,4 +630,135 @@ export interface RollCall {
   /** eLMS person id -> "yes" | "no" | "Absent" | "Not Voting" | "Present" | "Recused". */
   votes: Record<string, string>;
   url: string;
+}
+
+/**
+ * A zoning change or development a ward's residents can weigh in on
+ * (zoningItems/{id}, synced daily by syncWardCivics; text as the city
+ * writes it). 'council': a zoning map amendment before the Council's
+ * Committee on Zoning; 'zba': a Zoning Board of Appeals case; 'cpc': a
+ * Chicago Plan Commission item (Planned Developments).
+ */
+export interface ZoningItem {
+  id: string;
+  source: 'council' | 'zba' | 'cpc';
+  wardIds: number[];
+  address: string | null;
+  /** The Clerk's title (council filings). */
+  title?: string;
+  /** ZBA cases: 'variation' or 'special-use'. */
+  kind?: 'variation' | 'special-use';
+  applicant?: string | null;
+  /** "RM5 Residential Multi-Unit District to B3-3 Community Shopping District". */
+  changeRequest?: string | null;
+  /** What the applicant wants to build or do, from the agenda. */
+  purpose?: string | null;
+  /** Set once the item is on a posted hearing agenda. */
+  hearing?: {
+    body: string;
+    date: Timestamp;
+    location: string | null;
+    commentDeadline: Timestamp | null;
+    agendaUrl: string | null;
+  } | null;
+  filedAt?: Timestamp;
+  url?: string;
+}
+
+/** A Police District Council or CCPSA meeting (civicMeetings/{id}, CCPSA's feed). */
+export interface CivicMeeting {
+  id: string;
+  kind: 'district-council' | 'commission';
+  policeDistrict: number | null;
+  title: string;
+  start: Timestamp;
+  end: Timestamp | null;
+  /** Null while CCPSA lists the place as TBD. */
+  venue: string | null;
+  address: string | null;
+  url: string;
+}
+
+/**
+ * A meeting a ward office announced in its newsletter (wardMeetings/{id},
+ * written by scripts/newsletters.ts from the operator's daily extraction).
+ */
+export interface WardMeeting {
+  id: string;
+  wardId: number;
+  /** As the newsletter names it ("Community meeting on 2652 W Chicago Ave"). */
+  title: string;
+  /** 'development' for a proposed project or zoning change; else 'ward' (ward nights, office hours, town halls) or 'community'. */
+  kind: 'development' | 'ward' | 'community';
+  start: Timestamp;
+  end: Timestamp | null;
+  place: string | null;
+  /** A street address to open in maps, when the newsletter gives one. */
+  address: string | null;
+  online: boolean;
+  /** RSVP or details link from the newsletter, else the issue itself; null when neither is public. */
+  url: string | null;
+  /** The newsletter issue it came from (null for an email-only issue). */
+  sourceUrl: string | null;
+  sourceTitle: string;
+}
+
+/** One ward newsletter issue with its AI summary (newsletterIssues/{id}). */
+export interface NewsletterIssue {
+  id: string;
+  wardId: number;
+  title: string;
+  /** The issue's public web copy; null when it was only emailed. */
+  url: string | null;
+  sentAt: Timestamp;
+  summary: string;
+  summaryEs: string | null;
+}
+
+/** The week's ward newsletters summarized together (newsletterDigests/{weekOf}). */
+export interface NewsletterDigest {
+  id: string;
+  /** Monday of the week, 'YYYY-MM-DD' (Chicago). */
+  weekOf: string;
+  summary: string;
+  summaryEs: string | null;
+  /** Wards whose issues went into it. */
+  wards: number[];
+  issueCount: number;
+}
+
+/** What a person's news tab leaves out (users/{uid}.newsPrefs, or the device when signed out). */
+export interface NewsPrefs {
+  hiddenSources?: string[];
+  hiddenLangs?: string[];
+}
+
+/**
+ * A newsroom on the news tab (newsSources/{id}, syncNewsFeeds). `included`
+ * false means it is listed as not in, with `status` saying why.
+ */
+export interface NewsSource {
+  id: string;
+  name: string;
+  homepage: string;
+  order: number;
+  included: boolean;
+  lang?: 'en' | 'es';
+  status?: 'blocked' | 'asked' | 'declined';
+  lastOkAt?: Timestamp;
+  lastError?: string | null;
+}
+
+/** One headline (newsItems/{id}): the story itself lives on the newsroom's site. */
+export interface NewsItem {
+  id: string;
+  sourceId: string;
+  title: string;
+  url: string;
+  lang: 'en' | 'es' | 'zh';
+  publishedAt: Timestamp;
+  /** Wards the story names (the ward, its alderman, or its neighborhoods). */
+  wardIds: number[];
+  /** Officials the story names in full. */
+  officialIds: string[];
 }

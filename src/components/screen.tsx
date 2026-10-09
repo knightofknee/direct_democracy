@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from 're
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HelpButton } from '@/components/help-button';
+import { NotificationBell } from '@/components/notification-bell';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -46,7 +47,7 @@ export const Screen = React.forwardRef<
         contentContainerStyle={[
           styles.content,
           {
-            paddingTop: tab ? insets.top + Spacing.three : Spacing.three,
+            paddingTop: tab ? insets.top + Spacing.two : Spacing.three,
             paddingBottom: (tab ? BottomTabInset : 0) + insets.bottom + Spacing.five,
           },
           style,
@@ -57,14 +58,18 @@ export const Screen = React.forwardRef<
         bounces={false}
         overScrollMode="never">
         <View style={styles.inner}>
-          {children}
           {tab && (
             // Tab screens have no header, so their help "?" sits in the
-            // same top-right corner every other screen's header puts it.
-            <View style={styles.help}>
+            // same top-right corner every other screen's header puts it,
+            // with the notifications bell beside it. A row of its own, not
+            // laid over the page: with large text on a narrow phone the
+            // tab's title would run into the two icons.
+            <View style={styles.corner}>
+              <NotificationBell />
               <HelpButton />
             </View>
           )}
+          {children}
         </View>
       </ScrollView>
       {tab && (
@@ -96,9 +101,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     gap: Spacing.three,
   },
-  help: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
+  corner: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: 18,
+    // The page's gap below it is enough; the row itself adds no space.
+    marginBottom: -Spacing.two,
   },
 });

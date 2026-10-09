@@ -40,6 +40,8 @@ interface Entry {
   incumbent: boolean;
   website: string | null;
   writeIn?: boolean;
+  /** Endorsed by the Chicago Teachers Union (its published slate). */
+  ctuEndorsed?: boolean;
   photoUrl?: string | null;
   photoFrame?: { x: number; y: number; zoom: number } | null;
   runningOn: string;
@@ -83,11 +85,18 @@ function validate(entries: Entry[]): void {
         problems.push(`${e.name}: photoFrame needs x/y in 0-1 and zoom in 1-8`);
     }
     if (e.writeIn != null && typeof e.writeIn !== 'boolean') problems.push(`${e.name}: writeIn must be boolean`);
+    if (e.ctuEndorsed != null && typeof e.ctuEndorsed !== 'boolean')
+      problems.push(`${e.name}: ctuEndorsed must be boolean`);
     if (!Array.isArray(e.sourceUrls) || e.sourceUrls.length === 0)
       problems.push(`${e.name}: needs at least one source URL`);
     for (const text of [e.runningOn, e.priorCareer ?? '', e.runningOnEs ?? '', e.priorCareerEs ?? '']) {
       if (/[–—]/.test(text)) problems.push(`${e.name}: em/en dash in copy`);
     }
+  }
+  // The CTU backs at most one name per seat.
+  const ctuRaces = entries.filter((e) => e.ctuEndorsed).map((e) => e.race);
+  for (const race of new Set(ctuRaces)) {
+    if (ctuRaces.filter((r) => r === race).length > 1) problems.push(`${race}: more than one CTU endorsement`);
   }
   if (problems.length) {
     console.error('Seed data problems:');
@@ -124,6 +133,7 @@ async function main() {
         photoUrl: e.photoUrl ?? null,
         photoFrame: e.photoFrame ?? null,
         writeIn: e.writeIn === true,
+        ctuEndorsed: e.ctuEndorsed === true,
         runningOn: e.runningOn.trim(),
         priorCareer: e.priorCareer?.trim() || null,
         runningOnEs: e.runningOnEs?.trim() || null,

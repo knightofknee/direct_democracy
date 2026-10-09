@@ -1178,8 +1178,6 @@ export const HI: Record<string, string> = {
     'टिप्पणियाँ: {n}, सबसे नई {ago}।',
   'Compare candidates on this page. Each card shows their party, an "Incumbent" chip if they hold the seat, and a preview of what they are running on.':
     'इस पेज पर उम्मीदवारों की तुलना करें। हर कार्ड पर उनकी पार्टी, सीट उनके पास हो तो "मौजूदा पदाधिकारी" चिप, और वे किन मुद्दों पर चुनाव लड़ रहे हैं इसकी झलक दिखती है।',
-  'Compare nominees on this page by the preview of what each is running on and the "Incumbent" chip.':
-    'इस पेज पर नामांकित उम्मीदवारों की तुलना करें, हर एक के मुख्य मुद्दों की झलक और "मौजूदा पदाधिकारी" चिप से।',
   'Compare the challengers under "Declared challengers" by background and a preview of what each is running on. Tap one to see their full card.':
     '"घोषित चुनौती देने वाले" के तहत चुनौती देने वालों की तुलना उनकी पृष्ठभूमि और मुख्य मुद्दों की झलक से करें। पूरा कार्ड देखने के लिए किसी पर टैप करें।',
   'Concerns on the big board: {n}.':
@@ -1700,8 +1698,8 @@ export const HI: Record<string, string> = {
     'आपका होम वार्ड: {ward}, बिना ID के चुना गया।',
   'Your home ward: the {ward}, verified.':
     'आपका होम वार्ड: {ward}, सत्यापित।',
-  'Your next two ballots, each in its own color band. The red bands hold the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race.':
-    'आपके अगले दो मतपत्र, हर एक अपने रंग की पट्टी में। लाल पट्टियों में 23 फ़रवरी, 2027 के चुनाव हैं: मेयर, मेयर पद के हर उम्मीदवार से पूछे गए सवाल, और वार्ड चुनाव। नीली पट्टी में 3 नवंबर का मतपत्र है: आपके चुनाव, वोट कैसे दें, और हर राज्य, काउंटी, स्कूल बोर्ड, जज और डिस्ट्रिक्ट चुनाव।',
+  'Your next two ballots, each in its own color band, the sooner one first. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race. The red band below it holds the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. Mayoral candidates are listed in random order, so no one is always first.':
+    'आपके अगले दो मतपत्र, हर एक अपने रंग की पट्टी में, पहले वाला ऊपर। नीली पट्टी में 3 नवंबर का मतपत्र है: आपके चुनाव, वोट कैसे दें, और हर राज्य, काउंटी, स्कूल बोर्ड, जज और डिस्ट्रिक्ट चुनाव। उसके नीचे लाल पट्टी में 23 फ़रवरी, 2027 के चुनाव हैं: मेयर, मेयर पद के हर उम्मीदवार से पूछे गए सवाल, और वार्ड चुनाव। मेयर पद के उम्मीदवार यादृच्छिक क्रम में दिखाए जाते हैं, ताकि कोई हमेशा पहले न रहे।',
   'Your profile is not claimed yet.':
     'आपकी प्रोफ़ाइल अभी क्लेम नहीं की गई है।',
   'Your races are listed first, from your address in the {ward}.':
@@ -1720,4 +1718,206 @@ export const HI: Record<string, string> = {
     '{place}, {name} ने {ago} पोस्ट किया।',
   '“{title}”, from the platform of {name}.':
     '“{title}”, {name} के प्लेटफ़ॉर्म से।',
+  'CTU endorsed':
+    'CTU समर्थित',
+  'Endorsed by the Chicago Teachers Union: {names}.':
+    'शिकागो टीचर्स यूनियन (CTU) का समर्थन: {names}।',
+  'Endorsed by the Chicago Teachers Union.':
+    'शिकागो टीचर्स यूनियन (CTU) का समर्थन प्राप्त है।',
+  'Compare nominees on this page by the preview of what each is running on and the "CTU endorsed" and "Incumbent" chips.':
+    'इस पेज पर नामांकित उम्मीदवारों की तुलना करें, हर एक के मुख्य मुद्दों की झलक और "CTU समर्थित" व "मौजूदा पदाधिकारी" चिप से।',
+  'A "CTU endorsed" chip means the Chicago Teachers Union endorsed them. The union\'s slate is listed under "Compiled from public sources:".':
+    '"CTU समर्थित" चिप का मतलब है कि शिकागो टीचर्स यूनियन ने उनका समर्थन किया है। यूनियन की सूची "सार्वजनिक स्रोतों से संकलित:" के नीचे है।',
+  'Ward newsletter':
+    'वार्ड न्यूज़लेटर',
+  'Tap "Ward newsletter" to read the ward office\'s past newsletters or sign up for them.':
+    'वार्ड कार्यालय के पिछले न्यूज़लेटर पढ़ने या सदस्यता लेने के लिए "वार्ड न्यूज़लेटर" पर टैप करें।',
+  'Take part':
+    'भाग लें',
+  'Where decisions about this ward get made, and when you can be heard.':
+    'इस वार्ड के बारे में फ़ैसले कहाँ होते हैं, और आप कब अपनी बात रख सकते हैं।',
+  'Ward meetings':
+    'वार्ड बैठकें',
+  'Development':
+    'विकास परियोजना',
+  'Online':
+    'ऑनलाइन',
+  'As announced in the ward office’s newsletter. Tap a meeting for its details or RSVP.':
+    'वार्ड कार्यालय के न्यूज़लेटर में घोषित। विवरण या RSVP के लिए किसी बैठक पर टैप करें।',
+  'Development and zoning':
+    'विकास और ज़ोनिंग',
+  'No zoning changes or development hearings are pending in this ward right now.':
+    'इस वार्ड में अभी कोई ज़ोनिंग बदलाव या विकास सुनवाई लंबित नहीं है।',
+  'Show fewer':
+    'कम दिखाएँ',
+  'Show all {n}':
+    'सभी {n} दिखाएँ',
+  'Committee on Zoning hearings: anyone may speak for up to 3 minutes in the public comment period, or send written comment by the deadline.':
+    'ज़ोनिंग समिति की सुनवाई: कोई भी व्यक्ति सार्वजनिक टिप्पणी के समय में 3 मिनट तक बोल सकता है, या समय सीमा से पहले लिखित टिप्पणी भेज सकता है।',
+  'Zoning Board of Appeals: anyone may comment by signing in on the day. Owners within 100 feet (variations) or 250 feet (special uses) can register by 9 AM the Tuesday before to question the applicant.':
+    'ज़ोनिंग अपील बोर्ड: कोई भी व्यक्ति उसी दिन साइन इन करके टिप्पणी कर सकता है। 100 फ़ुट (छूट) या 250 फ़ुट (विशेष उपयोग) के भीतर के मालिक आवेदक से सवाल पूछने के लिए पिछले मंगलवार सुबह 9 बजे तक पंजीकरण कर सकते हैं।',
+  'Zoning Board of Appeals participation rules':
+    'ज़ोनिंग अपील बोर्ड में भाग लेने के नियम',
+  'Plan Commission hearing page':
+    'प्लान कमीशन सुनवाई पेज',
+  'Planned Development':
+    'नियोजित विकास',
+  'Special use':
+    'विशेष उपयोग',
+  'Variation':
+    'छूट',
+  'Zoning change':
+    'ज़ोनिंग बदलाव',
+  'Hearing: {body}, {when}':
+    'सुनवाई: {body}, {when}',
+  'Filed {date}. No hearing set yet.':
+    '{date} को दायर। अभी सुनवाई तय नहीं है।',
+  'No hearing set yet.':
+    'अभी सुनवाई तय नहीं है।',
+  'Written comment deadline: {date}':
+    'लिखित टिप्पणी की समय सीमा: {date}',
+  'This ward is in police district {list}. Its elected council holds public meetings on policing in the district.':
+    'यह वार्ड पुलिस डिस्ट्रिक्ट {list} में है। इसकी निर्वाचित परिषद डिस्ट्रिक्ट में पुलिसिंग पर सार्वजनिक बैठकें करती है।',
+  'This ward spans police districts {list}. Each has an elected council that holds public meetings on policing in the district.':
+    'यह वार्ड पुलिस डिस्ट्रिक्ट {list} में फैला है। हर डिस्ट्रिक्ट की एक निर्वाचित परिषद है जो डिस्ट्रिक्ट में पुलिसिंग पर सार्वजनिक बैठकें करती है।',
+  'District {n} council':
+    'डिस्ट्रिक्ट {n} परिषद',
+  'Place to be announced':
+    'स्थान की घोषणा बाद में होगी',
+  'Beat meetings with your district’s officers (CPD calendar)':
+    'आपके डिस्ट्रिक्ट के अधिकारियों के साथ बीट बैठकें (CPD कैलेंडर)',
+  'Ward office':
+    'वार्ड कार्यालय',
+  'AI summary of the {date} newsletter':
+    '{date} के न्यूज़लेटर का AI सारांश',
+  'Read the newsletter':
+    'न्यूज़लेटर पढ़ें',
+  'Report a city service problem to 311':
+    '311 पर शहर की सेवा से जुड़ी समस्या की रिपोर्ट करें',
+  'Committee on Zoning':
+    'ज़ोनिंग समिति',
+  'Zoning Board of Appeals':
+    'ज़ोनिंग अपील बोर्ड',
+  'Plan Commission':
+    'प्लान कमीशन',
+  'Under "Take part", tap a ward meeting, a zoning item, or a police district council meeting to open it at its source. Ward meetings come from the ward office\'s newsletter; zoning items and police meetings come from the city.':
+    '"भाग लें" में किसी वार्ड बैठक, ज़ोनिंग मामले या पुलिस डिस्ट्रिक्ट परिषद की बैठक पर टैप करके उसे उसके स्रोत पर खोलें। वार्ड बैठकें वार्ड कार्यालय के न्यूज़लेटर से आती हैं; ज़ोनिंग मामले और पुलिस बैठकें शहर से आती हैं।',
+  'Under "Ward office", tap the address for directions, the phone number to call, or "Ward newsletter" to read past issues or sign up.':
+    '"वार्ड कार्यालय" में रास्ते के लिए पते पर, कॉल करने के लिए फ़ोन नंबर पर, या पिछले अंक पढ़ने या सदस्यता लेने के लिए "वार्ड न्यूज़लेटर" पर टैप करें।',
+  'This week in the wards':
+    'इस हफ़्ते वार्डों में',
+  'What aldermen told residents in their newsletters, the week of {date}.':
+    'एल्डरमैन ने अपने न्यूज़लेटर में निवासियों को क्या बताया, {date} वाला हफ़्ता।',
+  'Each ward’s latest newsletter is summarized on its ward page.':
+    'हर वार्ड के ताज़ा न्यूज़लेटर का सारांश उसके वार्ड पेज पर है।',
+  'newsletter':
+    'न्यूज़लेटर',
+  'newsletters':
+    'न्यूज़लेटर',
+  'ward office':
+    'वार्ड कार्यालय',
+  'ward offices':
+    'वार्ड कार्यालय',
+  'Under "This week in the wards", read an AI summary of what ward offices told residents in their newsletters this week. Tap "Show more" for all of it.':
+    '"इस हफ़्ते वार्डों में" में पढ़ें कि वार्ड कार्यालयों ने इस हफ़्ते अपने न्यूज़लेटर में निवासियों को क्या बताया, उसका AI सारांश। पूरा देखने के लिए "और दिखाएँ" पर टैप करें।',
+
+  // News tab and the notifications bell (2026-10-07)
+  "If you turn news sources or story languages off while signed in: which ones, so the choice follows your account.":
+    "अगर आप साइन इन रहते हुए समाचार स्रोत या खबरों की भाषाएँ बंद करते हैं: कौन-सी, ताकि आपकी पसंद आपके खाते के साथ रहे।",
+  "Newsrooms included: {n}. Turned off by you: {off}.":
+    "शामिल समाचार संस्थान: {n}. आपने बंद किए: {off}.",
+  "Headlines showing: {n}.":
+    "दिख रही सुर्खियाँ: {n}.",
+  "Showing only stories that name your ward.":
+    "केवल वे खबरें दिख रही हैं जिनमें आपके वार्ड का नाम है।",
+  "Not included: {names}.":
+    "शामिल नहीं: {names}.",
+  "All Chicago":
+    "पूरा शिकागो",
+  "news":
+    "समाचार",
+  "Headlines from {n} newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "शिकागो को कवर करने वाले {n} समाचार संस्थानों की सुर्खियाँ, सबसे नई पहले। किसी पर टैप करके उसे संस्थान की साइट पर पढ़ें।",
+  "Headlines from newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "शिकागो को कवर करने वाले समाचार संस्थानों की सुर्खियाँ, सबसे नई पहले। किसी पर टैप करके उसे संस्थान की साइट पर पढ़ें।",
+  "Sources ({n} off)":
+    "स्रोत ({n} बंद)",
+  "You have turned every source off.":
+    "आपने हर स्रोत बंद कर दिया है।",
+  "Show every source":
+    "सभी स्रोत दिखाएँ",
+  "No story in the past two weeks names your ward, its alderman, or its neighborhoods.":
+    "पिछले दो हफ़्तों की किसी खबर में आपके वार्ड, उसके एल्डरमैन या उसके इलाकों का नाम नहीं है।",
+  "No headlines yet.":
+    "अभी कोई सुर्खी नहीं है।",
+  "See why":
+    "कारण देखें",
+  "Your choices are saved to your account.":
+    "आपकी पसंद आपके खाते में सहेजी जाती है।",
+  "Your choices are saved on this device.":
+    "आपकी पसंद इस डिवाइस पर सहेजी जाती है।",
+  "Every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites (the Tranco list) is here. Every one is on until you turn it off. Stories are listed newest first. The app never ranks them or hides any.":
+    "शिकागो या इलिनॉय सरकार को कवर करने वाला, सार्वजनिक फ़ीड वाला और दस लाख सबसे लोकप्रिय वेबसाइटों (Tranco सूची) में शामिल हर समाचार संस्थान यहाँ है। हर एक तब तक चालू रहता है जब तक आप उसे बंद न करें। खबरें सबसे नई पहले दिखती हैं। ऐप कभी उन्हें रैंक नहीं करता और न ही कोई खबर छिपाता है।",
+  "Newsrooms":
+    "समाचार संस्थान",
+  "Its feed is not answering right now.":
+    "इसकी फ़ीड अभी जवाब नहीं दे रही है।",
+  "Story languages":
+    "खबरों की भाषाएँ",
+  "Headlines stay in the language the newsroom wrote them in.":
+    "सुर्खियाँ उसी भाषा में रहती हैं जिसमें संस्थान ने उन्हें लिखा।",
+  "Not included":
+    "शामिल नहीं",
+  "Opens the story on {source}'s site":
+    "{source} की साइट पर खबर खोलता है",
+  "In the news":
+    "खबरों में",
+  "Stories from the past two weeks that name this ward, its alderman, or one of its neighborhoods.":
+    "पिछले दो हफ़्तों की वे खबरें जिनमें इस वार्ड, इसके एल्डरमैन या इसके किसी इलाके का नाम है।",
+  "Stories from the past two weeks that name them.":
+    "पिछले दो हफ़्तों की वे खबरें जिनमें इनका नाम है।",
+  "Notifications, {n} unread":
+    "सूचनाएँ, {n} बिना पढ़ी",
+  "Notifications":
+    "सूचनाएँ",
+  "Could not save your news choices":
+    "आपकी समाचार पसंद सहेजी नहीं जा सकी",
+  "News sources":
+    "समाचार स्रोत",
+  "Its site turns away automated feed readers, so its headlines can't be included without its permission.":
+    "इसकी साइट स्वचालित फ़ीड रीडर को रोकती है, इसलिए इसकी अनुमति के बिना इसकी सुर्खियाँ शामिल नहीं की जा सकतीं।",
+  "Its site turns away automated feed readers. We've asked for permission to include its headlines.":
+    "इसकी साइट स्वचालित फ़ीड रीडर को रोकती है। हमने इसकी सुर्खियाँ शामिल करने की अनुमति माँगी है।",
+  "We asked to include its headlines, and it declined.":
+    "हमने इसकी सुर्खियाँ शामिल करने की अनुमति माँगी, और इसने मना कर दिया।",
+  "Tap the bell at the top to see your notifications. A number on it counts the ones you haven't opened.":
+    "अपनी सूचनाएँ देखने के लिए ऊपर घंटी पर टैप करें। उस पर लिखी संख्या उन सूचनाओं की है जो आपने अभी तक नहीं खोलीं।",
+  "Under \"In the news\", tap a headline to read a recent story that names this ward, its alderman, or one of its neighborhoods.":
+    "“खबरों में” के अंदर, किसी सुर्खी पर टैप करके ऐसी हाल की खबर पढ़ें जिसमें इस वार्ड, इसके एल्डरमैन या इसके किसी इलाके का नाम हो।",
+  "Headlines from every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites, newest first. The app never ranks them or hides any. Below the list are the newsrooms that are not included, and why.":
+    "शिकागो या इलिनॉय सरकार को कवर करने वाले, सार्वजनिक फ़ीड वाले और दस लाख सबसे लोकप्रिय वेबसाइटों में शामिल हर समाचार संस्थान की सुर्खियाँ, सबसे नई पहले। ऐप कभी उन्हें रैंक नहीं करता और न ही कोई छिपाता है। सूची के नीचे वे संस्थान हैं जो शामिल नहीं हैं, और उसका कारण।",
+  "Tap a headline to read the story on the newsroom's own site.":
+    "किसी सुर्खी पर टैप करके खबर संस्थान की अपनी साइट पर पढ़ें।",
+  "Tap your ward to see only stories that name your home ward, its alderman, or one of its neighborhoods. Tap \"All Chicago\" to see everything again. A \"Your ward\" tag marks those stories in the full list.":
+    "अपने वार्ड पर टैप करें ताकि सिर्फ़ वे खबरें दिखें जिनमें आपके होम वार्ड, उसके एल्डरमैन या उसके किसी इलाके का नाम हो। सब कुछ फिर से देखने के लिए “पूरा शिकागो” पर टैप करें। पूरी सूची में ऐसी खबरों पर “आपका वार्ड” टैग लगा होता है।",
+  "Tap \"Sources\" to turn newsrooms or story languages off or back on.":
+    "समाचार संस्थानों या खबरों की भाषाओं को बंद या फिर से चालू करने के लिए “स्रोत” पर टैप करें।",
+  "Tap \"Show more\" at the bottom to load 30 more headlines.":
+    "30 और सुर्खियाँ लोड करने के लिए नीचे “और दिखाएँ” पर टैप करें।",
+  "Tap \"See why\" to read why a newsroom is not included.":
+    "कोई समाचार संस्थान शामिल क्यों नहीं है, यह पढ़ने के लिए “कारण देखें” पर टैप करें।",
+  "Which newsrooms and story languages your news tab shows, and the newsrooms that are not included, with why. Every included newsroom is on until you turn it off.":
+    "आपका समाचार टैब कौन-से संस्थान और खबरों की कौन-सी भाषाएँ दिखाता है, और कौन-से संस्थान शामिल नहीं हैं, कारण सहित। हर शामिल संस्थान तब तक चालू रहता है जब तक आप उसे बंद न करें।",
+  "Turn a newsroom's switch off to hide its headlines, or back on to show them again.":
+    "किसी संस्थान की सुर्खियाँ छिपाने के लिए उसका स्विच बंद करें, या उन्हें फिर से दिखाने के लिए चालू करें।",
+  "Under \"Story languages\", turn off a language to hide stories written in it. Headlines are never translated.":
+    "“खबरों की भाषाएँ” के अंदर, किसी भाषा को बंद करें ताकि उसमें लिखी खबरें छिप जाएँ। सुर्खियों का कभी अनुवाद नहीं होता।",
+  "Tap \"Show every source\" to turn everything back on.":
+    "सब कुछ फिर से चालू करने के लिए “सभी स्रोत दिखाएँ” पर टैप करें।",
+  "Under \"Not included\", tap a newsroom's name to visit its site.":
+    "“शामिल नहीं” के अंदर, किसी संस्थान की साइट पर जाने के लिए उसके नाम पर टैप करें।",
+  "Signed in, your choices are saved to your account and follow you to other devices. Signed out, they are saved on this device.":
+    "साइन इन होने पर आपकी पसंद आपके खाते में सहेजी जाती है और दूसरे डिवाइसों पर भी साथ रहती है। साइन आउट होने पर वह इस डिवाइस पर सहेजी जाती है।",
+  "Under \"In the news\", tap a headline to read a recent story that names them.":
+    "“खबरों में” के अंदर, किसी सुर्खी पर टैप करके ऐसी हाल की खबर पढ़ें जिसमें इनका नाम हो।",
 };

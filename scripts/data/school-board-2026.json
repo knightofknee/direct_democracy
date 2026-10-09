@@ -19,6 +19,7 @@
     "name": "Connie Anderson",
     "race": "10b",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": null,
     "runningOn": "According to the candidate platform text published on the Chicago Teachers Union's 2026 election page, Anderson says she is running to fight for fully funded schools, including full funding and staffing for special education services, hands-on job training and career and technical education classes, art and music programming that celebrates culture and community, and healthy, safe, and modern school facilities.",
     "priorCareer": "Mother of CPS graduates, award-winning school robotics team coach, and co-owner of the Record Track in South Chicago; spent 12 years with the Friends of Ogden parent group and was involved in the 2018 Ogden-Jenner school merger. Appointed to the board by Mayor Brandon Johnson in July 2026 to fill the District 10b vacancy.",
@@ -46,6 +47,7 @@
       "https://www.chalkbeat.org/chicago/2026/05/27/51-candidates-running-for-the-2026-chicago-school-board-election/",
       "https://news.wttw.com/2026/05/28/51-candidates-set-run-chicago-s-first-fully-elected-school-board"
     ],
+    "photoUrl": "https://img1.wsimg.com/isteam/ip/f5fe8118-7393-4f50-8a8a-aac9de9168e6/GPphoto-Patrick-Watson-03300.jpg",
     "runningOnEs": "Watson dice que su primera prioridad sería equilibrar el presupuesto de CPS, buscando ahorros dentro del distrito antes de pedir más dinero. Dice que los recursos deben repartirse de forma equitativa para que cada escuela tenga las instalaciones y los programas que tienen otras, y no descarta cerrar escuelas si eso ayuda al presupuesto. Ve el Illinois Quantum and Microelectronics Park en el distrito como una oportunidad de colaborar en el plan de estudios. Cuenta con el respaldo del Common Ground Collective.",
     "priorCareerEs": "Asistente legislativo en la oficina del concejal Anthony Beale del Distrito 9; antes trabajó 25 años como contador. Creció en Roseland, vive en Pullman y se graduó de Chicago Vocational Career Academy."
   },
@@ -53,13 +55,15 @@
     "name": "Ed Bannon",
     "race": "1a",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://edbannon.com",
     "runningOn": "Bannon says he puts students first, asking whether each policy decision is best for Chicago's kids, and campaigns on budget accountability and transparency in school funding. He calls for qualified teachers, counselors, and classroom resources for Northwest Side schools. At a 2026 town hall he said finding ways to increase funding for public education without raising property taxes is a top goal.",
     "priorCareer": "Career experience includes serving as executive director of the Six Corners Association. He served about ten years on the Dever Elementary Local School Council and was appointed to the board's District 1A seat in January 2025.",
     "sourceUrls": [
       "https://edbannon.com",
       "https://ballotpedia.org/Ed_Bannon",
-      "https://nadignewspapers.com/nw-side-chicago-school-board-member-ed-bannon-holds-education-budget-related-meeting/"
+      "https://nadignewspapers.com/nw-side-chicago-school-board-member-ed-bannon-holds-education-budget-related-meeting/",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://edbannon.com/wp-content/uploads/2026/08/About-Ed-Header-Headshot-.png",
     "photoFrame": {
@@ -95,13 +99,15 @@
     "name": "Claudia Peralta",
     "race": "1b",
     "incumbent": false,
+    "ctuEndorsed": true,
     "website": "https://www.communityforclaudia.com",
     "runningOn": "Peralta says every family deserves access to a high-quality, fully funded public neighborhood school regardless of neighborhood, language, or their children's abilities. She says she wants to bring a community-centered, problem-solving approach to the board and be an advocate and voice for families across the district, building a school system that meets the needs of every student.",
     "priorCareer": "She serves as district director for U.S. Rep. Delia Ramirez and previously was chief of staff to State Rep. Lindsey LaPointe. She is a CPS parent, CPS graduate, and former Local School Council member.",
     "sourceUrls": [
       "https://www.communityforclaudia.com",
       "https://ballotpedia.org/Claudia_Peralta",
-      "https://board-rule.ghost.io/school-board-candidates-filed/"
+      "https://board-rule.ghost.io/school-board-candidates-filed/",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://static.wixstatic.com/media/c1aad4_83f5f482303141c8b7ec43c6f6995ab0~mv2.jpg",
     "photoFrame": {
@@ -137,13 +143,15 @@
     "name": "Ebony DeBerry",
     "race": "2a",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://ebony4education.org",
     "runningOn": "DeBerry says she is running for fully funded schools rooted in justice and equity, funded by taxing corporations and billionaires rather than cutting classrooms. She calls for schools that serve children holistically, from universal pre-K starting at age 3 through wraparound family support, with resources invested in as one system so no neighborhood competes for what every child deserves. She has also spoken about protecting students amid immigration enforcement threats.",
     "priorCareer": "A former CPS kindergarten and first grade teacher and former Local School Council member at Gale Elementary, she has worked as an education organizer with ONE Northside since 2014, where she oversees a Parent Mentor program. She won the District 2A seat in the 2024 election.",
     "sourceUrls": [
       "https://ebony4education.org",
       "https://ballotpedia.org/Ebony_DeBerry",
-      "https://board-rule.ghost.io/school-board-candidates-filed/"
+      "https://board-rule.ghost.io/school-board-candidates-filed/",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://www.cpsboe.org/content/images/person/ebony_deberry_photo_1.jpg",
     "runningOnEs": "DeBerry dice que se postula por escuelas plenamente financiadas y arraigadas en la justicia y la equidad, financiadas con impuestos a las corporaciones y a los multimillonarios en lugar de recortar los salones de clase. Pide escuelas que atiendan a los niños de manera integral, desde pre-K universal a partir de los 3 años hasta apoyos integrales para las familias, con recursos invertidos como un solo sistema para que ningún vecindario compita por lo que cada niño merece. También ha hablado de proteger a los estudiantes ante las amenazas de los operativos de inmigración.",
@@ -185,13 +193,15 @@
     "name": "Deborah \"Debby\" Pope",
     "race": "2b",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://www.debbyfordistrict2b.com",
     "runningOn": "Pope says she is running for fully funded public schools and opposes vouchers and charter expansion, backed by progressive revenue in which big business pays a fair share. Her platform calls for equitable district funding to make every school a magnet for learning, more social workers, counselors, and wraparound services, culturally relevant curriculum with a library in every school, real restorative justice, expanded dual language programs, bus transportation as an equity issue, and green schools.",
     "priorCareer": "Pope taught in Chicago Public Schools for decades as a bilingual and history teacher, including at Benito Juarez, Schurz, and Gage Park high schools, retiring from CPS in 2011, and later worked with the Chicago Teachers Union, including its grievance department and House of Delegates. She was appointed to the board's District 2B seat in January 2025.",
     "sourceUrls": [
       "https://www.debbyfordistrict2b.com",
       "https://ballotpedia.org/Debby_Pope",
-      "https://www.wbez.org/education/chicago-school-board/2025/01/29/debby-pope-appointed-board-member-district-2"
+      "https://www.wbez.org/education/chicago-school-board/2025/01/29/debby-pope-appointed-board-member-district-2",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://images.squarespace-cdn.com/content/v1/69d3b6e659f6b0333cee6b2b/e19d3d0d-0d86-40e2-9ad2-da7008676dbc/IMG_8133.jpg",
     "runningOnEs": "Pope dice que se postula por escuelas públicas plenamente financiadas y se opone a los vales escolares y a la expansión de las escuelas chárter, con el respaldo de ingresos progresivos en los que las grandes empresas paguen una parte justa. Su plataforma pide financiamiento equitativo en el distrito para hacer de cada escuela un imán para el aprendizaje, más trabajadores sociales, consejeros y servicios integrales, un currículo culturalmente relevante con una biblioteca en cada escuela, justicia restaurativa real, más programas de doble idioma, transporte en autobús como asunto de equidad, y escuelas verdes.",
@@ -222,13 +232,15 @@
     "name": "Norma Rios-Sierra",
     "race": "3a",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://www.normaforchicago.org",
     "runningOn": "Rios-Sierra says she is running for fully resourced schools with on-site mental health care and welcoming, peer-directed safe spaces to resolve conflicts, expanded equitable access to arts education, and protections for immigrant students including clear, consistent CPS communication regarding ICE activity. She also calls for stronger language access through translation services, dual language programs, and bilingual staff, and says she will fight school privatization to keep public money in public education.",
     "priorCareer": "A community organizer and artist from Logan Square, she has worked at Palenque LSNA as cultural events manager, with experience in arts education, parent mentoring, and after-school programming. She was appointed to the board's District 3A seat in January 2025.",
     "sourceUrls": [
       "https://www.normaforchicago.org",
       "https://ballotpedia.org/Norma_Rios-Sierra",
-      "https://www.cpsboe.org/about/bios/2037"
+      "https://www.cpsboe.org/about/bios/2037",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://www.cpsboe.org/content/images/person/norma_rios-sierra_photo_1.jpg",
     "runningOnEs": "Rios-Sierra dice que se postula por escuelas con recursos completos, con atención de salud mental en el plantel y espacios seguros y acogedores dirigidos por pares para resolver conflictos, mayor acceso equitativo a la educación artística, y protecciones para los estudiantes inmigrantes, incluyendo comunicación clara y consistente de CPS sobre la actividad de ICE. También pide un acceso lingüístico más fuerte mediante servicios de traducción, programas de doble idioma y personal bilingüe, y dice que luchará contra la privatización escolar para mantener el dinero público en la educación pública.",
@@ -280,6 +292,7 @@
     "name": "Jason Dónes",
     "race": "3b",
     "incumbent": false,
+    "ctuEndorsed": true,
     "website": "https://www.donesforschoolboard.com/",
     "runningOn": "Dónes says his top priority is equitable school funding, with resources allocated based on student need, and a strong public school within walking distance of every home. He is campaigning on supporting neighborhood schools over privatization and school closures, expanding bilingual and culturally relevant education, restorative justice practices, and mental health supports, and on centering student, parent, and community voices, including empowered Local School Councils.",
     "priorCareer": "Dónes is an educator and nonprofit leader who serves as chief of people and operations at Beyond100K, a nonprofit focused on the STEM teacher shortage. He has worked with the CPS Office of Equity, chaired a Local School Council, and ran for the same seat in 2024 with Chicago Teachers Union backing.",
@@ -287,7 +300,8 @@
       "https://www.donesforschoolboard.com/priorities",
       "https://votecps.org/jason-c-dones/",
       "https://www.wbez.org/education/chicago-school-board/2024/10/22/cps-school-board-the-race-in-the-near-northwest-sides-district-3",
-      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)"
+      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/JasonDones2024.jpg",
     "runningOnEs": "Dónes dice que su máxima prioridad es el financiamiento escolar equitativo, con recursos asignados según las necesidades de los estudiantes, y una escuela pública fuerte a distancia caminable de cada hogar. Su campaña se basa en apoyar a las escuelas de vecindario frente a la privatización y los cierres de escuelas, en expandir la educación bilingüe y culturalmente relevante, las prácticas de justicia restaurativa y los apoyos de salud mental, y en poner al centro las voces de estudiantes, padres y comunidad, incluyendo Local School Councils con poder real.",
@@ -336,6 +350,7 @@
     "name": "Karen Zaccor",
     "race": "4a",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://neighborsforkarenzaccor.org/",
     "runningOn": "Zaccor says she will press for full and fair funding for CPS from state and local progressive revenue sources and for equitable use of those funds. She campaigns on expanding the Sustainable Community Schools model, building robust restorative discipline practices, empowering student voice, and improving school food quality.",
     "priorCareer": "Zaccor taught in Chicago Public Schools for about 29 years and co-founded Uplift Community High School in Uptown, retiring in 2024. She was appointed to the board's District 4a seat in January 2025 after running unsuccessfully for an elected seat in 2024.",
@@ -343,7 +358,8 @@
       "https://neighborsforkarenzaccor.org/about/",
       "https://www.wbez.org/education/chicago-school-board/2025/01/29/karen-zaccor-appointed-board-member-district-4",
       "https://www.chalkbeat.org/chicago/2026/08/11/chicago-public-schools-board-races-close-to-set/",
-      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)"
+      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://neighborsforkarenzaccor.org/wp-content/uploads/2024/08/Karen-Headshot.jpeg",
     "runningOnEs": "Zaccor dice que presionará por un financiamiento completo y justo para CPS proveniente de fuentes de ingresos progresivos estatales y locales, y por un uso equitativo de esos fondos. Su campaña se basa en expandir el modelo de Sustainable Community Schools, construir prácticas sólidas de disciplina restaurativa, empoderar la voz estudiantil y mejorar la calidad de la comida escolar.",
@@ -370,13 +386,15 @@
     "name": "Aaron \"Jitu\" Brown",
     "race": "5a",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://www.aaronjitubrown4cps.org/",
     "runningOn": "Brown says he is running to responsibly expand the Sustainable Community Schools model with community input, ensure equitable access to early childhood education starting with pre-K, and win equitable funding from the state of Illinois. His platform also calls for increasing the number of Black and Brown educators, strengthening Local School Councils, culturally relevant curriculum, and ending punitive standardized testing, with District 5 families building a pre-K through 12th grade vision for their schools.",
     "priorCareer": "Brown is a longtime education organizer who serves as national director of the Journey for Justice Alliance and was a lead organizer in the 2015 hunger strike that saved Dyett High School, helping develop the Sustainable Community Schools model. He served about 15 years on Local School Councils and won the District 5 seat in November 2024.",
     "sourceUrls": [
       "https://www.aaronjitubrown4cps.org/",
       "https://www.wbez.org/education/2025/01/15/aaron-jitu-brown-elected-board-member-district-5",
-      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)"
+      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://www.cpsboe.org/content/images/person/jitubrown_1.jpg",
     "runningOnEs": "Brown dice que se postula para expandir de manera responsable el modelo de Sustainable Community Schools con participación comunitaria, asegurar acceso equitativo a la educación temprana comenzando con pre-K, y conseguir financiamiento equitativo del estado de Illinois. Su plataforma también pide aumentar el número de educadores negros y latinos, fortalecer los Local School Councils, un currículo culturalmente relevante y el fin de las pruebas estandarizadas punitivas, con las familias del Distrito 5 construyendo una visión de pre-K a 12o grado para sus escuelas.",
@@ -446,6 +464,7 @@
     "name": "Michilla \"Kyla\" Blaise",
     "race": "5b",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://www.blaiseforschoolboard.com/",
     "runningOn": "Blaise says she is running to ensure a quality and enriching education for all students, drawing on her experience navigating CPS as the mother of two CPS students. She emphasizes equity and access, community representation over big-money interests in the first fully elected board, and data-driven approaches to budgets and policy, citing her recent public policy graduate studies.",
     "priorCareer": "Blaise is a political consultant who founded Blaise and Associates and serves as chief of staff to Cook County Commissioner Frank Aguilar; she began her career on the staff of 46th Ward Alderman Helen Shiller. She was appointed to the board's District 5b seat in the fall of 2024 after the previous board resigned.",
@@ -453,7 +472,8 @@
       "https://www.blaiseforschoolboard.com/",
       "https://blockclubchicago.org/2025/01/14/meet-the-new-chicago-board-of-education/",
       "https://www.chalkbeat.org/chicago/2026/08/11/chicago-public-schools-board-races-close-to-set/",
-      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)"
+      "https://ballotpedia.org/Chicago_Public_Schools,_Illinois,_elections_(2026)",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://static1.squarespace.com/static/6671eb734a05eb4ddf042841/t/668b519e39b73f5402b9af4b/1720406430298/michilla_blaise_by_oliphant_72DPI-3.jpg",
     "photoFrame": {
@@ -468,13 +488,15 @@
     "name": "Anusha Thotakura",
     "race": "6a",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": "https://www.anushaforcps.com/",
     "runningOn": "Thotakura says she is running to expand access to high-quality pre-K across District 6A, put dedicated full-time counselors and social workers in every CPS school, and grow career and technical education tied to clean energy job training. She points to creating the Healthy Green Schools Fund and a board resolution launching renewable energy projects as first-term work she wants to continue.",
     "priorCareer": "Executive director of Citizen Action/Illinois and a former bilingual middle school math teacher through Teach For America; she has served on the Chicago Board of Education for District 6A.",
     "sourceUrls": [
       "https://www.anushaforcps.com/",
       "https://www.chalkbeat.org/chicago/2026/08/11/chicago-public-schools-board-races-close-to-set/",
-      "https://www.chalkbeat.org/chicago/2026/07/14/ctu-announces-endorsements-in-school-board-election/"
+      "https://www.chalkbeat.org/chicago/2026/07/14/ctu-announces-endorsements-in-school-board-election/",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://www.cpsboe.org/content/images/person/anusha_thotakura_photo_1.jpg",
     "runningOnEs": "Thotakura dice que se postula para ampliar el acceso a pre-K de alta calidad en todo el Distrito 6A, poner consejeros y trabajadores sociales dedicados de tiempo completo en cada escuela de CPS, y hacer crecer la educación técnica y de carreras vinculada a la capacitación en empleos de energía limpia. Señala la creación del Healthy Green Schools Fund y una resolución del consejo que puso en marcha proyectos de energía renovable como trabajo de su primer periodo que quiere continuar.",
@@ -556,13 +578,15 @@
     "name": "Emma Lozano",
     "race": "7a",
     "incumbent": true,
+    "ctuEndorsed": true,
     "website": null,
     "runningOn": "Lozano's board profile emphasizes fighting school overcrowding, steadfast support for bilingual education, and serving the educational needs of underrepresented families. She has long advocated for immigrant families' participation in schools, including the right of undocumented parents to vote in and run for Local School Council elections.",
     "priorCareer": "Pastor of Lincoln United Methodist Church in Pilsen and founder and president of Centro Sin Fronteras, a longtime Mexican American community organization; she led the campaign to establish the Rudy Lozano School.",
     "sourceUrls": [
       "https://www.cpsboe.org/about/bios/2040",
       "https://www.chalkbeat.org/chicago/2026/07/14/five-school-board-candidates-removed-from-ballot/",
-      "https://www.chalkbeat.org/chicago/2026/07/14/ctu-announces-endorsements-in-school-board-election/"
+      "https://www.chalkbeat.org/chicago/2026/07/14/ctu-announces-endorsements-in-school-board-election/",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://www.cpsboe.org/content/images/person/emma_lozano_photo_2.jpg",
     "runningOnEs": "El perfil de Lozano en el consejo enfatiza la lucha contra la sobrepoblación escolar, el apoyo firme a la educación bilingüe y la atención a las necesidades educativas de las familias subrepresentadas. Ha abogado por mucho tiempo por la participación de las familias inmigrantes en las escuelas, incluyendo el derecho de los padres indocumentados a votar y postularse en las elecciones de los Local School Councils.",
@@ -679,12 +703,14 @@
     "name": "Katherine S. Dunneback",
     "race": "9b",
     "incumbent": false,
+    "ctuEndorsed": true,
     "website": null,
     "runningOn": "Dunneback has said she is running as a progressive candidate focused on student services, particularly ensuring that services for students with IEPs are fully funded. She has also pointed to overcrowding at local schools, saying high-performing but under-resourced schools need long-term solutions rather than temporary annexes that become permanent.",
     "priorCareer": "Speech-language pathologist with 22 years of experience in public and private school settings, currently an adjunct clinical supervisor at St. Xavier University; she is a CPS parent of two former Clissold Elementary students.",
     "sourceUrls": [
       "https://www.beverlyreview.net/news/community_news/article_077b9c29-40af-4416-9a63-54cd71d3fa61.html",
-      "https://www.chalkbeat.org/chicago/2026/06/04/chicago-school-board-candidates-face-petition-challenges/"
+      "https://www.chalkbeat.org/chicago/2026/06/04/chicago-school-board-candidates-face-petition-challenges/",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "runningOnEs": "Dunneback ha dicho que se postula como candidata progresista enfocada en los servicios estudiantiles, en particular en asegurar que los servicios para estudiantes con IEP estén plenamente financiados. También ha señalado la sobrepoblación en las escuelas locales, diciendo que las escuelas de alto rendimiento pero con pocos recursos necesitan soluciones de largo plazo en lugar de anexos temporales que se vuelven permanentes.",
     "priorCareerEs": "Patóloga del habla y el lenguaje con 22 años de experiencia en escuelas públicas y privadas, actualmente supervisora clínica adjunta en St. Xavier University; es madre de dos exalumnos de la primaria Clissold de CPS.",
@@ -709,6 +735,7 @@
     "name": "Hilario Dominguez",
     "race": "president",
     "incumbent": false,
+    "ctuEndorsed": true,
     "website": "https://hilarioforcps.com",
     "runningOn": "Dominguez is campaigning on free full-day pre-K for every Chicago family starting at age 3, an overhaul of school meals, and new youth jobs and career pathway programs. He supports sustainable community schools and says the district should press state lawmakers for roughly 2 billion dollars in additional funding rather than make cuts, arguing CPS struggles because the state has not met its funding obligation. He also calls for preventing school closures, expanding support staff such as librarians, nurses, and social workers, and reducing class sizes.",
     "priorCareer": "A CPS graduate and former CPS special education teacher of six years who most recently served as political director of the Chicago Teachers Union. He ran unsuccessfully for alderman in 2019.",
@@ -716,7 +743,8 @@
       "https://hilarioforcps.com/",
       "https://www.wbez.org/education/2026/05/22/meet-the-candidates-for-chicagos-first-ever-elected-school-board-president",
       "https://wgntv.com/news/ctu-backed-candidate-for-chicago-school-board-hilario-dominguez-talks-campaign/",
-      "https://news.wttw.com/2026/09/15/chicago-school-board-president-candidates-talk-budgets-closures-and-why-election-matters"
+      "https://news.wttw.com/2026/09/15/chicago-school-board-president-candidates-talk-budgets-closures-and-why-election-matters",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/hd-face_20260623_034242_30311_1.png",
     "runningOnEs": "Dominguez hace campaña por pre-K gratuito de día completo para cada familia de Chicago a partir de los 3 años, una renovación de las comidas escolares, y nuevos programas de empleos juveniles y de rutas de carrera. Apoya las escuelas comunitarias sostenibles y dice que el distrito debería presionar a los legisladores estatales por aproximadamente 2 mil millones de dólares en financiamiento adicional en lugar de hacer recortes, argumentando que CPS batalla porque el estado no ha cumplido su obligación de financiamiento. También pide prevenir cierres de escuelas, ampliar el personal de apoyo como bibliotecarios, enfermeras y trabajadores sociales, y reducir el tamaño de los grupos.",
@@ -744,16 +772,18 @@
     "race": "president",
     "incumbent": false,
     "website": "https://www.sendhilforcps.com",
-    "runningOn": "Revuluri says he is running to put students at the center of every board decision, pointing to declining enrollment, record chronic absenteeism, and two-thirds of students not reading at grade level as the problems to fix. He says the board needs to clarify its role and goals, practice student-centered governance, and focus spending on learning outcomes. He has said the board must be willing to make hard budgeting calls and has criticized what he describes as a slogan-driven approach to district funding. At a WTTW forum in September 2026 he said there are \"too many schools that are too empty to give kids a quality educational experience.\"",
+    "runningOn": "Revuluri dropped out of the race on Sept. 30, 2026, saying \"the gusher of special-interest cash has crowded out the voices of real Chicagoans\"; his name will still appear on the ballot. Before withdrawing, he said he was running to put students at the center of every board decision, pointing to declining enrollment, record chronic absenteeism, and two-thirds of students not reading at grade level as the problems to fix. He says the board needs to clarify its role and goals, practice student-centered governance, and focus spending on learning outcomes. He has said the board must be willing to make hard budgeting calls and has criticized what he describes as a slogan-driven approach to district funding. At a WTTW forum in September 2026 he said there are \"too many schools that are too empty to give kids a quality educational experience.\"",
     "priorCareer": "A former public school math teacher in the Bronx who later worked in the CPS Office of High School Teaching and Learning and on a University of Illinois Chicago math initiative. He served as an appointed member and vice president of the Chicago Board of Education under Mayor Lori Lightfoot from 2019 to 2022 and now works as a consultant and school governance coach.",
     "sourceUrls": [
+      "https://www.chalkbeat.org/chicago/2026/09/30/sendhil-revuluri-drops-out-of-chicago-school-board-president-race/",
+      "https://blockclubchicago.org/2026/09/30/sendhil-revuluri-drops-out-of-race-for-chicago-school-board-president/",
       "https://www.sendhilforcps.com/",
       "https://www.wbez.org/education/2026/05/22/meet-the-candidates-for-chicagos-first-ever-elected-school-board-president",
       "https://www.chalkbeat.org/chicago/2025/10/15/sendhil-revuluri-running-for-chicago-school-board-president/",
       "https://news.wttw.com/2026/09/15/chicago-school-board-president-candidates-talk-budgets-closures-and-why-election-matters"
     ],
     "photoUrl": "https://s3.amazonaws.com/ballotpedia-api4/files/RevuluriGuptaFamily2015-0064-Square_20260610_232427_29733_1.jpg",
-    "runningOnEs": "Revuluri dice que se postula para poner a los estudiantes al centro de cada decisión del consejo, señalando la matrícula en descenso, el ausentismo crónico récord y que dos terceras partes de los estudiantes no leen al nivel de su grado como los problemas a resolver. Dice que el consejo necesita aclarar su rol y sus metas, practicar una gobernanza centrada en los estudiantes y enfocar el gasto en los resultados de aprendizaje. Ha dicho que el consejo debe estar dispuesto a tomar decisiones presupuestarias difíciles y ha criticado lo que describe como un enfoque de puros lemas hacia el financiamiento del distrito. En un foro de WTTW en septiembre de 2026 dijo que hay \"too many schools that are too empty to give kids a quality educational experience.\"",
+    "runningOnEs": "Revuluri abandonó la contienda el 30 de septiembre de 2026, diciendo que \"the gusher of special-interest cash has crowded out the voices of real Chicagoans\"; su nombre seguirá apareciendo en la boleta. Antes de retirarse, dijo que se postulaba para poner a los estudiantes al centro de cada decisión del consejo, señalando la matrícula en descenso, el ausentismo crónico récord y que dos terceras partes de los estudiantes no leen al nivel de su grado como los problemas a resolver. Dice que el consejo necesita aclarar su rol y sus metas, practicar una gobernanza centrada en los estudiantes y enfocar el gasto en los resultados de aprendizaje. Ha dicho que el consejo debe estar dispuesto a tomar decisiones presupuestarias difíciles y ha criticado lo que describe como un enfoque de puros lemas hacia el financiamiento del distrito. En un foro de WTTW en septiembre de 2026 dijo que hay \"too many schools that are too empty to give kids a quality educational experience.\"",
     "priorCareerEs": "Exmaestro de matemáticas de escuelas públicas en el Bronx que después trabajó en la Office of High School Teaching and Learning de CPS y en una iniciativa de matemáticas de la University of Illinois Chicago. Sirvió como miembro nombrado y vicepresidente del Chicago Board of Education bajo la alcaldesa Lori Lightfoot de 2019 a 2022 y ahora trabaja como consultor y asesor de gobernanza escolar."
   },
   {
@@ -777,6 +807,7 @@
     "name": "Tameka Walton",
     "race": "10a",
     "incumbent": false,
+    "ctuEndorsed": true,
     "writeIn": true,
     "website": null,
     "runningOn": "Declared write-in candidate; the name is not printed on the ballot. She says her priorities are equity between schools, supporting student mental health, and giving Local School Councils a stronger voice in board decisions. She was removed from the ballot in July after some of her petition signatures were ruled ineligible, leaving her below the 500-signature requirement. The Chicago Teachers Union endorsed her as a write-in candidate.",
@@ -786,7 +817,8 @@
       "https://www.chalkbeat.org/chicago/2026/07/29/electoral-board-removes-tameka-walton-from-ballot/",
       "https://www.ctulocal1.org/posts/chicago-teachers-union-endorses-candidates-running-as-public-school-champions-in-school-board-race-says-students-educational-experience-to-be-decided-in-november/",
       "https://gov-pritzker-newsroom.prezly.com/gov-pritzker-announces-five-appointments-to-boards-and-commissions-y8hc5d",
-      "https://restoredhopechicago.org/meet-our-founder"
+      "https://restoredhopechicago.org/meet-our-founder",
+      "https://www.ctulocal1.org/movement/school-board-election-2026/"
     ],
     "photoUrl": "https://goldininstitute.org/wp-content/uploads/2022/09/Walton-Tameka-PP.jpg",
     "runningOnEs": "Candidatura por escrito declarada; el nombre no aparece impreso en la boleta. Dice que sus prioridades son la equidad entre escuelas, el apoyo a la salud mental de los estudiantes y dar a los Local School Councils una voz más fuerte en las decisiones del consejo. Fue retirada de la boleta en julio después de que algunas de sus firmas fueron declaradas inválidas, lo que la dejó por debajo del requisito de 500 firmas. El Chicago Teachers Union la respaldó como candidata por escrito.",

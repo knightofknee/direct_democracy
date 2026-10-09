@@ -44,10 +44,13 @@
     "react-native-worklets": "0.10.1"
   },
   "devDependencies": {
+    "@types/mailparser": "^3.9.0",
     "@types/react": "~19.2.2",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~57.0.2",
     "firebase-admin": "^14.2.0",
+    "imapflow": "^2.2.5",
+    "mailparser": "^3.9.36",
     "tsx": "^4.23.1",
     "typescript": "~6.0.3"
   },
@@ -64,6 +67,8 @@
     "sync-platform": "tsx scripts/sync-platform.ts",
     "set-platform-summaries": "tsx scripts/set-platform-summaries.ts",
     "set-official": "tsx scripts/set-official.ts",
+    "set-newsletters": "tsx scripts/set-newsletters.ts",
+    "newsletters": "tsx scripts/newsletters.ts",
     "seed-aldermen": "tsx scripts/seed-aldermen.ts",
     "verify-user": "tsx scripts/verify-user.ts",
     "review-account": "tsx scripts/review-account.ts",
@@ -76,7 +81,9 @@
     "build-ward-map": "tsx scripts/build-ward-map.ts",
     "build-district-map": "tsx scripts/build-district-map.ts",
     "export-web": "WEB_EXPORT=1 expo export --platform web --output-dir dist-web",
-    "publish-web": "npm run export-web && rsync -a --delete dist-web/ ../../Documents/GitHub/the-waldgave2/public/directdemocracy/app/"
+    "publish-web": "npm run export-web && rsync -a --delete dist-web/ ../../Documents/GitHub/the-waldgave2/public/directdemocracy/app/",
+    "build-neighborhood-wards": "tsx scripts/build-neighborhood-wards.ts",
+    "news-ranks": "tsx scripts/news-ranks.ts"
   },
   "private": true
 }

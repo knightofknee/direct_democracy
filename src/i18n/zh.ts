@@ -1168,8 +1168,6 @@ export const ZH: Record<string, string> = {
     '评论：{n}条，最新一条在{ago}。',
   'Compare candidates on this page. Each card shows their party, an "Incumbent" chip if they hold the seat, and a preview of what they are running on.':
     '在本页比较候选人。每张名片显示其党派、现任者会有“现任”标签，以及其竞选主张预览。',
-  'Compare nominees on this page by the preview of what each is running on and the "Incumbent" chip.':
-    '在本页通过每位提名人的竞选主张预览和“现任”标签比较提名人。',
   'Compare the challengers under "Declared challengers" by background and a preview of what each is running on. Tap one to see their full card.':
     '在“已宣布的挑战者”下，按背景和竞选主张预览比较挑战者。点按一位即可查看其完整名片。',
   'Concerns on the big board: {n}.':
@@ -1690,8 +1688,8 @@ export const ZH: Record<string, string> = {
     '你的所属选区：{ward}，未用证件设定。',
   'Your home ward: the {ward}, verified.':
     '你的所属选区：{ward}，已验证。',
-  'Your next two ballots, each in its own color band. The red bands hold the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race.':
-    '你接下来的两次投票，各有自己的颜色带。红色带是2027年2月23日的选举：市长、向所有市长候选人提出的问题，以及选区选举。蓝色带是11月3日的选票：你的选举、如何投票，以及所有州、县、教育委员会、法官和分区选举。',
+  'Your next two ballots, each in its own color band, the sooner one first. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race. The red band below it holds the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. Mayoral candidates are listed in random order, so no one is always first.':
+    '你接下来的两次投票，各有自己的颜色带，较近的一次在前。蓝色带是11月3日的选票：你的选举、如何投票，以及所有州、县、教育委员会、法官和分区选举。下面的红色带是2027年2月23日的选举：市长、向所有市长候选人提出的问题，以及选区选举。市长候选人按随机顺序列出，没有人总是排在第一。',
   'Your profile is not claimed yet.':
     '你的资料尚未被认领。',
   'Your races are listed first, from your address in the {ward}.':
@@ -1710,4 +1708,206 @@ export const ZH: Record<string, string> = {
     '{place}，由{name}于{ago}发布。',
   '“{title}”, from the platform of {name}.':
     '“{title}”，来自{name}的政纲。',
+  'CTU endorsed':
+    'CTU 背书',
+  'Endorsed by the Chicago Teachers Union: {names}.':
+    '获得芝加哥教师工会（CTU）背书：{names}。',
+  'Endorsed by the Chicago Teachers Union.':
+    '获得芝加哥教师工会（CTU）背书。',
+  'Compare nominees on this page by the preview of what each is running on and the "CTU endorsed" and "Incumbent" chips.':
+    '在本页通过每位提名人的竞选主张预览以及“CTU 背书”和“现任”标签比较提名人。',
+  'A "CTU endorsed" chip means the Chicago Teachers Union endorsed them. The union\'s slate is listed under "Compiled from public sources:".':
+    '“CTU 背书”标签表示芝加哥教师工会为其背书。工会的背书名单列在“根据公开资料整理：”下。',
+  'Ward newsletter':
+    '选区通讯',
+  'Tap "Ward newsletter" to read the ward office\'s past newsletters or sign up for them.':
+    '点按“选区通讯”阅读选区办公室以往的通讯，或订阅。',
+  'Take part':
+    '参与',
+  'Where decisions about this ward get made, and when you can be heard.':
+    '本选区的决定在哪里做出，以及你何时可以发声。',
+  'Ward meetings':
+    '选区会议',
+  'Development':
+    '开发项目',
+  'Online':
+    '线上',
+  'As announced in the ward office’s newsletter. Tap a meeting for its details or RSVP.':
+    '依据选区办公室通讯的公告。点按会议查看详情或报名。',
+  'Development and zoning':
+    '开发与分区',
+  'No zoning changes or development hearings are pending in this ward right now.':
+    '本选区目前没有待处理的分区变更或开发听证会。',
+  'Show fewer':
+    '收起',
+  'Show all {n}':
+    '显示全部 {n} 项',
+  'Committee on Zoning hearings: anyone may speak for up to 3 minutes in the public comment period, or send written comment by the deadline.':
+    '分区委员会听证会：任何人都可以在公众评论时段发言最多 3 分钟，或在截止日期前提交书面意见。',
+  'Zoning Board of Appeals: anyone may comment by signing in on the day. Owners within 100 feet (variations) or 250 feet (special uses) can register by 9 AM the Tuesday before to question the applicant.':
+    '分区上诉委员会：任何人都可以在当天签到后发表意见。距离 100 英尺内（变更许可）或 250 英尺内（特殊用途）的业主可在前一个星期二上午 9 点前登记，以便质询申请人。',
+  'Zoning Board of Appeals participation rules':
+    '分区上诉委员会参与规则',
+  'Plan Commission hearing page':
+    '规划委员会听证会页面',
+  'Planned Development':
+    '规划开发项目',
+  'Special use':
+    '特殊用途',
+  'Variation':
+    '变更许可',
+  'Zoning change':
+    '分区变更',
+  'Hearing: {body}, {when}':
+    '听证会：{body}，{when}',
+  'Filed {date}. No hearing set yet.':
+    '{date} 提交。尚未安排听证会。',
+  'No hearing set yet.':
+    '尚未安排听证会。',
+  'Written comment deadline: {date}':
+    '书面意见截止：{date}',
+  'This ward is in police district {list}. Its elected council holds public meetings on policing in the district.':
+    '本选区位于第 {list} 警区。该警区的民选委员会就警区内的警务举行公开会议。',
+  'This ward spans police districts {list}. Each has an elected council that holds public meetings on policing in the district.':
+    '本选区跨越第 {list} 警区。每个警区都有一个民选委员会，就警区内的警务举行公开会议。',
+  'District {n} council':
+    '第 {n} 警区委员会',
+  'Place to be announced':
+    '地点待定',
+  'Beat meetings with your district’s officers (CPD calendar)':
+    '与本警区警员的巡区会议（CPD 日历）',
+  'Ward office':
+    '选区办公室',
+  'AI summary of the {date} newsletter':
+    '{date} 通讯的 AI 摘要',
+  'Read the newsletter':
+    '阅读通讯',
+  'Report a city service problem to 311':
+    '向 311 报告城市服务问题',
+  'Committee on Zoning':
+    '分区委员会',
+  'Zoning Board of Appeals':
+    '分区上诉委员会',
+  'Plan Commission':
+    '规划委员会',
+  'Under "Take part", tap a ward meeting, a zoning item, or a police district council meeting to open it at its source. Ward meetings come from the ward office\'s newsletter; zoning items and police meetings come from the city.':
+    '在“参与”中，点按选区会议、分区事项或警区委员会会议，可在其来源处打开。选区会议来自选区办公室的通讯；分区事项和警务会议来自市政府。',
+  'Under "Ward office", tap the address for directions, the phone number to call, or "Ward newsletter" to read past issues or sign up.':
+    '在“选区办公室”中，点按地址查看路线，点按电话号码拨打，或点按“选区通讯”阅读往期或订阅。',
+  'This week in the wards':
+    '本周各选区',
+  'What aldermen told residents in their newsletters, the week of {date}.':
+    '市议员本周在通讯中告诉居民的内容，{date} 这一周。',
+  'Each ward’s latest newsletter is summarized on its ward page.':
+    '每个选区最新一期通讯的摘要在该选区页面上。',
+  'newsletter':
+    '份通讯',
+  'newsletters':
+    '份通讯',
+  'ward office':
+    '个选区办公室',
+  'ward offices':
+    '个选区办公室',
+  'Under "This week in the wards", read an AI summary of what ward offices told residents in their newsletters this week. Tap "Show more" for all of it.':
+    '在“本周各选区”中，阅读选区办公室本周在通讯中告诉居民的内容的 AI 摘要。点按“显示更多”查看全部。',
+
+  // News tab and the notifications bell (2026-10-07)
+  "If you turn news sources or story languages off while signed in: which ones, so the choice follows your account.":
+    "如果你在登录状态下关闭了某些新闻来源或报道语言：会保存是哪些，以便你的选择跟随你的账户。",
+  "Newsrooms included: {n}. Turned off by you: {off}.":
+    "已收录的新闻机构：{n} 家。你关闭的：{off} 家。",
+  "Headlines showing: {n}.":
+    "正在显示的标题：{n} 条。",
+  "Showing only stories that name your ward.":
+    "只显示提到你所在选区的报道。",
+  "Not included: {names}.":
+    "未收录：{names}。",
+  "All Chicago":
+    "全芝加哥",
+  "news":
+    "新闻",
+  "Headlines from {n} newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "来自 {n} 家报道芝加哥的新闻机构的标题，最新的在前。点按一条，到该机构的网站上阅读。",
+  "Headlines from newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "来自报道芝加哥的新闻机构的标题，最新的在前。点按一条，到该机构的网站上阅读。",
+  "Sources ({n} off)":
+    "来源（已关闭 {n} 个）",
+  "You have turned every source off.":
+    "你关闭了所有来源。",
+  "Show every source":
+    "显示所有来源",
+  "No story in the past two weeks names your ward, its alderman, or its neighborhoods.":
+    "过去两周内没有报道提到你的选区、该选区的市议员或其社区。",
+  "No headlines yet.":
+    "还没有标题。",
+  "See why":
+    "查看原因",
+  "Your choices are saved to your account.":
+    "你的选择保存在你的账户中。",
+  "Your choices are saved on this device.":
+    "你的选择保存在此设备上。",
+  "Every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites (the Tranco list) is here. Every one is on until you turn it off. Stories are listed newest first. The app never ranks them or hides any.":
+    "这里收录了每一家报道芝加哥或伊利诺伊州政府、提供公开订阅源、且位列全球最受欢迎的一百万个网站之内（Tranco 榜单）的新闻机构。全部默认开启，直到你关闭为止。报道按最新在前排列。本应用从不给报道排名，也不隐藏任何报道。",
+  "Newsrooms":
+    "新闻机构",
+  "Its feed is not answering right now.":
+    "它的订阅源目前没有响应。",
+  "Story languages":
+    "报道语言",
+  "Headlines stay in the language the newsroom wrote them in.":
+    "标题保留新闻机构撰写时使用的语言。",
+  "Not included":
+    "未收录",
+  "Opens the story on {source}'s site":
+    "在 {source} 的网站上打开这篇报道",
+  "In the news":
+    "新闻报道",
+  "Stories from the past two weeks that name this ward, its alderman, or one of its neighborhoods.":
+    "过去两周内提到本选区、本选区市议员或其某个社区的报道。",
+  "Stories from the past two weeks that name them.":
+    "过去两周内提到其姓名的报道。",
+  "Notifications, {n} unread":
+    "通知，{n} 条未读",
+  "Notifications":
+    "通知",
+  "Could not save your news choices":
+    "无法保存你的新闻设置",
+  "News sources":
+    "新闻来源",
+  "Its site turns away automated feed readers, so its headlines can't be included without its permission.":
+    "它的网站拒绝自动订阅阅读器，所以未经其许可无法收录其标题。",
+  "Its site turns away automated feed readers. We've asked for permission to include its headlines.":
+    "它的网站拒绝自动订阅阅读器。我们已请求许可收录其标题。",
+  "We asked to include its headlines, and it declined.":
+    "我们请求收录其标题，对方拒绝了。",
+  "Tap the bell at the top to see your notifications. A number on it counts the ones you haven't opened.":
+    "点按顶部的铃铛查看你的通知。铃铛上的数字是你还没打开的通知数量。",
+  "Under \"In the news\", tap a headline to read a recent story that names this ward, its alderman, or one of its neighborhoods.":
+    "在“新闻报道”中，点按标题阅读提到本选区、本选区市议员或其某个社区的近期报道。",
+  "Headlines from every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites, newest first. The app never ranks them or hides any. Below the list are the newsrooms that are not included, and why.":
+    "来自每一家报道芝加哥或伊利诺伊州政府、提供公开订阅源、且位列全球最受欢迎的一百万个网站之内的新闻机构的标题，最新的在前。本应用从不给标题排名，也不隐藏任何标题。列表下方是未收录的新闻机构及原因。",
+  "Tap a headline to read the story on the newsroom's own site.":
+    "点按标题，到新闻机构自己的网站上阅读报道。",
+  "Tap your ward to see only stories that name your home ward, its alderman, or one of its neighborhoods. Tap \"All Chicago\" to see everything again. A \"Your ward\" tag marks those stories in the full list.":
+    "点按你的选区，只看提到你所在选区、该选区市议员或其某个社区的报道。点按“全芝加哥”重新查看全部。在完整列表中，这些报道带有“你的选区”标签。",
+  "Tap \"Sources\" to turn newsrooms or story languages off or back on.":
+    "点按“来源”关闭或重新开启新闻机构或报道语言。",
+  "Tap \"Show more\" at the bottom to load 30 more headlines.":
+    "点按底部的“显示更多”再加载 30 条标题。",
+  "Tap \"See why\" to read why a newsroom is not included.":
+    "点按“查看原因”了解某家新闻机构为何未被收录。",
+  "Which newsrooms and story languages your news tab shows, and the newsrooms that are not included, with why. Every included newsroom is on until you turn it off.":
+    "你的新闻标签页显示哪些新闻机构和报道语言，以及未收录的新闻机构和原因。每家已收录的机构都默认开启，直到你关闭为止。",
+  "Turn a newsroom's switch off to hide its headlines, or back on to show them again.":
+    "关闭某家新闻机构的开关可隐藏其标题，重新开启即可再次显示。",
+  "Under \"Story languages\", turn off a language to hide stories written in it. Headlines are never translated.":
+    "在“报道语言”中，关闭某种语言可隐藏用该语言撰写的报道。标题从不翻译。",
+  "Tap \"Show every source\" to turn everything back on.":
+    "点按“显示所有来源”重新开启全部。",
+  "Under \"Not included\", tap a newsroom's name to visit its site.":
+    "在“未收录”中，点按新闻机构的名称可访问其网站。",
+  "Signed in, your choices are saved to your account and follow you to other devices. Signed out, they are saved on this device.":
+    "登录后，你的选择会保存在账户中，并同步到你的其他设备。未登录时，选择保存在此设备上。",
+  "Under \"In the news\", tap a headline to read a recent story that names them.":
+    "在“新闻报道”中，点按标题阅读提到其姓名的近期报道。",
 };

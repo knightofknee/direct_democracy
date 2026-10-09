@@ -188,6 +188,8 @@ function RootStack() {
         <Stack.Screen name="privacy" options={{ title: t('Privacy & data') }} />
         <Stack.Screen name="rules" options={{ title: t('Community rules') }} />
         <Stack.Screen name="settings" options={{ title: t('Settings') }} />
+        <Stack.Screen name="notifications" options={{ title: t('Notifications') }} />
+        <Stack.Screen name="news-sources" options={{ title: t('News sources') }} />
         <Stack.Screen
           name="help"
           options={{ title: t('Help'), presentation: 'modal', headerRight: () => <ModalClose /> }}

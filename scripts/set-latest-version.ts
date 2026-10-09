@@ -7,6 +7,17 @@
  *
  *   npm run set-latest-version -- 1.0.9
  *
+ * Android has its own dials on the build number (versionCode), since Android
+ * builds only bump versionCode and several Play releases share one version
+ * name. Flip each store's dial once THAT store serves the build (closed
+ * testing counts: it is how testers learn a build is out):
+ *
+ *   npm run set-latest-version -- --android-latest 9     Android warn
+ *   npm run set-latest-version -- --android-min 9        Android block ("" lifts it)
+ *
+ * Android builds up to versionCode 8 have no build-number check and still
+ * read latestVersion / minVersion.
+ *
  * Run it only once the store actually serves the update (check the listing
  * page or a device's App Store), so the nudge never sends users to a page
  * with nothing to install.
@@ -55,7 +66,7 @@ if (useEmulator) {
 }
 
 import { applicationDefault, initializeApp } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 
 const PROJECT_ID = 'direct-democracy-e338a';
 
@@ -83,6 +94,15 @@ async function main() {
   );
   const iosUrl = arg('ios-url');
   const androidUrl = arg('android-url');
+  const androidLatest = arg('android-latest');
+  const androidMinIdx = process.argv.indexOf('--android-min');
+  const androidMin = androidMinIdx >= 0 ? (process.argv[androidMinIdx + 1] ?? '') : null;
+  for (const n of [androidLatest, androidMin]) {
+    if (n && !/^[1-9]\d*$/.test(n)) {
+      console.error('Not a build number:', n);
+      process.exit(1);
+    }
+  }
   const minIdx = process.argv.indexOf('--min-version');
   const minVersion = minIdx >= 0 ? (process.argv[minIdx + 1] ?? '') : null;
   if (minVersion && !/^\d+(\.\d+)*$/.test(minVersion)) {
@@ -96,18 +116,21 @@ async function main() {
     console.error('Not a dotted version:', version);
     process.exit(1);
   }
-  if (!version && !iosUrl && !androidUrl && minVersion === null) {
+  if (!version && !iosUrl && !androidUrl && minVersion === null && androidLatest === null && androidMin === null) {
     console.error(
-      'Usage: npm run set-latest-version -- <binary version, e.g. 1.0.9> [--ios-url URL] [--android-url URL] [--emulator]'
+      'Usage: npm run set-latest-version -- [<binary version, e.g. 1.0.9>] [--min-version V|""]' +
+        ' [--android-latest BUILD] [--android-min BUILD|""] [--ios-url URL] [--android-url URL] [--emulator]'
     );
     process.exit(1);
   }
 
-  const update: Record<string, string> = {};
+  const update: Record<string, string | number | FieldValue> = {};
   if (version) update.latestVersion = version;
   if (iosUrl) update.iosUrl = iosUrl;
   if (androidUrl) update.androidUrl = androidUrl;
   if (minVersion !== null) update.minVersion = minVersion;
+  if (androidLatest) update.androidLatestBuild = Number(androidLatest);
+  if (androidMin !== null) update.androidMinBuild = androidMin ? Number(androidMin) : FieldValue.delete();
   const message = arg('message');
   const messageEs = arg('message-es');
   if (message) update.updateMessage = message;
@@ -119,6 +142,12 @@ async function main() {
     console.error(`minVersion ${floor} is above latestVersion ${latest}: that would lock out the current release.`);
     process.exit(1);
   }
+  const aFloor = androidMin !== null ? Number(androidMin || 0) : Number(current.androidMinBuild ?? 0);
+  const aLatest = androidLatest ? Number(androidLatest) : Number(current.androidLatestBuild ?? 0);
+  if (aFloor && aFloor > aLatest) {
+    console.error(`androidMinBuild ${aFloor} is above androidLatestBuild ${aLatest || '(unset)'}: that would lock out the current release.`);
+    process.exit(1);
+  }
   await db.doc('config/app').set(update, { merge: true });
 
   const doc = await db.doc('config/app').get();
@@ -128,8 +157,14 @@ async function main() {
   }
   if (version) {
     console.log(
-      'Installed binaries older than', version, 'will show the update nudge on platforms with a store URL.'
+      'iOS binaries older than', version, '(and Android builds 8 and older) will show the update nudge.'
     );
+  }
+  if (androidLatest) {
+    console.log('Android builds older than', androidLatest, 'will show the update nudge.');
+  }
+  if (androidMin) {
+    console.log('Android builds older than', androidMin, 'are now locked out until they update.');
   }
 }
 

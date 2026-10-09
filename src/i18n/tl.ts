@@ -1182,8 +1182,6 @@ export const TL: Record<string, string> = {
     'Mga komento: {n}, ang pinakabago ay {ago}.',
   'Compare candidates on this page. Each card shows their party, an "Incumbent" chip if they hold the seat, and a preview of what they are running on.':
     'Ihambing ang mga kandidato sa pahinang ito. Ipinapakita ng bawat card ang kanilang partido, isang chip na "Nanunungkulan" kung sila ang nakaupo, at isang silip sa kanilang isinusulong.',
-  'Compare nominees on this page by the preview of what each is running on and the "Incumbent" chip.':
-    'Ihambing ang mga nominado sa pahinang ito ayon sa silip sa isinusulong ng bawat isa at sa chip na "Nanunungkulan".',
   'Compare the challengers under "Declared challengers" by background and a preview of what each is running on. Tap one to see their full card.':
     'Ihambing ang mga kalaban sa ilalim ng "Mga nagdeklarang kalaban" ayon sa background at silip sa isinusulong ng bawat isa. I-tap ang isa para makita ang buong card nila.',
   'Concerns on the big board: {n}.':
@@ -1704,8 +1702,8 @@ export const TL: Record<string, string> = {
     'Ang iyong home ward: ang {ward}, itinakda nang walang ID.',
   'Your home ward: the {ward}, verified.':
     'Ang iyong home ward: ang {ward}, beripikado.',
-  'Your next two ballots, each in its own color band. The red bands hold the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race.':
-    'Ang susunod mong dalawang balota, bawat isa sa sariling kulay. Nasa mga pulang banda ang mga halalan sa Pebrero 23, 2027: mayor, mga tanong sa bawat kandidato sa pagka-mayor, at mga halalan sa ward. Nasa asul na banda ang balota sa Nobyembre 3: ang iyong mga halalan, paano bumoto, at bawat halalan sa estado, county, school board, hukom, at distrito.',
+  'Your next two ballots, each in its own color band, the sooner one first. The blue band holds the November 3 ballot: your races, how to vote, and every state, county, school board, judge, and district race. The red band below it holds the February 23, 2027 races: mayor, questions put to every mayoral candidate, and the ward races. Mayoral candidates are listed in random order, so no one is always first.':
+    'Ang susunod mong dalawang balota, bawat isa sa sariling kulay, ang mas malapit ang una. Nasa asul na banda ang balota sa Nobyembre 3: ang iyong mga halalan, paano bumoto, at bawat halalan sa estado, county, school board, hukom, at distrito. Nasa pulang banda sa ilalim nito ang mga halalan sa Pebrero 23, 2027: mayor, mga tanong sa bawat kandidato sa pagka-mayor, at mga halalan sa ward. Nakalista ang mga kandidato sa pagka-mayor sa random na pagkakasunod, para walang laging nauuna.',
   'Your profile is not claimed yet.':
     'Hindi pa na-claim ang iyong profile.',
   'Your races are listed first, from your address in the {ward}.':
@@ -1724,4 +1722,206 @@ export const TL: Record<string, string> = {
     '{place}, ipinost ni {name} {ago}.',
   '“{title}”, from the platform of {name}.':
     '“{title}”, mula sa plataporma ni {name}.',
+  'CTU endorsed':
+    'Inendorso ng CTU',
+  'Endorsed by the Chicago Teachers Union: {names}.':
+    'Inendorso ng Chicago Teachers Union: {names}.',
+  'Endorsed by the Chicago Teachers Union.':
+    'Inendorso ng Chicago Teachers Union.',
+  'Compare nominees on this page by the preview of what each is running on and the "CTU endorsed" and "Incumbent" chips.':
+    'Ihambing ang mga nominado sa pahinang ito ayon sa silip sa isinusulong ng bawat isa at sa mga chip na "Inendorso ng CTU" at "Nanunungkulan".',
+  'A "CTU endorsed" chip means the Chicago Teachers Union endorsed them. The union\'s slate is listed under "Compiled from public sources:".':
+    'Ang chip na "Inendorso ng CTU" ay nangangahulugang inendorso sila ng Chicago Teachers Union. Ang listahan ng unyon ay nasa ilalim ng "Tinipon mula sa mga pampublikong sanggunian:".',
+  'Ward newsletter':
+    'Newsletter ng ward',
+  'Tap "Ward newsletter" to read the ward office\'s past newsletters or sign up for them.':
+    'I-tap ang "Newsletter ng ward" para basahin ang mga nakaraang newsletter ng ward office o mag-sign up.',
+  'Take part':
+    'Makilahok',
+  'Where decisions about this ward get made, and when you can be heard.':
+    'Kung saan ginagawa ang mga desisyon tungkol sa ward na ito, at kailan ka maaaring magsalita.',
+  'Ward meetings':
+    'Mga pulong ng ward',
+  'Development':
+    'Development',
+  'Online':
+    'Online',
+  'As announced in the ward office’s newsletter. Tap a meeting for its details or RSVP.':
+    'Ayon sa newsletter ng ward office. I-tap ang pulong para sa detalye o RSVP.',
+  'Development and zoning':
+    'Development at zoning',
+  'No zoning changes or development hearings are pending in this ward right now.':
+    'Walang nakabinbing pagbabago sa zoning o hearing sa development sa ward na ito ngayon.',
+  'Show fewer':
+    'Ipakita ang mas kaunti',
+  'Show all {n}':
+    'Ipakita lahat ng {n}',
+  'Committee on Zoning hearings: anyone may speak for up to 3 minutes in the public comment period, or send written comment by the deadline.':
+    'Mga hearing ng Committee on Zoning: sinuman ay maaaring magsalita nang hanggang 3 minuto sa oras ng pampublikong komento, o magpadala ng nakasulat na komento bago ang deadline.',
+  'Zoning Board of Appeals: anyone may comment by signing in on the day. Owners within 100 feet (variations) or 250 feet (special uses) can register by 9 AM the Tuesday before to question the applicant.':
+    'Zoning Board of Appeals: sinuman ay maaaring magkomento sa pag-sign in sa araw mismo. Ang mga may-ari sa loob ng 100 talampakan (variation) o 250 talampakan (special use) ay maaaring magparehistro bago mag-9 AM ng Martes bago nito para matanong ang aplikante.',
+  'Zoning Board of Appeals participation rules':
+    'Mga patakaran sa paglahok sa Zoning Board of Appeals',
+  'Plan Commission hearing page':
+    'Pahina ng hearing ng Plan Commission',
+  'Planned Development':
+    'Planned Development',
+  'Special use':
+    'Special use',
+  'Variation':
+    'Variation',
+  'Zoning change':
+    'Pagbabago sa zoning',
+  'Hearing: {body}, {when}':
+    'Hearing: {body}, {when}',
+  'Filed {date}. No hearing set yet.':
+    'Isinampa noong {date}. Wala pang nakatakdang hearing.',
+  'No hearing set yet.':
+    'Wala pang nakatakdang hearing.',
+  'Written comment deadline: {date}':
+    'Deadline ng nakasulat na komento: {date}',
+  'This ward is in police district {list}. Its elected council holds public meetings on policing in the district.':
+    'Ang ward na ito ay nasa police district {list}. Ang inihalal nitong konseho ay nagdaraos ng mga pampublikong pulong tungkol sa pagpupulis sa district.',
+  'This ward spans police districts {list}. Each has an elected council that holds public meetings on policing in the district.':
+    'Sakop ng ward na ito ang mga police district {list}. Bawat isa ay may inihalal na konseho na nagdaraos ng mga pampublikong pulong tungkol sa pagpupulis sa district.',
+  'District {n} council':
+    'Konseho ng District {n}',
+  'Place to be announced':
+    'Iaanunsyo pa ang lugar',
+  'Beat meetings with your district’s officers (CPD calendar)':
+    'Mga beat meeting kasama ang mga pulis ng iyong district (kalendaryo ng CPD)',
+  'Ward office':
+    'Ward office',
+  'AI summary of the {date} newsletter':
+    'AI summary ng newsletter noong {date}',
+  'Read the newsletter':
+    'Basahin ang newsletter',
+  'Report a city service problem to 311':
+    'Iulat sa 311 ang problema sa serbisyo ng lungsod',
+  'Committee on Zoning':
+    'Committee on Zoning',
+  'Zoning Board of Appeals':
+    'Zoning Board of Appeals',
+  'Plan Commission':
+    'Plan Commission',
+  'Under "Take part", tap a ward meeting, a zoning item, or a police district council meeting to open it at its source. Ward meetings come from the ward office\'s newsletter; zoning items and police meetings come from the city.':
+    'Sa ilalim ng "Makilahok", i-tap ang pulong ng ward, isang zoning item, o pulong ng konseho ng police district para buksan ito sa pinagmulan. Ang mga pulong ng ward ay mula sa newsletter ng ward office; ang mga zoning item at pulong ng pulis ay mula sa lungsod.',
+  'Under "Ward office", tap the address for directions, the phone number to call, or "Ward newsletter" to read past issues or sign up.':
+    'Sa ilalim ng "Ward office", i-tap ang address para sa direksyon, ang numero para tumawag, o ang "Newsletter ng ward" para basahin ang mga nakaraang isyu o mag-sign up.',
+  'This week in the wards':
+    'Ngayong linggo sa mga ward',
+  'What aldermen told residents in their newsletters, the week of {date}.':
+    'Ang sinabi ng mga alderman sa mga residente sa kanilang mga newsletter, linggo ng {date}.',
+  'Each ward’s latest newsletter is summarized on its ward page.':
+    'Ang pinakabagong newsletter ng bawat ward ay may buod sa pahina ng ward nito.',
+  'newsletter':
+    'newsletter',
+  'newsletters':
+    'newsletter',
+  'ward office':
+    'ward office',
+  'ward offices':
+    'ward office',
+  'Under "This week in the wards", read an AI summary of what ward offices told residents in their newsletters this week. Tap "Show more" for all of it.':
+    'Sa ilalim ng "Ngayong linggo sa mga ward", basahin ang AI summary ng sinabi ng mga ward office sa mga residente sa kanilang mga newsletter ngayong linggo. I-tap ang "Ipakita pa" para makita lahat.',
+
+  // News tab and the notifications bell (2026-10-07)
+  "If you turn news sources or story languages off while signed in: which ones, so the choice follows your account.":
+    "Kung mag-off ka ng mga source ng balita o wika ng balita habang naka-sign in: kung alin ang mga ito, para sumunod sa iyong account ang pinili mo.",
+  "Newsrooms included: {n}. Turned off by you: {off}.":
+    "Mga newsroom na kasama: {n}. Pinatay mo: {off}.",
+  "Headlines showing: {n}.":
+    "Mga headline na nakikita: {n}.",
+  "Showing only stories that name your ward.":
+    "Ipinapakita lang ang mga balitang bumabanggit sa iyong ward.",
+  "Not included: {names}.":
+    "Hindi kasama: {names}.",
+  "All Chicago":
+    "Buong Chicago",
+  "news":
+    "balita",
+  "Headlines from {n} newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "Mga headline mula sa {n} newsroom na nagbabalita tungkol sa Chicago, pinakabago muna. I-tap ang isa para basahin ito sa site ng newsroom.",
+  "Headlines from newsrooms covering Chicago, newest first. Tap one to read it on the newsroom's site.":
+    "Mga headline mula sa mga newsroom na nagbabalita tungkol sa Chicago, pinakabago muna. I-tap ang isa para basahin ito sa site ng newsroom.",
+  "Sources ({n} off)":
+    "Mga source ({n} naka-off)",
+  "You have turned every source off.":
+    "Pinatay mo ang lahat ng source.",
+  "Show every source":
+    "Ipakita ang lahat ng source",
+  "No story in the past two weeks names your ward, its alderman, or its neighborhoods.":
+    "Walang balita sa nakaraang dalawang linggo na bumabanggit sa iyong ward, sa alderman nito, o sa mga neighborhood nito.",
+  "No headlines yet.":
+    "Wala pang headline.",
+  "See why":
+    "Tingnan kung bakit",
+  "Your choices are saved to your account.":
+    "Naka-save sa iyong account ang mga pinili mo.",
+  "Your choices are saved on this device.":
+    "Naka-save sa device na ito ang mga pinili mo.",
+  "Every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites (the Tranco list) is here. Every one is on until you turn it off. Stories are listed newest first. The app never ranks them or hides any.":
+    "Narito ang bawat newsroom na nagbabalita tungkol sa Chicago o sa gobyerno ng Illinois, may pampublikong feed, at kabilang sa isang milyong pinakasikat na website (ang listahan ng Tranco). Naka-on ang bawat isa hanggang patayin mo. Pinakabago muna ang mga balita. Hindi kailanman nira-rank o itinatago ng app ang alinman.",
+  "Newsrooms":
+    "Mga newsroom",
+  "Its feed is not answering right now.":
+    "Hindi sumasagot ang feed nito sa ngayon.",
+  "Story languages":
+    "Mga wika ng balita",
+  "Headlines stay in the language the newsroom wrote them in.":
+    "Nananatili ang mga headline sa wikang ginamit ng newsroom.",
+  "Not included":
+    "Hindi kasama",
+  "Opens the story on {source}'s site":
+    "Binubuksan ang balita sa site ng {source}",
+  "In the news":
+    "Sa balita",
+  "Stories from the past two weeks that name this ward, its alderman, or one of its neighborhoods.":
+    "Mga balita sa nakaraang dalawang linggo na bumabanggit sa ward na ito, sa alderman nito, o sa isa sa mga neighborhood nito.",
+  "Stories from the past two weeks that name them.":
+    "Mga balita sa nakaraang dalawang linggo na bumabanggit sa kanila.",
+  "Notifications, {n} unread":
+    "Mga abiso, {n} hindi pa nabubuksan",
+  "Notifications":
+    "Mga abiso",
+  "Could not save your news choices":
+    "Hindi ma-save ang mga pinili mo sa balita",
+  "News sources":
+    "Mga source ng balita",
+  "Its site turns away automated feed readers, so its headlines can't be included without its permission.":
+    "Tinatanggihan ng site nito ang mga automated na feed reader, kaya hindi maisasama ang mga headline nito nang walang pahintulot nito.",
+  "Its site turns away automated feed readers. We've asked for permission to include its headlines.":
+    "Tinatanggihan ng site nito ang mga automated na feed reader. Humingi na kami ng pahintulot na isama ang mga headline nito.",
+  "We asked to include its headlines, and it declined.":
+    "Humingi kami ng pahintulot na isama ang mga headline nito, at tumanggi ito.",
+  "Tap the bell at the top to see your notifications. A number on it counts the ones you haven't opened.":
+    "I-tap ang kampana sa itaas para makita ang iyong mga abiso. Ang numero rito ay ang bilang ng hindi mo pa nabubuksan.",
+  "Under \"In the news\", tap a headline to read a recent story that names this ward, its alderman, or one of its neighborhoods.":
+    "Sa “Sa balita”, i-tap ang isang headline para basahin ang bagong balitang bumabanggit sa ward na ito, sa alderman nito, o sa isa sa mga neighborhood nito.",
+  "Headlines from every newsroom that covers Chicago or Illinois government, has a public feed, and is among the million most popular websites, newest first. The app never ranks them or hides any. Below the list are the newsrooms that are not included, and why.":
+    "Mga headline mula sa bawat newsroom na nagbabalita tungkol sa Chicago o sa gobyerno ng Illinois, may pampublikong feed, at kabilang sa isang milyong pinakasikat na website, pinakabago muna. Hindi kailanman nira-rank o itinatago ng app ang alinman. Nasa ibaba ng listahan ang mga newsroom na hindi kasama, at kung bakit.",
+  "Tap a headline to read the story on the newsroom's own site.":
+    "I-tap ang isang headline para basahin ang balita sa sariling site ng newsroom.",
+  "Tap your ward to see only stories that name your home ward, its alderman, or one of its neighborhoods. Tap \"All Chicago\" to see everything again. A \"Your ward\" tag marks those stories in the full list.":
+    "I-tap ang iyong ward para makita lang ang mga balitang bumabanggit sa iyong home ward, sa alderman nito, o sa isa sa mga neighborhood nito. I-tap ang “Buong Chicago” para makita ulit ang lahat. May tag na “Ang iyong ward” ang mga balitang iyon sa buong listahan.",
+  "Tap \"Sources\" to turn newsrooms or story languages off or back on.":
+    "I-tap ang “Mga source” para i-off o i-on ulit ang mga newsroom o wika ng balita.",
+  "Tap \"Show more\" at the bottom to load 30 more headlines.":
+    "I-tap ang “Ipakita pa” sa ibaba para mag-load ng 30 pang headline.",
+  "Tap \"See why\" to read why a newsroom is not included.":
+    "I-tap ang “Tingnan kung bakit” para mabasa kung bakit hindi kasama ang isang newsroom.",
+  "Which newsrooms and story languages your news tab shows, and the newsrooms that are not included, with why. Every included newsroom is on until you turn it off.":
+    "Kung aling mga newsroom at wika ng balita ang ipinapakita ng iyong news tab, at ang mga newsroom na hindi kasama, kasama ang dahilan. Naka-on ang bawat kasamang newsroom hanggang patayin mo.",
+  "Turn a newsroom's switch off to hide its headlines, or back on to show them again.":
+    "I-off ang switch ng isang newsroom para itago ang mga headline nito, o i-on ulit para ipakita muli.",
+  "Under \"Story languages\", turn off a language to hide stories written in it. Headlines are never translated.":
+    "Sa “Mga wika ng balita”, i-off ang isang wika para itago ang mga balitang nakasulat dito. Hindi kailanman isinasalin ang mga headline.",
+  "Tap \"Show every source\" to turn everything back on.":
+    "I-tap ang “Ipakita ang lahat ng source” para i-on ulit ang lahat.",
+  "Under \"Not included\", tap a newsroom's name to visit its site.":
+    "Sa “Hindi kasama”, i-tap ang pangalan ng isang newsroom para bisitahin ang site nito.",
+  "Signed in, your choices are saved to your account and follow you to other devices. Signed out, they are saved on this device.":
+    "Kapag naka-sign in, naka-save sa iyong account ang mga pinili mo at sumusunod sa iyo sa ibang device. Kapag naka-sign out, naka-save ang mga ito sa device na ito.",
+  "Under \"In the news\", tap a headline to read a recent story that names them.":
+    "Sa “Sa balita”, i-tap ang isang headline para basahin ang bagong balitang bumabanggit sa kanila.",
 };

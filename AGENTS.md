@@ -103,7 +103,7 @@ Conventions:
   official, candidate, policy, and ward pages read EXACTLY the same for the
   politician as for anyone: no owner controls there, ever. Their own AMA
   notifications open `/command?q=` (rewritten client-side in the
-  notifications tab). Six tabs step labels down further (see the tab
+  notifications screen). Six tabs step labels down further (see the tab
   layout); check 320pt after touching tab titles.
 - Poll results (2026-09-27): the poll's author always sees live results
   and gets no vote buttons on their own poll. Anyone who can still vote sees
@@ -169,6 +169,74 @@ Conventions:
   No), and `officials.elmsPersonId`; admin-written, world-readable. The API
   double-encodes JSON when sent `accept: application/json`, so council.ts
   sends no accept header and parses a string body twice.
+- Take part (2026-10-05): each ward page has a "Take part" section under
+  the alderman (`WardTakePart`, src/components/ward-take-part.tsx): ward
+  meetings from the ward newsletter, development and zoning, the police
+  district councils covering the ward, and the ward office (addresses with
+  directions, hours, phone, email, newsletter, its latest issue's AI
+  summary, 311). Data, all public record, no client writes:
+  - `zoningItems` (`syncWardCivics`, twice daily, functions/src/zoning.ts):
+    zoning map amendments in committee at the Clerk (eLMS has no ward field:
+    the filing alderman's office, else the title's first address geocoded
+    once), joined to the Committee on Zoning agenda PDF (ward, applicant,
+    change, purpose, hearing, written comment deadline); Zoning Board of
+    Appeals agenda cases; Plan Commission hearing items (can span wards).
+    chicago.gov answers bots with 403, so those fetches send a browser user
+    agent. Testimony rules shown are only the ones the boards print (ZBA
+    participation page, Zoning Committee agenda); the Plan Commission states
+    none, so it gets a link.
+  - `civicMeetings` (same function, functions/src/civic.ts): Police District
+    Council and CCPSA meetings from CCPSA's events feed. CAPS beat meetings
+    are linked, not synced: CPD's calendar blocks every non-browser request.
+  - `officials.officeAddresses` and website fixes (`WEBSITE_OVERRIDES`) come
+    from `seed-aldermen`; `officials.newsletterUrl` from `npm run
+    set-newsletters` and scripts/data/ward-newsletters.json (one entry per
+    ward: the office's own newsletter archive, else its signup; campaign
+    lists only when the office's site offers nothing else; null with a note
+    when none works).
+  - `newsletterIssues` (AI summary per issue), `wardMeetings`,
+    `officials.officeHours`, and `newsletterDigests` (home tab, "This week in
+    the wards", Mondays) are written by `npm run newsletters` from the daily
+    scheduled task "ward-newsletter-digest", which reads each new issue
+    under ONE prompt, scripts/data/newsletter-prompt.md (describe, never
+    rate; same words for every ward). Feeds and archive pages cover about
+    half the wards; email-only lists need a subscribed inbox, not built yet.
+- News tab (2026-10-07): `news` (newspaper icon, between wards and
+  election) lists headlines from every newsroom that covers Chicago or
+  Illinois government, has a public feed, and is in the top million of the
+  Tranco list (tranco-list.eu; Brian 2026-10-08: traffic is the main
+  qualifier; `npm run news-ranks` rechecks every outlet, including the
+  watched ones below the bar, and the Monday newsletter run reports it),
+  newest first, never ranked or hidden by the app. A national site's
+  Chicago section (CBS, Chalkbeat) counts by its whole domain's rank. That inclusion rule is the same for every outlet on
+  purpose (Brian is on the ballot, so the list must not read as curated),
+  and it is stated on the sources screen and in help. Brian's call: include
+  the outlets that allow it; ask the ones that block feed readers; if one
+  declines, list it as declined. `syncNewsFeeds` (every 20 minutes,
+  functions/src/news.ts) fetches each feed with a user agent naming the app
+  and keeps 14 days in `newsItems` (headline, link, time, language, and
+  `wardIds` / `officialIds`) and the source list in `newsSources`; an outlet
+  that turns that reader away goes in `NOT_INCLUDED` with its status
+  (`blocked`, `asked`, `declined`), never around the block (Tribune, Crain's,
+  and the Hyde Park Herald's 429 from data centers). Moving one into
+  `SOURCES` once it agrees is the whole change, and taking one out deletes
+  its stories on the next run. Open outreach and sourcing work lives in
+  docs/content-follow-ups.md. AI-written summary sites (Hoodline) are left
+  out: the app is the summary.
+  Headlines are never translated; each story's language comes from the
+  source, the Sun-Times' `/la-voz/` path, or the headline (Chalkbeat
+  translates some into Spanish and Chinese). Each person turns sources and
+  languages off on `/news-sources` (`users/{uid}.newsPrefs`, or the device
+  when signed out; `useNewsPrefs` in src/lib/news.ts). Ward matching is
+  text rules, never AI: "25th Ward" / "Ward 25", an alderman by any form the
+  press uses (`officialRules`: full name, no middle initial, short first
+  name, "Ald. Last" when unique, "Last (25th)"), or a neighborhood at least
+  15% of whose residents live in the ward (functions/data/
+  neighborhood-wards.json from `npm run build-neighborhood-wards`, the city's
+  98 neighborhoods plus aliases like Pilsen and Bronzeville); neighborhood
+  names count only in Chicago-only newsrooms or stories that say "Chicago".
+  Ward pages and alderman pages show the matches as "In the news"
+  (`InTheNews`), and the tab's ward switch narrows to the home ward.
 - Ward concerns end with a quiet "Report it to 311" link (311.chicago.gov);
   the how-to-vote card folds "More help voting" (accessible voting,
   language help, permanent vote by mail, pre-registration at 16, election
@@ -186,10 +254,11 @@ Conventions:
   next.config.js sends every non-file path under /directdemocracy/app to
   the app's index.html. Web App Check is reCAPTCHA v3
   (`EXPO_PUBLIC_RECAPTCHA_V3_SITE_KEY`), registered for waldgrave.com. Android claims
-  those links in the binary (app.json intent filter); iOS needs a
-  `/directdemocracy/app/*` component in waldgrave's apple-app-site-association,
-  added only once a build with the prefix-stripping `+native-intent.ts` is
-  live in the store (older builds would open the link to a missing screen).
+  those links in the binary (app.json intent filter); on iOS, waldgrave's
+  apple-app-site-association has carried a `/directdemocracy/app/*`
+  component since 2026-10-01, once 1.0.15 (the first build whose
+  `+native-intent.ts` strips the prefix) was live, so shared links open the
+  installed app.
 - Languages (2026-09-29): `Locale` is en, es, zh (Simplified), pl, tl, ko,
   hi (`LANGUAGES` in src/lib/i18n.tsx); dictionaries in src/i18n/<code>.ts,
   all keyed by the English source. Spanish is the full set; the other five
@@ -310,7 +379,11 @@ Conventions:
   runningOn, priorCareer, website, and the sourceUrls each summary was
   compiled from. Races/labels live in `src/constants/school-board.ts`.
   Withdrawn/removed candidates are dropped from the JSON and the seed's
-  full sync deletes them. Copy must stay neutral and sourced; candidates
+  full sync deletes them. `ctuEndorsed: true` marks the Chicago Teachers
+  Union's published slate (ctulocal1.org school-board-election-2026, one
+  per seat at most, the seed checks): a green "CTU endorsed" chip
+  (`CtuChip`) on the race list and the nominee card, since for many voters
+  it is the deciding fact. Copy must stay neutral and sourced; candidates
   with no findable platform say so plainly.
 - Officials are graded on two axes in `src/services/officials.ts`: constituent
   approval (5-ballot minimum) and the community-judged answer score, averaged
@@ -358,7 +431,10 @@ Conventions:
   `/command?q=` does the same in the command center). New notification types follow
   the same rule.
   The notifications tab replaced the ama tab (the officials directory moved
-  to `/officials`; wards link to each alderman directly).
+  to `/officials`; wards link to each alderman directly), and on 2026-10-07
+  it became `/notifications`, opened from the bell (`NotificationBell`,
+  with the unread count) beside the help "?" in the row at the top of every
+  tab (the Screen shell), so the news tab could have its place.
 - Claimed profiles: `claimed` on officials/candidates is set by
   `refreshClaim`/`sweepClaims` (a provider attached to the placeholder
   account = someone proved control of the published inbox). Rules require
@@ -468,7 +544,14 @@ Conventions:
   `config/app.updateMessage(Es)`) replaces it on both cards in builds after
   1.0.12; clear it on the next flip so it never describes the wrong release. The doc is
   world-readable, admin-write-only; a platform with no store URL on the doc
-  never nudges.
+  never nudges. Android (2026-10-06, ported from Escape from Hades IRL)
+  compares the build number, not the name, since Android builds only bump
+  versionCode and several Play releases share one name: its own dials
+  `androidLatestBuild` / `androidMinBuild` (`--android-latest <code>`,
+  `--android-min <code>`), flipped once Play serves that build, closed
+  testing included, so testers hear about every build. Android builds up to
+  versionCode 8 predate this and still read latestVersion / minVersion.
+  Every release flips the dial of each store it reached.
 - Paid verification (`functions/src/payments.ts`): Didit's first 500 ID
   checks each month (Chicago time, counted in `verificationUsage`) are free;
   past them, and for every bill move (proof of address is never free), a
@@ -545,11 +628,12 @@ Conventions:
   system's own app chooser handles; on the web, Google Maps directions.
 - Election tab layout (2026-09-30): each ballot is a full-width band of
   its own color (`ElectionBand`, theme `novemberBand` / `februaryBand`,
-  headed by its date; the jump grid's cells wear the same colors). Order:
-  February band (race for mayor, mayoral AMA), November band (`YourRaces`,
-  how to vote, the statewide and county offices, the advisory question,
-  then the school board, judges, and every district), February band (ward
-  races). `YourRaces` (src/components/your-races.tsx) leads the November
+  headed by its date; the jump grid's cells wear the same colors). Order
+  (2026-10-08, the sooner ballot first): November band (`YourRaces`, how to
+  vote, the statewide and county offices, the advisory question, then the
+  school board, judges, and every district), then one February band (race
+  for mayor, mayoral AMA, ward races). Mayoral candidates are listed in a
+  random order (`shuffled`, seeded once per mount), never alphabetical. `YourRaces` (src/components/your-races.tsx) leads the November
   ballot: with an address on file, every race that address decides, with
   who is running, and the ones not up this year in one line; without one,
   a prominent ask for the address ("Find my races"), since the address is

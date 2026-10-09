@@ -121,14 +121,15 @@ service cloud.firestore {
         && request.resource.data.stats.votes == 0
         && request.resource.data.stats.judgments == 0;
 
-      // Users may edit their display name and their phone-notification
-      // settings (which types reach the phone, and this phone's push token)
+      // Users may edit their display name, their phone-notification
+      // settings (which types reach the phone, and this phone's push token),
+      // and which news sources and languages their news tab leaves out
       // - nothing else. verified / wardId / role are written only by the
       // Admin SDK (Didit webhook and admin tooling). Account deletion goes
       // through the deleteAccount callable (Admin SDK), not a client delete.
       allow update: if signedIn()
         && request.auth.uid == uid
-        && onlyChanges(['displayName', 'pushPrefs', 'pushTokens'])
+        && onlyChanges(['displayName', 'pushPrefs', 'pushTokens', 'newsPrefs'])
         && (
           !('displayName' in request.resource.data.diff(resource.data).affectedKeys())
           || (
@@ -143,6 +144,19 @@ service cloud.firestore {
           || (
             request.resource.data.pushPrefs is map
             && request.resource.data.pushPrefs.keys().hasOnly(['deadline', 'answers', 'comments', 'replies', 'credits', 'questions'])
+          )
+        )
+        && (
+          !('newsPrefs' in request.resource.data)
+          || (
+            request.resource.data.newsPrefs is map
+            && request.resource.data.newsPrefs.keys().hasOnly(['hiddenSources', 'hiddenLangs'])
+            && (!('hiddenSources' in request.resource.data.newsPrefs)
+              || (request.resource.data.newsPrefs.hiddenSources is list
+                && request.resource.data.newsPrefs.hiddenSources.size() <= 50))
+            && (!('hiddenLangs' in request.resource.data.newsPrefs)
+              || (request.resource.data.newsPrefs.hiddenLangs is list
+                && request.resource.data.newsPrefs.hiddenLangs.size() <= 5))
           )
         )
         && (
@@ -747,11 +761,12 @@ service cloud.firestore {
     }
 
     // ── App config ───────────────────────────────────────────────────────
-    // App-level config, not user data. config/app.latestVersion drives the
-    // update nudge (src/lib/app-update.ts) and is compared against the
-    // running binary's own version, so it must be readable BEFORE sign-in
-    // (the check runs at cold start). World-readable is fine: it holds only
-    // the released version string and public store links. Writes happen
+    // App-level config, not user data. config/app.latestVersion (iOS, the
+    // binary's version) and androidLatestBuild (Android, the versionCode)
+    // drive the update nudge (src/lib/app-update.ts), so it must be readable
+    // BEFORE sign-in (the check runs at cold start). World-readable is fine:
+    // it holds only released version numbers, release copy, and public store
+    // links. Writes happen
     // exclusively via admin tooling (scripts/set-latest-version.ts), never
     // from clients.
     match /config/app {
@@ -964,6 +979,33 @@ service cloud.firestore {
       allow read: if true;
     }
     match /rollCalls/{rollCallId} {
+      allow read: if true;
+    }
+    // A ward's development and zoning items (syncWardCivics: the Clerk, the
+    // Zoning Board of Appeals, the Plan Commission), police district council
+    // meetings (CCPSA's feed), and community meetings and newsletter
+    // summaries (scripts/newsletters.ts): public record, Admin SDK only.
+    match /zoningItems/{itemId} {
+      allow read: if true;
+    }
+    match /civicMeetings/{meetingId} {
+      allow read: if true;
+    }
+    match /wardMeetings/{meetingId} {
+      allow read: if true;
+    }
+    match /newsletterIssues/{issueId} {
+      allow read: if true;
+    }
+    match /newsletterDigests/{digestId} {
+      allow read: if true;
+    }
+    // The news tab (syncNewsFeeds, functions/src/news.ts): each source and
+    // its status, and headlines with links. Public record, Admin SDK only.
+    match /newsSources/{sourceId} {
+      allow read: if true;
+    }
+    match /newsItems/{itemId} {
       allow read: if true;
     }
 

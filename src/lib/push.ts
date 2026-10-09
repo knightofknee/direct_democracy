@@ -18,7 +18,7 @@ import type { Role, UserProfile } from '@/lib/types';
  * notification reach the phone (users/{uid}.pushPrefs), and this phone's
  * Expo push token is stored with its language (users/{uid}.pushTokens) so
  * the server (sendPush in functions) can send in the right one. Kinds not
- * listed here stay in the notifications tab only: verdicts, verification
+ * listed here stay in the app's notifications only: verdicts, verification
  * results, and posting-limit notices. Mirror of PUSH_PREF_FOR_TYPE in
  * functions/src/index.ts.
  */

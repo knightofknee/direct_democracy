@@ -36,6 +36,8 @@ interface WardRow {
   ward_phone?: string;
   website?: { url: string };
   photo_link?: { url: string };
+  address?: string;
+  zipcode?: string;
 }
 
 function ordinal(n: number): string {
@@ -91,6 +93,34 @@ async function main() {
   const EMAIL_OVERRIDES: Record<number, string> = {
     1: 'info@the1stward.com', // dataset: Ward01@cityofchicago.org; chicago.gov Ward 1 page and La Spata's office use info@
   };
+  // Ward office sites the dataset lacks or gets wrong (blank, an email in
+  // the URL field, a dead or hijacked domain), each read on the office's
+  // own site 2026-10-05 (scripts/data/ward-newsletters.json names the
+  // pages). The dataset wins again once it carries a site.
+  const WEBSITE_OVERRIDES: Record<number, string> = {
+    4: 'https://www.robinson4thward.com/',
+    6: 'https://www.6wardchicago.com/',
+    10: 'https://www.aldermanchico.org/',
+    12: 'https://www.the12thward.org/',
+    17: 'https://www.17thwardalderman.com/',
+    19: 'https://www.19thwardmobile.com/',
+    20: 'https://www.ward20th.com/',
+    21: 'https://www.aldmosley21.com/',
+    22: 'https://www.22ndward.org/',
+    23: 'https://www.ward23.org/',
+    26: 'https://www.the26thward.org/',
+    27: 'https://building27together.com/',
+    30: 'https://www.30thward.org/',
+    31: 'https://www.ward31.org/',
+    33: 'https://33rdward.org/',
+    34: 'https://www.ward34.org/',
+    35: 'https://www.ward35.org/',
+    39: 'https://www.aldermannugent.com/',
+    42: 'https://ward42chicago.com/',
+    44: 'https://www.44thward.org/',
+    46: 'https://www.46thward.com/',
+    50: 'https://50thward.org/',
+  };
   for (const row of rows) {
     const wardId = Number(row.ward);
     const name = displayName(row.alderman);
@@ -100,13 +130,20 @@ async function main() {
       console.warn(`Ward ${wardId} (${name}): no email in dataset - skipped.`);
       continue;
     }
-    const websiteUrl = httpsOrNull(row.website?.url);
+    // Dataset sites that redirect elsewhere, sit parked, or carry spam.
+    const dead = new Set([8, 19, 27, 50]);
+    const websiteUrl =
+      (dead.has(wardId) ? null : httpsOrNull(row.website?.url)) ?? WEBSITE_OVERRIDES[wardId] ?? null;
+    // A ward with two offices lists both, ';'-separated, zips in order.
+    const streets = (row.address ?? '').split(';').map((a) => a.replace(/\s+/g, ' ').trim()).filter(Boolean);
+    const zips = (row.zipcode ?? '').split(';').map((z) => z.trim());
+    const officeAddresses = streets.map((a, i) => `${a}, Chicago, IL${zips[i] ? ` ${zips[i]}` : ''}`);
     const photoUrl = httpsOrNull(row.photo_link?.url);
     const phone = row.ward_phone?.split('/')[0].trim() || null;
 
     if (dryRun) {
       console.log(
-        `ward ${String(wardId).padStart(2)}: ${name} | ${email} | ${phone ?? '-'} | ${websiteUrl ?? '-'} | photo ${photoUrl ? 'yes' : 'no'}`
+        `ward ${String(wardId).padStart(2)}: ${name} | ${email} | ${phone ?? '-'} | ${websiteUrl ?? '-'} | ${officeAddresses.join(' / ') || '-'} | photo ${photoUrl ? 'yes' : 'no'}`
       );
       continue;
     }
@@ -144,6 +181,7 @@ async function main() {
         contactEmail: email,
         phone,
         websiteUrl,
+        officeAddresses,
         ...(existing.exists
           ? {}
           : {
