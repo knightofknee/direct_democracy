@@ -90,10 +90,11 @@
     "sourceUrl": "https://www.ward09.com/",
     "rssUrl": null,
     "note": "Constant Contact signup behind bot check, linked from ward homepage",
-    "inbox": "subscribed 2026-10-05 (welcome email received)",
+    "inbox": "receiving since 2026-10-09",
     "checked": "2026-10-05",
     "senders": [
-      "09th.ward-gmail.com@shared1.ccsend.com"
+      "09th.ward-gmail.com@shared1.ccsend.com",
+      "ward09-cityofchicago.org@shared1.ccsend.com"
     ]
   },
   {
@@ -112,7 +113,7 @@
     "sourceUrl": "https://www.nwnachicago.org/knowledge_hub__ward_newsletters.php",
     "rssUrl": null,
     "note": "Constant Contact signup titled for Alderman Nicole T. Lee; no ward site",
-    "inbox": "subscribed, confirmed by Brian by 2026-10-07",
+    "inbox": "receiving since 2026-10-11",
     "checked": "2026-10-05",
     "senders": [
       "nicolelee11thwardchi-gmail.com@shared1.ccsend.com",
@@ -175,8 +176,11 @@
     "sourceUrl": "https://www.17thwardalderman.com/",
     "rssUrl": null,
     "note": "Constant Contact signup behind bot check",
-    "inbox": "signed up 2026-10-05; no mail yet",
-    "checked": "2026-10-05"
+    "inbox": "receiving since 2026-10-09",
+    "checked": "2026-10-05",
+    "senders": [
+      "bburks17ward-gmail.com@shared1.ccsend.com"
+    ]
   },
   {
     "ward": 18,
@@ -445,8 +449,11 @@
     "sourceUrl": "https://www.aldermangardiner.com/",
     "rssUrl": null,
     "note": "popup signup on homepage, Constant Contact",
-    "inbox": "signed up 2026-10-05; no mail yet",
-    "checked": "2026-10-05"
+    "inbox": "receiving since 2026-10-08",
+    "checked": "2026-10-05",
+    "senders": [
+      "ward45@cityofchicago.org"
+    ]
   },
   {
     "ward": 46,

@@ -5,6 +5,36 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-10-09: anonymous screen counts
+
+- **What is sent:** `src/lib/usage.ts` counts screen views per route
+  pattern (the help key, '(tabs)/news', 'official/[id]', never an id) and
+  sends at most one `usageEvents` doc a minute, plus one when the app goes
+  to the background: the Chicago day, platform, app version, view counts,
+  and `reach` (routes this device opens for the first time that day, kept
+  on the device in AsyncStorage). No uid, no device or install id, no
+  push token. Off in development and against the emulators; a failed send
+  is dropped.
+- **Rules:** anyone may create a `usageEvents` doc (signed in or not, App
+  Check still applies) with exactly those five fields, a 'YYYY-MM-DD' day,
+  one of three platforms, a version of at most 20 characters, and maps of
+  at most 40 keys. Nobody may read, update, or delete one. `usageDaily`
+  has no client access at all. Verified 2026-10-09 against the live
+  ruleset (Rules API test) and through the REST API with an App Check
+  token: extra field, bad platform, read, list, update, and delete all
+  denied.
+- **Trigger:** `onUsageEvent` re-checks every value (counts 1 to 500, reach
+  exactly 1, route keys under 80 characters of letters, digits, `_()[]/#-`,
+  a day within two days of today), adds the rest into `usageDaily/{day}`
+  with increments written as nested maps through set-merge (route keys
+  hold '/' and brackets), and deletes the event in the same transaction,
+  so a retry never counts twice. `npm run usage` (scripts/usage.ts) is the
+  only reader.
+- **Accepted:** anyone with an attested app could post made-up counts, and
+  a device that clears its storage counts as a new device that day. These
+  numbers are for Brian's decisions only and are never shown in the app,
+  so nothing a voter sees can be moved by them.
+
 ## Update - 2026-09-29: moderation
 
 - **Shadowban:** 5 distinct accounts with open reports against a citizen hide

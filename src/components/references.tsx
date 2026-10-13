@@ -76,7 +76,7 @@ export function ReferenceList({ references }: { references?: string[] }) {
             onPress={() => void openLink(url)}
             accessibilityRole="link"
             style={styles.row}>
-            <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 12, width: 20 }}>
+            <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 12, minWidth: 20 }}>
               {i + 1}
             </ThemedText>
             <ThemedText
@@ -127,7 +127,7 @@ export function ReferenceEditor({
       )}
       {references.map((url, i) => (
         <View key={i} style={styles.editRow}>
-          <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13, width: 20 }}>
+          <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13, minWidth: 20 }}>
             {i + 1}
           </ThemedText>
           <View style={{ flex: 1 }}>
@@ -142,7 +142,8 @@ export function ReferenceEditor({
           </View>
           <Pressable
             onPress={() => onChange(references.filter((_, j) => j !== i))}
-            hitSlop={8}
+            hitSlop={12}
+            accessibilityRole="button"
             accessibilityLabel={t('Remove reference {n}').replace('{n}', String(i + 1))}>
             <Ionicons name="close-circle" size={20} color={theme.textSecondary} />
           </Pressable>
@@ -177,18 +178,25 @@ export function SourcesButton({ references }: { references?: string[] }) {
   if (refs.length === 0) return null;
   return (
     <>
-      <Pressable onPress={() => setOpen(true)} hitSlop={4} style={styles.sourcesButton}>
+      <Pressable
+        onPress={() => setOpen(true)}
+        hitSlop={4}
+        accessibilityRole="button"
+        style={styles.sourcesButton}>
         <Ionicons name="link-outline" size={14} color={theme.textSecondary} />
         <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, fontWeight: '600' }}>
           {refs.length === 1 ? t('source') : t('sources')}
         </ThemedText>
       </Pressable>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
+        {/* Neither Pressable is a screen reader element, so each source
+            link in the popup is reached on its own. */}
+        <Pressable style={styles.backdrop} onPress={() => setOpen(false)} accessible={false}>
           <Pressable
+            accessible={false}
             style={[styles.sheet, { backgroundColor: theme.background, borderColor: theme.border }]}
             onPress={(e) => e.stopPropagation()}>
-            <ThemedText type="smallBold">
+            <ThemedText type="smallBold" accessibilityRole="header">
               {refs.length === 1 ? t('Source') : t('Sources')}
             </ThemedText>
             {refs.map((url, i) => (
@@ -197,7 +205,7 @@ export function SourcesButton({ references }: { references?: string[] }) {
                 onPress={() => void openLink(url)}
                 accessibilityRole="link"
                 style={styles.row}>
-                <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 12, width: 20 }}>
+                <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 12, minWidth: 20 }}>
                   {i + 1}
                 </ThemedText>
                 <ThemedText

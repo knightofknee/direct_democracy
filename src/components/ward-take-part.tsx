@@ -14,7 +14,7 @@ import { db } from '@/lib/firebase';
 import { useLocalized, useT } from '@/lib/i18n';
 import { openDirections, openLink } from '@/lib/open-link';
 import type { CivicMeeting, NewsletterIssue, Official, WardMeeting, ZoningItem } from '@/lib/types';
-import { formatWhen } from '@/lib/ward-posting';
+import { formatDay, formatWhen } from '@/lib/ward-posting';
 
 /** The City Clerk's page on giving public comment (Council and its committees). */
 const PUBLIC_COMMENT_URL = 'https://www.chicityclerk.com/public-comment-process';
@@ -47,7 +47,7 @@ export function WardTakePart({ wardId, alderman }: { wardId: number; alderman: O
         title={t('Take part')}
         subtitle={t('Where decisions about this ward get made, and when you can be heard.')}
       />
-      <WardMeetingsCard wardId={wardId} />
+      <WardMeetingsCard wardId={wardId} phone={alderman?.phone ?? null} />
       <ZoningCard wardId={wardId} />
       <PoliceCouncilCard wardId={wardId} />
       {alderman && <WardOfficeCard wardId={wardId} alderman={alderman} />}
@@ -60,7 +60,7 @@ function CardTitle({ icon, title }: { icon: keyof typeof Ionicons.glyphMap; titl
   return (
     <View style={styles.cardTitle}>
       <Ionicons name={icon} size={16} color={theme.primary} />
-      <ThemedText type="smallBold" style={{ fontSize: 14, flex: 1 }}>
+      <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 14, flex: 1 }}>
         {title}
       </ThemedText>
     </View>
@@ -79,10 +79,14 @@ function LinkLine({ icon, label, onPress }: { icon: keyof typeof Ionicons.glyphM
   );
 }
 
-/** Ward nights, community meetings on proposed projects, town halls: from the ward newsletter. */
-function WardMeetingsCard({ wardId }: { wardId: number }) {
+/**
+ * Ward nights, community meetings on proposed projects, town halls: from the
+ * ward newsletter. Meetings it announces without a time follow under "Time
+ * not found in the newsletter" (2026-10-12), with the office's phone: the
+ * time may well be set, the newsletter just doesn't say it.
+ */
+function WardMeetingsCard({ wardId, phone }: { wardId: number; phone: string | null }) {
   const t = useT();
-  const theme = useTheme();
   const [now] = useState(() => new Date());
   const { data: meetings } = useLiveQuery<WardMeeting>(
     () =>
@@ -95,40 +99,81 @@ function WardMeetingsCard({ wardId }: { wardId: number }) {
       ),
     [wardId]
   );
-  if (meetings.length === 0) return null;
+  const { data: undatedAll } = useLiveQuery<WardMeeting>(
+    () => query(collection(db, 'wardMeetings'), where('wardId', '==', wardId), where('start', '==', null)),
+    [wardId]
+  );
+  // The script clears expired ones once a day; between runs, hide them here.
+  const undated = undatedAll
+    .filter((m) => !m.expiresAt || m.expiresAt.toMillis() > now.getTime())
+    .sort((a, b) => (a.date ?? '9999').localeCompare(b.date ?? '9999') || a.title.localeCompare(b.title));
+  if (meetings.length === 0 && undated.length === 0) return null;
   return (
     <Card>
       <CardTitle icon="people-outline" title={t('Ward meetings')} />
       {meetings.map((m) => (
-        <Pressable
-          key={m.id}
-          onPress={m.url ? () => void openLink(m.url!) : undefined}
-          accessibilityRole={m.url ? 'link' : undefined}
-          style={styles.item}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two, alignItems: 'center' }}>
-            <ThemedText type="smallBold" style={{ fontSize: 14, lineHeight: 19, flexShrink: 1 }}>
-              {m.title}
-            </ThemedText>
-            {m.kind === 'development' && <Chip label={t('Development')} icon="construct-outline" />}
-            {m.online && <Chip label={t('Online')} icon="videocam-outline" />}
-          </View>
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {formatWhen(m.start.toDate())}
-          </ThemedText>
-          {m.place ? (
-            <ThemedText
-              type="small"
-              style={{ fontSize: 12, color: m.address ? theme.primary : theme.textSecondary }}
-              onPress={m.address ? () => void openDirections(m.address!) : undefined}>
-              {m.place}
-            </ThemedText>
-          ) : null}
-        </Pressable>
+        <MeetingRow key={m.id} meeting={m} when={formatWhen(m.start!.toDate())} />
       ))}
-      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-        {t('As announced in the ward office’s newsletter. Tap a meeting for its details or RSVP.')}
-      </ThemedText>
+      {meetings.length > 0 && (
+        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+          {t('As announced in the ward office’s newsletter. Tap a meeting for its details or RSVP.')}
+        </ThemedText>
+      )}
+      {undated.length > 0 && (
+        <>
+          <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 13, marginTop: Spacing.one }}>
+            {t('Time not found in the newsletter')}
+          </ThemedText>
+          {undated.map((m) => (
+            <MeetingRow
+              key={m.id}
+              meeting={m}
+              when={m.date ? t('{date}, time not found').replace('{date}', formatDay(m.date)) : t('Date and time not found')}
+            />
+          ))}
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+            {t('The ward office’s newsletter mentions these without a time. The office can tell you when they meet.')}
+          </ThemedText>
+          {phone ? (
+            <LinkLine
+              icon="call-outline"
+              label={t('Call the ward office: {phone}').replace('{phone}', phone)}
+              onPress={() => void Linking.openURL(`tel:${phone.replace(/[^+\d]/g, '')}`)}
+            />
+          ) : null}
+        </>
+      )}
     </Card>
+  );
+}
+
+function MeetingRow({ meeting: m, when }: { meeting: WardMeeting; when: string }) {
+  const t = useT();
+  const theme = useTheme();
+  return (
+    <Pressable
+      onPress={m.url ? () => void openLink(m.url!) : undefined}
+      accessibilityRole={m.url ? 'link' : undefined}
+      style={styles.item}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two, alignItems: 'center' }}>
+        <ThemedText type="smallBold" style={{ fontSize: 14, lineHeight: 19, flexShrink: 1 }}>
+          {m.title}
+        </ThemedText>
+        {m.kind === 'development' && <Chip label={t('Development')} icon="construct-outline" />}
+        {m.online && <Chip label={t('Online')} icon="videocam-outline" />}
+      </View>
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+        {when}
+      </ThemedText>
+      {m.place ? (
+        <ThemedText
+          type="small"
+          style={{ fontSize: 12, color: m.address ? theme.primary : theme.textSecondary }}
+          onPress={m.address ? () => void openDirections(m.address!) : undefined}>
+          {m.place}
+        </ThemedText>
+      ) : null}
+    </Pressable>
   );
 }
 
@@ -237,7 +282,11 @@ function ZoningRow({ item, now }: { item: ZoningItem; now: number }) {
               .replace('{body}', t(BODY_SHORT[item.hearing.body] ?? item.hearing.body))
               .replace('{when}', formatWhen(item.hearing.date.toDate()))
           : item.filedAt
-            ? t('Filed {date}. No hearing set yet.').replace('{date}', formatWhen(item.filedAt.toDate(), false))
+            ? // The Clerk dates a filing by the Council meeting that introduces
+              // it, which can still be ahead (2026-10-09).
+              item.filedAt.toMillis() > now
+              ? t('Goes to the City Council on {date}. No hearing set yet.').replace('{date}', formatWhen(item.filedAt.toDate(), false))
+              : t('Filed {date}. No hearing set yet.').replace('{date}', formatWhen(item.filedAt.toDate(), false))
             : t('No hearing set yet.')}
       </ThemedText>
       {deadline && deadline.toMillis() > now && (

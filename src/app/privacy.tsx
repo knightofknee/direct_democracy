@@ -32,11 +32,13 @@ export default function PrivacyScreen() {
         <Bullet text={t('If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.')} />
         <Bullet text={t('If you turn news sources or story languages off while signed in: which ones, so the choice follows your account.')} />
         <Bullet text={t('If you pay for a verification: which one you bought, when, and the store’s transaction number. Your payment details stay with Apple or Google.')} />
+        <Bullet text={t('The app counts how often each screen is opened, by day and by phone type, anonymously: the counts carry no account, name, or device identifier.')} />
       </Section>
 
       <Section title={t('What we never see')}>
         <Bullet text={t('Your identity documents. Verification is performed by Didit, a third-party service; documents go to them, and we receive only the verdict.')} />
         <Bullet text={t('Your address. It is used only at the moment you verify or look up your districts, to find your ward and districts, and is never saved.')} />
+        <Bullet text={t('Your ballot picks. My ballot keeps them on your phone only; they are never sent to us.')} />
       </Section>
 
       <Section title={t('Who can see what')}>

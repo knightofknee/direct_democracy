@@ -93,7 +93,7 @@ export function ContentActions({
     return (
       <Pressable
         onPress={() => setOpen(true)}
-        hitSlop={8}
+        hitSlop={15}
         accessibilityRole="button"
         accessibilityLabel={t('Report or block')}
         style={styles.flagButton}>
@@ -134,6 +134,7 @@ export function ContentActions({
           <Pressable
             key={r.key}
             disabled={busy}
+            hitSlop={7}
             accessibilityRole="button"
             onPress={() => report(r.key)}
             style={[styles.chip, { borderColor: theme.border, backgroundColor: theme.backgroundElement }]}>
@@ -147,6 +148,7 @@ export function ContentActions({
       <View style={styles.reasonRow}>
         <Pressable
           disabled={busy}
+          hitSlop={7}
           accessibilityRole="button"
           onPress={block}
           style={[styles.chip, { borderColor: theme.danger, backgroundColor: theme.dangerSoft }]}>
@@ -162,7 +164,7 @@ export function ContentActions({
             setOtherNote(null);
           }}
           style={styles.chip}
-          hitSlop={4}>
+          hitSlop={7}>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
             {t('Cancel')}
           </ThemedText>

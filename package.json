@@ -81,9 +81,12 @@
     "build-ward-map": "tsx scripts/build-ward-map.ts",
     "build-district-map": "tsx scripts/build-district-map.ts",
     "export-web": "WEB_EXPORT=1 expo export --platform web --output-dir dist-web",
-    "publish-web": "npm run export-web && rsync -a --delete dist-web/ ../../Documents/GitHub/the-waldgave2/public/directdemocracy/app/",
+    "publish-web": "npm run export-web && npm run build-seo-pages && rsync -a --delete dist-web/ ../../Documents/GitHub/the-waldgave2/public/directdemocracy/app/",
+    "build-seo-pages": "tsx scripts/build-seo-pages.ts",
     "build-neighborhood-wards": "tsx scripts/build-neighborhood-wards.ts",
-    "news-ranks": "tsx scripts/news-ranks.ts"
+    "news-ranks": "tsx scripts/news-ranks.ts",
+    "usage": "tsx scripts/usage.ts",
+    "store-screenshots": "tsx scripts/store-screenshots.ts"
   },
   "private": true
 }

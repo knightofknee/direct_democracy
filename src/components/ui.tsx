@@ -21,10 +21,21 @@ export function Card({
   children,
   style,
   onPress,
+  accessible,
+  accessibilityLabel,
+  accessibilityHint,
 }: {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
+  /**
+   * A tappable card is one screen reader element by default. A card that
+   * holds its own buttons passes false so each control stays reachable, and
+   * makes its title the link that opens it.
+   */
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }) {
   const theme = useTheme();
   const base = [
@@ -36,6 +47,10 @@ export function Card({
     return (
       <Pressable
         onPress={onPress}
+        accessible={accessible}
+        accessibilityRole={accessible === false ? undefined : 'button'}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint={accessibilityHint}
         style={({ pressed }) => [
           ...base,
           pressed && { opacity: 0.9, transform: [{ scale: 0.985 }] },
@@ -44,7 +59,15 @@ export function Card({
       </Pressable>
     );
   }
-  return <View style={base}>{children}</View>;
+  return (
+    <View
+      style={base}
+      accessible={accessible}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}>
+      {children}
+    </View>
+  );
 }
 
 export function Button({
@@ -55,6 +78,9 @@ export function Button({
   loading,
   style,
   icon,
+  selected,
+  expanded,
+  accessibilityLanguage,
 }: {
   title: string;
   onPress: () => void;
@@ -63,6 +89,12 @@ export function Button({
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   icon?: React.ReactNode;
+  /** The chosen one of a set (a language), told to screen readers. */
+  selected?: boolean;
+  /** For a show more / show less button: whether the text is open. */
+  expanded?: boolean;
+  /** Speak the title in this language (a language's own name). */
+  accessibilityLanguage?: string;
 }) {
   const theme = useTheme();
   const background =
@@ -84,7 +116,13 @@ export function Button({
       // shows, and whether it's off (posting limits) or working.
       accessibilityRole="button"
       accessibilityLabel={title}
-      accessibilityState={{ disabled: !!(disabled || loading), busy: !!loading }}
+      accessibilityLanguage={accessibilityLanguage}
+      accessibilityState={{
+        disabled: !!(disabled || loading),
+        busy: !!loading,
+        selected,
+        expanded,
+      }}
       style={({ pressed }) => [
         styles.button,
         {
@@ -124,6 +162,10 @@ export function Field(props: TextInputProps & { label?: string }) {
         // (ThemedText's 2x); uncapped it reached 3x and a placeholder filled
         // the screen.
         maxFontSizeMultiplier={2}
+        {...rest}
+        // The visible label (or the placeholder) names the field for a
+        // screen reader, which otherwise hears only "text field".
+        accessibilityLabel={rest.accessibilityLabel ?? label ?? rest.placeholder}
         style={[
           styles.field,
           {
@@ -133,7 +175,6 @@ export function Field(props: TextInputProps & { label?: string }) {
           },
           style,
         ]}
-        {...rest}
       />
     </View>
   );
@@ -143,7 +184,11 @@ export function Field(props: TextInputProps & { label?: string }) {
 export function VerifiedBadge({ compact }: { compact?: boolean }) {
   const theme = useTheme();
   return (
-    <View style={[styles.badge, { backgroundColor: theme.verifiedSoft }]}>
+    <View
+      style={[styles.badge, { backgroundColor: theme.verifiedSoft }]}
+      // The compact badge is only an icon; give it its word.
+      accessible={compact ? true : undefined}
+      accessibilityLabel={compact ? tr('Verified') : undefined}>
       <Ionicons name="shield-checkmark" size={12} color={theme.verified} />
       {!compact && (
         <ThemedText type="small" style={{ color: theme.verified, fontSize: 12, lineHeight: 16 }}>
@@ -194,7 +239,10 @@ export function SectionHeader({
   const align = centered ? ({ textAlign: 'center' } as const) : null;
   return (
     <View style={{ gap: 2, marginTop: Spacing.three }}>
-      <ThemedText type="smallBold" style={[{ textTransform: 'uppercase', letterSpacing: 1 }, align]}>
+      <ThemedText
+        type="smallBold"
+        accessibilityRole="header"
+        style={[{ textTransform: 'uppercase', letterSpacing: 1 }, align]}>
         {title}
       </ThemedText>
       {subtitle ? (
@@ -242,8 +290,11 @@ export function InfoModal({
   const theme = useTheme();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable style={styles.modalBackdrop} onPress={onClose}>
+      {/* Neither Pressable is a screen reader element, so the title, the
+          text, and the close button are each reached on their own. */}
+      <Pressable style={styles.modalBackdrop} onPress={onClose} accessible={false}>
         <Pressable
+          accessible={false}
           style={[
             styles.modalCard,
             { backgroundColor: theme.background, borderColor: theme.border },
@@ -251,10 +302,14 @@ export function InfoModal({
           // Swallow taps so touching the card doesn't dismiss it.
           onPress={() => {}}>
           <View style={styles.modalHeader}>
-            <ThemedText type="smallBold" style={{ fontSize: 17, flex: 1 }}>
+            <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 17, flex: 1 }}>
               {title}
             </ThemedText>
-            <Pressable onPress={onClose} hitSlop={10} accessibilityLabel={tr('Close')}>
+            <Pressable
+              onPress={onClose}
+              hitSlop={12}
+              accessibilityRole="button"
+              accessibilityLabel={tr('Close')}>
               <Ionicons name="close" size={20} color={theme.textSecondary} />
             </Pressable>
           </View>

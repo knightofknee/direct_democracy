@@ -37,6 +37,8 @@ export function LanguagePrompt() {
               key={l.code}
               onPress={() => setLocale(l.code)}
               accessibilityRole="button"
+              // Each name is spoken in its own language.
+              accessibilityLanguage={l.code}
               style={[styles.choice, { backgroundColor: theme.primary }]}>
               <ThemedText type="smallBold" style={styles.choiceText}>
                 {l.name}

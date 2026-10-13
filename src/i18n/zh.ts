@@ -1910,4 +1910,175 @@ export const ZH: Record<string, string> = {
     "登录后，你的选择会保存在账户中，并同步到你的其他设备。未登录时，选择保存在此设备上。",
   "Under \"In the news\", tap a headline to read a recent story that names them.":
     "在“新闻报道”中，点按标题阅读提到其姓名的近期报道。",
+
+  // Ballot planner, notification offers, welcome, share the app, screen counts (2026-10-09)
+  "Federal":
+    "联邦",
+  "State":
+    "州",
+  "County":
+    "县",
+  "Judges":
+    "法官",
+  "Choices made: {n} of {total}.":
+    "已做选择：{total} 项中的 {n} 项。",
+  "No address on file, so district races are not listed.":
+    "没有登记地址，所以未列出按选区划分的选举。",
+  "Your picks stay on this phone.":
+    "你的选择只保存在这部手机上。",
+  "write in":
+    "需手写",
+  "My picks for the {date} ballot":
+    "我对 {date} 选票的选择",
+  "Keep these judges":
+    "留任这些法官",
+  "Do not keep these judges":
+    "不留任这些法官",
+  "Nothing picked yet":
+    "还没有做任何选择",
+  "Pick a candidate in a race first.":
+    "请先在某个选举中选择一位候选人。",
+  "Plan yours with direct democracy":
+    "用 direct democracy 规划你的选票",
+  "Copied":
+    "已复制",
+  "Your picks are copied. Paste them anywhere.":
+    "你的选择已复制，可以粘贴到任何地方。",
+  "Your choices for the {date} ballot, in about the order the ballot prints them. Tap a race to pick. Your picks stay on this phone: they are never sent to us or anyone else.":
+    "你对 {date} 选票的选择，大致按选票印刷的顺序排列。点按一项选举进行选择。你的选择只保存在这部手机上，从不会发送给我们或任何人。",
+  "Your address decides your congressional, state legislative, county board, and school board races. Add it to see them here.":
+    "你的地址决定你参与的国会、州议会、县委员会和教育委员会选举。添加地址即可在这里看到它们。",
+  "Not decided":
+    "未决定",
+  "Yes: {yes}. No: {no}. Not decided: {open}.":
+    "是：{yes}。否：{no}。未决定：{open}。",
+  "Share my picks":
+    "分享我的选择",
+  "Clear my picks":
+    "清除我的选择",
+  "Clear my picks?":
+    "清除我的选择？",
+  "Every pick on this phone is removed.":
+    "这部手机上的所有选择都会被删除。",
+  "Clear":
+    "清除",
+  "You can pick up to {n} here":
+    "这里最多可以选择 {n} 位",
+  "Take one of your picks back first.":
+    "请先取消一个已选的人选。",
+  "Your pick":
+    "你的选择",
+  "Pick":
+    "选择",
+  "Keep this judge?":
+    "留任这位法官？",
+  "My ballot":
+    "我的选票",
+  "{n} made so far. Your picks stay on this phone.":
+    "目前已做 {n}。你的选择只保存在这部手机上。",
+  "Pick a candidate in each race and take the list with you to vote.":
+    "在每项选举中选择一位候选人，投票时带上这份清单。",
+  "Not now":
+    "以后再说",
+  "Turn on":
+    "开启",
+  "Notifications are off for this app":
+    "此应用的通知已关闭",
+  "Could not turn on notifications":
+    "无法开启通知",
+  "Got it":
+    "知道了",
+  "I use direct democracy to follow Chicago: rate your alderman, ask them anything, plan your ballot, and read the city's news in one place.":
+    "我用 direct democracy 关注芝加哥：给你的市议员打分、向他们提任何问题、规划你的选票，并在一个地方阅读城市新闻。",
+  "Paste it anywhere to share the app.":
+    "粘贴到任何地方即可分享这款应用。",
+  "Share the app":
+    "分享这款应用",
+  "The app counts how often each screen is opened, by day and by phone type, anonymously: the counts carry no account, name, or device identifier.":
+    "本应用会匿名统计每个页面每天在各类手机上被打开的次数：这些统计不含任何账户、姓名或设备标识。",
+  "Your ballot picks. My ballot keeps them on your phone only; they are never sent to us.":
+    "你的选票选择。“我的选票”只把它们保存在你的手机上，从不发送给我们。",
+  "Tap \"My ballot\" to see every choice on your November 3 ballot and the picks you have made. Your picks stay on this phone.":
+    "点按“我的选票”查看你 11 月 3 日选票上的每项选择以及你已做的选择。你的选择只保存在这部手机上。",
+  "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
+    "在 11 月 3 日的选举中，点按候选人上的“选择”将其加入“我的选票”，点按“你的选择”可撤回。对于寻求留任的法官，在“留任这位法官？”下点按“是”或“否”。你的选择只保存在这部手机上。",
+  "Tap \"My ballot\" at the top to see all your picks.":
+    "点按顶部的“我的选票”查看你的全部选择。",
+  "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
+    "点按候选人上的“选择”将其加入“我的选票”，点按“你的选择”可撤回。你的选择只保存在这部手机上。",
+  "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
+    "你 2026 年 11 月 3 日选票上的每项选择，大致按选票印刷的顺序排列，并显示你在每项中的选择。你的选择只保存在这部手机上，从不发送到应用的服务器，其他人也看不到。",
+  "Tap a race to open it and pick a candidate there.":
+    "点按一项选举打开它，并在其中选择一位候选人。",
+  "Tap \"Yes\" or \"No\" on the advisory question.":
+    "在咨询性问题上点按“是”或“否”。",
+  "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
+    "点按“查找我的选举”添加你的地址，即可列出你的国会、州议会、县委员会和教育委员会选举。",
+  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
+    "点按“分享我的选择”把清单作为消息发送或保存。需要手写的名字标有“需手写”。",
+  "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
+    "点按“清除我的选择”并确认，即可删除这部手机上的所有选择。",
+  "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
+    "点按“分享这款应用”给朋友发送一条附有下载链接的简短消息。发送前可以编辑消息。",
+  "Chicago's top concerns, ranked by the people, plus citywide polls and City Council.":
+    "芝加哥最受关注的问题，由市民排序，另有全市投票和市议会信息。",
+  "Your ward's concerns, your alderman's grade, and its meetings, zoning hearings, and ward office.":
+    "你所在选区的问题、你的市议员的评分，以及选区的会议、分区听证会和选区办公室。",
+  "Headlines from Chicago newsrooms, newest first.":
+    "芝加哥新闻机构的标题，最新的在前。",
+  "Who is on your ballot, and My ballot to plan your picks.":
+    "你的选票上有谁，以及用“我的选票”规划你的选择。",
+  "On every screen: what is there and what you can do.":
+    "每个页面都有：页面上有什么，你能做什么。",
+  "Get a notification when they answer?":
+    "在他们回答时收到通知？",
+  "Your phone will tell you when your question gets an answer. You can change this any time in Settings.":
+    "你的问题得到回答时，手机会通知你。你可以随时在“设置”中更改。",
+  "Get a notification when someone comments?":
+    "有人评论时收到通知？",
+  "Your phone will tell you when someone comments on your concern. You can change this any time in Settings.":
+    "有人评论你的问题时，手机会通知你。你可以随时在“设置”中更改。",
+  "Get a notification when someone replies?":
+    "有人回复时收到通知？",
+  "Your phone will tell you when someone replies to your comment. You can change this any time in Settings.":
+    "有人回复你的评论时，手机会通知你。你可以随时在“设置”中更改。",
+  "choice":
+    "项选择",
+  "choices":
+    "项选择",
+  // Accessibility labels (2026-10-09): screen reader text for unread
+  // notifications, join counts, ballot picks, password visibility, scores,
+  // and loading placeholders.
+  "Unread":
+    "未读",
+  "{n} joined":
+    "{n}人附议",
+  "Your pick: {name}":
+    "你的选择：{name}",
+  "Pick {name}":
+    "选择{name}",
+  "Keep {name}?":
+    "留任{name}？",
+  "Show password":
+    "显示密码",
+  "Hide password":
+    "隐藏密码",
+  "Score {n}":
+    "得分 {n}",
+  "Loading":
+    "加载中",
+  "Goes to the City Council on {date}. No hearing set yet.":
+    "将于 {date} 提交市议会。尚未安排听证会。",
+  "Time not found in the newsletter":
+    "简报中未找到时间",
+  "{date}, time not found":
+    "{date}，未找到时间",
+  "Date and time not found":
+    "未找到日期和时间",
+  "The ward office’s newsletter mentions these without a time. The office can tell you when they meet.":
+    "选区办公室的简报提到了这些会议，但没有写时间。办公室可以告诉你会议时间。",
+  "Call the ward office: {phone}":
+    "致电选区办公室：{phone}",
+  "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
+    "在“选区会议”下，“简报中未找到时间”列出选区办公室简报中宣布但没有写时间的会议。点按“致电选区办公室”询问会议时间。",
 };

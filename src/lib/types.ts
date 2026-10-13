@@ -690,7 +690,15 @@ export interface WardMeeting {
   title: string;
   /** 'development' for a proposed project or zoning change; else 'ward' (ward nights, office hours, town halls) or 'community'. */
   kind: 'development' | 'ward' | 'community';
-  start: Timestamp;
+  /**
+   * Null when the newsletter announces it without a time (2026-10-12): the
+   * ward page lists those as "time not found", with the office's phone.
+   */
+  start: Timestamp | null;
+  /** With start null: the day the newsletter gives (YYYY-MM-DD, Chicago), else null. */
+  date?: string | null;
+  /** With start null: when it comes off the page (the day after `date`, or 21 days after the issue). */
+  expiresAt?: Timestamp;
   end: Timestamp | null;
   place: string | null;
   /** A street address to open in maps, when the newsletter gives one. */

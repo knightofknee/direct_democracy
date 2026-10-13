@@ -79,13 +79,23 @@ interface QueuedIssue {
   url: string | null;
   sentAt: string;
   text: string;
+  /**
+   * The ward's meetings already on its page with no time found (2026-10-12),
+   * so the reader can tell when this issue gives one's time (`resolves`).
+   */
+  undated?: { id: string; title: string; date: string | null }[];
 }
 
 interface ResultMeeting {
   title: string;
   kind: 'development' | 'ward' | 'community';
-  /** ISO 8601 with the Chicago offset, e.g. 2026-10-14T18:00:00-05:00. */
-  start: string;
+  /**
+   * ISO 8601 with the Chicago offset, e.g. 2026-10-14T18:00:00-05:00; null
+   * when the issue announces the meeting without a time (2026-10-12).
+   */
+  start: string | null;
+  /** With start null: the day the issue gives (YYYY-MM-DD), else null. */
+  date?: string | null;
   end?: string | null;
   place?: string | null;
   address?: string | null;
@@ -104,6 +114,8 @@ interface Result {
   /** The ward office's regular hours / ward night, when the issue states them. */
   officeHours?: { text: string; textEs: string } | null;
   meetings: ResultMeeting[];
+  /** Ids from the queue's `undated` list that this issue gives a time for. */
+  resolves?: string[];
 }
 
 const issueId = (ward: number, url: string) =>
@@ -237,6 +249,17 @@ async function pull(out: string) {
     }
   }
   const inbox = await pullInbox(sources, queue, problems);
+  const undated = new Map<number, QueuedIssue['undated']>();
+  for (const ward of new Set(queue.map((q) => q.ward))) {
+    const snap = await db.collection('wardMeetings').where('wardId', '==', ward).where('start', '==', null).get();
+    undated.set(
+      ward,
+      snap.docs
+        .filter((d) => (d.get('expiresAt') as Timestamp).toMillis() > Date.now())
+        .map((d) => ({ id: d.id, title: d.get('title'), date: d.get('date') ?? null }))
+    );
+  }
+  for (const q of queue) if (undated.get(q.ward)?.length) q.undated = undated.get(q.ward);
   writeFileSync(out, JSON.stringify(queue, null, 2));
   console.log(`${queue.length} new issue(s) from ${new Set(queue.map((q) => q.ward)).size} ward(s) -> ${out}`);
   for (const p of problems) console.warn(`  could not read ${p}`);
@@ -381,6 +404,31 @@ function chicagoDate(iso: string): Date {
   return d;
 }
 
+/** A Chicago calendar day (YYYY-MM-DD) for an instant. */
+function chicagoDay(d: Date): string {
+  return d.toLocaleDateString('en-CA', { timeZone: 'America/Chicago' });
+}
+
+/** Midnight in Chicago at the start of the given day. */
+function chicagoMidnight(day: string): Date {
+  for (const offset of ['-05:00', '-06:00']) {
+    const d = new Date(`${day}T00:00:00${offset}`);
+    if (chicagoDay(d) === day && d.toLocaleTimeString('en-GB', { timeZone: 'America/Chicago' }).startsWith('00')) return d;
+  }
+  throw new Error(`no Chicago midnight for ${day}`);
+}
+
+function nextDay(day: string): string {
+  const d = new Date(`${day}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
+/** An undated meeting with no day stays on the page this long after its issue. */
+const UNDATED_DAYS = 21;
+
+const sameTitle = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+
 async function apply(file: string, queueFile?: string) {
   const results: Result[] = JSON.parse(readFileSync(file, 'utf8'));
   const queued: QueuedIssue[] = queueFile ? JSON.parse(readFileSync(queueFile, 'utf8')) : [];
@@ -401,8 +449,48 @@ async function apply(file: string, queueFile?: string) {
     if (!r.summary.trim() || !r.summaryEs.trim()) throw new Error(`${r.id}: summary and summaryEs are both required`);
     const old = await db.collection('wardMeetings').where('issueId', '==', r.id).get();
     for (const d of old.docs) await d.ref.delete();
+    for (const id of r.resolves ?? []) {
+      if (!q.undated?.some((u) => u.id === id)) throw new Error(`${r.id}: resolves ${id}, which is not in its undated list`);
+      await db.doc(`wardMeetings/${id}`).delete();
+    }
     for (const [n, m] of r.meetings.entries()) {
       if (!['development', 'ward', 'community'].includes(m.kind)) throw new Error(`${r.id}: bad kind ${m.kind}`);
+      if (m.start == null) {
+        // Announced without a time (2026-10-12): listed as "time not found"
+        // until its day passes, or for UNDATED_DAYS when no day is given.
+        if (m.date != null && !/^\d{4}-\d{2}-\d{2}$/.test(m.date)) throw new Error(`${r.id}: date must be YYYY-MM-DD, got ${m.date}`);
+        const expires = m.date
+          ? chicagoMidnight(nextDay(m.date))
+          : new Date(new Date(q.sentAt).getTime() + UNDATED_DAYS * 86_400_000);
+        if (expires.getTime() <= Date.now()) continue;
+        const ward = await db.collection('wardMeetings').where('wardId', '==', q.ward).get();
+        const repeat = ward.docs.some(
+          (d) =>
+            d.get('issueId') !== r.id &&
+            (sameTitle(d.get('title'), m.title) ||
+              (m.date != null && (d.get('date') === m.date || (d.get('start') && chicagoDay((d.get('start') as Timestamp).toDate()) === m.date))))
+        );
+        if (repeat) continue;
+        await db.doc(`wardMeetings/${r.id}-${n}`).set({
+          wardId: q.ward,
+          issueId: r.id,
+          title: m.title.trim(),
+          kind: m.kind,
+          start: null,
+          date: m.date ?? null,
+          expiresAt: Timestamp.fromDate(expires),
+          end: null,
+          place: m.place?.trim() || null,
+          address: m.address?.trim() || null,
+          online: m.online === true,
+          url: m.url && /^https:\/\//.test(m.url) ? m.url : q.url,
+          sourceUrl: q.url,
+          sourceTitle: q.title,
+          createdAt: FieldValue.serverTimestamp(),
+        });
+        meetings += 1;
+        continue;
+      }
       const start = chicagoDate(m.start);
       if (start.getTime() < Date.now() - 86_400_000) continue; // already happened
       // A resend or a later issue repeating the same meeting adds nothing.
@@ -412,6 +500,10 @@ async function apply(file: string, queueFile?: string) {
         .where('start', '==', Timestamp.fromDate(start))
         .get();
       if (dupes.docs.some((d) => d.get('issueId') !== r.id)) continue;
+      // The time an undated meeting on the same day was missing: this replaces it.
+      const day = chicagoDay(start);
+      const waiting = await db.collection('wardMeetings').where('wardId', '==', q.ward).where('date', '==', day).get();
+      for (const d of waiting.docs) if (d.get('start') == null) await d.ref.delete();
       await db.doc(`wardMeetings/${r.id}-${n}`).set({
         wardId: q.ward,
         issueId: r.id,
@@ -458,7 +550,11 @@ async function apply(file: string, queueFile?: string) {
   // Meetings that have passed come off the ward pages.
   const past = await db.collection('wardMeetings').where('start', '<', Timestamp.fromMillis(Date.now() - 86_400_000)).get();
   for (const d of past.docs) await d.ref.delete();
-  console.log(`Wrote ${issues} issue summaries and ${meetings} upcoming meetings; removed ${past.size} past meetings.`);
+  const expired = await db.collection('wardMeetings').where('expiresAt', '<', Timestamp.now()).get();
+  for (const d of expired.docs) await d.ref.delete();
+  console.log(
+    `Wrote ${issues} issue summaries and ${meetings} upcoming meetings; removed ${past.size + expired.size} past meetings.`
+  );
 }
 
 async function recent(days: number, out: string) {

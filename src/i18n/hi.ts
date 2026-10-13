@@ -1920,4 +1920,175 @@ export const HI: Record<string, string> = {
     "साइन इन होने पर आपकी पसंद आपके खाते में सहेजी जाती है और दूसरे डिवाइसों पर भी साथ रहती है। साइन आउट होने पर वह इस डिवाइस पर सहेजी जाती है।",
   "Under \"In the news\", tap a headline to read a recent story that names them.":
     "“खबरों में” के अंदर, किसी सुर्खी पर टैप करके ऐसी हाल की खबर पढ़ें जिसमें इनका नाम हो।",
+
+  // Ballot planner, notification offers, welcome, share the app, screen counts (2026-10-09)
+  "Federal":
+    "संघीय",
+  "State":
+    "राज्य",
+  "County":
+    "काउंटी",
+  "Judges":
+    "न्यायाधीश",
+  "Choices made: {n} of {total}.":
+    "चुने गए विकल्प: {total} में से {n}।",
+  "No address on file, so district races are not listed.":
+    "कोई पता दर्ज नहीं है, इसलिए ज़िले वाले चुनाव नहीं दिखाए गए हैं।",
+  "Your picks stay on this phone.":
+    "आपकी पसंद इसी फ़ोन पर रहती है।",
+  "write in":
+    "नाम लिखें",
+  "My picks for the {date} ballot":
+    "{date} के मतपत्र के लिए मेरी पसंद",
+  "Keep these judges":
+    "इन न्यायाधीशों को बनाए रखें",
+  "Do not keep these judges":
+    "इन न्यायाधीशों को न रखें",
+  "Nothing picked yet":
+    "अभी कुछ नहीं चुना गया",
+  "Pick a candidate in a race first.":
+    "पहले किसी चुनाव में एक उम्मीदवार चुनें।",
+  "Plan yours with direct democracy":
+    "direct democracy पर अपना मतपत्र तैयार करें",
+  "Copied":
+    "कॉपी हो गया",
+  "Your picks are copied. Paste them anywhere.":
+    "आपकी पसंद कॉपी हो गई है। इसे कहीं भी पेस्ट करें।",
+  "Your choices for the {date} ballot, in about the order the ballot prints them. Tap a race to pick. Your picks stay on this phone: they are never sent to us or anyone else.":
+    "{date} के मतपत्र के लिए आपकी पसंद, लगभग उसी क्रम में जिसमें मतपत्र पर छपी होती है। चुनने के लिए किसी चुनाव पर टैप करें। आपकी पसंद इसी फ़ोन पर रहती है: वह कभी हमें या किसी और को नहीं भेजी जाती।",
+  "Your address decides your congressional, state legislative, county board, and school board races. Add it to see them here.":
+    "आपका पता तय करता है कि आप कांग्रेस, राज्य विधायिका, काउंटी बोर्ड और स्कूल बोर्ड के किन चुनावों में वोट देंगे। उन्हें यहाँ देखने के लिए पता जोड़ें।",
+  "Not decided":
+    "तय नहीं",
+  "Yes: {yes}. No: {no}. Not decided: {open}.":
+    "हाँ: {yes}। ना: {no}। तय नहीं: {open}।",
+  "Share my picks":
+    "मेरी पसंद साझा करें",
+  "Clear my picks":
+    "मेरी पसंद मिटाएँ",
+  "Clear my picks?":
+    "मेरी पसंद मिटाएँ?",
+  "Every pick on this phone is removed.":
+    "इस फ़ोन पर की गई हर पसंद हटा दी जाएगी।",
+  "Clear":
+    "मिटाएँ",
+  "You can pick up to {n} here":
+    "यहाँ आप ज़्यादा से ज़्यादा {n} चुन सकते हैं",
+  "Take one of your picks back first.":
+    "पहले अपनी एक पसंद वापस लें।",
+  "Your pick":
+    "आपकी पसंद",
+  "Pick":
+    "चुनें",
+  "Keep this judge?":
+    "इस न्यायाधीश को बनाए रखें?",
+  "My ballot":
+    "मेरा मतपत्र",
+  "{n} made so far. Your picks stay on this phone.":
+    "अब तक {n}। आपकी पसंद इसी फ़ोन पर रहती है।",
+  "Pick a candidate in each race and take the list with you to vote.":
+    "हर चुनाव में एक उम्मीदवार चुनें और वोट डालने जाते समय सूची साथ ले जाएँ।",
+  "Not now":
+    "अभी नहीं",
+  "Turn on":
+    "चालू करें",
+  "Notifications are off for this app":
+    "इस ऐप के लिए सूचनाएँ बंद हैं",
+  "Could not turn on notifications":
+    "सूचनाएँ चालू नहीं हो सकीं",
+  "Got it":
+    "समझ गया",
+  "I use direct democracy to follow Chicago: rate your alderman, ask them anything, plan your ballot, and read the city's news in one place.":
+    "मैं शिकागो पर नज़र रखने के लिए direct democracy इस्तेमाल करता हूँ: अपने एल्डरमैन को रेट करें, उनसे कुछ भी पूछें, अपना मतपत्र तैयार करें और शहर की खबरें एक ही जगह पढ़ें।",
+  "Paste it anywhere to share the app.":
+    "ऐप साझा करने के लिए इसे कहीं भी पेस्ट करें।",
+  "Share the app":
+    "ऐप साझा करें",
+  "The app counts how often each screen is opened, by day and by phone type, anonymously: the counts carry no account, name, or device identifier.":
+    "ऐप गुमनाम रूप से गिनता है कि हर स्क्रीन दिन और फ़ोन के प्रकार के हिसाब से कितनी बार खुली: इन गिनतियों में कोई खाता, नाम या डिवाइस पहचान नहीं होती।",
+  "Your ballot picks. My ballot keeps them on your phone only; they are never sent to us.":
+    "आपके मतपत्र की पसंद। मेरा मतपत्र उन्हें सिर्फ़ आपके फ़ोन पर रखता है; वे कभी हमें नहीं भेजी जातीं।",
+  "Tap \"My ballot\" to see every choice on your November 3 ballot and the picks you have made. Your picks stay on this phone.":
+    "3 नवंबर के अपने मतपत्र का हर विकल्प और अपनी चुनी हुई पसंद देखने के लिए “मेरा मतपत्र” पर टैप करें। आपकी पसंद इसी फ़ोन पर रहती है।",
+  "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
+    "3 नवंबर के किसी चुनाव में, किसी उम्मीदवार पर “चुनें” टैप करके उन्हें मेरे मतपत्र में जोड़ें, और वापस लेने के लिए “आपकी पसंद” टैप करें। बने रहने के लिए खड़े न्यायाधीशों पर “इस न्यायाधीश को बनाए रखें?” के नीचे “हाँ” या “ना” टैप करें। आपकी पसंद इसी फ़ोन पर रहती है।",
+  "Tap \"My ballot\" at the top to see all your picks.":
+    "अपनी सारी पसंद देखने के लिए ऊपर “मेरा मतपत्र” पर टैप करें।",
+  "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
+    "किसी उम्मीदवार पर “चुनें” टैप करके उन्हें मेरे मतपत्र में जोड़ें, और वापस लेने के लिए “आपकी पसंद” टैप करें। आपकी पसंद इसी फ़ोन पर रहती है।",
+  "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
+    "3 नवंबर 2026 के आपके मतपत्र का हर विकल्प, लगभग उसी क्रम में जिसमें मतपत्र पर छपा होता है, हर एक में आपकी पसंद के साथ। आपकी पसंद सिर्फ़ इसी फ़ोन पर रखी जाती है। वह कभी ऐप के सर्वरों पर नहीं भेजी जाती और कोई और उसे नहीं देख सकता।",
+  "Tap a race to open it and pick a candidate there.":
+    "किसी चुनाव को खोलने और वहाँ उम्मीदवार चुनने के लिए उस पर टैप करें।",
+  "Tap \"Yes\" or \"No\" on the advisory question.":
+    "सलाहकारी प्रश्न पर “हाँ” या “ना” टैप करें।",
+  "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
+    "अपना पता जोड़ने के लिए “मेरे चुनाव खोजें” पर टैप करें, ताकि आपके कांग्रेस, राज्य विधायिका, काउंटी बोर्ड और स्कूल बोर्ड के चुनाव दिखें।",
+  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
+    "अपनी सूची संदेश के रूप में भेजने या सहेजने के लिए “मेरी पसंद साझा करें” पर टैप करें। जिन नामों को लिखना है उन पर “नाम लिखें” लिखा होता है।",
+  "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
+    "इस फ़ोन से हर पसंद हटाने के लिए “मेरी पसंद मिटाएँ” पर टैप करें और पुष्टि करें।",
+  "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
+    "किसी दोस्त को डाउनलोड लिंक के साथ छोटा संदेश भेजने के लिए “ऐप साझा करें” पर टैप करें। भेजने से पहले आप संदेश बदल सकते हैं।",
+  "Chicago's top concerns, ranked by the people, plus citywide polls and City Council.":
+    "लोगों द्वारा क्रम में रखी गई शिकागो की मुख्य चिंताएँ, साथ में शहर-भर के पोल और सिटी काउंसिल।",
+  "Your ward's concerns, your alderman's grade, and its meetings, zoning hearings, and ward office.":
+    "आपके वार्ड की चिंताएँ, आपके एल्डरमैन का ग्रेड, और उसकी बैठकें, ज़ोनिंग सुनवाई और वार्ड कार्यालय।",
+  "Headlines from Chicago newsrooms, newest first.":
+    "शिकागो के समाचार संस्थानों की सुर्खियाँ, सबसे नई पहले।",
+  "Who is on your ballot, and My ballot to plan your picks.":
+    "आपके मतपत्र पर कौन है, और अपनी पसंद तय करने के लिए मेरा मतपत्र।",
+  "On every screen: what is there and what you can do.":
+    "हर स्क्रीन पर: वहाँ क्या है और आप क्या कर सकते हैं।",
+  "Get a notification when they answer?":
+    "जवाब आने पर सूचना पाएँ?",
+  "Your phone will tell you when your question gets an answer. You can change this any time in Settings.":
+    "आपके सवाल का जवाब आने पर फ़ोन आपको बताएगा। आप इसे कभी भी सेटिंग्स में बदल सकते हैं।",
+  "Get a notification when someone comments?":
+    "कोई टिप्पणी करे तो सूचना पाएँ?",
+  "Your phone will tell you when someone comments on your concern. You can change this any time in Settings.":
+    "कोई आपकी चिंता पर टिप्पणी करे तो फ़ोन आपको बताएगा। आप इसे कभी भी सेटिंग्स में बदल सकते हैं।",
+  "Get a notification when someone replies?":
+    "कोई जवाब दे तो सूचना पाएँ?",
+  "Your phone will tell you when someone replies to your comment. You can change this any time in Settings.":
+    "कोई आपकी टिप्पणी का जवाब दे तो फ़ोन आपको बताएगा। आप इसे कभी भी सेटिंग्स में बदल सकते हैं।",
+  "choice":
+    "विकल्प",
+  "choices":
+    "विकल्प",
+  // Accessibility labels (2026-10-09): screen reader text for unread
+  // notifications, join counts, ballot picks, password visibility, scores,
+  // and loading placeholders.
+  "Unread":
+    "बिना पढ़ी",
+  "{n} joined":
+    "{n} जुड़े",
+  "Your pick: {name}":
+    "आपकी पसंद: {name}",
+  "Pick {name}":
+    "{name} को चुनें",
+  "Keep {name}?":
+    "{name} को बनाए रखें?",
+  "Show password":
+    "पासवर्ड दिखाएँ",
+  "Hide password":
+    "पासवर्ड छिपाएँ",
+  "Score {n}":
+    "स्कोर {n}",
+  "Loading":
+    "लोड हो रहा है",
+  "Goes to the City Council on {date}. No hearing set yet.":
+    "{date} को सिटी काउंसिल में जाएगा। अभी कोई सुनवाई तय नहीं है।",
+  "Time not found in the newsletter":
+    "न्यूज़लेटर में समय नहीं मिला",
+  "{date}, time not found":
+    "{date}, समय नहीं मिला",
+  "Date and time not found":
+    "तारीख और समय नहीं मिला",
+  "The ward office’s newsletter mentions these without a time. The office can tell you when they meet.":
+    "वार्ड कार्यालय का न्यूज़लेटर इन बैठकों का ज़िक्र बिना समय के करता है। कार्यालय बता सकता है कि ये कब होंगी।",
+  "Call the ward office: {phone}":
+    "वार्ड कार्यालय को कॉल करें: {phone}",
+  "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
+    "\"वार्ड बैठकें\" के नीचे, \"न्यूज़लेटर में समय नहीं मिला\" उन बैठकों की सूची है जिनकी घोषणा वार्ड कार्यालय का न्यूज़लेटर बिना समय के करता है। ये कब होंगी, पूछने के लिए \"वार्ड कार्यालय को कॉल करें\" पर टैप करें।",
 };

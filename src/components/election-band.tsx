@@ -35,7 +35,7 @@ export function ElectionBand({
       style={[styles.band, { backgroundColor: november ? theme.novemberBand : theme.februaryBand }]}>
       <View style={styles.label}>
         <Ionicons name="calendar" size={14} color={ink} />
-        <ThemedText type="smallBold" style={[styles.labelText, { color: ink }]}>
+        <ThemedText type="smallBold" accessibilityRole="header" style={[styles.labelText, { color: ink }]}>
           {t(november ? 'November 3, 2026 ballot' : 'February 23, 2027 ballot')}
         </ThemedText>
       </View>

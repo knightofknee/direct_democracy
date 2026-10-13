@@ -41,10 +41,11 @@ export function UpvotePill({
       disabled={disabled}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityState={{ selected: active }}
-      accessibilityLabel={
+      accessibilityState={{ selected: active, disabled: !!disabled }}
+      // The count is the pill's only text, so the label carries it too.
+      accessibilityLabel={`${
         active ? t('Leave this question') : t('Join this question, I want it answered too')
-      }
+      }, ${t('{n} joined').replace('{n}', String(count))}`}
       style={[
         styles.pill,
         {

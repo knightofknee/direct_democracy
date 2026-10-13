@@ -173,7 +173,11 @@ export function CommentsSection({
           <ThemedText type="small" style={{ color: theme.primary, fontSize: 12, flex: 1 }}>
             {t('Replying to {name}').replace('{name}', replyTo.name)}
           </ThemedText>
-          <Pressable onPress={() => setReplyTo(null)} hitSlop={8} accessibilityLabel={t('Cancel reply')}>
+          <Pressable
+            onPress={() => setReplyTo(null)}
+            hitSlop={14}
+            accessibilityRole="button"
+            accessibilityLabel={t('Cancel reply')}>
             <Ionicons name="close" size={16} color={theme.textSecondary} />
           </Pressable>
         </View>
@@ -207,7 +211,9 @@ export function CommentsSection({
         <Pressable
           onPress={() => setShowExtras((v) => !v)}
           hitSlop={8}
+          accessibilityRole="button"
           accessibilityLabel={t('More options')}
+          accessibilityState={{ expanded: showExtras }}
           style={[styles.extrasButton, { borderColor: theme.border }]}>
           <Ionicons
             name="ellipsis-horizontal"
@@ -235,7 +241,10 @@ export function CommentsSection({
               <Pressable
                 key={s.key}
                 onPress={() => setSort(s.key)}
-                hitSlop={4}
+                hitSlop={7}
+                // The chosen order is shown by color; say it too.
+                accessibilityRole="button"
+                accessibilityState={{ selected }}
                 style={[
                   styles.sortChip,
                   {
@@ -471,7 +480,11 @@ function CommentRow({
       <View style={styles.actionsRow}>
         <SourcesButton references={comment.references} />
         {isMine && editing == null && !confirmRemove && (
-          <Pressable onPress={() => setEditing(comment.body)} hitSlop={8} style={styles.action}>
+          <Pressable
+            onPress={() => setEditing(comment.body)}
+            hitSlop={8}
+            accessibilityRole="button"
+            style={styles.action}>
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
               {t('Edit')}
             </ThemedText>
@@ -484,7 +497,11 @@ function CommentRow({
               <Button title={t('Keep')} variant="ghost" onPress={() => setConfirmRemove(false)} />
             </View>
           ) : (
-            <Pressable onPress={() => setConfirmRemove(true)} hitSlop={8} style={styles.action}>
+            <Pressable
+              onPress={() => setConfirmRemove(true)}
+              hitSlop={8}
+              accessibilityRole="button"
+              style={styles.action}>
               <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
                 {t('Remove')}
               </ThemedText>
@@ -492,14 +509,20 @@ function CommentRow({
           ))}
         <View style={{ flex: 1 }} />
         {canCredit && (
-          <Pressable onPress={credit} hitSlop={4} disabled={crediting} style={styles.action}>
+          <Pressable
+            onPress={credit}
+            hitSlop={4}
+            disabled={crediting}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: crediting }}
+            style={styles.action}>
             <Ionicons name="pencil" size={14} color={theme.verified} />
             <ThemedText type="small" style={{ fontSize: 12, color: theme.verified, fontWeight: '600' }}>
               {comment.credited ? t('Retract credit') : t('Credit')}
             </ThemedText>
           </Pressable>
         )}
-        <Pressable onPress={() => onReply(comment)} hitSlop={4} style={styles.action}>
+        <Pressable onPress={() => onReply(comment)} hitSlop={4} accessibilityRole="button" style={styles.action}>
           <Ionicons name="arrow-undo-outline" size={14} color={theme.primary} />
           <ThemedText type="small" style={{ fontSize: 12, color: theme.primary, fontWeight: '600' }}>
             {t('Reply')}
@@ -510,7 +533,9 @@ function CommentRow({
           onPress={() => vote('up')}
           disabled={voting}
           hitSlop={4}
+          accessibilityRole="button"
           accessibilityLabel={t('Rate up')}
+          accessibilityState={{ selected: myVote?.value === 'up', disabled: voting }}
           style={styles.action}>
           <Ionicons
             name={myVote?.value === 'up' ? 'arrow-up-circle' : 'arrow-up-circle-outline'}
@@ -522,7 +547,9 @@ function CommentRow({
           onPress={() => vote('down')}
           disabled={voting}
           hitSlop={4}
+          accessibilityRole="button"
           accessibilityLabel={t('Rate down')}
+          accessibilityState={{ selected: myVote?.value === 'down', disabled: voting }}
           style={styles.action}>
           <Ionicons
             name={myVote?.value === 'down' ? 'arrow-down-circle' : 'arrow-down-circle-outline'}

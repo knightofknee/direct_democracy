@@ -1910,4 +1910,175 @@ export const KO: Record<string, string> = {
     "로그인하면 선택한 내용이 계정에 저장되어 다른 기기에서도 그대로예요. 로그아웃 상태에서는 이 기기에 저장돼요.",
   "Under \"In the news\", tap a headline to read a recent story that names them.":
     "“뉴스에서”에서 헤드라인을 누르면 이 공직자를 언급한 최근 기사를 읽을 수 있어요.",
+
+  // Ballot planner, notification offers, welcome, share the app, screen counts (2026-10-09)
+  "Federal":
+    "연방",
+  "State":
+    "주",
+  "County":
+    "카운티",
+  "Judges":
+    "판사",
+  "Choices made: {n} of {total}.":
+    "선택 완료: {total}개 중 {n}개.",
+  "No address on file, so district races are not listed.":
+    "등록된 주소가 없어 선거구별 선거는 나오지 않아요.",
+  "Your picks stay on this phone.":
+    "선택한 내용은 이 휴대폰에만 남아요.",
+  "write in":
+    "직접 기입",
+  "My picks for the {date} ballot":
+    "{date} 투표용지 내 선택",
+  "Keep these judges":
+    "이 판사들은 유임",
+  "Do not keep these judges":
+    "이 판사들은 유임 반대",
+  "Nothing picked yet":
+    "아직 선택한 것이 없어요",
+  "Pick a candidate in a race first.":
+    "먼저 선거에서 후보를 선택하세요.",
+  "Plan yours with direct democracy":
+    "direct democracy에서 내 투표를 계획해 보세요",
+  "Copied":
+    "복사됨",
+  "Your picks are copied. Paste them anywhere.":
+    "선택 내용이 복사됐어요. 어디든 붙여 넣으세요.",
+  "Your choices for the {date} ballot, in about the order the ballot prints them. Tap a race to pick. Your picks stay on this phone: they are never sent to us or anyone else.":
+    "{date} 투표용지의 내 선택으로, 대략 투표용지에 인쇄된 순서예요. 선거를 눌러 선택하세요. 선택한 내용은 이 휴대폰에만 남고, 우리나 다른 누구에게도 전송되지 않아요.",
+  "Your address decides your congressional, state legislative, county board, and school board races. Add it to see them here.":
+    "주소에 따라 연방 하원, 주 의회, 카운티 위원회, 교육위원회 선거가 정해져요. 주소를 추가하면 여기 보여요.",
+  "Not decided":
+    "미정",
+  "Yes: {yes}. No: {no}. Not decided: {open}.":
+    "예: {yes}. 아니오: {no}. 미정: {open}.",
+  "Share my picks":
+    "내 선택 공유",
+  "Clear my picks":
+    "내 선택 지우기",
+  "Clear my picks?":
+    "내 선택을 지울까요?",
+  "Every pick on this phone is removed.":
+    "이 휴대폰에 있는 모든 선택이 지워져요.",
+  "Clear":
+    "지우기",
+  "You can pick up to {n} here":
+    "여기서는 최대 {n}명까지 선택할 수 있어요",
+  "Take one of your picks back first.":
+    "먼저 선택 하나를 취소하세요.",
+  "Your pick":
+    "내 선택",
+  "Pick":
+    "선택",
+  "Keep this judge?":
+    "이 판사를 유임할까요?",
+  "My ballot":
+    "내 투표용지",
+  "{n} made so far. Your picks stay on this phone.":
+    "지금까지 {n}. 선택한 내용은 이 휴대폰에만 남아요.",
+  "Pick a candidate in each race and take the list with you to vote.":
+    "선거마다 후보를 선택하고 투표하러 갈 때 목록을 가져가세요.",
+  "Not now":
+    "나중에",
+  "Turn on":
+    "켜기",
+  "Notifications are off for this app":
+    "이 앱의 알림이 꺼져 있어요",
+  "Could not turn on notifications":
+    "알림을 켜지 못했어요",
+  "Got it":
+    "알겠어요",
+  "I use direct democracy to follow Chicago: rate your alderman, ask them anything, plan your ballot, and read the city's news in one place.":
+    "저는 direct democracy로 시카고 소식을 챙겨요. 내 시의원을 평가하고, 무엇이든 질문하고, 투표를 계획하고, 시 뉴스를 한곳에서 읽을 수 있어요.",
+  "Paste it anywhere to share the app.":
+    "어디든 붙여 넣어 앱을 공유하세요.",
+  "Share the app":
+    "앱 공유하기",
+  "The app counts how often each screen is opened, by day and by phone type, anonymously: the counts carry no account, name, or device identifier.":
+    "앱은 각 화면이 얼마나 자주 열리는지 날짜별, 휴대폰 종류별로 익명으로 세어요. 이 집계에는 계정, 이름, 기기 식별자가 전혀 없어요.",
+  "Your ballot picks. My ballot keeps them on your phone only; they are never sent to us.":
+    "투표 선택 내용. 내 투표용지는 이를 휴대폰에만 저장하고, 우리에게 절대 보내지 않아요.",
+  "Tap \"My ballot\" to see every choice on your November 3 ballot and the picks you have made. Your picks stay on this phone.":
+    "“내 투표용지”를 누르면 11월 3일 투표용지의 모든 선택 항목과 내가 고른 것을 볼 수 있어요. 선택한 내용은 이 휴대폰에만 남아요.",
+  "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
+    "11월 3일 선거에서 후보의 “선택”을 누르면 내 투표용지에 추가되고, “내 선택”을 누르면 취소돼요. 유임 심사 판사는 “이 판사를 유임할까요?” 아래 “예” 또는 “아니오”를 누르세요. 선택한 내용은 이 휴대폰에만 남아요.",
+  "Tap \"My ballot\" at the top to see all your picks.":
+    "위쪽의 “내 투표용지”를 누르면 모든 선택을 볼 수 있어요.",
+  "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
+    "후보의 “선택”을 누르면 내 투표용지에 추가되고, “내 선택”을 누르면 취소돼요. 선택한 내용은 이 휴대폰에만 남아요.",
+  "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
+    "2026년 11월 3일 투표용지의 모든 선택 항목을 대략 인쇄 순서대로 보여 주고, 항목마다 내가 고른 것을 함께 보여 줘요. 선택한 내용은 이 휴대폰에만 저장되며 앱 서버로 전송되지 않고 다른 누구도 볼 수 없어요.",
+  "Tap a race to open it and pick a candidate there.":
+    "선거를 눌러 열고 그곳에서 후보를 선택하세요.",
+  "Tap \"Yes\" or \"No\" on the advisory question.":
+    "권고 질문에 “예” 또는 “아니오”를 누르세요.",
+  "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
+    "“내 선거 찾기”를 눌러 주소를 추가하면 연방 하원, 주 의회, 카운티 위원회, 교육위원회 선거가 나와요.",
+  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
+    "“내 선택 공유”를 누르면 목록을 메시지로 보내거나 저장할 수 있어요. 직접 써야 하는 이름에는 “직접 기입” 표시가 붙어요.",
+  "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
+    "“내 선택 지우기”를 누르고 확인하면 이 휴대폰의 모든 선택이 지워져요.",
+  "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
+    "“앱 공유하기”를 누르면 친구에게 다운로드 링크가 담긴 짧은 메시지를 보낼 수 있어요. 보내기 전에 메시지를 고칠 수 있어요.",
+  "Chicago's top concerns, ranked by the people, plus citywide polls and City Council.":
+    "시민이 순위를 매긴 시카고의 주요 현안, 그리고 시 전체 투표와 시의회 소식.",
+  "Your ward's concerns, your alderman's grade, and its meetings, zoning hearings, and ward office.":
+    "내 선거구의 현안, 내 시의원의 등급, 그리고 선거구 회의, 용도 지역 청문회, 선거구 사무실.",
+  "Headlines from Chicago newsrooms, newest first.":
+    "시카고 언론사의 헤드라인을 최신순으로.",
+  "Who is on your ballot, and My ballot to plan your picks.":
+    "내 투표용지에 누가 있는지, 그리고 선택을 계획하는 내 투표용지.",
+  "On every screen: what is there and what you can do.":
+    "모든 화면에서: 무엇이 있고 무엇을 할 수 있는지.",
+  "Get a notification when they answer?":
+    "답변이 오면 알림을 받을까요?",
+  "Your phone will tell you when your question gets an answer. You can change this any time in Settings.":
+    "질문에 답변이 오면 휴대폰이 알려 줘요. 설정에서 언제든 바꿀 수 있어요.",
+  "Get a notification when someone comments?":
+    "누군가 댓글을 달면 알림을 받을까요?",
+  "Your phone will tell you when someone comments on your concern. You can change this any time in Settings.":
+    "누군가 내 현안에 댓글을 달면 휴대폰이 알려 줘요. 설정에서 언제든 바꿀 수 있어요.",
+  "Get a notification when someone replies?":
+    "누군가 답글을 달면 알림을 받을까요?",
+  "Your phone will tell you when someone replies to your comment. You can change this any time in Settings.":
+    "누군가 내 댓글에 답글을 달면 휴대폰이 알려 줘요. 설정에서 언제든 바꿀 수 있어요.",
+  "choice":
+    "개 선택",
+  "choices":
+    "개 선택",
+  // Accessibility labels (2026-10-09): screen reader text for unread
+  // notifications, join counts, ballot picks, password visibility, scores,
+  // and loading placeholders.
+  "Unread":
+    "읽지 않음",
+  "{n} joined":
+    "{n}명 동참",
+  "Your pick: {name}":
+    "내 선택: {name}",
+  "Pick {name}":
+    "{name} 선택",
+  "Keep {name}?":
+    "{name} 판사를 유임할까요?",
+  "Show password":
+    "비밀번호 보기",
+  "Hide password":
+    "비밀번호 숨기기",
+  "Score {n}":
+    "점수 {n}",
+  "Loading":
+    "불러오는 중",
+  "Goes to the City Council on {date}. No hearing set yet.":
+    "{date}에 시의회에 상정돼요. 아직 청문회 일정은 없어요.",
+  "Time not found in the newsletter":
+    "소식지에서 시간을 찾지 못함",
+  "{date}, time not found":
+    "{date}, 시간을 찾지 못함",
+  "Date and time not found":
+    "날짜와 시간을 찾지 못함",
+  "The ward office’s newsletter mentions these without a time. The office can tell you when they meet.":
+    "선거구 사무실 소식지에 시간 없이 언급된 회의예요. 사무실에서 언제 열리는지 알려 줄 수 있어요.",
+  "Call the ward office: {phone}":
+    "선거구 사무실에 전화: {phone}",
+  "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
+    "\"선거구 회의\" 아래 \"소식지에서 시간을 찾지 못함\"에는 선거구 사무실 소식지가 시간 없이 알린 회의가 나와요. \"선거구 사무실에 전화\"를 눌러 언제 열리는지 물어보세요.",
 };

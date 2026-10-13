@@ -36,6 +36,7 @@ import { useLocale, usePlural, useT } from '@/lib/i18n';
 import { enter } from '@/lib/motion';
 import { usePageSummary } from '@/lib/page-help';
 import { useMyDistricts } from '@/lib/districts';
+import { offerPush } from '@/lib/push-offer';
 import { wardLabel } from '@/constants/chicago';
 
 /**
@@ -110,7 +111,7 @@ export default function ElectionScreen() {
       <View style={{ gap: Spacing.one, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
-          <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+          <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34 }}>
             {t('election')}
           </ThemedText>
         </View>
@@ -322,7 +323,11 @@ function GridCell({
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={t('Jump to {section}').replace('{section}', t(hint))}
+      accessibilityLabel={`${label}, ${caption}`}
+      // The cell's color is what says which ballot; a screen reader hears it.
+      accessibilityHint={`${t('Jump to {section}').replace('{section}', t(hint))}. ${t(
+        ballot === 'november' ? 'On the November 3, 2026 ballot.' : 'On the February 23, 2027 ballot.'
+      )}`}
       style={({ pressed }) => [
         styles.gridCell,
         tight && { paddingHorizontal: Spacing.two + 2, gap: 7 },
@@ -405,6 +410,7 @@ function ElectionAma() {
     try {
       const id = await askElectionQuestion(profile, draft);
       setDraft('');
+      void offerPush(profile, 'answers');
       router.push(`/election-question/${id}`);
     } catch (e) {
       notify(t('Could not post the question'), errorMessage(e));
@@ -462,8 +468,14 @@ function ElectionAma() {
           .filter((q) => !isBlocked(q.authorUid))
           .sort((a, b) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
           .map((q) => (
-            <Card key={q.id} onPress={() => router.push(`/election-question/${q.id}`)}>
-              <ThemedText type="smallBold" style={{ fontSize: 15 }}>
+            // The card holds the join and report buttons, so it is not one
+            // screen reader element; the question is the link that opens it.
+            <Card key={q.id} onPress={() => router.push(`/election-question/${q.id}`)} accessible={false}>
+              <ThemedText
+                type="smallBold"
+                style={{ fontSize: 15 }}
+                accessibilityRole="link"
+                onPress={() => router.push(`/election-question/${q.id}`)}>
                 {q.body}
               </ThemedText>
               {/* Wraps on a narrow screen rather than cutting the name or

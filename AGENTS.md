@@ -130,8 +130,13 @@ Conventions:
   HttpsError text) are es.ts keys like any string; anything else in
   Spanish mode shows a Spanish line for its error code with the English
   detail under it. New error text gets its es.ts entry in the same change.
-- Phone notifications (2026-09-29): expo-notifications; the ONLY place that
-  asks is Settings > Phone notifications, one switch per kind
+- Phone notifications (2026-09-29): expo-notifications; Settings > Phone
+  notifications holds the switches, and since 2026-10-09 (Brian's call; no
+  one had turned them on) the app also offers one kind once, right after
+  the act it is about (`offerPush` in src/lib/push-offer.ts: "answers"
+  after asking a politician or every candidate, "comments" after raising a
+  concern, "replies" after commenting; phones only, once per kind per
+  phone, never when that kind is on). One switch per kind
   (`PUSH_SWITCHES` in src/lib/push.ts, mirrored by `PUSH_PREF_FOR_TYPE` in
   functions): election reminders, a politician answered your question,
   comments on your posts, replies to your comments (type `reply`, split
@@ -201,6 +206,14 @@ Conventions:
     under ONE prompt, scripts/data/newsletter-prompt.md (describe, never
     rate; same words for every ward). Feeds and archive pages cover about
     half the wards; email-only lists need a subscribed inbox, not built yet.
+  - Meetings a newsletter announces without a time (2026-10-12) are kept
+    too: `wardMeetings` with `start: null`, `date` (the day, when given) and
+    `expiresAt` (the day after `date`, else 21 days after the issue), listed
+    under "Time not found in the newsletter" with the office's phone. "Not
+    found", never "not set": the time may exist, the text just doesn't say
+    it. Each queued issue carries its ward's open ones (`undated`); a later
+    issue that gives the time lists them in `resolves`, and a dated meeting
+    on the same day replaces one automatically.
 - News tab (2026-10-07): `news` (newspaper icon, between wards and
   election) lists headlines from every newsroom that covers Chicago or
   Illinois government, has a public feed, and is in the top million of the
@@ -646,6 +659,52 @@ Conventions:
 - Each ward's early voting site (2026 general) is in
   src/constants/early-voting-2026.ts, from the Board's poster; the
   how-to-vote card shows the home ward's site with hours and a directions link.
+- Ballot planner (2026-10-09): a "Pick" on every candidate in a November 3
+  race (`PickButton`, src/components/ballot-pick.tsx; school board races
+  too), "Keep this judge?" yes/no on retention, and `/my-ballot`: every
+  choice on the person's ballot in about ballot order (their district
+  races from `useMyDistricts`, one choice per judicial vacancy, MWRD's
+  vote-for-three, the advisory question), share as text, clear. Picks live
+  ON THE DEVICE ONLY (src/lib/ballot.ts, AsyncStorage `ballot.v1.<election>`,
+  a useSyncExternalStore store): never sent to the server, never on the
+  account; the privacy pages say so. February races get no picks until
+  their fields settle. `MyBallotLink` sits under YourRaces and atop races.
+  Race ids are unique across both ballots (the February City Treasurer is
+  `city-treasurer` since 2026-10-09; 'treasurer' is the state race).
+- First run and sharing (2026-10-09, from the testers' report): a one-time
+  `Welcome` (src/components/welcome.tsx, AsyncStorage `welcome.v1`, after
+  the language prompt; updaters see it once too) names each tab in a line
+  and points at the "?"; Settings has "Share the app" (`ShareAppButton`,
+  the waldgrave.com/directdemocracy page, an editable message, no referral
+  tracking). No rating prompt: Brian wants more good users before asking.
+  Store copy lives in docs/store-listing.md (English and Spanish, within
+  each store's limits); `npm run store-screenshots [-- --es]` captures
+  captioned 1080x1920 shots with headless Chrome from the local web dev
+  server on port 8085 (the live site's App Check turns headless Chrome
+  away); the alderman shot is the fictional ward 51 alderman, the ballot
+  shot an open seat with no pick, and the news shot leaves out crime,
+  investigations, deaths, and politicians. Output in store-screenshots/.
+- Search and link previews (2026-10-09): `npm run publish-web` runs
+  `build-seo-pages` between the export and the copy: it reads production
+  (needs gcloud application-default credentials) and writes an
+  extensionless HTML file per public page (candidates, races, school board,
+  mayoral candidates, aldermen 1-50, ward races, /officials) with its own
+  title, description, canonical and Open Graph tags, and the page's text in
+  the root div (the app's createRoot replaces it on load), plus a
+  sitemap.xml. Waldgrave's next.config.js serves those files as text/html
+  and its robots.txt lists the sitemap. Submit the sitemap in Google Search
+  Console (Brian's account).
+- Screen counts (2026-10-09): anonymous, no ids, ever. `useUsageTracking`
+  (src/lib/usage.ts, mounted once in `LocaleKeyedStack` in
+  src/app/_layout.tsx, so navigator redraws don't count) counts views per
+  help key (route pattern, never an id) and sends one `usageEvents` doc a
+  minute at most and on going to the background: day, platform, app
+  version, `views`, and `reach` (first time today on this device, kept in
+  AsyncStorage, which is how devices are counted without an id). Off in
+  dev and on the emulators. `onUsageEvent` re-checks it, adds it into
+  `usageDaily/{day}`, and deletes it; `npm run usage -- --days 14` prints
+  tabs, other screens by device-days, and PAGE_HELP screens never opened.
+  Never shown in the app, never add a uid, device id, or token to it.
 - Security posture and accepted limitations are documented in `docs/AUDIT.md`;
   update it when the trust model changes.
 - Typecheck with `npm run typecheck` before finishing.

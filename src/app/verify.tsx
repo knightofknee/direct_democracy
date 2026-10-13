@@ -358,9 +358,11 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
     alignItems: 'flex-start',
   },
+  // Grows with large text instead of clipping the number.
   stepBubble: {
-    width: 22,
-    height: 22,
+    minWidth: 22,
+    minHeight: 22,
+    paddingHorizontal: 4,
     borderRadius: 11,
     alignItems: 'center',
     justifyContent: 'center',

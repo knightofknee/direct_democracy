@@ -7,6 +7,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui';
 import { YourRaces } from '@/components/your-races';
+import { MyBallotLink } from '@/components/my-ballot-link';
 import {
   COOK_2026_RACES,
   GENERAL_2026_QUESTION,
@@ -55,6 +56,8 @@ export function NovemberSection() {
       </ThemedText>
 
       <YourRaces />
+
+      <MyBallotLink />
 
       <HowToVoteCard />
 

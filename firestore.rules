@@ -774,6 +774,33 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // ── Anonymous screen counts ──────────────────────────────────────────
+    // src/lib/usage.ts sends one event a minute at most: the Chicago day,
+    // platform, app version, and per-route view counts and first-today
+    // reach. No uid, no device id, so anyone may create one (signed in or
+    // not) and nobody may read, change, or delete one. The onUsageEvent
+    // trigger re-checks every value, adds it into usageDaily/{day}, and
+    // deletes it. usageDaily is for the operator's script only.
+    match /usageEvents/{eventId} {
+      allow create: if request.resource.data.keys().hasOnly(['day', 'platform', 'appVersion', 'views', 'reach'])
+        && request.resource.data.keys().hasAll(['day', 'platform', 'appVersion', 'views', 'reach'])
+        && request.resource.data.day is string
+        && request.resource.data.day.size() == 10
+        && request.resource.data.day.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.platform in ['ios', 'android', 'web']
+        && request.resource.data.appVersion is string
+        && request.resource.data.appVersion.size() <= 20
+        && request.resource.data.views is map
+        && request.resource.data.views.size() >= 1
+        && request.resource.data.views.size() <= 40
+        && request.resource.data.reach is map
+        && request.resource.data.reach.size() <= 40;
+      allow read, update, delete: if false;
+    }
+    match /usageDaily/{day} {
+      allow read, write: if false;
+    }
+
     // ── School board voter directory ─────────────────────────────────────
     // Read-only nominee cards for the 2026 school board election, seeded by
     // the operator (scripts/seed-school-board.ts) from public sources. Not

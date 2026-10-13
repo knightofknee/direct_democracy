@@ -116,7 +116,7 @@ export default function BigBoardScreen() {
       <View style={[styles.header, { alignItems: 'center' }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
-          <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+          <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34 }}>
             {t('big board')}
           </ThemedText>
         </View>
@@ -197,6 +197,7 @@ function VerifiedInfo() {
       <Pressable
         onPress={() => setOpen(true)}
         hitSlop={12}
+        accessibilityRole="button"
         accessibilityLabel={t('About verified votes and your data')}
         style={styles.footer}>
         <Ionicons name="information-circle-outline" size={20} color={theme.textSecondary} />

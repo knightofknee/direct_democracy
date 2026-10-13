@@ -97,7 +97,7 @@ const VALID_RACES: Record<string, (race: string) => boolean> = {
       race
     ),
   '2027-municipal': (race) =>
-    race === 'clerk' || race === 'treasurer' || /^ward-([1-9]|[1-4]\d|50)$/.test(race) || /^pdc-\d+$/.test(race),
+    race === 'clerk' || race === 'city-treasurer' || /^ward-([1-9]|[1-4]\d|50)$/.test(race) || /^pdc-\d+$/.test(race),
 };
 
 /** Races seeded before ids carried the race; their doc ids must not change. */
@@ -105,6 +105,9 @@ const ORIGINAL_RACES = new Set([
   'us-senate', 'governor', 'attorney-general', 'secretary-of-state', 'comptroller', 'treasurer',
   'cook-board-president', 'cook-assessor', 'cook-treasurer', 'cook-sheriff', 'cook-clerk', 'mwrd',
   'mwrd-2yr', 'clerk',
+  // The February City Treasurer race, renamed from 'treasurer' on 2026-10-09
+  // (that id is the November state race); its card ids stay as they were.
+  'city-treasurer',
   ...Array.from({ length: 50 }, (_, i) => `ward-${i + 1}`),
 ]);
 

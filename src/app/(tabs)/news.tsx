@@ -36,6 +36,8 @@ export default function NewsScreen() {
   const homeWard = profile?.wardId ?? null;
   const [wardOnly, setWardOnly] = useState(false);
   const [count, setCount] = useState(PAGE);
+  /** How many stories were on hand when "Show more" was last tapped, and under which filter. */
+  const [asked, setAsked] = useState({ key: '', n: 0 });
   const { sources } = useNewsSources();
   const { hiddenSources, hiddenLangs, showEverything } = useNewsPrefs();
 
@@ -62,7 +64,15 @@ export default function NewsScreen() {
           : query(collection(db, 'newsItems'), orderBy('publishedAt', 'desc'), limit(count)),
     [byWard, homeWard, pick?.join(','), count]
   );
-  const items = visibleNews(data, hiddenSources, hiddenLangs);
+  // "Show more" asks for a longer page, and a new query starts out empty.
+  // Until it lands, the stories already on screen stay (same filter only),
+  // so the list never collapses to the loading cards and drops the reader
+  // back at the top.
+  const filterKey = `${byWard}|${homeWard}|${pick?.join(',') ?? ''}`;
+  const [kept, setKept] = useState<{ key: string; data: NewsItem[] }>({ key: '', data: [] });
+  if (!loading && (kept.key !== filterKey || kept.data !== data)) setKept({ key: filterKey, data });
+  const rows = loading && kept.key === filterKey ? kept.data : data;
+  const items = visibleNews(rows, hiddenSources, hiddenLangs);
   const names = new Map(sources.map((s) => [s.id, s.name]));
   const allOff = included.length > 0 && shownSources.length === 0;
   const turnedOff = hiddenSources.size + hiddenLangs.size;
@@ -87,7 +97,7 @@ export default function NewsScreen() {
       <View style={{ gap: Spacing.one, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
-          <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+          <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34 }}>
             {t('news')}
           </ThemedText>
         </View>
@@ -116,6 +126,7 @@ export default function NewsScreen() {
                   }}
                   accessibilityRole="button"
                   accessibilityState={{ selected: on }}
+                  hitSlop={{ top: 6, bottom: 6 }}
                   style={{ paddingHorizontal: Spacing.three - 4, paddingVertical: 6, backgroundColor: on ? theme.primary : 'transparent' }}>
                   <ThemedText type="smallBold" style={{ fontSize: 13, color: on ? '#fff' : theme.text }}>
                     {tab.label}
@@ -144,7 +155,7 @@ export default function NewsScreen() {
           <EmptyState icon="newspaper-outline" message={t('You have turned every source off.')} />
           <Button title={t('Show every source')} variant="secondary" onPress={showEverything} />
         </>
-      ) : loading && data.length === 0 ? (
+      ) : loading && rows.length === 0 ? (
         <SkeletonCards />
       ) : items.length === 0 ? (
         <EmptyState
@@ -167,8 +178,20 @@ export default function NewsScreen() {
               />
             ))}
           </Card>
-          {data.length >= count && (
-            <Button title={t('Show more')} variant="ghost" onPress={() => setCount((n) => n + PAGE)} />
+          {/* Stays up while the next page loads, so the list's height (and
+              the reader's place) holds still. Firestore first answers a
+              longer page from its cache with only the stories it already
+              has; that is not the end of the list, so the button goes only
+              once a page brings fewer new stories than were asked for. */}
+          {(loading || data.length >= count || (asked.key === filterKey && data.length <= asked.n)) && (
+            <Button
+              title={t('Show more')}
+              variant="ghost"
+              onPress={() => {
+                setAsked({ key: filterKey, n: data.length });
+                setCount((n) => n + PAGE);
+              }}
+            />
           )}
         </>
       )}

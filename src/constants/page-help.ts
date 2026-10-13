@@ -37,6 +37,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap 1 to 5 on a concern to rate its priority, and tap yours again to take it back. Here the verified count includes only verified residents of this ward.',
       'Tap the alderman to see their grade and ask them a question.',
       'Under "Take part", tap a ward meeting, a zoning item, or a police district council meeting to open it at its source. Ward meetings come from the ward office\'s newsletter; zoning items and police meetings come from the city.',
+      'Under "Ward meetings", "Time not found in the newsletter" lists meetings the ward office\'s newsletter announces without a time. Tap "Call the ward office" to ask when they meet.',
       'Under "Ward office", tap the address for directions, the phone number to call, or "Ward newsletter" to read past issues or sign up.',
       'Under "In the news", tap a headline to read a recent story that names this ward, its alderman, or one of its neighborhoods.',
       'Vote on polls under "On the ballot" if this is your home ward. Results show after you vote. "Past votes" shows the results of closed polls.',
@@ -50,6 +51,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
     can: [
       'Tap a box under the header, such as "judges" or "ward races", to jump to that section. Tap the countdown line to jump to the November ballot.',
       'Tap "Find my races" and enter your address once to see the races on your ballot first. Only the district numbers are kept, never the address.',
+      'Tap "My ballot" to see every choice on your November 3 ballot and the picks you have made. Your picks stay on this phone.',
       'Tap a mayoral candidate to read their full platform and comment on any policy.',
       'Type in "Ask every candidate at once…" and tap "Put it to the candidates". The limit is 3 a day. Tap the arrow on a question to join it, and tap again to leave.',
       'Tap a race, a district number, or a ward number to see who is running. "Your ward" shows your alderman\'s record next to their challengers.',
@@ -218,6 +220,8 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Open "Injustice Watch judicial guide" or "Chicago Bar Association evaluations" from the box at the top of any judge race.',
       'On "Judges up for retention", each judge is a separate yes-or-no question on your ballot. A judge needs 60 percent yes to stay.',
       'Look under "Write-in candidates" for declared write-ins. Their names are not printed on the ballot, and the section explains how to write one in.',
+      'On a November 3 race, tap "Pick" on a candidate to add them to My ballot, and tap "Your pick" to take it back. On judges up for retention, tap "Yes" or "No" under "Keep this judge?". Your picks stay on this phone.',
+      'Tap "My ballot" at the top to see all your picks.',
     ],
   },
   'election-candidate/[id]': {
@@ -237,6 +241,17 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Compare nominees on this page by the preview of what each is running on and the "CTU endorsed" and "Incumbent" chips.',
       'Look under "Write-in candidates" for declared write-ins, whose names are not printed on the ballot, and read how to write one in.',
       'Find your school board district with "Find my races" on the election tab. School board districts do not follow ward lines.',
+      'Tap "Pick" on a nominee to add them to My ballot, and tap "Your pick" to take it back. Your picks stay on this phone.',
+    ],
+  },
+  'my-ballot': {
+    what: 'Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app\'s servers, and nobody else can see them.',
+    can: [
+      'Tap a race to open it and pick a candidate there.',
+      'Tap "Yes" or "No" on the advisory question.',
+      'Tap "Find my races" to add your address, so your congressional, state legislative, county board, and school board races are listed.',
+      'Tap "Share my picks" to send your list as a message or save it. Names to write in are marked "write in".',
+      'Tap "Clear my picks" and confirm to remove every pick from this phone.',
     ],
   },
   'school-board-candidate/[id]': {
@@ -347,6 +362,7 @@ export const PAGE_HELP: Record<string, PageHelp> = {
       'Tap "Open phone settings" if your phone has notifications turned off for this app.',
       'Without verification, tap "Verify your residency" or "Set your home ward" (no ID needed). You can tap "Change home ward" until posting in that ward locks it.',
       'Moved within Chicago? Once verified, tap "Verify with my ID" or "Verify with a bill or statement". You can do this once every 3 months.',
+      'Tap "Share the app" to send a friend a short message with the link to download it. You can edit the message before it goes.',
       'Tap "Privacy & data" to see what the app stores. "Community rules" is at the bottom of the page.',
       'Tap "Delete my account…" and confirm twice to remove your sign-in, profile, verification, and every vote you cast. Your posts stay, credited to [deleted].',
     ],

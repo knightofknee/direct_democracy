@@ -1924,4 +1924,175 @@ export const TL: Record<string, string> = {
     "Kapag naka-sign in, naka-save sa iyong account ang mga pinili mo at sumusunod sa iyo sa ibang device. Kapag naka-sign out, naka-save ang mga ito sa device na ito.",
   "Under \"In the news\", tap a headline to read a recent story that names them.":
     "Sa “Sa balita”, i-tap ang isang headline para basahin ang bagong balitang bumabanggit sa kanila.",
+
+  // Ballot planner, notification offers, welcome, share the app, screen counts (2026-10-09)
+  "Federal":
+    "Pederal",
+  "State":
+    "Estado",
+  "County":
+    "County",
+  "Judges":
+    "Mga hukom",
+  "Choices made: {n} of {total}.":
+    "Mga napili: {n} sa {total}.",
+  "No address on file, so district races are not listed.":
+    "Walang address na naka-save, kaya hindi nakalista ang mga halalan ayon sa distrito.",
+  "Your picks stay on this phone.":
+    "Nananatili sa teleponong ito ang mga pinili mo.",
+  "write in":
+    "isulat",
+  "My picks for the {date} ballot":
+    "Ang mga pinili ko para sa balota ng {date}",
+  "Keep these judges":
+    "Panatilihin ang mga hukom na ito",
+  "Do not keep these judges":
+    "Huwag panatilihin ang mga hukom na ito",
+  "Nothing picked yet":
+    "Wala ka pang napili",
+  "Pick a candidate in a race first.":
+    "Pumili muna ng kandidato sa isang halalan.",
+  "Plan yours with direct democracy":
+    "Planuhin ang iyo gamit ang direct democracy",
+  "Copied":
+    "Nakopya",
+  "Your picks are copied. Paste them anywhere.":
+    "Nakopya na ang mga pinili mo. I-paste kahit saan.",
+  "Your choices for the {date} ballot, in about the order the ballot prints them. Tap a race to pick. Your picks stay on this phone: they are never sent to us or anyone else.":
+    "Ang mga pinili mo para sa balota ng {date}, halos sa pagkakasunod ng pagkaka-print sa balota. I-tap ang isang halalan para pumili. Nananatili sa teleponong ito ang mga pinili mo: hindi kailanman ipinapadala sa amin o kaninuman.",
+  "Your address decides your congressional, state legislative, county board, and school board races. Add it to see them here.":
+    "Ang address mo ang nagpapasya sa mga halalan mo para sa Kongreso, lehislatura ng estado, county board, at school board. Idagdag ito para makita sila rito.",
+  "Not decided":
+    "Hindi pa napagpasyahan",
+  "Yes: {yes}. No: {no}. Not decided: {open}.":
+    "Oo: {yes}. Hindi: {no}. Hindi pa napagpasyahan: {open}.",
+  "Share my picks":
+    "Ibahagi ang mga pinili ko",
+  "Clear my picks":
+    "Burahin ang mga pinili ko",
+  "Clear my picks?":
+    "Burahin ang mga pinili ko?",
+  "Every pick on this phone is removed.":
+    "Mabubura ang lahat ng pinili sa teleponong ito.",
+  "Clear":
+    "Burahin",
+  "You can pick up to {n} here":
+    "Hanggang {n} ang mapipili mo rito",
+  "Take one of your picks back first.":
+    "Bawiin muna ang isa sa mga pinili mo.",
+  "Your pick":
+    "Pinili mo",
+  "Pick":
+    "Piliin",
+  "Keep this judge?":
+    "Panatilihin ang hukom na ito?",
+  "My ballot":
+    "Aking balota",
+  "{n} made so far. Your picks stay on this phone.":
+    "{n} sa ngayon. Nananatili sa teleponong ito ang mga pinili mo.",
+  "Pick a candidate in each race and take the list with you to vote.":
+    "Pumili ng kandidato sa bawat halalan at dalhin ang listahan sa pagboto.",
+  "Not now":
+    "Hindi muna",
+  "Turn on":
+    "I-on",
+  "Notifications are off for this app":
+    "Naka-off ang mga abiso para sa app na ito",
+  "Could not turn on notifications":
+    "Hindi ma-on ang mga abiso",
+  "Got it":
+    "Sige",
+  "I use direct democracy to follow Chicago: rate your alderman, ask them anything, plan your ballot, and read the city's news in one place.":
+    "Ginagamit ko ang direct democracy para subaybayan ang Chicago: i-rate ang iyong alderman, tanungin sila ng kahit ano, planuhin ang iyong balota, at basahin ang balita ng lungsod sa iisang lugar.",
+  "Paste it anywhere to share the app.":
+    "I-paste ito kahit saan para ibahagi ang app.",
+  "Share the app":
+    "Ibahagi ang app",
+  "The app counts how often each screen is opened, by day and by phone type, anonymously: the counts carry no account, name, or device identifier.":
+    "Binibilang ng app nang anonymous kung gaano kadalas binubuksan ang bawat screen, ayon sa araw at uri ng telepono: walang account, pangalan, o identifier ng device ang mga bilang.",
+  "Your ballot picks. My ballot keeps them on your phone only; they are never sent to us.":
+    "Ang mga pinili mo sa balota. Sa telepono mo lang ito itinatago ng Aking balota; hindi kailanman ipinapadala sa amin.",
+  "Tap \"My ballot\" to see every choice on your November 3 ballot and the picks you have made. Your picks stay on this phone.":
+    "I-tap ang “Aking balota” para makita ang bawat pagpipilian sa balota mo sa Nobyembre 3 at ang mga napili mo na. Nananatili sa teleponong ito ang mga pinili mo.",
+  "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
+    "Sa isang halalan sa Nobyembre 3, i-tap ang “Piliin” sa isang kandidato para idagdag sila sa Aking balota, at i-tap ang “Pinili mo” para bawiin. Sa mga hukom na humihingi ng retention, i-tap ang “Oo” o “Hindi” sa ilalim ng “Panatilihin ang hukom na ito?”. Nananatili sa teleponong ito ang mga pinili mo.",
+  "Tap \"My ballot\" at the top to see all your picks.":
+    "I-tap ang “Aking balota” sa itaas para makita ang lahat ng pinili mo.",
+  "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
+    "I-tap ang “Piliin” sa isang kandidato para idagdag sila sa Aking balota, at i-tap ang “Pinili mo” para bawiin. Nananatili sa teleponong ito ang mga pinili mo.",
+  "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
+    "Ang bawat pagpipilian sa balota mo sa Nobyembre 3, 2026, halos sa pagkakasunod ng pagkaka-print sa balota, kasama ang pinili mo sa bawat isa. Sa teleponong ito lang itinatago ang mga pinili mo. Hindi kailanman ipinapadala sa mga server ng app, at walang ibang makakakita.",
+  "Tap a race to open it and pick a candidate there.":
+    "I-tap ang isang halalan para buksan ito at pumili ng kandidato roon.",
+  "Tap \"Yes\" or \"No\" on the advisory question.":
+    "I-tap ang “Oo” o “Hindi” sa advisory na tanong.",
+  "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
+    "I-tap ang “Hanapin ang aking mga halalan” para idagdag ang address mo, para makalista ang mga halalan mo para sa Kongreso, lehislatura ng estado, county board, at school board.",
+  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
+    "I-tap ang “Ibahagi ang mga pinili ko” para ipadala ang listahan mo bilang mensahe o i-save ito. May markang “isulat” ang mga pangalang kailangang isulat.",
+  "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
+    "I-tap ang “Burahin ang mga pinili ko” at kumpirmahin para alisin ang lahat ng pinili sa teleponong ito.",
+  "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
+    "I-tap ang “Ibahagi ang app” para padalhan ang isang kaibigan ng maikling mensahe na may link para i-download ito. Maaari mong i-edit ang mensahe bago ipadala.",
+  "Chicago's top concerns, ranked by the people, plus citywide polls and City Council.":
+    "Ang mga pangunahing alalahanin ng Chicago, niraranggo ng mga tao, kasama ang mga botohan sa buong lungsod at ang City Council.",
+  "Your ward's concerns, your alderman's grade, and its meetings, zoning hearings, and ward office.":
+    "Ang mga alalahanin ng iyong ward, ang grado ng iyong alderman, at ang mga pulong, zoning hearing, at ward office nito.",
+  "Headlines from Chicago newsrooms, newest first.":
+    "Mga headline mula sa mga newsroom ng Chicago, pinakabago muna.",
+  "Who is on your ballot, and My ballot to plan your picks.":
+    "Sino ang nasa balota mo, at ang Aking balota para planuhin ang mga pipiliin mo.",
+  "On every screen: what is there and what you can do.":
+    "Sa bawat screen: kung ano ang naroon at kung ano ang magagawa mo.",
+  "Get a notification when they answer?":
+    "Makatanggap ng abiso kapag sumagot sila?",
+  "Your phone will tell you when your question gets an answer. You can change this any time in Settings.":
+    "Sasabihan ka ng telepono mo kapag nasagot ang tanong mo. Maaari mo itong baguhin anumang oras sa Settings.",
+  "Get a notification when someone comments?":
+    "Makatanggap ng abiso kapag may nagkomento?",
+  "Your phone will tell you when someone comments on your concern. You can change this any time in Settings.":
+    "Sasabihan ka ng telepono mo kapag may nagkomento sa iyong alalahanin. Maaari mo itong baguhin anumang oras sa Settings.",
+  "Get a notification when someone replies?":
+    "Makatanggap ng abiso kapag may sumagot?",
+  "Your phone will tell you when someone replies to your comment. You can change this any time in Settings.":
+    "Sasabihan ka ng telepono mo kapag may sumagot sa komento mo. Maaari mo itong baguhin anumang oras sa Settings.",
+  "choice":
+    "pagpili",
+  "choices":
+    "pagpili",
+  // Accessibility labels (2026-10-09): screen reader text for unread
+  // notifications, join counts, ballot picks, password visibility, scores,
+  // and loading placeholders.
+  "Unread":
+    "Hindi pa nababasa",
+  "{n} joined":
+    "{n} ang sumali",
+  "Your pick: {name}":
+    "Pinili mo: {name}",
+  "Pick {name}":
+    "Piliin si {name}",
+  "Keep {name}?":
+    "Panatilihin si {name}?",
+  "Show password":
+    "Ipakita ang password",
+  "Hide password":
+    "Itago ang password",
+  "Score {n}":
+    "Iskor {n}",
+  "Loading":
+    "Naglo-load",
+  "Goes to the City Council on {date}. No hearing set yet.":
+    "Dadalhin sa City Council sa {date}. Wala pang nakatakdang hearing.",
+  "Time not found in the newsletter":
+    "Hindi nakita ang oras sa newsletter",
+  "{date}, time not found":
+    "{date}, hindi nakita ang oras",
+  "Date and time not found":
+    "Hindi nakita ang petsa at oras",
+  "The ward office’s newsletter mentions these without a time. The office can tell you when they meet.":
+    "Binabanggit ng newsletter ng ward office ang mga ito nang walang oras. Masasabi ng opisina kung kailan ang pulong.",
+  "Call the ward office: {phone}":
+    "Tawagan ang ward office: {phone}",
+  "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
+    "Sa ilalim ng \"Mga pulong ng ward\", ang \"Hindi nakita ang oras sa newsletter\" ay naglilista ng mga pulong na inanunsyo ng newsletter ng ward office nang walang oras. I-tap ang \"Tawagan ang ward office\" para itanong kung kailan ang pulong.",
 };

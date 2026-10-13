@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.diditWebhook = exports.redeemVerificationPurchase = exports.getVerificationQuote = exports.createVerificationSession = exports.findMyDistricts = exports.declareWard = exports.devVerify = exports.syncMyPlatform = exports.syncPlatforms = exports.syncNewsFeeds = exports.syncWardCivics = exports.syncCouncil = exports.eraseDiditSessions = exports.sendDeadlineReminders = exports.sweepPendingQuestions = exports.refreshClaim = exports.sweepClaims = exports.editPost = exports.onModerationAction = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onQuestionUpvoteWrite = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onPolicyWrite = exports.onPolicyCommentCredited = exports.onPolicyCommentDeleted = exports.onPolicyCommentCreated = exports.onPolicyVoteWrite = exports.onElectionQuestionDeleted = exports.onElectionQuestionCreated = exports.onElectionQuestionUpvoteWrite = exports.onElectionAnswerVoteWrite = exports.onElectionAnswerWrite = exports.onConcernDeleted = exports.onPolicyCommentVoteWrite = exports.onCommentVoteWrite = exports.onQuestionCommentVoteWrite = exports.onQuestionCommentDeleted = exports.onQuestionCommentCreated = exports.onCommentDeleted = exports.onCommentCreated = exports.onPushTokensChanged = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onReportCreated = exports.onConcernCreated = void 0;
+exports.diditWebhook = exports.redeemVerificationPurchase = exports.getVerificationQuote = exports.createVerificationSession = exports.findMyDistricts = exports.declareWard = exports.devVerify = exports.syncMyPlatform = exports.syncPlatforms = exports.onUsageEvent = exports.syncNewsFeeds = exports.syncWardCivics = exports.syncCouncil = exports.eraseDiditSessions = exports.sendDeadlineReminders = exports.sweepPendingQuestions = exports.refreshClaim = exports.sweepClaims = exports.editPost = exports.onModerationAction = exports.deleteAccount = exports.onJudgmentWrite = exports.onQuestionResponded = exports.onQuestionCreated = exports.onQuestionUpvoteWrite = exports.onApprovalWrite = exports.onQuestionDeleted = exports.onPolicyWrite = exports.onPolicyCommentCredited = exports.onPolicyCommentDeleted = exports.onPolicyCommentCreated = exports.onPolicyVoteWrite = exports.onElectionQuestionDeleted = exports.onElectionQuestionCreated = exports.onElectionQuestionUpvoteWrite = exports.onElectionAnswerVoteWrite = exports.onElectionAnswerWrite = exports.onConcernDeleted = exports.onPolicyCommentVoteWrite = exports.onCommentVoteWrite = exports.onQuestionCommentVoteWrite = exports.onQuestionCommentDeleted = exports.onQuestionCommentCreated = exports.onCommentDeleted = exports.onCommentCreated = exports.onPushTokensChanged = exports.onPollVoteWrite = exports.onConcernVoteWrite = exports.onReportCreated = exports.onConcernCreated = void 0;
 const crypto = __importStar(require("crypto"));
 const app_1 = require("firebase-admin/app");
 const auth_1 = require("firebase-admin/auth");
@@ -2276,6 +2276,82 @@ exports.syncWardCivics = (0, scheduler_1.onSchedule)({ schedule: '30 5,14 * * *'
  */
 exports.syncNewsFeeds = (0, scheduler_1.onSchedule)({ schedule: 'every 20 minutes', timeZone: 'America/Chicago', timeoutSeconds: 300, memory: '512MiB' }, async () => {
     console.log(`News: ${await (0, news_1.syncNews)(db)}`);
+});
+// ── Anonymous screen counts ──────────────────────────────────────────────
+/** A route pattern as the app's help key names it ('official/[id]'). */
+const USAGE_ROUTE_RE = /^[\w()[\]/#-]+$/;
+/** One device can't open one screen this often in a minute. */
+const USAGE_MAX_COUNT = 500;
+const USAGE_PLATFORMS = new Set(['ios', 'android', 'web']);
+/** 'YYYY-MM-DD' on Chicago's clock, `offsetDays` from now. */
+function chicagoDayKey(offsetDays = 0) {
+    const s = new Date(Date.now() + offsetDays * 86_400_000).toLocaleDateString('en-US', {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    });
+    const [m, d, y] = s.split('/');
+    return `${y}-${m}-${d}`;
+}
+/** The route -> count entries worth keeping, capped at `max` per entry. */
+function usageCounts(raw, max) {
+    const out = {};
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw))
+        return out;
+    for (const [route, n] of Object.entries(raw)) {
+        if (route.length > 80 || !USAGE_ROUTE_RE.test(route))
+            continue;
+        if (typeof n !== 'number' || !Number.isInteger(n) || n < 1 || n > max)
+            continue;
+        out[route] = n;
+    }
+    return out;
+}
+/**
+ * Anonymous screen counts (2026-10-09, src/lib/usage.ts): each event adds
+ * into `usageDaily/{day}` (views and devices per route, events and views
+ * per platform and app version) and is deleted. Values the app would
+ * never send are dropped: counts over 500, odd route keys, a day that is
+ * not around today. Written as nested maps with set-merge, since route
+ * keys hold '/' and brackets that a dotted update path would misread.
+ * One transaction, so a retried event is never counted twice.
+ */
+exports.onUsageEvent = (0, firestore_2.onDocumentCreated)('usageEvents/{eventId}', async (event) => {
+    const ref = event.data?.ref;
+    if (!ref)
+        return;
+    await db.runTransaction(async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists)
+            return;
+        const e = snap.data();
+        tx.delete(ref);
+        const day = typeof e.day === 'string' ? e.day : '';
+        const nearToday = [-2, -1, 0, 1].some((o) => chicagoDayKey(o) === day);
+        if (!nearToday || !USAGE_PLATFORMS.has(e.platform))
+            return;
+        const views = usageCounts(e.views, USAGE_MAX_COUNT);
+        const reach = usageCounts(e.reach, 1);
+        const total = Object.values(views).reduce((a, b) => a + b, 0);
+        if (total === 0)
+            return;
+        const version = typeof e.appVersion === 'string' && /^[\w.-]{1,20}$/.test(e.appVersion) ? e.appVersion : 'other';
+        const inc = (m) => Object.fromEntries(Object.entries(m).map(([k, n]) => [k, firestore_1.FieldValue.increment(n)]));
+        tx.set(db.doc(`usageDaily/${day}`), {
+            day,
+            views: inc(views),
+            devices: inc(reach),
+            platforms: {
+                [e.platform]: {
+                    events: firestore_1.FieldValue.increment(1),
+                    views: firestore_1.FieldValue.increment(total),
+                    versions: { [version]: firestore_1.FieldValue.increment(1) },
+                },
+            },
+            updatedAt: firestore_1.FieldValue.serverTimestamp(),
+        }, { merge: true });
+    });
 });
 exports.syncPlatforms = (0, scheduler_1.onSchedule)({ schedule: '0 6 * * *', timeZone: 'America/Chicago', timeoutSeconds: 540, memory: '512MiB' }, async () => {
     const candidates = await db.collection('candidates').where('sourceUrl', '!=', null).get();

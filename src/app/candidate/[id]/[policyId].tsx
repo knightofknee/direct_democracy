@@ -22,6 +22,7 @@ import { usePageSummary } from '@/lib/page-help';
 import { useT } from '@/lib/i18n';
 import { openLink } from '@/lib/open-link';
 import type { Candidate, Comment, Policy } from '@/lib/types';
+import { offerPush } from '@/lib/push-offer';
 import {
   addPolicyComment,
   deletePolicyComment,
@@ -107,11 +108,11 @@ export default function PolicyScreen() {
             />
           )}
         </View>
-        <ThemedText type="subtitle" style={{ fontSize: 24, lineHeight: 30 }}>
+        <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 24, lineHeight: 30 }}>
           {policy.title}
         </ThemedText>
         {candidate && (
-          <Pressable onPress={() => router.push(`/candidate/${policy.candidateUid}`)}>
+          <Pressable onPress={() => router.push(`/candidate/${policy.candidateUid}`)} accessibilityRole="link">
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
               {isDirectory
                 ? t('Declared candidate · no platform published to import')
@@ -155,7 +156,9 @@ export default function PolicyScreen() {
           `candidates/${policy.candidateUid}/policies/${policy.id}/comments/${comment.id}`
         }
         onSubmit={(body, reply, references) =>
-          addPolicyComment(profile!, policy.candidateUid, policy.id, body, reply, references)
+          addPolicyComment(profile!, policy.candidateUid, policy.id, body, reply, references).then(() => {
+            void offerPush(profile, 'replies');
+          })
         }
         onDelete={(comment) =>
           deletePolicyComment(profile!, policy.candidateUid, policy.id, comment)
@@ -180,14 +183,18 @@ function Receipts({ links, title }: { links: Policy['links']; title: string }) {
 
   return (
     <Card>
-      <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+      <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 13 }}>
         {title}
       </ThemedText>
       {links.map((link, i) => (
         <View key={`${link.url}-${i}`} style={styles.linkRow}>
-          <Pressable onPress={() => void openLink(link.url)} style={[styles.linkRow, { flex: 1 }]}>
+          <Pressable
+            onPress={() => void openLink(link.url)}
+            accessibilityRole="link"
+            style={[styles.linkRow, { flex: 1 }]}>
             <Ionicons name="link-outline" size={14} color={theme.primary} />
-            <ThemedText type="small" style={{ color: theme.primary, flex: 1 }} numberOfLines={2}>
+            {/* A label is never cut off; a long one wraps. */}
+            <ThemedText type="small" style={{ color: theme.primary, flex: 1 }}>
               {link.label}
             </ThemedText>
           </Pressable>

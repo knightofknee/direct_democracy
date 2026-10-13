@@ -2283,4 +2283,175 @@ export const ES: Record<string, string> = {
     "Con sesión iniciada, tus elecciones se guardan en tu cuenta y te acompañan en otros dispositivos. Sin sesión, se guardan en este dispositivo.",
   "Under \"In the news\", tap a headline to read a recent story that names them.":
     "En “En las noticias”, toca un titular para leer una noticia reciente que lo nombra.",
+
+  // Ballot planner, notification offers, welcome, share the app, screen counts (2026-10-09)
+  "Federal":
+    "Federal",
+  "State":
+    "Estatal",
+  "County":
+    "Condado",
+  "Judges":
+    "Jueces",
+  "Choices made: {n} of {total}.":
+    "Elecciones hechas: {n} de {total}.",
+  "No address on file, so district races are not listed.":
+    "No hay dirección guardada, así que no aparecen las contiendas por distrito.",
+  "Your picks stay on this phone.":
+    "Tus elecciones se quedan en este teléfono.",
+  "write in":
+    "escribir el nombre",
+  "My picks for the {date} ballot":
+    "Mis elecciones para la boleta del {date}",
+  "Keep these judges":
+    "Mantener a estos jueces",
+  "Do not keep these judges":
+    "No mantener a estos jueces",
+  "Nothing picked yet":
+    "Todavía no elegiste nada",
+  "Pick a candidate in a race first.":
+    "Primero elige a un candidato en alguna contienda.",
+  "Plan yours with direct democracy":
+    "Planea la tuya con direct democracy",
+  "Copied":
+    "Copiado",
+  "Your picks are copied. Paste them anywhere.":
+    "Tus elecciones se copiaron. Pégalas donde quieras.",
+  "Your choices for the {date} ballot, in about the order the ballot prints them. Tap a race to pick. Your picks stay on this phone: they are never sent to us or anyone else.":
+    "Tus elecciones para la boleta del {date}, más o menos en el orden en que la boleta las imprime. Toca una contienda para elegir. Tus elecciones se quedan en este teléfono: nunca se nos envían a nosotros ni a nadie.",
+  "Your address decides your congressional, state legislative, county board, and school board races. Add it to see them here.":
+    "Tu dirección decide tus contiendas para el Congreso, la legislatura estatal, la junta del condado y el consejo escolar. Agrégala para verlas aquí.",
+  "Not decided":
+    "Sin decidir",
+  "Yes: {yes}. No: {no}. Not decided: {open}.":
+    "Sí: {yes}. No: {no}. Sin decidir: {open}.",
+  "Share my picks":
+    "Compartir mis elecciones",
+  "Clear my picks":
+    "Borrar mis elecciones",
+  "Clear my picks?":
+    "¿Borrar mis elecciones?",
+  "Every pick on this phone is removed.":
+    "Se borra cada elección guardada en este teléfono.",
+  "Clear":
+    "Borrar",
+  "You can pick up to {n} here":
+    "Aquí puedes elegir hasta {n}",
+  "Take one of your picks back first.":
+    "Primero quita una de tus elecciones.",
+  "Your pick":
+    "Tu elección",
+  "Pick":
+    "Elegir",
+  "Keep this judge?":
+    "¿Mantener a este juez?",
+  "My ballot":
+    "Mi boleta",
+  "{n} made so far. Your picks stay on this phone.":
+    "{n} hasta ahora. Tus elecciones se quedan en este teléfono.",
+  "Pick a candidate in each race and take the list with you to vote.":
+    "Elige un candidato en cada contienda y lleva la lista contigo a votar.",
+  "Not now":
+    "Ahora no",
+  "Turn on":
+    "Activar",
+  "Notifications are off for this app":
+    "Los avisos están desactivados para esta app",
+  "Could not turn on notifications":
+    "No se pudieron activar los avisos",
+  "Got it":
+    "Entendido",
+  "I use direct democracy to follow Chicago: rate your alderman, ask them anything, plan your ballot, and read the city's news in one place.":
+    "Uso direct democracy para seguir lo que pasa en Chicago: califica a tu concejal, pregúntale lo que quieras, planea tu boleta y lee las noticias de la ciudad en un solo lugar.",
+  "Paste it anywhere to share the app.":
+    "Pégalo donde quieras para compartir la app.",
+  "Share the app":
+    "Compartir la app",
+  "The app counts how often each screen is opened, by day and by phone type, anonymously: the counts carry no account, name, or device identifier.":
+    "La app cuenta cuántas veces se abre cada pantalla, por día y por tipo de teléfono, de forma anónima: los conteos no llevan ninguna cuenta, nombre ni identificador del dispositivo.",
+  "Your ballot picks. My ballot keeps them on your phone only; they are never sent to us.":
+    "Tus elecciones de la boleta. Mi boleta las guarda solo en tu teléfono; nunca se nos envían.",
+  "Tap \"My ballot\" to see every choice on your November 3 ballot and the picks you have made. Your picks stay on this phone.":
+    "Toca “Mi boleta” para ver cada elección de tu boleta del 3 de noviembre y lo que ya elegiste. Tus elecciones se quedan en este teléfono.",
+  "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
+    "En una contienda del 3 de noviembre, toca “Elegir” en un candidato para agregarlo a Mi boleta, y toca “Tu elección” para quitarlo. En los jueces que buscan retención, toca “Sí” o “No” bajo “¿Mantener a este juez?”. Tus elecciones se quedan en este teléfono.",
+  "Tap \"My ballot\" at the top to see all your picks.":
+    "Toca “Mi boleta” arriba para ver todas tus elecciones.",
+  "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
+    "Toca “Elegir” en un candidato para agregarlo a Mi boleta, y toca “Tu elección” para quitarlo. Tus elecciones se quedan en este teléfono.",
+  "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
+    "Cada elección de tu boleta del 3 de noviembre de 2026, más o menos en el orden en que la boleta las imprime, con lo que elegiste en cada una. Tus elecciones se guardan solo en este teléfono. Nunca se envían a los servidores de la app y nadie más puede verlas.",
+  "Tap a race to open it and pick a candidate there.":
+    "Toca una contienda para abrirla y elegir un candidato ahí.",
+  "Tap \"Yes\" or \"No\" on the advisory question.":
+    "Toca “Sí” o “No” en la pregunta consultiva.",
+  "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
+    "Toca “Buscar mis contiendas” para agregar tu dirección y que aparezcan tus contiendas para el Congreso, la legislatura estatal, la junta del condado y el consejo escolar.",
+  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
+    "Toca “Compartir mis elecciones” para enviar tu lista como mensaje o guardarla. Los nombres que debes escribir a mano llevan la marca “escribir el nombre”.",
+  "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
+    "Toca “Borrar mis elecciones” y confirma para quitar todas las elecciones de este teléfono.",
+  "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
+    "Toca “Compartir la app” para enviarle a alguien un mensaje corto con el enlace para descargarla. Puedes editar el mensaje antes de enviarlo.",
+  "Chicago's top concerns, ranked by the people, plus citywide polls and City Council.":
+    "Las principales preocupaciones de Chicago, ordenadas por la gente, más las encuestas de la ciudad y el Concejo Municipal.",
+  "Your ward's concerns, your alderman's grade, and its meetings, zoning hearings, and ward office.":
+    "Las preocupaciones de tu distrito, la calificación de tu concejal, y sus reuniones, audiencias de zonificación y oficina del distrito.",
+  "Headlines from Chicago newsrooms, newest first.":
+    "Titulares de los medios de Chicago, los más recientes primero.",
+  "Who is on your ballot, and My ballot to plan your picks.":
+    "Quién está en tu boleta, y Mi boleta para planear tus elecciones.",
+  "On every screen: what is there and what you can do.":
+    "En cada pantalla: qué hay y qué puedes hacer.",
+  "Get a notification when they answer?":
+    "¿Quieres un aviso cuando respondan?",
+  "Your phone will tell you when your question gets an answer. You can change this any time in Settings.":
+    "Tu teléfono te avisará cuando tu pregunta tenga respuesta. Puedes cambiarlo cuando quieras en Ajustes.",
+  "Get a notification when someone comments?":
+    "¿Quieres un aviso cuando alguien comente?",
+  "Your phone will tell you when someone comments on your concern. You can change this any time in Settings.":
+    "Tu teléfono te avisará cuando alguien comente en tu preocupación. Puedes cambiarlo cuando quieras en Ajustes.",
+  "Get a notification when someone replies?":
+    "¿Quieres un aviso cuando alguien responda?",
+  "Your phone will tell you when someone replies to your comment. You can change this any time in Settings.":
+    "Tu teléfono te avisará cuando alguien responda a tu comentario. Puedes cambiarlo cuando quieras en Ajustes.",
+  "choice":
+    "elección",
+  "choices":
+    "elecciones",
+  // Accessibility labels (2026-10-09): screen reader text for unread
+  // notifications, join counts, ballot picks, password visibility, scores,
+  // and loading placeholders.
+  "Unread":
+    "Sin leer",
+  "{n} joined":
+    "{n} la apoyan",
+  "Your pick: {name}":
+    "Tu elección: {name}",
+  "Pick {name}":
+    "Elegir a {name}",
+  "Keep {name}?":
+    "¿Mantener a {name}?",
+  "Show password":
+    "Mostrar contraseña",
+  "Hide password":
+    "Ocultar contraseña",
+  "Score {n}":
+    "Puntuación {n}",
+  "Loading":
+    "Cargando",
+  "Goes to the City Council on {date}. No hearing set yet.":
+    "Pasa al Concejo Municipal el {date}. Todavía no hay audiencia.",
+  "Time not found in the newsletter":
+    "Hora no encontrada en el boletín",
+  "{date}, time not found":
+    "{date}, hora no encontrada",
+  "Date and time not found":
+    "Fecha y hora no encontradas",
+  "The ward office’s newsletter mentions these without a time. The office can tell you when they meet.":
+    "El boletín de la oficina del distrito menciona estas reuniones sin hora. La oficina puede decirle cuándo se reúnen.",
+  "Call the ward office: {phone}":
+    "Llame a la oficina del distrito: {phone}",
+  "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
+    "En \"Reuniones del distrito\", \"Hora no encontrada en el boletín\" muestra las reuniones que el boletín de la oficina del distrito anuncia sin hora. Toque \"Llame a la oficina del distrito\" para preguntar cuándo se reúnen.",
 };

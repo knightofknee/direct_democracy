@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, Switch, View } from 'react-native';
 
@@ -104,12 +103,8 @@ export default function NewsSourcesScreen() {
               <Card style={{ gap: Spacing.three }}>
                 {notIncluded.map((s) => (
                   <View key={s.id} style={{ gap: 2 }}>
-                    <Pressable
-                      onPress={() => void openLink(s.homepage)}
-                      accessibilityRole="link"
-                      style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.one }}>
+                    <Pressable onPress={() => void openLink(s.homepage)} accessibilityRole="link">
                       <ThemedText style={{ fontSize: 15, color: theme.primary, fontWeight: '600' }}>{s.name}</ThemedText>
-                      <Ionicons name="open-outline" size={13} color={theme.primary} />
                     </Pressable>
                     {s.status ? (
                       <ThemedText type="small" themeColor="textSecondary">

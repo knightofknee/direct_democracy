@@ -85,7 +85,7 @@ export default function ProfileScreen() {
         <View style={{ gap: Spacing.one, alignItems: 'center' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
             <ChicagoStar size={18} />
-            <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+            <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34 }}>
               {t('profile')}
             </ThemedText>
           </View>
@@ -145,7 +145,7 @@ export default function ProfileScreen() {
 
   return (
     <Screen tab key="signed-in">
-      <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34, textAlign: 'center' }}>
+      <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34, textAlign: 'center' }}>
         {t('profile')}
       </ThemedText>
 
@@ -309,7 +309,10 @@ function StatTile({
 }) {
   const theme = useTheme();
   return (
-    <View style={[styles.statTile, { backgroundColor: theme.background, borderColor: theme.border }]}>
+    <View
+      style={[styles.statTile, { backgroundColor: theme.background, borderColor: theme.border }]}
+      accessible
+      accessibilityLabel={`${value.toLocaleString()} ${label}`}>
       <Ionicons name={icon} size={14} color={theme.primary} />
       <ThemedText type="smallBold" style={{ fontSize: 18, lineHeight: 24 }}>
         {value.toLocaleString()}

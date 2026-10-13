@@ -18,6 +18,7 @@ import { useTheme } from '@/hooks/use-theme';
 import type { Scope } from '@/lib/types';
 import { useRateWindow } from '@/lib/rate-limits';
 import { useWardPostWindow } from '@/lib/ward-posting';
+import { offerPush } from '@/lib/push-offer';
 import { createConcern } from '@/services/concerns';
 
 export default function NewConcernScreen() {
@@ -62,6 +63,7 @@ export default function NewConcernScreen() {
     try {
       const id = await createConcern(profile, { title, body, scope, wardId: targetWard, references });
       anticipate('concerns');
+      void offerPush(profile, 'comments');
       // Land on the newly opened concern. Dismiss the modal first - a bare
       // replace() from inside a native modal can pop to whatever screen sat
       // under it instead of the target.

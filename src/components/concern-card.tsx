@@ -96,12 +96,19 @@ export function ConcernCard({
 
   return (
     <Animated.View entering={enter(FadeInDown.duration(280).delay(Math.min(index, 8) * 45))}>
-      <Card onPress={() => router.push(`/concern/${concern.id}`)} style={styles.card}>
+      {/* The card holds the priority buttons, so it is not one screen reader
+          element (VoiceOver could not reach them); the title is the link
+          that opens the concern. */}
+      <Card onPress={() => router.push(`/concern/${concern.id}`)} style={styles.card} accessible={false}>
         {/* One left edge for every line: the rank rides in the byline as a
             small tag instead of a wide number column the rest of the card
             has to line up around. */}
         <ConcernByline concern={concern} rank={rank} />
-        <ThemedText type="smallBold" style={styles.title}>
+        <ThemedText
+          type="smallBold"
+          style={styles.title}
+          accessibilityRole="link"
+          onPress={() => router.push(`/concern/${concern.id}`)}>
           {concern.title}
         </ThemedText>
         <ConcernStats score={score} voters={voters} comments={concern.commentCount} createdAt={concern.createdAt} />
@@ -150,15 +157,19 @@ function ConcernStats({
   createdAt: Concern['createdAt'];
 }) {
   const theme = useTheme();
+  const t = useT();
   return (
     <View style={styles.statsRow}>
-      <View style={styles.stat}>
+      <View
+        style={styles.stat}
+        accessible
+        accessibilityLabel={`${t('Score {n}').replace('{n}', String(score))}, ${plural(voters, 'vote')}`}>
         <Ionicons name="flame" size={14} color={theme.accent} />
         <ThemedText type="small" themeColor="textSecondary" style={styles.bylineText}>
           {score} · {plural(voters, 'vote')}
         </ThemedText>
       </View>
-      <View style={styles.stat}>
+      <View style={styles.stat} accessible accessibilityLabel={plural(comments, 'comment')}>
         <Ionicons name="chatbubble-outline" size={13} color={theme.textSecondary} />
         <ThemedText type="small" themeColor="textSecondary" style={styles.bylineText}>
           {comments}

@@ -10,10 +10,12 @@ import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-rean
 import { CelebrationProvider } from '@/components/celebration';
 import { HeaderActions } from '@/components/help-button';
 import { LanguagePrompt } from '@/components/language-prompt';
+import { Welcome } from '@/components/welcome';
 import { UpdateModal } from '@/components/update-modal';
 import { Colors } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { useNotificationTaps, usePushTokenSync } from '@/lib/push';
+import { useUsageTracking } from '@/lib/usage';
 import { useTheme } from '@/hooks/use-theme';
 import { LocaleProvider, tr, useLocale, useT } from '@/lib/i18n';
 
@@ -98,6 +100,7 @@ export default function RootLayout() {
           <CelebrationProvider>
             <LocaleKeyedStack />
             <LanguagePrompt />
+            <Welcome />
             <UpdateModal />
           </CelebrationProvider>
         </AuthProvider>
@@ -140,6 +143,8 @@ function LocaleKeyedStack() {
     });
     return () => sub.remove();
   }, []);
+  // Anonymous screen counts; above the redraw, so it never double counts.
+  useUsageTracking(`${locale}:${fontScale}`);
   return <RootStack key={`${locale}:${fontScale}`} />;
 }
 
@@ -190,6 +195,7 @@ function RootStack() {
         <Stack.Screen name="settings" options={{ title: t('Settings') }} />
         <Stack.Screen name="notifications" options={{ title: t('Notifications') }} />
         <Stack.Screen name="news-sources" options={{ title: t('News sources') }} />
+        <Stack.Screen name="my-ballot" options={{ title: t('My ballot') }} />
         <Stack.Screen
           name="help"
           options={{ title: t('Help'), presentation: 'modal', headerRight: () => <ModalClose /> }}

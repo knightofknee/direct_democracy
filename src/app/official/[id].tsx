@@ -52,6 +52,7 @@ import {
 import { computeGrade } from '@/services/officials';
 import { editPost } from '@/services/posts';
 import { enter } from '@/lib/motion';
+import { offerPush } from '@/lib/push-offer';
 
 const VERDICT_OPTIONS = [
   { key: 'answered', label: 'Answered' },
@@ -159,6 +160,7 @@ export default function OfficialAmaScreen() {
     try {
       await askQuestion(profile, official.uid, body);
       setQuestionText('');
+      void offerPush(profile, 'answers');
     } catch (e) {
       notifyError(t('Could not ask'), e);
     } finally {
@@ -301,7 +303,7 @@ function GradeCard({
       <View style={styles.headerRow}>
         <OfficialAvatar name={official.name} photoUrl={official.photoUrl} size={64} />
         <View style={{ flex: 1, gap: 2 }}>
-          <ThemedText type="smallBold" style={{ fontSize: 19, lineHeight: 25 }}>
+          <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 19, lineHeight: 25 }}>
             {official.name}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
@@ -429,7 +431,7 @@ function AxisSummary({
         {onInfo && (
           <Pressable
             onPress={onInfo}
-            hitSlop={8}
+            hitSlop={15}
             accessibilityRole="button"
             accessibilityLabel={t('How {axis} are graded').replace('{axis}', title.toLowerCase())}>
             <Ionicons name="information-circle-outline" size={14} color={theme.textSecondary} />
@@ -755,7 +757,10 @@ function QuestionThread({ question, startOpen }: { question: AmaQuestion; startO
           contentPathFor={(comment) =>
             `officials/${question.officialUid}/questions/${question.id}/comments/${comment.id}`
           }
-          onSubmit={(body, reply, references) => addQuestionComment(profile!, question, body, reply, references)}
+          onSubmit={async (body, reply, references) => {
+            await addQuestionComment(profile!, question, body, reply, references);
+            void offerPush(profile, 'replies');
+          }}
           onDelete={(comment) => deleteQuestionComment(profile!, question, comment)}
           onVote={(comment, value) => voteOnQuestionComment(profile!, question, comment.id, value)}
         />

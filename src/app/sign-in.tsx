@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import {
+  AccessibilityInfo,
   ActivityIndicator,
   Image,
   Keyboard,
@@ -45,6 +46,12 @@ export default function SignInScreen() {
   const [pwFocused, setPwFocused] = useState(false);
 
   const anyLoading = submitting || ssoLoading != null || sendingEmail;
+  const submitDisabled = anyLoading || !email.trim() || !password;
+
+  // An error shows in red above the fields; a screen reader hears it said.
+  useEffect(() => {
+    if (error) AccessibilityInfo.announceForAccessibility(t(error));
+  }, [error, t]);
 
   const done = () => {
     // Always land on the big board, wherever sign-in was opened from.
@@ -165,7 +172,7 @@ export default function SignInScreen() {
                 resizeMode="cover"
               />
             </View>
-            <ThemedText type="subtitle" style={styles.title}>
+            <ThemedText type="subtitle" accessibilityRole="header" style={styles.title}>
               {mode === 'signIn' ? t('Welcome back') : t('Create account')}
             </ThemedText>
             <ThemedText themeColor="textSecondary">
@@ -191,7 +198,8 @@ export default function SignInScreen() {
                   setError('');
                   setMode(mode === 'signIn' ? 'signUp' : 'signIn');
                 }}
-                hitSlop={8}>
+                hitSlop={8}
+                accessibilityRole="button">
                 <ThemedText type="smallBold" style={{ color: theme.primary }}>
                   {mode === 'signIn' ? t('Create an account') : t('Sign in')}
                 </ThemedText>
@@ -201,6 +209,9 @@ export default function SignInScreen() {
             {/* Error (space reserved so the card never jumps) */}
             <ThemedText
               type="small"
+              accessibilityLiveRegion="polite"
+              accessibilityElementsHidden={!error}
+              importantForAccessibility={error ? 'auto' : 'no-hide-descendants'}
               style={[styles.error, { color: theme.danger, opacity: error ? 1 : 0 }]}>
               {error ? t(error) : ' '}
             </ThemedText>
@@ -218,6 +229,7 @@ export default function SignInScreen() {
                   },
                 ]}
                 placeholder="you@example.com"
+                accessibilityLabel={t('Email')}
                 placeholderTextColor={theme.textSecondary}
                 maxFontSizeMultiplier={2}
                 autoCapitalize="none"
@@ -249,6 +261,7 @@ export default function SignInScreen() {
                 <TextInput
                   style={{ flex: 1, color: theme.text, padding: 0 }}
                   placeholder={mode === 'signUp' ? t('At least 6 characters') : '••••••••'}
+                  accessibilityLabel={t('Password')}
                   placeholderTextColor={theme.textSecondary}
                   maxFontSizeMultiplier={2}
                   secureTextEntry={!showPassword}
@@ -262,7 +275,11 @@ export default function SignInScreen() {
                   returnKeyType="go"
                   onSubmitEditing={submit}
                 />
-                <Pressable onPress={() => setShowPassword((s) => !s)} hitSlop={10}>
+                <Pressable
+                  onPress={() => setShowPassword((s) => !s)}
+                  hitSlop={10}
+                  accessibilityRole="button"
+                  accessibilityLabel={showPassword ? t('Hide password') : t('Show password')}>
                   <ThemedText type="smallBold" style={{ color: theme.primary }}>
                     {showPassword ? t('Hide') : t('Show')}
                   </ThemedText>
@@ -273,15 +290,16 @@ export default function SignInScreen() {
             {/* Submit */}
             <Pressable
               onPress={submit}
-              disabled={anyLoading || !email.trim() || !password}
+              disabled={submitDisabled}
               style={({ pressed }) => [
                 styles.primaryBtn,
                 { backgroundColor: theme.primary },
                 pressed && { opacity: 0.9 },
-                (anyLoading || !email.trim() || !password) && { opacity: 0.7 },
+                submitDisabled && { opacity: 0.7 },
               ]}
               accessibilityRole="button"
-              accessibilityLabel={mode === 'signIn' ? t('Sign in') : t('Create account')}>
+              accessibilityLabel={mode === 'signIn' ? t('Sign in') : t('Create account')}
+              accessibilityState={{ disabled: submitDisabled, busy: submitting }}>
               {submitting ? (
                 <ActivityIndicator color="#FFFFFF" />
               ) : (
@@ -294,12 +312,22 @@ export default function SignInScreen() {
             {/* Passwordless link + password reset, side by side */}
             {mode === 'signIn' && (
               <View style={styles.linkRow}>
-                <Pressable onPress={magicLink} disabled={anyLoading} hitSlop={8}>
+                <Pressable
+                  onPress={magicLink}
+                  disabled={anyLoading}
+                  hitSlop={8}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: anyLoading }}>
                   <ThemedText type="smallBold" style={{ color: theme.primary }}>
                     {t('Email me a sign-in link')}
                   </ThemedText>
                 </Pressable>
-                <Pressable onPress={forgotPassword} disabled={anyLoading} hitSlop={8}>
+                <Pressable
+                  onPress={forgotPassword}
+                  disabled={anyLoading}
+                  hitSlop={8}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: anyLoading }}>
                   <ThemedText type="smallBold" style={{ color: theme.primary }}>
                     {t('Forgot password?')}
                   </ThemedText>
@@ -332,7 +360,8 @@ export default function SignInScreen() {
                   anyLoading && { opacity: 0.7 },
                 ]}
                 accessibilityRole="button"
-                accessibilityLabel={t('Sign in with Google')}>
+                accessibilityLabel={t('Sign in with Google')}
+                accessibilityState={{ disabled: anyLoading, busy: ssoLoading === 'google' }}>
                 {ssoLoading === 'google' ? (
                   <ActivityIndicator color={theme.text} />
                 ) : (
@@ -354,7 +383,8 @@ export default function SignInScreen() {
                     anyLoading && { opacity: 0.7 },
                   ]}
                   accessibilityRole="button"
-                  accessibilityLabel={t('Sign in with Apple')}>
+                  accessibilityLabel={t('Sign in with Apple')}
+                  accessibilityState={{ disabled: anyLoading, busy: ssoLoading === 'apple' }}>
                   {ssoLoading === 'apple' ? (
                     <ActivityIndicator color={isDark ? '#000000' : '#FFFFFF'} />
                   ) : (
@@ -380,7 +410,7 @@ export default function SignInScreen() {
               <ThemedText type="small" themeColor="textSecondary" style={styles.privacyText}>
                 {t('By continuing you agree to our')}{' '}
               </ThemedText>
-              <Pressable onPress={() => router.push('/privacy')} hitSlop={8}>
+              <Pressable onPress={() => router.push('/privacy')} hitSlop={8} accessibilityRole="link">
                 <ThemedText type="small" style={[styles.privacyText, { color: theme.primary, fontWeight: '700' }]}>
                   {t('privacy policy')}
                 </ThemedText>

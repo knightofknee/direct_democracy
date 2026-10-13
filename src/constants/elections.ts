@@ -395,7 +395,9 @@ export const MUNICIPAL_2027_CITYWIDE: RaceInfo[] = [
     detail: "Keeps the city's records and runs city vehicle stickers.",
   },
   {
-    id: 'treasurer',
+    // Not 'treasurer': that is the November state race, and one id can only
+    // name one race (2026-10-09).
+    id: 'city-treasurer',
     label: 'City Treasurer',
     detail: "Manages the city's cash and pension investments.",
   },

@@ -5,6 +5,8 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { MyBallotLink } from '@/components/my-ballot-link';
+import { PickButton, RetainButtons } from '@/components/ballot-pick';
 import { ShareButton } from '@/components/share-button';
 import { HeaderActions } from '@/components/help-button';
 import { OfficialAvatar } from '@/components/avatar';
@@ -47,6 +49,8 @@ export default function ElectionRaceScreen() {
   const info = race ? raceInfo(race) : null;
   const known = race ? isKnownRace(race) : false;
   const retention = race === 'judicial-retention';
+  // Picks are for the next ballot only (November 3); February's fields are still forming.
+  const plannable = info?.election === GENERAL_ELECTION;
   const judicial = race?.startsWith('judicial-') ?? false;
 
   const { data: candidates, loading } = useLiveQuery<ElectionCandidateCard>(
@@ -122,13 +126,15 @@ export default function ElectionRaceScreen() {
         }}
       />
       <View style={{ gap: Spacing.one }}>
-        <ThemedText type="subtitle" style={{ fontSize: 24, lineHeight: 30 }}>
+        <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 24, lineHeight: 30 }}>
           {t(info.label)}
         </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {info.detail ? `${t(info.detail)} · ` : ''}{t('on the ballot')} {t(electionDate)}.
         </ThemedText>
       </View>
+
+      {plannable && <MyBallotLink />}
 
       {judicial && (
         <Card>
@@ -171,7 +177,11 @@ export default function ElectionRaceScreen() {
               entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}
               style={{ gap: Spacing.three }}>
               {candidate.id === firstWriteIn && <WriteInHeader />}
-              <Card onPress={() => router.push(`/election-candidate/${candidate.id}`)}>
+              {/* The card holds its own pick buttons, so it is not one screen
+                  reader element; the name is the link that opens it. */}
+              <Card
+                onPress={() => router.push(`/election-candidate/${candidate.id}`)}
+                accessible={false}>
                 <View style={styles.row}>
                   <OfficialAvatar
                     name={candidate.name}
@@ -181,7 +191,11 @@ export default function ElectionRaceScreen() {
                   />
                   <View style={{ flex: 1, gap: 3 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
-                      <ThemedText type="smallBold" style={{ fontSize: 15 }}>
+                      <ThemedText
+                        type="smallBold"
+                        style={{ fontSize: 15 }}
+                        accessibilityRole="link"
+                        onPress={() => router.push(`/election-candidate/${candidate.id}`)}>
                         {candidate.name}
                       </ThemedText>
                       {candidate.party && <Chip label={t(candidate.party)} />}
@@ -209,6 +223,17 @@ export default function ElectionRaceScreen() {
                     {loc(candidate.runningOn, candidate.runningOnEs)}
                   </ThemedText>
                 )}
+                {plannable &&
+                  (retention ? (
+                    <RetainButtons candidateId={candidate.id} candidateName={candidate.name} />
+                  ) : (
+                    <PickButton
+                      race={candidate.race}
+                      seat={candidate.seat}
+                      candidateId={candidate.id}
+                      candidateName={candidate.name}
+                    />
+                  ))}
               </Card>
             </Animated.View>
           ))}

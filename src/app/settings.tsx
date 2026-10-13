@@ -6,6 +6,7 @@ import { Linking, Pressable, Switch, View } from 'react-native';
 
 import { DeclaredWardNote, HomeWardChoice } from '@/components/home-ward-choice';
 import { Screen } from '@/components/screen';
+import { ShareAppButton } from '@/components/share-app';
 import { ThemedText } from '@/components/themed-text';
 import { Button, Card } from '@/components/ui';
 import { wardLabel } from '@/constants/chicago';
@@ -44,7 +45,7 @@ export default function SettingsScreen() {
   // Language is the one setting that must work signed out too.
   const language = (
     <Card>
-      <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+      <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 13 }}>
         Language · Idioma · 语言 · Język · Wika · 언어 · भाषा
       </ThemedText>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two }}>
@@ -53,6 +54,10 @@ export default function SettingsScreen() {
             key={l.code}
             title={l.name}
             variant={locale === l.code ? 'primary' : 'secondary'}
+            // The chosen language is more than a color to a screen reader,
+            // and each name is spoken in its own language.
+            selected={locale === l.code}
+            accessibilityLanguage={l.code}
             onPress={() => {
               if (l.code === locale) return;
               reopenAfterRedraw('/settings');
@@ -69,6 +74,7 @@ export default function SettingsScreen() {
     return (
       <Screen>
         {language}
+        <ShareAppButton />
         <Button title={t('Privacy & data')} variant="secondary" onPress={() => router.push('/privacy')} />
         <RulesLink />
       </Screen>
@@ -79,6 +85,7 @@ export default function SettingsScreen() {
     <Screen>
       {language}
       <NotificationsCard />
+      <ShareAppButton />
       <Button title={t('Privacy & data')} variant="secondary" onPress={() => router.push('/privacy')} />
 
       {/* Officials and candidates keep the ward their account was set up
@@ -87,7 +94,7 @@ export default function SettingsScreen() {
 
       {profile.role === 'citizen' && (
         <Card>
-          <ThemedText type="smallBold" style={{ fontSize: 13, color: theme.danger }}>
+          <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 13, color: theme.danger }}>
             {t('Delete account')}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
@@ -200,7 +207,7 @@ function NotificationsCard() {
     <Card>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
         <Ionicons name="notifications-outline" size={16} color={theme.primary} />
-        <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+        <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 13 }}>
           {t('Phone notifications')}
         </ThemedText>
       </View>
@@ -267,7 +274,7 @@ function VerificationCard() {
   if (!profile.verified) {
     return (
       <Card>
-        <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+        <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 13 }}>
           {t('Verification')}
         </ThemedText>
         {profile.wardId == null ? (
@@ -287,7 +294,7 @@ function VerificationCard() {
   });
   return (
     <Card>
-      <ThemedText type="smallBold" style={{ fontSize: 13 }}>
+      <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 13 }}>
         {t('Verification')}
       </ThemedText>
       {profile.wardId != null && (

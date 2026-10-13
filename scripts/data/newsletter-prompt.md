@@ -13,7 +13,8 @@ something in the summary sends them there.
 
 ## Per issue
 
-Input: one queued issue (`id`, `ward`, `title`, `url`, `sentAt`, `text`).
+Input: one queued issue (`id`, `ward`, `title`, `url`, `sentAt`, `text`, and
+`undated` when the ward's page already lists meetings with no time found).
 Output: one object in the results array:
 
 ```json
@@ -24,7 +25,8 @@ Output: one object in the results array:
   "summary": "...",
   "summaryEs": "...",
   "officeHours": null,
-  "meetings": []
+  "meetings": [],
+  "resolves": []
 }
 ```
 
@@ -97,13 +99,27 @@ Each meeting:
   shown as written; it names the place or project, not the newsletter).
 - `start`: date AND time stated in the issue, as ISO 8601 with the Chicago
   offset (-05:00 during daylight time, -06:00 after the first Sunday in
-  November). No time stated: leave the meeting out.
+  November).
+- No time stated: still include the meeting, with `"start": null` and
+  `"date"`: the day the issue gives (`"2026-10-26"`), or null when it gives
+  none. The app lists these as "time not found" with the ward office's
+  phone, so a resident knows to ask. Only a meeting the issue actually
+  announces (a planned event), not a standing program or a page to learn
+  about a process. Never guess a day or a time.
 - `place`: the venue as written ("Budlong Elementary, 2701 W Foster Ave");
   `address`: a street address that a map can find, when given; `online`:
   true for virtual or hybrid.
 - `url`: the RSVP, registration, or details link from the issue (https
   only), else null.
 - A recurring standing meeting (every Monday) is officeHours, not a meeting.
+
+### resolves
+
+When the queued issue has an `undated` list, give the `id` of each entry
+this issue states the time for (the same event, by what it is about, place,
+and day), and include that meeting in `meetings` with its full `start`. The
+app then shows the dated meeting in place of the "time not found" one.
+Otherwise `[]`.
 
 ## Weekly digest (Mondays)
 

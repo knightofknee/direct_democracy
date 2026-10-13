@@ -55,7 +55,11 @@ export function NewsletterDigestSection() {
         </ThemedText>
         <SummaryChunks text={open ? text : chunks.slice(0, 2).join('\n\n')} />
         {chunks.length > 2 && (
-          <Pressable onPress={() => setOpen((o) => !o)} accessibilityRole="button" hitSlop={6}>
+          <Pressable
+            onPress={() => setOpen((o) => !o)}
+            accessibilityRole="button"
+            accessibilityState={{ expanded: open }}
+            hitSlop={6}>
             <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
               {open ? t('Show less') : t('Show more')}
             </ThemedText>

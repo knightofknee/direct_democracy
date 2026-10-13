@@ -41,7 +41,7 @@
     },
     {
       "name": "Melissa Conyears-Ervin",
-      "race": "treasurer",
+      "race": "city-treasurer",
       "party": null,
       "incumbent": true,
       "website": null,
@@ -363,11 +363,12 @@
       "race": "ward-25",
       "party": null,
       "incumbent": true,
-      "website": "https://www.sigchofor25.com/",
+      "website": "https://byronfor25.com/",
       "runningOn": "Launched his re-election campaign in August 2026, pledging to keep pushing a statewide 3 percent millionaire tax, improve transit access in Pilsen, build affordable housing, and address helicopter noise, framing the race as fighting for working people.",
       "priorCareer": "25th Ward alderman since 2019; former educator and Pilsen community organizer.",
       "sourceUrls": [
-        "https://blockclubchicago.org/2026/08/19/byron-sigcho-lopez-launches-reelection-campaign-for-alderman/"
+        "https://blockclubchicago.org/2026/08/19/byron-sigcho-lopez-launches-reelection-campaign-for-alderman/",
+        "https://byronfor25.com/"
       ],
       "photoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/22nd_Ward_Alderman_Michael_Rodriguez_Striking_Chicago_Teachers_Surround_City_Hall_10-23-19_4248_%2848954717797%29_%28cropped%29.jpg",
       "photoFrame": {

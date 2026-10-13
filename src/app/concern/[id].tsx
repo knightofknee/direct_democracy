@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { collection, doc, orderBy, query } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { PriorityScale } from '@/components/priority-scale';
@@ -30,6 +30,7 @@ import { withBallotDelta, type BallotDelta } from '@/lib/tally';
 import { pct, timeAgo } from '@/lib/format';
 import { usePageSummary } from '@/lib/page-help';
 import { openLink } from '@/lib/open-link';
+import { offerPush } from '@/lib/push-offer';
 import { editPost } from '@/services/posts';
 import {
   CONCERN_PRIORITIES,
@@ -84,13 +85,12 @@ export default function ConcernScreen() {
   const [savingEdit, setSavingEdit] = useState(false);
 
   // The moment the server tally moves (almost always our own trigger
-  // landing), the optimistic overlay hands back to the real numbers.
+  // landing), the optimistic overlay hands back to the real numbers: it
+  // applies only while the tally still matches the one it was predicted
+  // from (the same contract as useOptimistic in src/lib/optimistic.ts), so
+  // a stale overlay is simply ignored, with no effect to clear it.
   const talliesJson = concern ? JSON.stringify(concern.tallies) : null;
-  useEffect(() => {
-    if (optimistic && talliesJson && talliesJson !== optimistic.baseline) {
-      setOptimistic(null);
-    }
-  }, [talliesJson, optimistic]);
+  const overlay = optimistic && talliesJson === optimistic.baseline ? optimistic : null;
 
   // The help sheet's summary of this concern as it stands.
   const urgentShare = (counts: Record<string, number>, total: number) =>
@@ -142,9 +142,9 @@ export default function ConcernScreen() {
 
   const recordedPriority = (myVote?.value as ConcernPriority | undefined) ?? null;
   // The overlayed choice wins while in flight so the tap highlights NOW.
-  const myPriority = optimistic ? ((optimistic.delta.to as ConcernPriority | null) ?? null) : recordedPriority;
-  const shownTallies = optimistic
-    ? withBallotDelta(concern.tallies, optimistic.delta)
+  const myPriority = overlay ? ((overlay.delta.to as ConcernPriority | null) ?? null) : recordedPriority;
+  const shownTallies = overlay
+    ? withBallotDelta(concern.tallies, overlay.delta)
     : concern.tallies;
   const isAuthor = profile?.uid === concern.authorUid;
   // Authors edit any time; editPost keeps the history (and the earlier
@@ -213,7 +213,7 @@ export default function ConcernScreen() {
         // The ballot the SERVER tally holds. While an earlier tap is still in
         // flight that is the overlay's own starting ballot (the local cache
         // already shows the in-flight one, which the tally doesn't have yet).
-        from: optimistic ? optimistic.delta.from : recordedPriority,
+        from: overlay ? overlay.delta.from : recordedPriority,
         to,
         // Mirror of the trigger's areaSlicesOf: the verified slice of a ward
         // concern counts only verified residents of that ward.
@@ -273,7 +273,7 @@ export default function ConcernScreen() {
           </>
         ) : (
           <>
-            <ThemedText type="subtitle" style={{ fontSize: 24, lineHeight: 30 }}>
+            <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 24, lineHeight: 30 }}>
               {concern.title}
             </ThemedText>
             <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
@@ -325,7 +325,10 @@ export default function ConcernScreen() {
       <CommentsSection
         comments={comments}
         contentPathFor={(comment) => `concerns/${concern.id}/comments/${comment.id}`}
-        onSubmit={(body, reply, references) => addComment(profile!, concern.id, body, reply, references)}
+        onSubmit={async (body, reply, references) => {
+          await addComment(profile!, concern.id, body, reply, references);
+          void offerPush(profile, 'replies');
+        }}
         onDelete={(comment) => deleteComment(profile!, concern.id, comment)}
         onVote={(comment, value) => voteOnComment(profile!, concern.id, comment.id, value)}
       />

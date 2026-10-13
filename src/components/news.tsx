@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import { collection, limit, orderBy, query, where } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -7,7 +6,6 @@ import { ThemedText } from '@/components/themed-text';
 import { Card, Chip, SectionHeader } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useLiveQuery } from '@/hooks/use-firestore';
-import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import { timeAgo } from '@/lib/format';
 import { useT } from '@/lib/i18n';
@@ -31,7 +29,6 @@ export function NewsRow({
   yourWard?: boolean;
 }) {
   const t = useT();
-  const theme = useTheme();
   return (
     <Pressable
       onPress={() => void openLink(item.url)}
@@ -47,10 +44,7 @@ export function NewsRow({
         </ThemedText>
         {yourWard && <Chip label={t('Your ward')} tone="primary" icon="location-outline" />}
       </View>
-      <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-        <ThemedText style={{ flex: 1, fontWeight: '600' }}>{item.title}</ThemedText>
-        <Ionicons name="open-outline" size={14} color={theme.textSecondary} style={{ marginTop: 4 }} />
-      </View>
+      <ThemedText style={{ fontWeight: '600' }}>{item.title}</ThemedText>
     </Pressable>
   );
 }

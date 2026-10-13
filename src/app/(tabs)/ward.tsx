@@ -80,7 +80,7 @@ function WardPicker({ onPick }: { onPick: (wardId: number) => void }) {
       <View style={{ gap: Spacing.one, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
-          <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+          <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34 }}>
             {t('wards')}
           </ThemedText>
         </View>
@@ -234,7 +234,7 @@ function WardHome({
       <View style={{ gap: Spacing.one, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
           <ChicagoStar size={18} />
-          <ThemedText type="subtitle" style={{ fontSize: 28, lineHeight: 34 }}>
+          <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34 }}>
             {wardLabel(wardId).toLowerCase()}
           </ThemedText>
         </View>
@@ -244,7 +244,11 @@ function WardHome({
           </ThemedText>
         )}
         <FlagAccent />
-        <Pressable onPress={onBrowseOthers} hitSlop={8} style={styles.browseButton}>
+        <Pressable
+          onPress={onBrowseOthers}
+          hitSlop={12}
+          accessibilityRole="button"
+          style={styles.browseButton}>
           <Ionicons name="map-outline" size={14} color={theme.primary} />
           <ThemedText type="small" style={{ fontSize: 12, color: theme.primary, fontWeight: '600' }}>
             {t('All wards')}

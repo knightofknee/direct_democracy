@@ -134,7 +134,12 @@ export function WardMap({
       style={[styles.frame, { borderColor: theme.border, backgroundColor: theme.backgroundElement }]}
       onLayout={(e) => setSize(e.nativeEvent.layout)}>
       <GestureDetector gesture={gestures}>
-        <Animated.View style={{ width: '100%', aspectRatio: aspect }}>
+        {/* Hidden from screen readers: the ward number grid does the same
+            job in a form they can read. The zoom buttons stay reachable. */}
+        <Animated.View
+          style={{ width: '100%', aspectRatio: aspect }}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants">
           <Animated.View style={[{ width: '100%', height: '100%' }, transformStyle]}>
             <Svg
               width="100%"

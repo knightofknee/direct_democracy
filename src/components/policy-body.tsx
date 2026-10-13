@@ -126,6 +126,7 @@ export function PolicyBody({ body }: { body: string }) {
       {long ? (
         <Button
           title={expanded ? t('Show less') : t('Show more')}
+          expanded={expanded}
           variant="secondary"
           icon={<Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={15} color={theme.text} />}
           onPress={() => setExpanded((v) => !v)}

@@ -10,6 +10,7 @@ import Animated, {
 
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useT } from '@/lib/i18n';
 
 function usePulse() {
   const pulse = useSharedValue(0.55);
@@ -29,10 +30,12 @@ function usePulse() {
 /** Pulsing placeholder card shown while a live query warms up. */
 export function SkeletonCards({ count = 3 }: { count?: number }) {
   const theme = useTheme();
+  const t = useT();
   const style = usePulse();
 
+  // One "Loading" for a screen reader instead of empty boxes.
   return (
-    <View style={{ gap: Spacing.three }}>
+    <View style={{ gap: Spacing.three }} accessible accessibilityLabel={t('Loading')}>
       {Array.from({ length: count }, (_, i) => (
         <Animated.View
           key={i}
@@ -57,9 +60,12 @@ export function SkeletonCards({ count = 3 }: { count?: number }) {
  */
 export function SkeletonButton() {
   const theme = useTheme();
+  const t = useT();
   const style = usePulse();
   return (
     <Animated.View
+      accessible
+      accessibilityLabel={t('Loading')}
       style={[styles.button, { backgroundColor: theme.backgroundElement, borderColor: theme.border }, style]}
     />
   );

@@ -158,7 +158,7 @@ export default function ElectionQuestionScreen() {
             </View>
           </View>
         ) : (
-          <ThemedText type="subtitle" style={{ fontSize: 22, lineHeight: 28 }}>
+          <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 22, lineHeight: 28 }}>
             {question.body}
           </ThemedText>
         )}
@@ -262,6 +262,7 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
         <Pressable
           onPress={() => router.push(`/candidate/${answer.candidateUid}`)}
           hitSlop={6}
+          accessibilityRole="link"
           style={{ flex: 1 }}>
           <ThemedText type="smallBold" style={{ fontSize: 15, color: theme.primary }}>
             {answer.candidateName}
@@ -278,7 +279,11 @@ function AnswerCard({ questionId, answer }: { questionId: string; answer: Electi
 
       <View style={styles.footerRow}>
         {collapsible ? (
-          <Pressable onPress={() => setExpanded((v) => !v)} hitSlop={8}>
+          <Pressable
+            onPress={() => setExpanded((v) => !v)}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityState={{ expanded }}>
             <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
               {expanded ? t('Show less') : t('Read the rest')}
             </ThemedText>
@@ -323,6 +328,7 @@ function RateButton({
       hitSlop={8}
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityState={{ selected: active }}
       style={[
         styles.rateButton,
         {

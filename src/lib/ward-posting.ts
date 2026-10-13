@@ -99,3 +99,13 @@ export function formatWhen(date: Date, withTime = true): string {
     ? date.toLocaleString(locale, { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone })
     : date.toLocaleDateString(locale, { month: 'long', day: 'numeric', year: 'numeric', timeZone });
 }
+
+/** A Chicago calendar day (YYYY-MM-DD) with its weekday, no time ("Monday, October 26"). */
+export function formatDay(day: string): string {
+  return new Date(`${day}T12:00:00Z`).toLocaleDateString(dateLocale(), {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+}

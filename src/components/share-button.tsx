@@ -51,7 +51,7 @@ export function ShareButton({ path, title }: { path: string; title: string }) {
   return (
     <Pressable
       onPress={() => void share()}
-      hitSlop={8}
+      hitSlop={13}
       accessibilityRole="button"
       accessibilityLabel={t('Share')}>
       <Ionicons name={Platform.OS === 'ios' ? 'share-outline' : 'share-social-outline'} size={18} color={theme.primary} />

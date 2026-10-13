@@ -87,7 +87,12 @@ export function UpdateModal() {
     <Modal visible transparent animationType="fade" onRequestClose={info.required ? () => {} : dismiss}>
       <View style={styles.overlay}>
         <View style={[styles.card, { backgroundColor: theme.background }]}>
-          <ThemedText style={styles.emoji}>{info.required ? '🙏' : '✨'}</ThemedText>
+          <ThemedText
+            style={styles.emoji}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants">
+            {info.required ? '🙏' : '✨'}
+          </ThemedText>
           <ThemedText type="smallBold" style={styles.title}>
             {info.required ? t('Time for an update') : t('A fresh update is here')}
           </ThemedText>

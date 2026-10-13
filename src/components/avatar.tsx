@@ -102,8 +102,12 @@ export function OfficialAvatar({
     .map((part) => part[0]?.toUpperCase())
     .join('');
 
+  // The name always sits beside the tile, so a screen reader skips the
+  // letters rather than spelling them out.
   return (
     <View
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
       style={[
         styles.fallback,
         { width: size, height: size, borderRadius: radius, backgroundColor: theme.primarySoft },

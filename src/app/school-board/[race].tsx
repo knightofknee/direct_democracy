@@ -6,6 +6,8 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { OfficialAvatar } from '@/components/avatar';
 import { CtuChip } from '@/components/ctu-chip';
+import { PickButton } from '@/components/ballot-pick';
+import { MyBallotLink } from '@/components/my-ballot-link';
 import { Screen } from '@/components/screen';
 import { SkeletonCards } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
@@ -73,13 +75,15 @@ export default function SchoolBoardRaceScreen() {
   return (
     <Screen>
       <View style={{ gap: Spacing.one }}>
-        <ThemedText type="subtitle" style={{ fontSize: 24, lineHeight: 30 }}>
+        <ThemedText type="subtitle" accessibilityRole="header" style={{ fontSize: 24, lineHeight: 30 }}>
           {schoolBoardRaceLabel(info.id)}
         </ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
           {t(info.detail)} · {t('on the ballot')} {t(SCHOOL_BOARD_ELECTION_DATE)}.
         </ThemedText>
       </View>
+
+      <MyBallotLink />
 
       {loading ? (
         <SkeletonCards count={2} />
@@ -99,7 +103,11 @@ export default function SchoolBoardRaceScreen() {
               entering={enter(FadeInDown.duration(280).delay(Math.min(i, 8) * 45))}
               style={{ gap: Spacing.three }}>
               {candidate.id === firstWriteIn && <WriteInHeader />}
-              <Card onPress={() => router.push(`/school-board-candidate/${candidate.id}`)}>
+              {/* The card holds its own pick button, so it is not one screen
+                  reader element; the name is the link that opens it. */}
+              <Card
+                onPress={() => router.push(`/school-board-candidate/${candidate.id}`)}
+                accessible={false}>
                 <View style={styles.row}>
                   <OfficialAvatar
                     name={candidate.name}
@@ -109,7 +117,11 @@ export default function SchoolBoardRaceScreen() {
                   />
                   <View style={{ flex: 1, gap: 3 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexWrap: 'wrap' }}>
-                      <ThemedText type="smallBold" style={{ fontSize: 15 }}>
+                      <ThemedText
+                        type="smallBold"
+                        style={{ fontSize: 15 }}
+                        accessibilityRole="link"
+                        onPress={() => router.push(`/school-board-candidate/${candidate.id}`)}>
                         {candidate.name}
                       </ThemedText>
                       {candidate.ctuEndorsed && <CtuChip />}
@@ -132,6 +144,7 @@ export default function SchoolBoardRaceScreen() {
                 <ThemedText type="small" style={{ fontSize: 13, lineHeight: 19 }} numberOfLines={3}>
                   {loc(candidate.runningOn, candidate.runningOnEs)}
                 </ThemedText>
+                <PickButton race={`sb-${candidate.race}`} candidateId={candidate.id} candidateName={candidate.name} />
               </Card>
             </Animated.View>
           ))}

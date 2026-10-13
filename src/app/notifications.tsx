@@ -128,12 +128,16 @@ const TYPE_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
 
 function NotificationRow({ note, onPress }: { note: AppNotification; onPress: () => void }) {
   const theme = useTheme();
+  const t = useT();
   // The server writes both languages; the device's setting picks.
   const localized = useLocalized();
   const title = localized(note.title, note.titleEs);
   const body = localized(note.body, note.bodyEs);
+  const when = timeAgo(note.createdAt);
+  // Unread shows as a dot and bold type; a screen reader hears it first.
+  const label = [note.read ? null : t('Unread'), title, body, when].filter(Boolean).join(', ');
   return (
-    <Card onPress={onPress} style={note.read ? { opacity: 0.75 } : undefined}>
+    <Card onPress={onPress} style={note.read ? { opacity: 0.75 } : undefined} accessibilityLabel={label}>
       <View style={styles.row}>
         <Ionicons
           name={TYPE_ICONS[note.type] ?? 'notifications'}
@@ -150,7 +154,7 @@ function NotificationRow({ note, onPress }: { note: AppNotification; onPress: ()
             </ThemedText>
           ) : null}
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 11 }}>
-            {timeAgo(note.createdAt)}
+            {when}
           </ThemedText>
         </View>
         {!note.read && <View style={[styles.dot, { backgroundColor: theme.primary }]} />}

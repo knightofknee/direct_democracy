@@ -2687,6 +2687,86 @@ export const syncNewsFeeds = onSchedule(
   }
 );
 
+// ── Anonymous screen counts ──────────────────────────────────────────────
+
+/** A route pattern as the app's help key names it ('official/[id]'). */
+const USAGE_ROUTE_RE = /^[\w()[\]/#-]+$/;
+/** One device can't open one screen this often in a minute. */
+const USAGE_MAX_COUNT = 500;
+const USAGE_PLATFORMS = new Set(['ios', 'android', 'web']);
+
+/** 'YYYY-MM-DD' on Chicago's clock, `offsetDays` from now. */
+function chicagoDayKey(offsetDays = 0): string {
+  const s = new Date(Date.now() + offsetDays * 86_400_000).toLocaleDateString('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  const [m, d, y] = s.split('/');
+  return `${y}-${m}-${d}`;
+}
+
+/** The route -> count entries worth keeping, capped at `max` per entry. */
+function usageCounts(raw: unknown, max: number): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  for (const [route, n] of Object.entries(raw as Record<string, unknown>)) {
+    if (route.length > 80 || !USAGE_ROUTE_RE.test(route)) continue;
+    if (typeof n !== 'number' || !Number.isInteger(n) || n < 1 || n > max) continue;
+    out[route] = n;
+  }
+  return out;
+}
+
+/**
+ * Anonymous screen counts (2026-10-09, src/lib/usage.ts): each event adds
+ * into `usageDaily/{day}` (views and devices per route, events and views
+ * per platform and app version) and is deleted. Values the app would
+ * never send are dropped: counts over 500, odd route keys, a day that is
+ * not around today. Written as nested maps with set-merge, since route
+ * keys hold '/' and brackets that a dotted update path would misread.
+ * One transaction, so a retried event is never counted twice.
+ */
+export const onUsageEvent = onDocumentCreated('usageEvents/{eventId}', async (event) => {
+  const ref = event.data?.ref;
+  if (!ref) return;
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists) return;
+    const e = snap.data()!;
+    tx.delete(ref);
+    const day = typeof e.day === 'string' ? e.day : '';
+    const nearToday = [-2, -1, 0, 1].some((o) => chicagoDayKey(o) === day);
+    if (!nearToday || !USAGE_PLATFORMS.has(e.platform)) return;
+    const views = usageCounts(e.views, USAGE_MAX_COUNT);
+    const reach = usageCounts(e.reach, 1);
+    const total = Object.values(views).reduce((a, b) => a + b, 0);
+    if (total === 0) return;
+    const version =
+      typeof e.appVersion === 'string' && /^[\w.-]{1,20}$/.test(e.appVersion) ? e.appVersion : 'other';
+    const inc = (m: Record<string, number>) =>
+      Object.fromEntries(Object.entries(m).map(([k, n]) => [k, FieldValue.increment(n)]));
+    tx.set(
+      db.doc(`usageDaily/${day}`),
+      {
+        day,
+        views: inc(views),
+        devices: inc(reach),
+        platforms: {
+          [e.platform]: {
+            events: FieldValue.increment(1),
+            views: FieldValue.increment(total),
+            versions: { [version]: FieldValue.increment(1) },
+          },
+        },
+        updatedAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+  });
+});
+
 export const syncPlatforms = onSchedule(
   { schedule: '0 6 * * *', timeZone: 'America/Chicago', timeoutSeconds: 540, memory: '512MiB' },
   async () => {
