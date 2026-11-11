@@ -3,9 +3,9 @@
 A civic app for Chicago: a citywide **big board** of the issues people care
 about most, a ward tab with polls from your alderman, public **AMAs** where the
 community (not the politician) decides whether a question was actually
-answered, report cards for all 50 aldermen, and a voter guide for the
-November 2026 and February 2027 ballots. The whole app is available in
-English and Spanish.
+answered, report cards for all 50 aldermen, and the mayor games: five ways
+to meet everyone running for mayor on February 23, 2027, plus the rest of
+that ballot. The whole app is available in English and Spanish.
 
 Built with React Native (Expo) for iOS and Android, backed by Firebase. The
 code is MIT licensed (see [LICENSE](LICENSE)).
@@ -48,7 +48,7 @@ under each ward's published email; an alderman claims theirs by proving
 control of that inbox. Portraits are links to externally hosted images; the
 app never stores the photo.
 
-**The more perfect platform.** The election tab lists every candidate for
+**The more perfect platform.** The elections tab lists every candidate for
 mayor. Each platform is a list of individual policies (a title, the full
 text, and a list of cited sources), with a comments section where the
 candidate's own replies carry a candidate badge. There is deliberately no
@@ -66,13 +66,24 @@ using only the policies as listed in the app, and describes rather than rates.
 each candidate posts one answer, and the community rates which answers
 actually answer it.
 
+**The mayor games.** Everyone running for mayor on February 23, 2027, in
+five games: blind date (their ideas and quotes first, the name behind a
+reveal), pick-up lines (a real quote and three faces: who said it), speed
+date (one at a time, what sets each apart and where the field splits), cheap
+date (campaign spending, poll support, and cost per point), and pizza date
+(ranked by who is right about pizza). Under the games the tab lists where
+the candidates split, what only one of them proposes, and a small card of
+former mayor trivia. Each candidate has a page with what sets them apart,
+campaign finance from the State Board of Elections, poll standing, quotes
+with sources, and pizza position. Seeded from
+`scripts/data/mayor-games.json`.
+
 **The rest of the ballot.** Read-only, sourced candidate directories for the
-Nov 3, 2026 general election (statewide, Cook County, district races, and
-judges with bar association ratings quoted verbatim) and the Feb 23, 2027
-municipal election (citywide offices, every ward's aldermanic race, police
-district councils), plus the 2026 school board races, declared write-ins, and
-how, when, and where to vote. Seeded from `scripts/data/*.json` and
-re-verified weekly.
+Feb 23, 2027 municipal election (citywide offices, every ward's aldermanic
+race, police district councils), declared write-ins, and how, when, and
+where to vote. Seeded from `scripts/data/municipal-2027.json` and
+re-verified weekly. The November 3, 2026 ballot and its planner left the
+app the day after the election.
 
 **Identity verification is third-party.** Didit checks the government ID;
 direct democracy stores only a verified yes/no, the ward you live in, and a
@@ -211,18 +222,18 @@ verification (`devVerify`, which refuses to run outside the emulator).
 ## Repository layout
 
 ```
-src/app/            expo-router screens: (tabs)/ big board · wards · election ·
-                    notifications · profile, plus concern, official, candidate,
-                    election and school board screens, sign-in, verify, settings
+src/app/            expo-router screens: (tabs)/ big board · wards · mayor games ·
+                    news · profile, plus concern, official, candidate, game,
+                    mayor, and election screens, sign-in, verify, settings
 src/components/     shared UI (cards, lens toggle, tally bars, poll voting, ward map)
 src/lib/            firebase init, domain types, tally math, i18n, optimistic UI
 src/i18n/es.ts      Spanish strings, keyed by their English source text
 src/services/       Firestore write paths (a client writes only its own docs)
-src/constants/      theme (Chicago flag palette), wards, elections, school board
+src/constants/      theme (Chicago flag palette), wards, elections
 functions/src/      Cloud Functions: tally triggers, Didit webhook, platform sync,
                     claims, deadline reminders
-scripts/            seed scripts (emulator demo data, aldermen, election and
-                    school board directories) and operator tools
+scripts/            seed scripts (emulator demo data, aldermen, the election
+                    directory, the mayor games) and operator tools
 scripts/data/       election data files and the AI summary prompt
 firestore.rules     security rules (deny by default on every aggregate)
 docs/AUDIT.md       security posture and accepted limitations

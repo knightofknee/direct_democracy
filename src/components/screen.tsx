@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { useScrollToTop } from 'expo-router';
+import { useScrollToTop, useSegments } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HelpButton } from '@/components/help-button';
 import { NotificationBell } from '@/components/notification-bell';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useKeyboardOverlap, useRevealFocusedField } from '@/hooks/use-keyboard-overlap';
 import { useTheme } from '@/hooks/use-theme';
 
 /**
@@ -14,8 +15,10 @@ import { useTheme } from '@/hooks/use-theme';
  * keyboard avoidance. Every screen with a text input must live inside this
  * shell (or another ScrollView with automaticallyAdjustKeyboardInsets) so the
  * keyboard never covers what the user is typing: iOS shifts the content via
- * the keyboard inset; Android resizes the window (softwareKeyboardLayoutMode
- * defaults to resize).
+ * the keyboard inset; on Android, which draws edge to edge and so no longer
+ * shrinks the window for the keyboard, the shell pads itself by however much
+ * the keyboard overlaps it (`useKeyboardOverlap`), and the ScrollView scrolls
+ * the focused field back into view.
  */
 export const Screen = React.forwardRef<
   ScrollView,
@@ -24,15 +27,30 @@ export const Screen = React.forwardRef<
     /** True for screens inside the tab bar (adds top + bottom insets). */
     tab?: boolean;
     style?: StyleProp<ViewStyle>;
+    /**
+     * Pinned under the scrolling content, always in view (the ballot's
+     * Next / Done on a race page). Not for tab screens.
+     */
+    footer?: React.ReactNode;
   }
->(function Screen({ children, tab, style }, ref) {
+>(function Screen({ children, tab, style, footer }, ref) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  // A page pushed inside a tab (the elections tab's stack) sits above the
+  // tab bar, which already clears the phone's home indicator.
+  const segments = useSegments();
+  const aboveTabBar = !tab && segments[0] === '(tabs)';
+  const bottomInset = aboveTabBar ? 0 : insets.bottom;
+  const shellRef = React.useRef<View>(null);
+  const keyboard = useKeyboardOverlap(shellRef);
 
   // Re-tapping the focused tab scrolls its screen back to the top (the
   // platform convention). No-op on screens without a tab ancestor.
   const scrollRef = React.useRef<ScrollView>(null);
   useScrollToTop(scrollRef);
+  const contentRef = React.useRef<View>(null);
+  // A screen outside the tab bar may be an iOS sheet (the MODAL screens).
+  useRevealFocusedField(scrollRef, contentRef, tab || aboveTabBar ? undefined : shellRef);
   const setRef = (node: ScrollView | null) => {
     scrollRef.current = node;
     if (typeof ref === 'function') ref(node);
@@ -40,15 +58,17 @@ export const Screen = React.forwardRef<
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background }}>
+    <View ref={shellRef} style={{ flex: 1, backgroundColor: theme.background, paddingBottom: keyboard }}>
       <ScrollView
         ref={setRef}
+        // React Native's type for this prop leaves out the null every ref starts as.
+        innerViewRef={contentRef as React.RefObject<View>}
         style={{ flex: 1 }}
         contentContainerStyle={[
           styles.content,
           {
             paddingTop: tab ? insets.top + Spacing.two : Spacing.three,
-            paddingBottom: (tab ? BottomTabInset : 0) + insets.bottom + Spacing.five,
+            paddingBottom: footer ? Spacing.four : (tab ? BottomTabInset : 0) + bottomInset + Spacing.five,
           },
           style,
         ]}
@@ -72,6 +92,15 @@ export const Screen = React.forwardRef<
           {children}
         </View>
       </ScrollView>
+      {footer != null && (
+        <View
+          style={[
+            styles.footer,
+            { borderTopColor: theme.border, backgroundColor: theme.background, paddingBottom: bottomInset + Spacing.two },
+          ]}>
+          <View style={styles.inner}>{footer}</View>
+        </View>
+      )}
       {tab && (
         // Tab screens have no native header, so scrolled content would sit
         // flush behind the clock; this fade keeps the status bar readable.
@@ -100,6 +129,11 @@ const styles = StyleSheet.create({
     maxWidth: MaxContentWidth,
     alignSelf: 'center',
     gap: Spacing.three,
+  },
+  footer: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: Spacing.two,
+    paddingHorizontal: Spacing.three,
   },
   corner: {
     flexDirection: 'row',

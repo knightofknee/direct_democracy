@@ -28,7 +28,7 @@ export default function PrivacyScreen() {
         <Bullet text={t('Your ballots, comments, questions, and judgments - the content you post.')} />
         <Bullet text={t('If you verify: a yes/no verified flag, your ward and district numbers, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.')} />
         <Bullet text={t('Participation counters (votes cast, concerns raised) that power your milestones.')} />
-        <Bullet text={t('If you look up your districts without verifying: the district numbers only, so the election tab can show your races first.')} />
+        <Bullet text={t('If you look up your districts without verifying: the district numbers only, so the ward races can show your police district council first.')} />
         <Bullet text={t('If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.')} />
         <Bullet text={t('If you turn news sources or story languages off while signed in: which ones, so the choice follows your account.')} />
         <Bullet text={t('If you pay for a verification: which one you bought, when, and the store’s transaction number. Your payment details stay with Apple or Google.')} />
@@ -38,13 +38,14 @@ export default function PrivacyScreen() {
       <Section title={t('What we never see')}>
         <Bullet text={t('Your identity documents. Verification is performed by Didit, a third-party service; documents go to them, and we receive only the verdict.')} />
         <Bullet text={t('Your address. It is used only at the moment you verify or look up your districts, to find your ward and districts, and is never saved.')} />
-        <Bullet text={t('Your ballot picks. My ballot keeps them on your phone only; they are never sent to us.')} />
+        <Bullet text={t('Which mayoral candidates you met on a blind date and which you said you would see again. Both lists stay on your phone only.')} />
       </Section>
 
       <Section title={t('Who can see what')}>
         <Bullet text={t('Your profile is readable only by you. Content you post carries your display name and a verified badge - nothing more.')} />
         <Bullet text={t('Your individual ballots and judgments are readable only by you; everyone else sees only aggregate tallies.')} />
         <Bullet text={t('Reports you file are visible only to the platform operators.')} />
+        <Bullet text={t('Feedback you send from Settings is visible only to the platform operators, with your account or the email you give, so they can answer.')} />
       </Section>
 
       <Section title={t('Your controls')}>

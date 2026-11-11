@@ -253,13 +253,12 @@ function AiSummary({ summary }: { summary: PlatformSummary }) {
       </Pressable>
       {open ? (
         <Animated.View entering={enter(FadeIn.duration(180))} style={{ gap: Spacing.three, padding: Spacing.three }}>
-          <SummaryChunks label={t('The platform')} text={loc(summary.summary, summary.summaryEs) ?? ''} />
-          <SummaryChunks
-            label={t('Next to the other candidates')}
-            text={loc(summary.comparison, summary.comparisonEs) ?? ''}
-          />
+          <SummaryChunks label={t('What sets them apart')} text={loc(summary.summary, summary.summaryEs) ?? ''} />
+          {summary.comparison ? (
+            <SummaryChunks label={t('Where they split')} text={loc(summary.comparison, summary.comparisonEs) ?? ''} />
+          ) : null}
           <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {t('Written by AI on {date} from the policies listed below, with the same prompt for every candidate. It can miss things. The policies are the source.').replace(
+            {t('Written by AI on {date} from the policies listed below and the candidate\'s public statements, under one set of rules for every candidate. What nearly all candidates say is left out. It can miss things. The policies are the source.').replace(
               '{date}',
               written ?? ''
             )}

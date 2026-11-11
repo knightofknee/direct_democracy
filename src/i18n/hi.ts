@@ -860,7 +860,7 @@ export const HI: Record<string, string> = {
   'Something went wrong on the server. Try again.': 'सर्वर पर कुछ गड़बड़ हो गई। फिर कोशिश करें।',
   'home': 'होम',
   'wards': 'वार्ड',
-  'election': 'चुनाव',
+  'elections': 'चुनाव',
   'notifications': 'सूचनाएँ',
   'profile': 'प्रोफ़ाइल',
   'command': 'कमांड',
@@ -920,7 +920,7 @@ export const HI: Record<string, string> = {
   // District lookup and top-up (2026-09-29).
   'Your districts': 'आपके डिस्ट्रिक्ट',
   'Districts found': 'डिस्ट्रिक्ट मिल गए',
-  'The election tab now shows your races first.': 'चुनाव टैब अब सबसे पहले आपके चुनाव दिखाता है।',
+  'The elections tab now shows your races first.': 'चुनाव टैब अब सबसे पहले आपके चुनाव दिखाता है।',
   'Could not look up that address': 'वह पता नहीं खोजा जा सका',
   'You can look up 5 addresses a day. Try again tomorrow.': 'आप दिन में 5 पते खोज सकते हैं। कल फिर कोशिश करें।',
   'Your districts ({ward})': 'आपके डिस्ट्रिक्ट ({ward})',
@@ -945,7 +945,7 @@ export const HI: Record<string, string> = {
   'Your district': 'आपका डिस्ट्रिक्ट',
   'Your ward’s districts': 'आपके वार्ड के डिस्ट्रिक्ट',
   'If you verify: a yes/no verified flag, your ward and district numbers, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.': 'अगर आप सत्यापन करते हैं: सत्यापित होने का हाँ/ना निशान, आपका वार्ड और डिस्ट्रिक्ट के नंबर, और डुप्लिकेट खातों को रोकने वाला एक विशिष्ट पहचानकर्ता। इसके अलावा कुछ नहीं, और आपका खाता हटाने पर यह भी हट जाता है।',
-  'If you look up your districts without verifying: the district numbers only, so the election tab can show your races first.': 'अगर आप सत्यापन के बिना अपने डिस्ट्रिक्ट खोजते हैं: सिर्फ़ डिस्ट्रिक्ट के नंबर, ताकि चुनाव टैब सबसे पहले आपके चुनाव दिखा सके।',
+  'If you look up your districts without verifying: the district numbers only, so the elections tab can show your races first.': 'अगर आप सत्यापन के बिना अपने डिस्ट्रिक्ट खोजते हैं: सिर्फ़ डिस्ट्रिक्ट के नंबर, ताकि चुनाव टैब सबसे पहले आपके चुनाव दिखा सके।',
   'If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.': 'अगर आप फ़ोन सूचनाएँ चालू करते हैं: हर फ़ोन का सूचना पता और वह भाषा जिसमें वह उन्हें दिखाता है। साइन आउट करने पर वह फ़ोन हटा दिया जाता है।',
   'Your address. It is used only at the moment you verify or look up your districts, to find your ward and districts, and is never saved.': 'आपका पता। इसका उपयोग सिर्फ़ सत्यापन या अपने डिस्ट्रिक्ट खोजने के समय आपका वार्ड और डिस्ट्रिक्ट खोजने के लिए होता है, और इसे कभी सहेजा नहीं जाता।',
   'Delete your account any time from Settings: your sign-in, profile, verification status, and every vote you cast are removed, and the tallies drop your votes. Anything you posted is re-attributed to [deleted].': 'सेटिंग्स से कभी भी अपना खाता हटाएँ: आपका साइन-इन, प्रोफ़ाइल, सत्यापन की स्थिति, और आपका डाला गया हर वोट हटा दिया जाता है, और गिनती से आपके वोट निकल जाते हैं। आपने जो भी पोस्ट किया वह [deleted] के नाम हो जाता है।',
@@ -1012,7 +1012,6 @@ export const HI: Record<string, string> = {
   'Type a street address.': 'सड़क का पता लिखें।',
   'The address lookup is not answering right now. Try again in a few minutes.':
     'पता खोजने की सेवा अभी जवाब नहीं दे रही है। कुछ मिनट बाद फिर कोशिश करें।',
-  'Write at least 10 characters.': 'कम से कम 5 अक्षर लिखें।',
   'That’s longer than this box allows.': 'यह इस बॉक्स की सीमा से लंबा है।',
   'You have looked up 5 addresses today. Try again tomorrow.':
     'आप आज 5 पते खोज चुके हैं। कल फिर कोशिश करें।',
@@ -1029,8 +1028,6 @@ export const HI: Record<string, string> = {
     'किसी और का रूप धारण न करें, अधिकारियों का भी नहीं।',
   'Nothing sexual involving minors. We report it to the authorities.':
     'नाबालिगों से जुड़ी कोई भी यौन सामग्री नहीं। हम इसकी सूचना कानूनी अधिकारियों को देते हैं।',
-  'Reported posts are reviewed every week. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.':
-    'रिपोर्ट की गई पोस्ट की हर हफ़्ते समीक्षा होती है। इन नियमों को तोड़ने वाली पोस्ट हटा दी जाती हैं, और गंभीर या बार-बार के मामलों में खाता बंद कर दिया जाता है। जिस खाते को 5 या उससे ज़्यादा लोगों ने रिपोर्ट किया हो, वह समीक्षा होने तक छिपा रहता है।',
   'From {residents} · {questions}': 'आधार: {residents} · {questions}',
   'Your ward’s site, from {date}': 'आपके वार्ड का केंद्र, {date} से',
   'Election officials there speak your language.': 'वहाँ के चुनाव कर्मचारी आपकी भाषा बोलते हैं।',
@@ -1095,8 +1092,8 @@ export const HI: Record<string, string> = {
     'पारित करने की सिफ़ारिश',
   'Your ward’s site, open starting {date}':
     'आपके वार्ड का केंद्र, {date} से शुरू',
-  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site.':
-    'डाउनटाउन में 1 अक्टूबर से शुरू (137 S. State St. और 69 W. Washington St., छठी मंज़िल), और सभी 50 वार्डों में 19 अक्टूबर से शुरू; शिकागो का कोई भी मतदाता किसी भी केंद्र पर जा सकता है।',
+  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site, and the two downtown sites stay open until 7 pm on weekdays October 26 to November 2.':
+    'डाउनटाउन में 1 अक्टूबर से शुरू (137 S. State St. और 69 W. Washington St., छठी मंज़िल), और सभी 50 वार्डों में 19 अक्टूबर से शुरू; शिकागो का कोई भी मतदाता किसी भी केंद्र पर जा सकता है, और 26 अक्टूबर से 2 नवंबर तक कार्यदिवसों में डाउनटाउन के दोनों केंद्र शाम 7 बजे तक खुले रहते हैं।',
   'November 3, 2026 ballot':
     '3 नवंबर 2026 का मतपत्र',
   'February 23, 2027 ballot':
@@ -1202,7 +1199,7 @@ export const HI: Record<string, string> = {
     'आपने जो कुछ पोस्ट किया है, सबसे नया पहले: आपके उठाए मुद्दे और अधिकारियों से पूछे गए आपके सवाल।',
   'Fill in a "Title" of at least 3 characters, an optional "Section", and "The policy", which can be up to 20,000 characters.':
     'कम से कम 3 अक्षरों का "शीर्षक", एक वैकल्पिक "खंड", और "नीति" भरें, जो 20,000 अक्षरों तक हो सकती है।',
-  'Find your school board district with "Find my races" on the election tab. School board districts do not follow ward lines.':
+  'Find your school board district with "Find my races" on the elections tab. School board districts do not follow ward lines.':
     'चुनाव टैब पर "मेरे चुनाव खोजें" से अपना स्कूल बोर्ड डिस्ट्रिक्ट खोजें। स्कूल बोर्ड डिस्ट्रिक्ट वार्ड की सीमाओं के हिसाब से नहीं होते।',
   'For multiple choice or approval, list 2 to 12 options under "Options (one per line)".':
     'बहुविकल्पी या स्वीकृति के लिए, "विकल्प (हर पंक्ति में एक)" के तहत 2 से 12 विकल्प लिखें।',
@@ -1240,8 +1237,6 @@ export const HI: Record<string, string> = {
     'ध्यान रखें कि जिस खाते की 5 या ज़्यादा अलग-अलग लोग रिपोर्ट करते हैं, वह समीक्षा होने तक छिपा रहता है।',
   'Know that an address outside Chicago changes nothing. A new ward replaces your old one, and you can move once every 3 months.':
     'ध्यान रखें कि शिकागो के बाहर का पता कुछ नहीं बदलता। नया वार्ड आपके पुराने वार्ड की जगह ले लेता है, और आप हर 3 महीने में एक बार ही पता बदल सकते हैं।',
-  'Know that reports are reviewed every week. Posts that break the rules come down, and serious or repeated cases lose the account.':
-    'ध्यान रखें कि रिपोर्ट की समीक्षा हर हफ़्ते होती है। नियम तोड़ने वाली पोस्ट हटा दी जाती हैं, और गंभीर या बार-बार के मामलों में खाता बंद कर दिया जाता है।',
   'Know that saving a policy imported from your campaign site takes it over. It becomes yours to manage here, its comments stay, and the site stops updating it.':
     'ध्यान रखें कि अपनी अभियान साइट से आयात की गई नीति सहेजने पर वह आपके हाथ में आ जाती है। इसे आप यहीं संभालेंगे, इसकी टिप्पणियाँ बनी रहेंगी, और साइट इसे अपडेट करना बंद कर देती है।',
   'Know that the app keeps only a verified yes or no, your ward and district numbers, and an identifier that stops one ID from verifying twice.':
@@ -1566,8 +1561,6 @@ export const HI: Record<string, string> = {
     'किसी और के सवाल से जुड़ने के लिए उस पर तीर और गिनती पर टैप करें ("मुझे भी इसका जवाब चाहिए")। छोड़ने के लिए फिर से टैप करें। जिन सवालों से ज़्यादा लोग जुड़े हैं, वे जवाबों के ग्रेड में ज़्यादा गिने जाते हैं।',
   'Tap the arrow and count to join the question ("I want this answered too"), and tap again to leave. You cannot join a question you asked.':
     'सवाल से जुड़ने के लिए तीर और गिनती पर टैप करें ("मुझे भी इसका जवाब चाहिए"), और छोड़ने के लिए फिर से टैप करें। आप अपने पूछे सवाल से नहीं जुड़ सकते।',
-  'Tap the flag icon on a post or comment to report it, or to block its author so you stop seeing their content.':
-    'किसी पोस्ट या टिप्पणी की रिपोर्ट करने के लिए, या उसके लेखक को ब्लॉक करने के लिए ताकि आपको उनकी सामग्री न दिखे, उस पर झंडे वाले आइकन पर टैप करें।',
   'Tap the flag icon to report the concern or block its author. Tap the share icon to send a web link that anyone can open.':
     'मुद्दे की रिपोर्ट करने या उसके लेखक को ब्लॉक करने के लिए झंडे वाले आइकन पर टैप करें। ऐसा वेब लिंक भेजने के लिए जिसे कोई भी खोल सके, शेयर आइकन पर टैप करें।',
   'Tap the flag icon to report the policy or a comment, or to block its author. Tap the share icon to send a web link.':
@@ -1616,7 +1609,7 @@ export const HI: Record<string, string> = {
     'अपना "ईमेल" और "पासवर्ड" लिखें, फिर "आगे बढ़ें" पर टैप करें। नए पासवर्ड में कम से कम 6 अक्षर होने चाहिए। आपने जो लिखा है उसे देखने के लिए "दिखाएँ" पर टैप करें।',
   'Type your answer under a question and tap "Post answer". Voters see every candidate\'s answer side by side. You can revise it later with "Update answer", but it cannot be taken down.':
     'किसी सवाल के नीचे अपना जवाब लिखें और "जवाब पोस्ट करें" पर टैप करें। मतदाता हर उम्मीदवार के जवाब साथ-साथ देखते हैं। आप बाद में "जवाब अपडेट करें" से इसे बदल सकते हैं, लेकिन इसे हटाया नहीं जा सकता।',
-  'Type your home address and tap "Find my districts". If it matches, you go back to the election tab with your own races listed first.':
+  'Type your home address and tap "Find my districts". If it matches, you go back to the elections tab with your own races listed first.':
     'अपने घर का पता लिखें और "मेरे डिस्ट्रिक्ट खोजें" पर टैप करें। अगर यह मेल खाता है, तो आप चुनाव टैब पर लौट जाते हैं, जहाँ आपके अपने चुनाव सबसे पहले दिखते हैं।',
   'Under "Audience", choose your ward\'s residents or "Citywide (everyone)". Officials without a ward can only post citywide.':
     '"दर्शक" के तहत, अपने वार्ड के निवासी या "पूरा शहर (सभी)" चुनें। जिन अधिकारियों का कोई वार्ड नहीं है, वे सिर्फ़ पूरे शहर के लिए पोस्ट कर सकते हैं।',
@@ -1706,8 +1699,6 @@ export const HI: Record<string, string> = {
     'आपके चुनाव सबसे पहले दिखाए गए हैं, {ward} में आपके पते के आधार पर।',
   'Your record: concerns {concerns}, comments {comments}, votes {votes}, judgments {judgments}.':
     'आपका रिकॉर्ड: मुद्दे {concerns}, टिप्पणियाँ {comments}, वोट {votes}, फ़ैसले {judgments}।',
-  'Your settings: language, phone notifications, verification and moving, privacy, deleting your account, and the community rules.':
-    'आपकी सेटिंग्स: भाषा, फ़ोन सूचनाएँ, सत्यापन और पता बदलना, गोपनीयता, अपना खाता हटाना, और समुदाय के नियम।',
   'Your vote: {n}.':
     'आपका वोट: {n}।',
   'Your work as a candidate: "ask every candidate" questions you haven\'t answered, the latest comments on your policies, your public card, and your platform.':
@@ -1962,8 +1953,6 @@ export const HI: Record<string, string> = {
     "तय नहीं",
   "Yes: {yes}. No: {no}. Not decided: {open}.":
     "हाँ: {yes}। ना: {no}। तय नहीं: {open}।",
-  "Share my picks":
-    "मेरी पसंद साझा करें",
   "Clear my picks":
     "मेरी पसंद मिटाएँ",
   "Clear my picks?":
@@ -1984,10 +1973,6 @@ export const HI: Record<string, string> = {
     "इस न्यायाधीश को बनाए रखें?",
   "My ballot":
     "मेरा मतपत्र",
-  "{n} made so far. Your picks stay on this phone.":
-    "अब तक {n}। आपकी पसंद इसी फ़ोन पर रहती है।",
-  "Pick a candidate in each race and take the list with you to vote.":
-    "हर चुनाव में एक उम्मीदवार चुनें और वोट डालने जाते समय सूची साथ ले जाएँ।",
   "Not now":
     "अभी नहीं",
   "Turn on":
@@ -2012,8 +1997,6 @@ export const HI: Record<string, string> = {
     "3 नवंबर के अपने मतपत्र का हर विकल्प और अपनी चुनी हुई पसंद देखने के लिए “मेरा मतपत्र” पर टैप करें। आपकी पसंद इसी फ़ोन पर रहती है।",
   "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
     "3 नवंबर के किसी चुनाव में, किसी उम्मीदवार पर “चुनें” टैप करके उन्हें मेरे मतपत्र में जोड़ें, और वापस लेने के लिए “आपकी पसंद” टैप करें। बने रहने के लिए खड़े न्यायाधीशों पर “इस न्यायाधीश को बनाए रखें?” के नीचे “हाँ” या “ना” टैप करें। आपकी पसंद इसी फ़ोन पर रहती है।",
-  "Tap \"My ballot\" at the top to see all your picks.":
-    "अपनी सारी पसंद देखने के लिए ऊपर “मेरा मतपत्र” पर टैप करें।",
   "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
     "किसी उम्मीदवार पर “चुनें” टैप करके उन्हें मेरे मतपत्र में जोड़ें, और वापस लेने के लिए “आपकी पसंद” टैप करें। आपकी पसंद इसी फ़ोन पर रहती है।",
   "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
@@ -2024,8 +2007,6 @@ export const HI: Record<string, string> = {
     "सलाहकारी प्रश्न पर “हाँ” या “ना” टैप करें।",
   "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
     "अपना पता जोड़ने के लिए “मेरे चुनाव खोजें” पर टैप करें, ताकि आपके कांग्रेस, राज्य विधायिका, काउंटी बोर्ड और स्कूल बोर्ड के चुनाव दिखें।",
-  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
-    "अपनी सूची संदेश के रूप में भेजने या सहेजने के लिए “मेरी पसंद साझा करें” पर टैप करें। जिन नामों को लिखना है उन पर “नाम लिखें” लिखा होता है।",
   "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
     "इस फ़ोन से हर पसंद हटाने के लिए “मेरी पसंद मिटाएँ” पर टैप करें और पुष्टि करें।",
   "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
@@ -2091,4 +2072,381 @@ export const HI: Record<string, string> = {
     "वार्ड कार्यालय को कॉल करें: {phone}",
   "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
     "\"वार्ड बैठकें\" के नीचे, \"न्यूज़लेटर में समय नहीं मिला\" उन बैठकों की सूची है जिनकी घोषणा वार्ड कार्यालय का न्यूज़लेटर बिना समय के करता है। ये कब होंगी, पूछने के लिए \"वार्ड कार्यालय को कॉल करें\" पर टैप करें।",
+  "{n} of {total} chosen":
+    "{total} में से {n} चुने गए",
+  "Next: {race}":
+    "अगला: {race}",
+  "Done":
+    "हो गया",
+  "Next to decide: {race}":
+    "अगला फ़ैसला: {race}",
+  "My cheat sheet":
+    "मेरी वोटिंग पर्ची",
+  "Made with direct democracy":
+    "direct democracy से बनाया गया",
+  "Could not make the image":
+    "तस्वीर नहीं बन सकी",
+  "Could not make the PDF":
+    "PDF नहीं बन सका",
+  "Save as image":
+    "तस्वीर के रूप में सेव करें",
+  "Save as PDF":
+    "PDF के रूप में सेव करें",
+  "Share as text":
+    "टेक्स्ट के रूप में शेयर करें",
+  "Tap \"My ballot\" at the top to see all your picks. The number on it counts the choices you have made out of all the choices on your ballot.":
+    "अपनी सारी पसंद देखने के लिए ऊपर “मेरा मतपत्र” पर टैप करें। उस पर लिखी संख्या बताती है कि आपके मतपत्र के सभी विकल्पों में से आपने कितने चुन लिए हैं।",
+  "After you pick, tap \"Next\" at the bottom to go to the next race on your ballot, in ballot order, or tap \"Skip\" to go on without picking. On your last race \"Next\" says \"Done\" and takes you back to My ballot. Picking needs your districts first: tap \"Find my races\".":
+    "चुनने के बाद, मतपत्र के क्रम में अपने मतपत्र के अगले चुनाव पर जाने के लिए नीचे “अगला” पर टैप करें, या बिना चुने आगे बढ़ने के लिए “छोड़ें” पर टैप करें। आख़िरी चुनाव पर “अगला” “हो गया” बन जाता है और आपको मेरा मतपत्र पर वापस ले जाता है। चुनने के लिए पहले आपके डिस्ट्रिक्ट चाहिए: “मेरे चुनाव खोजें” पर टैप करें।",
+  "Tap \"Next to decide\" to open the first race you have not picked in. From there, \"Next\" at the bottom of each race takes you down the ballot.":
+    "जिस पहले चुनाव में आपने अभी तक नहीं चुना है उसे खोलने के लिए “अगला फ़ैसला” पर टैप करें। वहाँ से हर चुनाव के नीचे “अगला” आपको मतपत्र में आगे ले जाता है।",
+  "Your picks for the November 3, 2026 ballot laid out as a cheat sheet, in about the order the ballot prints them, to read while you vote or fill in a mail ballot. It is made on this phone from the picks kept on it.":
+    "3 नवंबर 2026 के मतपत्र के लिए आपकी पसंद, एक वोटिंग पर्ची के रूप में, लगभग उसी क्रम में जिसमें मतपत्र छपता है, ताकि वोट डालते या डाक मतपत्र भरते समय पढ़ सकें। यह इसी फ़ोन पर, यहाँ रखी पसंद से बनती है।",
+  "Tap \"Save as image\" to save the sheet as a picture. On an iPhone, choose \"Save Image\" in the share sheet to put it in your photos.":
+    "पर्ची को तस्वीर के रूप में सेव करने के लिए “तस्वीर के रूप में सेव करें” पर टैप करें। iPhone पर, शेयर शीट में “Save Image” चुनें ताकि वह आपकी फ़ोटो में आ जाए।",
+  "Tap \"Save as PDF\" to make a PDF you can print or keep in your files.":
+    "प्रिंट करने या अपनी फ़ाइलों में रखने लायक़ PDF बनाने के लिए “PDF के रूप में सेव करें” पर टैप करें।",
+  "Tap \"Share as text\" to send your picks as a message.":
+    "अपनी पसंद संदेश के रूप में भेजने के लिए “टेक्स्ट के रूप में शेयर करें” पर टैप करें।",
+  "Look for \"write in\" after a name: that person's name is not printed on the ballot, so you write it in.":
+    "नाम के बाद “नाम लिखें” देखें: उस व्यक्ति का नाम मतपत्र पर छपा नहीं है, इसलिए आपको उसे लिखना होगा।",
+  "Skip":
+    "छोड़ें",
+  "Rated negatively by a bar association: {n}. They are listed first.":
+    "किसी बार एसोसिएशन से नकारात्मक रेटिंग: {n}। ये सबसे पहले दिखाए गए हैं।",
+  "On judge races, judges rated negatively by at least one bar association are listed first, those with the most negative ratings at the top.":
+    "जजों के चुनाव में, कम से कम एक बार एसोसिएशन से नकारात्मक रेटिंग पाने वाले जज सबसे पहले दिखते हैं, और सबसे ज़्यादा नकारात्मक रेटिंग वाले सबसे ऊपर।",
+  "{name} (rated negatively)":
+    "{name} (नकारात्मक रेटिंग)",
+  "Rated negatively by a bar association":
+    "किसी बार एसोसिएशन से नकारात्मक रेटिंग",
+  "Judges up for retention whom a bar association rated negatively come first, in red, each with your answer; every other judge is listed once below them. A negatively rated judge you picked for a vacancy is marked \"rated negatively\".":
+    "पद पर बने रहने के वोट वाले जिन जजों को किसी बार एसोसिएशन से नकारात्मक रेटिंग मिली, वे सबसे पहले, लाल रंग में, आपके जवाब के साथ दिखते हैं; बाकी जज उनके नीचे एक ही बार दिखते हैं। किसी खाली पद के लिए आपके चुने नकारात्मक रेटिंग वाले जज पर “नकारात्मक रेटिंग” लिखा होता है।",
+  "Under the judges up for retention, the ones a bar association rated negatively are named in red with your answer for each.":
+    "पद पर बने रहने के लिए वोट वाले जजों के नीचे, किसी बार एसोसिएशन से नकारात्मक रेटिंग पाने वाले जज लाल रंग में, हर एक के लिए आपके जवाब के साथ दिखते हैं।",
+  "Tap \"My cheat sheet\", at the top or the bottom, to see your picks laid out to vote with, and save them as an image or a PDF or share them as text.":
+    "वोट डालते समय देखने लायक़ अपनी पसंद देखने के लिए ऊपर या नीचे “मेरी वोटिंग पर्ची” पर टैप करें, और उसे तस्वीर या PDF के रूप में सेव करें या टेक्स्ट के रूप में शेयर करें।",
+  "choices made":
+    "विकल्प चुने गए",
+  "Complete":
+    "पूरा",
+  // Report dialog and Settings > Send feedback (2026-10-22).
+  'Pick at least one reason.': 'कम से कम एक कारण चुनें।',
+  'Pick every reason that applies.': 'जो भी कारण लागू हों, सभी चुनें।',
+  'Add a note (optional)': 'टिप्पणी जोड़ें (वैकल्पिक)',
+  'Sign in to send': 'भेजने के लिए साइन इन करें',
+  'Blocking hides everything they post, for you only. They are not told.': 'ब्लॉक करने से उनकी हर पोस्ट सिर्फ़ आपके लिए छिप जाती है। उन्हें बताया नहीं जाता।',
+  'A child’s safety': 'किसी बच्चे की सुरक्षा',
+  'A post or a person in the app': 'ऐप में कोई पोस्ट या कोई व्यक्ति',
+  'Something isn’t working': 'कुछ काम नहीं कर रहा',
+  'An idea for the app': 'ऐप के लिए कोई सुझाव',
+  'Answers go to {email}.': 'जवाब {email} पर आएँगे।',
+  'You are signed in.': 'आप साइन इन हैं।',
+  'You are signed out. Add an email if you want an answer.': 'आप साइन इन नहीं हैं। जवाब चाहिए तो ईमेल दें।',
+  'Message sent': 'संदेश भेजा गया',
+  'Thank you. The operators read every message.': 'धन्यवाद। प्लेटफ़ॉर्म चलाने वाले हर संदेश पढ़ते हैं।',
+  'Could not send your message': 'आपका संदेश नहीं भेजा जा सका',
+  'To report a post or comment, tap the flag on it. For anything else, write to the operators here.': 'किसी पोस्ट या टिप्पणी की रिपोर्ट करने के लिए उस पर बने झंडे पर टैप करें। बाकी किसी भी बात के लिए यहाँ प्लेटफ़ॉर्म चलाने वालों को लिखें।',
+  'What is this about?': 'यह किस बारे में है?',
+  'Child safety messages reach the operator right away. If a child is in danger now, call 911.': 'बच्चों की सुरक्षा से जुड़े संदेश तुरंत प्लेटफ़ॉर्म चलाने वाले तक पहुँचते हैं। अगर कोई बच्चा अभी ख़तरे में है, तो 911 पर कॉल करें।',
+  'Your message': 'आपका संदेश',
+  'What happened, and where in the app?': 'क्या हुआ, और ऐप में कहाँ?',
+  'Your email (optional)': 'आपका ईमेल (वैकल्पिक)',
+  'Only if you want an answer': 'सिर्फ़ अगर आपको जवाब चाहिए',
+  'Send': 'भेजें',
+  '10 character minimum': 'कम से कम 10 अक्षर',
+  'You can send up to 5 messages a day. You can send another {date}.': 'आप एक दिन में 5 संदेश तक भेज सकते हैं। अगला संदेश आप {date} को भेज सकते हैं।',
+  'Send feedback': 'राय भेजें',
+  'Send feedback or report a problem': 'राय भेजें या समस्या की रिपोर्ट करें',
+  'Pick what this is about.': 'चुनें कि यह किस बारे में है।',
+  'That email address does not look right.': 'यह ईमेल पता सही नहीं लगता।',
+  'Too many messages today. Try again tomorrow.': 'आज बहुत सारे संदेश भेजे गए। कल फिर कोशिश करें।',
+  'Feedback you send from Settings is visible only to the platform operators, with your account or the email you give, so they can answer.': 'सेटिंग्स से भेजी गई आपकी राय सिर्फ़ प्लेटफ़ॉर्म चलाने वाले देख सकते हैं, आपके खाते या आपके दिए ईमेल के साथ, ताकि वे जवाब दे सकें।',
+  'Reported posts are reviewed every week, and child safety reports right away. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.': 'रिपोर्ट की गई पोस्ट की समीक्षा हर हफ़्ते होती है, और बच्चों की सुरक्षा की रिपोर्ट की तुरंत। इन नियमों को तोड़ने वाली पोस्ट हटा दी जाती हैं, और गंभीर या बार-बार के मामलों में खाता चला जाता है। 5 या उससे ज़्यादा लोगों द्वारा रिपोर्ट किया गया खाता समीक्षा होने तक छिपा रहता है।',
+  'Tap the flag icon on a post or comment, pick every reason that applies, and tap "Send report". The same window blocks its author so you stop seeing their content.': 'किसी पोस्ट या टिप्पणी पर बने झंडे पर टैप करें, लागू होने वाले सभी कारण चुनें, और "रिपोर्ट भेजें" पर टैप करें। उसी विंडो में आप लेखक को ब्लॉक कर सकते हैं ताकि उनकी सामग्री न दिखे।',
+  'Know that reports are reviewed every week, and child safety reports right away. Posts that break the rules come down, and serious or repeated cases lose the account.': 'ध्यान रखें कि रिपोर्ट की समीक्षा हर हफ़्ते होती है, और बच्चों की सुरक्षा की रिपोर्ट की तुरंत। नियम तोड़ने वाली पोस्ट हटा दी जाती हैं, और गंभीर या बार-बार के मामलों में खाता चला जाता है।',
+  'Your settings: language, phone notifications, feedback to the operators, verification and moving, privacy, deleting your account, and the community rules.': 'आपकी सेटिंग्स: भाषा, फ़ोन सूचनाएँ, प्लेटफ़ॉर्म चलाने वालों को राय, सत्यापन और घर बदलना, गोपनीयता, खाता हटाना, और समुदाय के नियम।',
+  'Tap "Send feedback or report a problem" to write to the operators without leaving the app, signed in or not. Child safety messages reach them right away.': '"राय भेजें या समस्या की रिपोर्ट करें" पर टैप करके ऐप छोड़े बिना प्लेटफ़ॉर्म चलाने वालों को लिखें, साइन इन हों या नहीं। बच्चों की सुरक्षा से जुड़े संदेश उन तक तुरंत पहुँचते हैं।',
+  'A message to the operators from inside the app, for anything but a single post: a child safety concern, a person in the app, something that isn\'t working, or an idea.': 'ऐप के अंदर से प्लेटफ़ॉर्म चलाने वालों को संदेश, किसी एक पोस्ट के अलावा किसी भी बात के लिए: किसी बच्चे की सुरक्षा की चिंता, ऐप में कोई व्यक्ति, कुछ जो काम नहीं कर रहा, या कोई सुझाव।',
+  'Pick what it is about, write what happened and where, and tap "Send".': 'चुनें कि यह किस बारे में है, लिखें कि क्या हुआ और कहाँ, और "भेजें" पर टैप करें।',
+  'Pick "A child’s safety" for any concern about a child. Those messages reach the operator right away. If a child is in danger now, call 911.': 'किसी बच्चे से जुड़ी किसी भी चिंता के लिए "किसी बच्चे की सुरक्षा" चुनें। ऐसे संदेश तुरंत प्लेटफ़ॉर्म चलाने वाले तक पहुँचते हैं। अगर कोई बच्चा अभी ख़तरे में है, तो 911 पर कॉल करें।',
+  'To report one post or comment, tap the flag on it instead.': 'किसी एक पोस्ट या टिप्पणी की रिपोर्ट करनी हो, तो उसकी जगह उस पर बने झंडे पर टैप करें।',
+  'Signed out, add an email if you want an answer. Signed in, the answer goes to your account\'s email.': 'साइन इन न हों तो जवाब चाहने पर ईमेल दें। साइन इन हों तो जवाब आपके खाते के ईमेल पर आएगा।',
+  'Send up to 5 messages a day.': 'एक दिन में 5 संदेश तक भेजें।',
+  "Leave blank":
+    "खाली छोड़ें",
+  "Left blank":
+    "खाली छोड़ा",
+  "Leave blank: {seat}":
+    "खाली छोड़ें: {seat}",
+  "On a judge vacancy, tap \"Leave blank\" if you do not want to vote for that judge. Each vacancy has one candidate, so leaving it blank is the only other choice your ballot gives, and it counts as a choice made.":
+    "किसी जज की रिक्ति पर, अगर आप उस जज को वोट नहीं देना चाहते, तो “खाली छोड़ें” टैप करें। हर रिक्ति पर एक ही उम्मीदवार है, इसलिए खाली छोड़ना ही आपके मतपत्र पर दूसरा विकल्प है, और इसे लिया गया फ़ैसला गिना जाता है।",
+  // Mayor games (2026-11-04)
+  "6 am to 7 pm": "सुबह 6 बजे से शाम 7 बजे तक",
+  "Applications for a February mail ballot open November 25, 2026, online or on paper.": "फ़रवरी के डाक मतपत्र के आवेदन 25 नवंबर, 2026 से शुरू होते हैं, ऑनलाइन या कागज़ पर।",
+  "April 6, 2027": "6 अप्रैल, 2027",
+  "Be nice. They collected 12,500 signatures and they have feelings.": "अच्छे से पेश आइए। इन्होंने 12,500 हस्ताक्षर जुटाए हैं और इनके भी दिल हैं।",
+  "Blind date": "ब्लाइंड डेट",
+  "Candidate for mayor": "मेयर पद के उम्मीदवार",
+  "Candidates in the race: {n}.": "दौड़ में उम्मीदवार: {n}।",
+  "Cash on hand": "हाथ में नकद",
+  "Cheap date": "सस्ती डेट",
+  "Check your registration, see your sample ballot, and find your polling place.": "अपना पंजीकरण जाँचें, अपना नमूना मतपत्र देखें, और अपना मतदान केंद्र खोजें।",
+  "Checked {date}.": "{date} को जाँचा गया।",
+  "Compare candidates on this page. Each card shows an \"Incumbent\" chip if they hold the seat and a preview of what they are running on.": "इस पेज पर उम्मीदवारों की तुलना करें। हर कार्ड पर, अगर वे सीट पर हैं तो “मौजूदा पदाधिकारी” चिप दिखती है, और वे किस मुद्दे पर खड़े हैं उसकी एक झलक।",
+  "Data checked {date}.": "डेटा {date} को जाँचा गया।",
+  "Election day is {date}.": "चुनाव का दिन {date} है।",
+  "Every alderman's seat and every police district council is on the {date} ballot with the mayor's race above.": "हर एल्डरमैन की सीट और हर पुलिस डिस्ट्रिक्ट काउंसिल {date} के मतपत्र पर है, और सबसे ऊपर मेयर का चुनाव।",
+  "Everyone running for mayor on February 23, 2027. Four ways to meet them.": "23 फ़रवरी, 2027 को मेयर पद के लिए खड़े सभी लोग। उनसे मिलने के चार तरीके।",
+  "Everyone who filed to run for mayor, in alphabetical order. Tap a name for everything the games know.": "मेयर पद के लिए नामांकन भरने वाले सभी लोग, वर्णमाला के क्रम में। खेलों को जो कुछ पता है, उसके लिए किसी नाम पर टैप करें।",
+  "Everything about {name}": "{name} के बारे में सब कुछ",
+  "Everything the mayor games know about one candidate for mayor, with sources: who they are, their full platform, their campaign money as reported to the State Board of Elections, their standing in the latest public poll, what they say they would do in their own words, what they say about money, their pizza position, and the odd fact on the record.": "मेयर पद के एक उम्मीदवार के बारे में मेयर के खेलों को जो कुछ पता है, स्रोतों के साथ: वे कौन हैं, उनका पूरा प्लेटफ़ॉर्म, राज्य चुनाव बोर्ड को बताया गया उनका अभियान का पैसा, ताज़ा सार्वजनिक सर्वे में उनकी स्थिति, वे अपने शब्दों में क्या करने की बात कहते हैं, पैसे के बारे में वे क्या कहते हैं, पिज़्ज़ा पर उनका पक्ष, और रिकॉर्ड पर दर्ज अनोखी बात।",
+  "For the February 23 municipal election. Apply online or on paper; the ballot itself is mailed later.": "23 फ़रवरी के नगर चुनाव के लिए। ऑनलाइन या कागज़ पर आवेदन करें; मतपत्र खुद बाद में डाक से भेजा जाता है।",
+  "Fun fact: the lake is right there. Nobody has promised to fix it.": "मज़ेदार बात: झील वहीं पास में है। उसे ठीक करने का वादा किसी ने नहीं किया है।",
+  "Game not found.": "खेल नहीं मिला।",
+  "House rule: no Bears stadium talk on a first date.": "घर का नियम: पहली डेट पर Bears के स्टेडियम की बात नहीं।",
+  "If nobody wins a majority, the top two meet in a runoff on Tuesday, April 6, 2027.": "अगर किसी को बहुमत नहीं मिलता, तो ऊपर के दो उम्मीदवार मंगलवार, 6 अप्रैल, 2027 को रनऑफ़ में आमने-सामने होंगे।",
+  "If they say \"fiscal responsibility\", take a sip of water. Hydrate.": "अगर वे “वित्तीय ज़िम्मेदारी” कहें, तो एक घूँट पानी पी लें। पानी पीते रहिए।",
+  "If you look up your districts without verifying: the district numbers only, so the ward races can show your police district council first.": "अगर आप बिना सत्यापन के अपने डिस्ट्रिक्ट खोजते हैं: सिर्फ़ डिस्ट्रिक्ट के नंबर, ताकि वार्ड चुनाव आपकी पुलिस डिस्ट्रिक्ट काउंसिल को पहले दिखा सकें।",
+  "In their words where we have them.": "जहाँ हमारे पास हैं, उनके अपने शब्दों में।",
+  "Jumps to when and where to vote": "कब और कहाँ वोट दें, वहाँ ले जाता है",
+  "Key points listed: {n}.": "सूचीबद्ध मुख्य बातें: {n}।",
+  "Mail ballot applications open": "डाक मतपत्र के आवेदन शुरू:",
+  "Main points": "मुख्य बातें",
+  "Mayor games": "मेयर के खेल",
+  "Mayor, city clerk and treasurer, alderman, and police district council. Polls are open 6 am to 7 pm.": "मेयर, सिटी क्लर्क और ट्रेज़रर, एल्डरमैन, और पुलिस डिस्ट्रिक्ट काउंसिल। मतदान सुबह 6 बजे से शाम 7 बजे तक खुला है।",
+  "Met {n} of {total}": "{total} में से {n} से मिले",
+  "Mystery candidate": "रहस्यमय उम्मीदवार",
+  "Next date": "अगली डेट",
+  "Next to the others": "बाकियों की तुलना में",
+  "No candidates are on record yet. Petitions were filed October 19-26, 2026; the districts fill in here as the Board certifies the ballot.": "अभी कोई उम्मीदवार दर्ज नहीं है। याचिकाएँ 19-26 अक्टूबर, 2026 को दाखिल हुईं; जैसे-जैसे बोर्ड मतपत्र प्रमाणित करता है, डिस्ट्रिक्ट यहाँ भरते जाएँगे।",
+  "No candidates in the race yet.": "दौड़ में अभी कोई उम्मीदवार नहीं।",
+  "No pizza position found on the record. If one of them goes public, tell us and we will rank them.": "रिकॉर्ड पर पिज़्ज़ा पर कोई पक्ष नहीं मिला। अगर इनमें से कोई खुलकर बोले, तो हमें बताएँ और हम उन्हें रैंक कर देंगे।",
+  "No poll has listed this candidate yet.": "अभी किसी सर्वे ने इस उम्मीदवार को सूची में नहीं रखा है।",
+  "No spending report found for these campaigns yet. They wait here, which is the cheapest place to stand.": "इन अभियानों की खर्च रिपोर्ट अभी नहीं मिली। वे यहाँ इंतज़ार करते हैं, जो खड़े होने की सबसे सस्ती जगह है।",
+  "No spending report found for this campaign yet.": "इस अभियान की खर्च रिपोर्ट अभी नहीं मिली।",
+  "Nobody has mentioned the parking meters yet. Give it time.": "पार्किंग मीटर का ज़िक्र अभी किसी ने नहीं किया है। थोड़ा वक़्त दीजिए।",
+  "Not listed in the poll": "सर्वे में सूचीबद्ध नहीं",
+  "Not listed in the poll · {spent} spent": "सर्वे में सूचीबद्ध नहीं · {spent} खर्च",
+  "Off the ballot": "मतपत्र से बाहर",
+  "On Blind date, read the points, then tap \"Reveal who it is\" to see the name and face, then \"Next date\" for another. Tap \"Skip this one\" to move on without revealing.": "ब्लाइंड डेट में, बातें पढ़ें, फिर नाम और चेहरा देखने के लिए “बताओ कौन है” टैप करें, फिर किसी और के लिए “अगली डेट”। बिना बताए आगे बढ़ने के लिए “इसे छोड़ें” टैप करें।",
+  "On Cheap date and Pizza date, tap any card for everything about that candidate.": "सस्ती डेट और पिज़्ज़ा डेट में, उस उम्मीदवार के बारे में सब कुछ जानने के लिए किसी भी कार्ड पर टैप करें।",
+  "On Speed date, tap \"Next date\" and \"Back\" to move through the field. The clock only counts; it never cuts you off.": "स्पीड डेट में, उम्मीदवारों के बीच आगे-पीछे जाने के लिए “अगली डेट” और “वापस” टैप करें। घड़ी बस गिनती है; वह आपको कभी रोकती नहीं।",
+  "One ballot candidate's card, put together from public sources. It shows what they say they are running on, their background, and their campaign site. These candidates do not have accounts in the app.": "मतपत्र के एक उम्मीदवार का कार्ड, सार्वजनिक स्रोतों से तैयार। इसमें दिखता है कि वे किस मुद्दे पर खड़े होने की बात कहते हैं, उनकी पृष्ठभूमि, और उनकी अभियान की साइट। इन उम्मीदवारों के ऐप में खाते नहीं हैं।",
+  "One candidate at a time, the whole platform in a minute.": "एक बार में एक उम्मीदवार, पूरा प्लेटफ़ॉर्म एक मिनट में।",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, with their own words where we have them, and their name and face behind \"Reveal who it is\"; candidates come in random order and this phone remembers who you have met. Speed date: one candidate at a time, in a random order, with the AI summary of their main points and how they compare to the others. Cheap date: everyone with a spending report, ordered by poll support per dollar spent, with what they say about money. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end.": "मेयर के चार खेलों में से एक। ब्लाइंड डेट: एक रहस्यमय उम्मीदवार की मुख्य बातें, जहाँ हमारे पास हैं उनके अपने शब्दों में, और उनका नाम और चेहरा “बताओ कौन है” के पीछे; उम्मीदवार बेतरतीब क्रम में आते हैं और यह फ़ोन याद रखता है कि आप किनसे मिल चुके हैं। स्पीड डेट: एक बार में एक उम्मीदवार, बेतरतीब क्रम में, उनकी मुख्य बातों के AI सारांश और बाकियों से उनकी तुलना के साथ। सस्ती डेट: खर्च रिपोर्ट वाले सभी उम्मीदवार, खर्च किए गए हर डॉलर पर सर्वे समर्थन के क्रम में, पैसे के बारे में उनकी बातों के साथ। पिज़्ज़ा डेट: पिज़्ज़ा पर पक्ष रखने वाले सभी उम्मीदवार, कौन सही है (थिन क्रस्ट) के क्रम में, और बाकी अंत में एक सूची में।",
+  "One race on the February 23, 2027 ballot: city clerk, city treasurer, or a police district council. It lists every candidate, with the first lines of what each says they are running on, so you can compare them here.": "23 फ़रवरी, 2027 के मतपत्र का एक चुनाव: सिटी क्लर्क, सिटी ट्रेज़रर, या कोई पुलिस डिस्ट्रिक्ट काउंसिल। इसमें हर उम्मीदवार सूचीबद्ध है, साथ में हर एक किस मुद्दे पर खड़ा है उसकी पहली पंक्तियाँ, ताकि आप यहीं उनकी तुलना कर सकें।",
+  "Only in races where nobody won a majority on February 23. Polls are open 6 am to 7 pm.": "सिर्फ़ उन चुनावों में जहाँ 23 फ़रवरी को किसी को बहुमत नहीं मिला। मतदान सुबह 6 बजे से शाम 7 बजे तक खुला है।",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line.": "खर्च किए गए हर डॉलर पर सर्वे समर्थन के क्रम में। जहाँ हैं वहाँ पहुँचने में सबसे ज़्यादा खर्च किया, तो लाइन में सबसे पीछे खड़े हों।",
+  "Petitions filed": "याचिकाएँ दाखिल",
+  "Petitions were filed October 19-26, 2026, and the Board of Elections certifies the ballot by December 17. This page follows the field as it settles.": "याचिकाएँ 19-26 अक्टूबर, 2026 को दाखिल हुईं, और चुनाव बोर्ड 17 दिसंबर तक मतपत्र प्रमाणित करता है। जैसे-जैसे उम्मीदवारों की सूची तय होती है, यह पेज उसके साथ चलता है।",
+  "Petitions were filed October 19-26, 2026; the Board of Elections certifies the ballot by December 17": "याचिकाएँ 19-26 अक्टूबर, 2026 को दाखिल हुईं; चुनाव बोर्ड 17 दिसंबर तक मतपत्र प्रमाणित करता है",
+  "Pizza date": "पिज़्ज़ा डेट",
+  "Poll support: {pct}%.": "सर्वे समर्थन: {pct}%।",
+  "Polls are open": "मतदान खुला है",
+  "Put a question to every candidate": "हर उम्मीदवार से एक सवाल पूछें",
+  "Raised": "जुटाया",
+  "Ranked by who is right about pizza. No questions.": "पिज़्ज़ा पर कौन सही है, उसके क्रम में। कोई सवाल नहीं।",
+  "Ranked by who is right about pizza. Tavern-style thin crust is right. We do not explain ourselves.": "पिज़्ज़ा पर कौन सही है, उसके क्रम में। टैवर्न-स्टाइल थिन क्रस्ट सही है। हम सफ़ाई नहीं देते।",
+  "Register online with an Illinois license or state ID, or in person at any early voting site and at your polling place on election day, with two forms of ID (one showing your address).": "Illinois लाइसेंस या राज्य ID के साथ ऑनलाइन पंजीकरण करें, या खुद जाकर किसी भी जल्दी मतदान केंद्र पर और चुनाव के दिन अपने मतदान केंद्र पर, दो पहचान पत्रों के साथ (एक पर आपका पता हो)।",
+  "Reminder: the city is the one paying for dinner.": "याद रहे: खाने का बिल शहर भर रहा है।",
+  "Reveal who it is": "बताओ कौन है",
+  "Runoff election day is": "रनऑफ़ चुनाव का दिन:",
+  "Skip this one": "इसे छोड़ें",
+  "Somewhere, a ward meeting is running late. Your date left it early for you.": "कहीं कोई वार्ड मीटिंग देर तक चल रही है। आपकी डेट आपके लिए उसे बीच में छोड़कर आई है।",
+  "Speed date": "स्पीड डेट",
+  "Spent": "खर्च किया",
+  "Spent {spent} ({period}).": "{spent} खर्च किया ({period})।",
+  "Start over": "फिर से शुरू करें",
+  "Tap \"Blind date\", \"Speed date\", \"Cheap date\", or \"Pizza date\" to play. Every game links to each candidate's page, with sources.": "खेलने के लिए “ब्लाइंड डेट”, “स्पीड डेट”, “सस्ती डेट” या “पिज़्ज़ा डेट” टैप करें। हर खेल हर उम्मीदवार के पेज से जुड़ता है, स्रोतों के साथ।",
+  "Tap \"Everything about\" a candidate for their page, or \"Full platform\" for every policy they have published.": "किसी उम्मीदवार के पेज के लिए “के बारे में सब कुछ” टैप करें, या उनकी प्रकाशित हर नीति के लिए “पूरा प्लेटफ़ॉर्म”।",
+  "Tap \"Full platform\" to read every policy they have published. On the platform, you can comment on any policy. Candidates without a page in the app link to their own site.": "उनकी प्रकाशित हर नीति पढ़ने के लिए “पूरा प्लेटफ़ॉर्म” टैप करें। प्लेटफ़ॉर्म पर आप किसी भी नीति पर टिप्पणी कर सकते हैं। जिन उम्मीदवारों का ऐप में पेज नहीं है, उनका लिंक उनकी अपनी साइट पर जाता है।",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the mayor games tab.": "मेयर के खेल टैब पर सभी उम्मीदवारों से एक साथ पूछने के लिए “हर उम्मीदवार से एक सवाल पूछें” टैप करें।",
+  "Tap \"Source\" under any quote to read it where it was said.": "किसी भी उद्धरण के नीचे “स्रोत” टैप करें और उसे वहीं पढ़ें जहाँ वह कहा गया था।",
+  "Tap City Clerk, City Treasurer, a ward number, or a police district number to see who is running. \"Your ward\" shows your alderman's record next to their challengers.": "कौन खड़ा है यह देखने के लिए सिटी क्लर्क, सिटी ट्रेज़रर, किसी वार्ड नंबर या पुलिस डिस्ट्रिक्ट नंबर पर टैप करें। “आपका वार्ड” आपके एल्डरमैन का रिकॉर्ड उन्हें चुनौती देने वालों के बगल में दिखाता है।",
+  "Tap the countdown line to jump to when and where to vote.": "कब और कहाँ वोट दें, वहाँ जाने के लिए उलटी गिनती की पंक्ति पर टैप करें।",
+  "Tap the share icon at the top to send this page. The link opens on the web for people without the app.": "यह पेज भेजने के लिए ऊपर शेयर आइकन पर टैप करें। जिनके पास ऐप नहीं है, उनके लिए लिंक वेब पर खुलता है।",
+  "Taxes, the budget, and what it costs to live here.": "टैक्स, बजट, और यहाँ रहने की लागत।",
+  "The Board has not posted February early voting dates or sites yet. Any Chicago voter can use any early voting site, and same-day registration is available at all of them.": "बोर्ड ने फ़रवरी के जल्दी मतदान की तारीखें या केंद्र अभी नहीं बताए हैं। शिकागो का कोई भी मतदाता किसी भी जल्दी मतदान केंद्र पर जा सकता है, और उसी दिन पंजीकरण सभी केंद्रों पर उपलब्ध है।",
+  "The mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date shows a candidate's ideas before their name. Speed date walks the field one at a time with an AI summary. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the ward races, and the field A to Z.": "मेयर के खेल: 23 फ़रवरी, 2027 को शिकागो के मेयर पद के लिए खड़े सभी लोगों से मिलने के चार तरीके। ब्लाइंड डेट उम्मीदवार के विचार उनके नाम से पहले दिखाती है। स्पीड डेट AI सारांश के साथ एक-एक करके सभी उम्मीदवारों से मिलाती है। सस्ती डेट उन्हें खर्च किए गए हर डॉलर पर सर्वे समर्थन के हिसाब से रैंक करती है। पिज़्ज़ा डेट उन्हें पिज़्ज़ा पर सही होने के हिसाब से रैंक करती है। खेलों के नीचे, लाल पट्टी में, फ़रवरी के मतपत्र का बाकी हिस्सा है: कब और कहाँ वोट दें, वह सवाल जिसका हर उम्मीदवार जवाब देता है, वार्ड चुनाव, और उम्मीदवारों की सूची A से Z तक।",
+  "The pizza is cut in squares. The candidates are not.": "पिज़्ज़ा चौकोर टुकड़ों में कटा है। उम्मीदवार नहीं।",
+  "Their ideas first. Their name when you say so.": "पहले उनके विचार। उनका नाम तब, जब आप कहें।",
+  "These names are not printed on the ballot. To vote for one, write the name in the blank write-in space for that office and fill in the oval (on a touchscreen, follow the write-in steps on screen). Votes count only for write-ins who filed a declaration; election judges at your polling place have the official list.": "ये नाम मतपत्र पर छपे नहीं हैं। इनमें से किसी को वोट देने के लिए, उस पद की खाली राइट-इन जगह में नाम लिखें और गोला भरें (टचस्क्रीन पर, स्क्रीन पर दिए गए राइट-इन के कदम अपनाएँ)। वोट सिर्फ़ उन राइट-इन उम्मीदवारों के गिने जाते हैं जिन्होंने घोषणा-पत्र दाखिल किया है; आपके मतदान केंद्र के चुनाव जजों के पास आधिकारिक सूची होती है।",
+  "They all say they will fix the potholes. Ask how.": "सब कहते हैं कि वे गड्ढे भरवा देंगे। पूछिए, कैसे।",
+  "This date: {clock}": "यह डेट: {clock}",
+  "Tuesday, February 23, 2027": "मंगलवार, 23 फ़रवरी, 2027",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first.": "अपने घर का पता लिखें और “मेरे डिस्ट्रिक्ट खोजें” टैप करें। अगर वह मिल जाता है, तो आप मतपत्र पर वापस जाते हैं और आपकी पुलिस डिस्ट्रिक्ट काउंसिल सबसे पहले सूचीबद्ध होती है।",
+  "Under \"Campaign money\", read what the campaign raised, spent, and has on hand, and tap \"Source\" to open the State Board of Elections report.": "“अभियान का पैसा” के नीचे पढ़ें कि अभियान ने क्या जुटाया, क्या खर्च किया और हाथ में क्या है, और राज्य चुनाव बोर्ड की रिपोर्ट खोलने के लिए “स्रोत” टैप करें।",
+  "Under \"Support\", tap the poll's name to open it.": "“समर्थन” के नीचे, सर्वे खोलने के लिए उसके नाम पर टैप करें।",
+  "Under \"The field, A to Z\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "“उम्मीदवार, A से Z” के नीचे किसी भी नाम पर टैप करें और जानें कि खेलों को उनके बारे में क्या पता है: उनका प्लेटफ़ॉर्म, अभियान का पैसा, सर्वे में स्थिति, उद्धरण, और पिज़्ज़ा।",
+  "Use the \"When and where to vote\" links to register, apply for a mail ballot, find early voting sites, or find your polling place. Tap \"More help voting\" for accessible voting, language help, and poll work.": "पंजीकरण करने, डाक मतपत्र के लिए आवेदन करने, जल्दी मतदान केंद्र खोजने या अपना मतदान केंद्र खोजने के लिए “कब और कहाँ वोट दें” के लिंक इस्तेमाल करें। सुलभ मतदान, भाषा में मदद और मतदान में काम के लिए “वोट देने में और मदद” टैप करें।",
+  "What they would do as mayor, in their words where we have them.": "मेयर के रूप में वे क्या करेंगे, जहाँ हमारे पास हैं उनके अपने शब्दों में।",
+  "Which mayoral candidates you have already met in the games. That list stays on your phone only.": "खेलों में आप मेयर पद के किन उम्मीदवारों से मिल चुके हैं। वह सूची सिर्फ़ आपके फ़ोन पर रहती है।",
+  "Who gets the most support for the least money.": "सबसे कम पैसे में सबसे ज़्यादा समर्थन किसे मिलता है।",
+  "Withdrew": "नाम वापस लिया",
+  "Your date has arrived. They brought a budget.": "आपकी डेट आ गई है। वे बजट साथ लाए हैं।",
+  "Your district numbers for races that depend on your street address, not just your ward. On the February 23, 2027 ballot that is your police district council; the other numbers (US House, Illinois Senate and House, county districts, judicial subcircuit, school board) are kept for the next election that uses them.": "उन चुनावों के लिए आपके डिस्ट्रिक्ट नंबर जो सिर्फ़ आपके वार्ड पर नहीं, आपके गली के पते पर निर्भर करते हैं। 23 फ़रवरी, 2027 के मतपत्र पर वह आपकी पुलिस डिस्ट्रिक्ट काउंसिल है; बाकी नंबर (अमेरिकी प्रतिनिधि सभा, Illinois सीनेट और हाउस, काउंटी डिस्ट्रिक्ट, न्यायिक सबसर्किट, स्कूल बोर्ड) अगले उस चुनाव के लिए रखे जाते हैं जिसमें उनका इस्तेमाल होता है।",
+  "Your police district council race depends on your address, not just your ward. We send it to the US Census Bureau to place it on the map and keep only your district numbers, never the address.": "आपकी पुलिस डिस्ट्रिक्ट काउंसिल का चुनाव आपके पते पर निर्भर करता है, सिर्फ़ आपके वार्ड पर नहीं। हम इसे नक्शे पर ढूँढ़ने के लिए अमेरिकी जनगणना ब्यूरो (US Census Bureau) को भेजते हैं और सिर्फ़ आपके डिस्ट्रिक्ट के नंबर रखते हैं, पता कभी नहीं।",
+  "also on the record": "रिकॉर्ड पर यह भी",
+  "campaign money": "अभियान का पैसा",
+  "candidates who don't care about pizza": "वे उम्मीदवार जिन्हें पिज़्ज़ा की परवाह नहीं",
+  "games": "खेल",
+  "not found": "नहीं मिला",
+  "on": "पर",
+  "on money": "पैसे पर",
+  "pizza": "पिज़्ज़ा",
+  "spending not on record": "खर्च रिकॉर्ड पर नहीं",
+  "support": "समर्थन",
+  "the ai summary": "AI सारांश",
+  "the field, a to z": "उम्मीदवार, A से Z",
+  "the mayor games": "मेयर के खेल",
+  "waldgrave.com/directdemocracy": "waldgrave.com/directdemocracy",
+  "what they would do": "वे क्या करेंगे",
+  "when and where to vote": "कब और कहाँ वोट दें",
+  "{n} of {total}": "{total} में से {n}",
+  "{n} people want to be mayor on February 23, 2027. Four ways to meet them.": "{n} लोग 23 फ़रवरी, 2027 को मेयर बनना चाहते हैं। उनसे मिलने के चार तरीके।",
+  "{n} points of support per $1 million spent": "खर्च किए गए हर $1 मिलियन पर समर्थन के {n} अंक",
+  "{pct}% support · {spent} spent": "{pct}% समर्थन · {spent} खर्च",
+  // Mayor games, round two (2026-11-09)
+  "A \"?\" on every screen says what you can do there.": "हर स्क्रीन पर बना “?” बताता है कि आप वहाँ क्या कर सकते हैं।",
+  "After the reveal, tap \"Next date\" or swipe left for another. Tap the heart to change your mind about a second date.": "नाम सामने आने के बाद, किसी और के लिए “अगली डेट” टैप करें या बाईं ओर स्वाइप करें। दूसरी डेट पर अपना मन बदलने के लिए दिल पर टैप करें।",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, four ways.": "शिकागो 23 फ़रवरी, 2027 को मेयर चुनेगा। खड़े सभी लोगों से मिलिए, चार तरीकों से।",
+  "Chicago's top concerns, ranked by the people.": "शिकागो के सबसे बड़े मुद्दे, लोगों द्वारा क्रम में रखे गए।",
+  "Compare them on a speed date": "स्पीड डेट पर इनकी तुलना करें",
+  "Date {n} of {total}": "{total} में से डेट {n}",
+  "Find my police district": "मेरा पुलिस डिस्ट्रिक्ट खोजें",
+  "Finish": "खत्म करें",
+  "Four more races share the {date} ballot with the mayor's: two citywide, one by your ward, and one by your address.": "{date} के मतपत्र पर मेयर के चुनाव के साथ चार और चुनाव हैं: दो पूरे शहर के, एक आपके वार्ड के हिसाब से, और एक आपके पते के हिसाब से।",
+  "Full platform": "पूरा प्लेटफ़ॉर्म",
+  "Full platform on their site": "उनकी साइट पर पूरा प्लेटफ़ॉर्म",
+  "Full platform, open to your comments": "पूरा प्लेटफ़ॉर्म, आपकी टिप्पणियों के लिए खुला",
+  "Go again": "फिर से खेलें",
+  "Go on a blind date": "ब्लाइंड डेट पर जाएँ",
+  "In a random order, so no one is always listed first. Tap a name for everything the games know.": "बेतरतीब क्रम में, ताकि कोई हमेशा सबसे पहले न रहे। खेलों को जो कुछ पता है, उसके लिए किसी नाम पर टैप करें।",
+  "Judge the ideas first. Find out who it was after.": "पहले विचारों को परखें। कौन था, यह बाद में जानें।",
+  "Just reveal": "बस बता दो",
+  "Less help voting": "वोट देने में कम मदद",
+  "Look around first": "पहले घूमकर देखें",
+  "Look up a different address": "कोई दूसरा पता खोजें",
+  "No ketchup was involved in the making of this date.": "इस डेट को बनाने में केचप का कोई इस्तेमाल नहीं हुआ।",
+  "No pizza position found on the record, listed in random order. If one of them goes public, tell us and we will rank them.": "रिकॉर्ड पर पिज़्ज़ा पर कोई पक्ष नहीं मिला, बेतरतीब क्रम में सूचीबद्ध। अगर इनमें से कोई खुलकर बोले, तो हमें बताएँ और हम उन्हें रैंक कर देंगे।",
+  "No second dates this round. Tough crowd.": "इस दौर में कोई दूसरी डेट नहीं। आपको खुश करना आसान नहीं।",
+  "On Blind date, read the card, then tap \"Second date\" or \"Pass\", or swipe the card right or left. Either one reveals who it was. Tap \"Just reveal\" to see the name without a verdict.": "ब्लाइंड डेट में, कार्ड पढ़ें, फिर “दूसरी डेट” या “रहने दें” टैप करें, या कार्ड को दाईं या बाईं ओर स्वाइप करें। दोनों से पता चल जाता है कि वह कौन था। बिना फ़ैसला दिए नाम देखने के लिए “बस बता दो” टैप करें।",
+  "On Cheap date, tap a row to open what that candidate says about money. The bar shows their support per dollar next to the best in the field.": "सस्ती डेट में, किसी पंक्ति पर टैप करके देखें कि वह उम्मीदवार पैसे के बारे में क्या कहता है। पट्टी उनके हर डॉलर पर समर्थन को सभी उम्मीदवारों में सबसे अच्छे के बगल में दिखाती है।",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What they would do\" or \"Next to the others\" to turn the card. The clock runs down from a minute and never cuts you off.": "स्पीड डेट में, उम्मीदवारों के बीच आगे-पीछे जाने के लिए “अगली डेट” और “वापस” टैप करें, या स्वाइप करें। कार्ड पलटने के लिए “वे क्या करेंगे” या “बाकियों की तुलना में” टैप करें। घड़ी एक मिनट से उलटी चलती है और आपको कभी रोकती नहीं।",
+  "On their ideas alone, you would see these again:": "सिर्फ़ इनके विचारों के आधार पर, आप इनसे फिर मिलना चाहेंगे:",
+  "One minute each. The whole field in a coffee break.": "हर एक को एक मिनट। सारे उम्मीदवार एक कॉफ़ी ब्रेक में।",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Candidates come in random order, and this phone remembers who you have met and who got a second date. Speed date: one candidate at a time, in a random order, a minute each, with what they would do on one side of the card and how they compare to the others on the other. Cheap date: everyone with a spending report, ordered by poll support per dollar spent. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "मेयर के चार खेलों में से एक। ब्लाइंड डेट: एक रहस्यमय उम्मीदवार की मुख्य बातें, जहाँ हमारे पास हैं उनके अपने शब्दों में। आप बताते हैं कि आप उनसे फिर मिलना चाहेंगे या नहीं, और इससे तस्वीर पलटकर दिखाती है कि वह कौन था। उम्मीदवार बेतरतीब क्रम में आते हैं, और यह फ़ोन याद रखता है कि आप किनसे मिल चुके हैं और किसे दूसरी डेट मिली। स्पीड डेट: एक बार में एक उम्मीदवार, बेतरतीब क्रम में, हर एक को एक मिनट, कार्ड के एक तरफ़ वे क्या करेंगे और दूसरी तरफ़ बाकियों से उनकी तुलना। सस्ती डेट: खर्च रिपोर्ट वाले सभी उम्मीदवार, खर्च किए गए हर डॉलर पर सर्वे समर्थन के क्रम में। पिज़्ज़ा डेट: पिज़्ज़ा पर पक्ष रखने वाले सभी उम्मीदवार, कौन सही है (थिन क्रस्ट) के क्रम में, और बाकी अंत में एक सूची में, बेतरतीब क्रम में।",
+  "Or see it on your sample ballot (Board of Elections)": "या इसे अपने नमूना मतपत्र पर देखें (चुनाव बोर्ड)",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line. Tap anyone for what they say about money.": "खर्च किए गए हर डॉलर पर सर्वे समर्थन के क्रम में। जहाँ हैं वहाँ पहुँचने में सबसे ज़्यादा खर्च किया, तो लाइन में सबसे पीछे खड़े हों। पैसे के बारे में कोई क्या कहता है, यह जानने के लिए किसी पर भी टैप करें।",
+  "Pass": "रहने दें",
+  "Picked on a blind date, on their ideas alone. Kept on this phone only.": "ब्लाइंड डेट पर चुने गए, सिर्फ़ उनके विचारों के आधार पर। सिर्फ़ इसी फ़ोन पर रखे जाते हैं।",
+  "Play": "खेलें",
+  "Second date": "दूसरी डेट",
+  "Tap \"Everything about\" a candidate for their page, with their full platform.": "किसी उम्मीदवार के पेज के लिए “के बारे में सब कुछ” टैप करें, जहाँ उनका पूरा प्लेटफ़ॉर्म है।",
+  "Tap \"Play\" on Blind date, or tap Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "ब्लाइंड डेट पर “खेलें” टैप करें, या स्पीड डेट, सस्ती डेट या पिज़्ज़ा डेट पर टैप करें। हर खेल हर उम्मीदवार के पेज से जुड़ता है, स्रोतों के साथ।",
+  "That was everyone.": "बस, इतने ही लोग थे।",
+  "The address goes to the US Census Bureau to place it on the map. Only the district numbers are kept, never the address.": "पता नक्शे पर ढूँढ़ने के लिए अमेरिकी जनगणना ब्यूरो (US Census Bureau) को भेजा जाता है। सिर्फ़ डिस्ट्रिक्ट के नंबर रखे जाते हैं, पता कभी नहीं।",
+  "The elections tab, led by the mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Speed date gives each candidate a minute. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "चुनाव टैब, जिसमें सबसे आगे मेयर के खेल हैं: 23 फ़रवरी, 2027 को शिकागो के मेयर पद के लिए खड़े सभी लोगों से मिलने के चार तरीके। ब्लाइंड डेट, यानी बड़ा कार्ड, एक उम्मीदवार के विचार दिखाती है और यह बताने से पहले कि वह कौन था, पूछती है कि क्या आप उनसे फिर मिलना चाहेंगे। स्पीड डेट हर उम्मीदवार को एक मिनट देती है। सस्ती डेट उन्हें खर्च किए गए हर डॉलर पर सर्वे समर्थन के हिसाब से रैंक करती है। पिज़्ज़ा डेट उन्हें पिज़्ज़ा पर सही होने के हिसाब से रैंक करती है। खेलों के नीचे, लाल पट्टी में, फ़रवरी के मतपत्र का बाकी हिस्सा है: कब और कहाँ वोट दें, वह सवाल जिसका हर उम्मीदवार जवाब देता है, बाकी चुनाव, और मेयर पद के लिए खड़े सभी लोग बेतरतीब क्रम में, ताकि कोई हमेशा सबसे पहले न रहे।",
+  "The marks across the top count the round: red for a second date, gray for the rest you have met, blue for the one on screen. When you have met everyone, you see your second dates and can go again.": "ऊपर बने निशान दौर की गिनती रखते हैं: लाल दूसरी डेट के लिए, स्लेटी उन बाकियों के लिए जिनसे आप मिल चुके हैं, नीला उसके लिए जो स्क्रीन पर है। जब आप सभी से मिल लेते हैं, तो आपको अपनी दूसरी डेट दिखती हैं और आप फिर से खेल सकते हैं।",
+  "They ordered for the table. It was a plan with five bullet points.": "इन्होंने पूरी मेज़ के लिए ऑर्डर कर दिया। आई पाँच बुलेट पॉइंट वाली एक योजना।",
+  "This one asked for a table away from the dibs chairs.": "इन्होंने ऐसी मेज़ माँगी जो पार्किंग की जगह रोकने वाली कुर्सियों से दूर हो।",
+  "Three elected seats in each of the 22 police districts. Police districts do not follow ward lines, so yours goes by your address.": "22 पुलिस डिस्ट्रिक्ट में से हर एक में तीन निर्वाचित सीटें। पुलिस डिस्ट्रिक्ट वार्ड की सीमाओं के हिसाब से नहीं होते, इसलिए आपका डिस्ट्रिक्ट आपके पते से तय होता है।",
+  "Time. The next one is waiting.": "समय पूरा। अगला इंतज़ार कर रहा है।",
+  "To find your police district, type your home address and tap \"Find my police district\". It works signed in or out, and only the district numbers are kept, never the address. Or tap \"Or see it on your sample ballot (Board of Elections)\".": "अपना पुलिस डिस्ट्रिक्ट खोजने के लिए, अपने घर का पता लिखें और “मेरा पुलिस डिस्ट्रिक्ट खोजें” टैप करें। यह साइन इन हों या नहीं, दोनों में काम करता है, और सिर्फ़ डिस्ट्रिक्ट के नंबर रखे जाते हैं, पता कभी नहीं। या “या इसे अपने नमूना मतपत्र पर देखें (चुनाव बोर्ड)” टैप करें।",
+  "Too many address lookups today. Sign in to look up yours, or try again tomorrow.": "आज बहुत सारे पते खोजे गए। अपना पता खोजने के लिए साइन इन करें, या कल फिर कोशिश करें।",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first. The police district card on the elections tab does the same lookup in place.": "अपने घर का पता लिखें और “मेरे डिस्ट्रिक्ट खोजें” टैप करें। अगर वह मिल जाता है, तो आप मतपत्र पर वापस जाते हैं और आपकी पुलिस डिस्ट्रिक्ट काउंसिल सबसे पहले सूचीबद्ध होती है। चुनाव टैब पर पुलिस डिस्ट्रिक्ट का कार्ड यही खोज वहीं पर कर देता है।",
+  "Under \"Everyone running for mayor\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "“मेयर पद के लिए खड़े सभी लोग” के नीचे किसी भी नाम पर टैप करें और जानें कि खेलों को उनके बारे में क्या पता है: उनका प्लेटफ़ॉर्म, अभियान का पैसा, सर्वे में स्थिति, उद्धरण, और पिज़्ज़ा।",
+  "Under \"The rest of the ballot\", tap City Clerk or City Treasurer, pick your ward to see your alderman's record next to their challengers, or find your police district council.": "“मतपत्र का बाकी हिस्सा” के नीचे, सिटी क्लर्क या सिटी ट्रेज़रर पर टैप करें, अपना वार्ड चुनकर अपने एल्डरमैन का रिकॉर्ड उन्हें चुनौती देने वालों के बगल में देखें, या अपनी पुलिस डिस्ट्रिक्ट काउंसिल खोजें।",
+  "Under \"Your second dates\", tap a name to open the page of a candidate you said you would see again on a blind date. That list is kept on this phone only.": "“आपकी दूसरी डेट” के नीचे किसी नाम पर टैप करके उस उम्मीदवार का पेज खोलें जिनसे आपने ब्लाइंड डेट पर फिर मिलने की बात कही थी। वह सूची सिर्फ़ इसी फ़ोन पर रखी जाती है।",
+  "Which mayoral candidates you met on a blind date and which you said you would see again. Both lists stay on your phone only.": "ब्लाइंड डेट पर आप मेयर पद के किन उम्मीदवारों से मिले और किनसे आपने फिर मिलने की बात कही। दोनों सूचियाँ सिर्फ़ आपके फ़ोन पर रहती हैं।",
+  "Would you see them again?": "क्या आप इनसे फिर मिलना चाहेंगे?",
+  "You met the whole field.": "आप सभी उम्मीदवारों से मिल लिए।",
+  "Your date took the Blue Line here. They have thoughts.": "आपकी डेट Blue Line ट्रेन से यहाँ आई है। उनके पास कहने को बहुत कुछ है।",
+  "Your ward: your alderman's grade, meetings, and zoning.": "आपका वार्ड: आपके एल्डरमैन का ग्रेड, मीटिंग, और ज़ोनिंग।",
+  "also in the app": "ऐप में यह भी",
+  "citywide": "पूरा शहर",
+  "day until the runoff": "दिन बाकी, रनऑफ़ तक",
+  "days until the runoff": "दिन बाकी, रनऑफ़ तक",
+  "everyone running for mayor": "मेयर पद के लिए खड़े सभी लोग",
+  "the rest of the ballot": "मतपत्र का बाकी हिस्सा",
+  "your police district council": "आपकी पुलिस डिस्ट्रिक्ट काउंसिल",
+  "your second dates": "आपकी दूसरी डेट",
+  "{n} dates. Now find out whose ideas you like when you cannot see the name.": "{n} डेट। अब जानिए कि जब नाम नहीं दिखता, तब आपको किसके विचार पसंद आते हैं।",
+  "You passed": "आपने रहने दिया",
+  "What they would do": "वे क्या करेंगे",
+  // Mayor games, round three (2026-11-09)
+  "A perfect round. You know the field.": "एकदम सही दौर। आप सभी उम्मीदवारों को पहचानते हैं।",
+  "At the end of a round of Pick-up lines, tap anyone who got past you to open their page, or tap \"Play again\".": "पिकअप लाइनें खेल के एक दौर के अंत में, जो भी आपसे बच निकला उसका पेज खोलने के लिए उस पर टैप करें, या “दोबारा खेलें” टैप करें।",
+  "Best streak on this phone: {n}.": "इस फ़ोन पर सबसे ज़्यादा लगातार सही: {n}।",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, one game at a time.": "शिकागो 23 फ़रवरी, 2027 को मेयर चुनेगा। खड़े सभी लोगों से मिलिए, एक-एक खेल करके।",
+  "Everyone running for mayor on February 23, 2027. Meet them one game at a time.": "23 फ़रवरी, 2027 को मेयर पद के लिए खड़े सभी लोग। उनसे मिलिए, एक-एक खेल करके।",
+  "Line {n} of {total}": "{total} में से लाइन {n}",
+  "Next line": "अगली लाइन",
+  "No quotes on file yet.": "अभी कोई उद्धरण दर्ज नहीं है।",
+  "No. {name} said it.": "नहीं। यह {name} ने कहा था।",
+  "On Cheap date, tap \"Best bargain\", \"Most spent\", or \"Most support\" to reorder the line. Each row shows what the campaign spent, its support in the poll, and what it spent per point of support.": "सस्ती डेट में, लाइन का क्रम बदलने के लिए “सबसे अच्छा सौदा”, “सबसे ज़्यादा खर्च” या “सबसे ज़्यादा समर्थन” टैप करें। हर पंक्ति दिखाती है कि अभियान ने क्या खर्च किया, सर्वे में उसका समर्थन, और समर्थन के हर अंक पर उसने क्या खर्च किया।",
+  "On Pick-up lines, read the quote and tap the candidate you think said it. You see at once who did, where they said it, and what it was about. Tap \"Next line\" or swipe left to go on. The flame counts your streak, and the best one is kept on this phone.": "पिकअप लाइनें खेल में, उद्धरण पढ़ें और उस उम्मीदवार पर टैप करें जिसने आपके हिसाब से यह कहा। आपको तुरंत दिखता है कि किसने कहा, कहाँ कहा, और यह किस बारे में था। आगे बढ़ने के लिए “अगली लाइन” टैप करें या बाईं ओर स्वाइप करें। लौ आपके लगातार सही जवाब गिनती है, और सबसे अच्छा रिकॉर्ड इसी फ़ोन पर रखा जाता है।",
+  "One of the five mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Pick-up lines: a real quote and three candidates, and you tap who said it, ten lines a round, every candidate the answer once before anyone is the answer twice. Speed date: one candidate at a time, in a random order, a minute each. Cheap date: what the field has spent in all, then each campaign's spending, its support in the poll, and its cost per point of support. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "मेयर के पाँच खेलों में से एक। ब्लाइंड डेट: एक रहस्यमय उम्मीदवार की मुख्य बातें, जहाँ हमारे पास हैं उनके अपने शब्दों में। आप बताते हैं कि आप उनसे फिर मिलना चाहेंगे या नहीं, और इससे तस्वीर पलटकर दिखाती है कि वह कौन था। पिकअप लाइनें: एक असली उद्धरण और तीन उम्मीदवार, और आप टैप करके बताते हैं कि किसने कहा, हर दौर में दस लाइनें, और किसी के दूसरी बार जवाब बनने से पहले हर उम्मीदवार एक बार जवाब बनता है। स्पीड डेट: एक बार में एक उम्मीदवार, बेतरतीब क्रम में, हर एक को एक मिनट। सस्ती डेट: सभी उम्मीदवारों ने कुल मिलाकर क्या खर्च किया, फिर हर अभियान का खर्च, सर्वे में उसका समर्थन, और समर्थन के हर अंक पर उसकी लागत। पिज़्ज़ा डेट: पिज़्ज़ा पर पक्ष रखने वाले सभी उम्मीदवार, कौन सही है (थिन क्रस्ट) के क्रम में, और बाकी अंत में एक सूची में, बेतरतीब क्रम में।",
+  "One quote, three faces. Who said it?": "एक उद्धरण, तीन चेहरे। किसने कहा?",
+  "Per point": "प्रति अंक",
+  "Pick-up lines": "पिकअप लाइनें",
+  "Play again": "दोबारा खेलें",
+  "Poll support": "सर्वे समर्थन",
+  "Right. {name} said it.": "सही। यह {name} ने कहा था।",
+  "See my score": "मेरा स्कोर देखें",
+  "Streak: {n}": "लगातार सही: {n}",
+  "Tap \"Play\" on Blind date, or tap Pick-up lines, Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "ब्लाइंड डेट पर “खेलें” टैप करें, या पिकअप लाइनें, स्पीड डेट, सस्ती डेट या पिज़्ज़ा डेट पर टैप करें। हर खेल हर उम्मीदवार के पेज से जुड़ता है, स्रोतों के साथ।",
+  "Tap a row on Cheap date to see what the campaign raised, spent, and has on hand, the State Board of Elections report it comes from, and what the candidate says about money.": "सस्ती डेट में किसी पंक्ति पर टैप करके देखें कि अभियान ने क्या जुटाया, क्या खर्च किया और हाथ में क्या है, यह राज्य चुनाव बोर्ड की किस रिपोर्ट से आया है, और उम्मीदवार पैसे के बारे में क्या कहता है।",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "चुनाव टैब, जिसमें सबसे आगे मेयर के खेल हैं: 23 फ़रवरी, 2027 को शिकागो के मेयर पद के लिए खड़े सभी लोगों से मिलने के पाँच तरीके। ब्लाइंड डेट, यानी बड़ा कार्ड, एक उम्मीदवार के विचार दिखाती है और यह बताने से पहले कि वह कौन था, पूछती है कि क्या आप उनसे फिर मिलना चाहेंगे। पिकअप लाइनें खेल एक असली उद्धरण और तीन चेहरे दिखाता है, और आप बताते हैं कि किसने कहा। स्पीड डेट हर उम्मीदवार को एक मिनट देती है। सस्ती डेट पैसे का पीछा करती है: हर अभियान ने क्या खर्च किया और उससे कितना समर्थन खरीदा गया। पिज़्ज़ा डेट उन्हें पिज़्ज़ा पर सही होने के हिसाब से रैंक करती है। खेलों के नीचे, लाल पट्टी में, फ़रवरी के मतपत्र का बाकी हिस्सा है: कब और कहाँ वोट दें, वह सवाल जिसका हर उम्मीदवार जवाब देता है, बाकी चुनाव, और मेयर पद के लिए खड़े सभी लोग बेतरतीब क्रम में, ताकि कोई हमेशा सबसे पहले न रहे।",
+  "These ones got past you. Tap one to get to know them.": "ये आपसे बच निकले। इन्हें जानने के लिए किसी एक पर टैप करें।",
+  "Who used this line?": "यह लाइन किसने मारी?",
+  "You got {n} of {total}.": "आपने {total} में से {n} सही पहचाने।",
+  "no points": "कोई अंक नहीं",
+  "not polled": "सर्वे में नहीं पूछा गया",
+  "spent by the field so far": "सभी उम्मीदवारों का अब तक का खर्च",
+  "{n} campaigns have filed a spending report.": "{n} अभियानों ने खर्च रिपोर्ट दाखिल की है।",
+  "{n} people want to be mayor on February 23, 2027. Meet them one game at a time.": "{n} लोग 23 फ़रवरी, 2027 को मेयर बनना चाहते हैं। उनसे मिलिए, एक-एक खेल करके।",
+  "{pct}% in the poll": "सर्वे में {pct}%",
+  "Best bargain": "सबसे अच्छा सौदा",
+  "Most spent": "सबसे ज़्यादा खर्च",
+  "Most support": "सबसे ज़्यादा समर्थन",
+  "Ordered by money spent so far, most first.": "अब तक खर्च किए गए पैसे के क्रम में, सबसे ज़्यादा पहले।",
+  "Ordered by support in the poll, most first.": "सर्वे में समर्थन के क्रम में, सबसे ज़्यादा पहले।",
+  // Mayor games, round four (2026-11-09)
+  "Also:": "साथ ही:",
+  "Has taken a side on {n} of the {total} questions that split the field.": "उम्मीदवारों को बाँटने वाले {total} सवालों में से {n} पर पक्ष लिया है।",
+  "No side found yet on any of the questions that divide the field.": "उम्मीदवारों को बाँटने वाले किसी भी सवाल पर अभी कोई पक्ष नहीं मिला।",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What sets them apart\" or \"Where they split\" to turn the card. The clock runs down from a minute and never cuts you off.": "स्पीड डेट में, उम्मीदवारों के बीच आगे-पीछे जाने के लिए “अगली डेट” और “वापस” टैप करें, या स्वाइप करें। कार्ड पलटने के लिए “उन्हें क्या अलग बनाता है” या “जहाँ उनकी राय अलग है” टैप करें। घड़ी एक मिनट से उलटी चलती है और आपको कभी रोकती नहीं।",
+  "One candidate for mayor, most important first. Under the name are three numbers: support in the latest public poll, money spent, and dollars spent per point of support. Then what sets this candidate apart from the others, then their side of each question the field splits on, then their own words with sources. What nearly every candidate says is left out on purpose. Campaign money in full, pizza, and sources follow.": "मेयर पद का एक उम्मीदवार, सबसे ज़रूरी बात सबसे पहले। नाम के नीचे तीन संख्याएँ हैं: ताज़ा सार्वजनिक सर्वे में समर्थन, खर्च किया गया पैसा, और समर्थन के हर अंक पर खर्च किए गए डॉलर। फिर यह कि इस उम्मीदवार को बाकियों से क्या अलग बनाता है, फिर उन सवालों पर उनका पक्ष जिन पर उम्मीदवार बँटे हैं, फिर स्रोतों के साथ उनके अपने शब्द। जो बात लगभग हर उम्मीदवार कहता है, वह जानबूझकर छोड़ी गई है। इसके बाद अभियान के पैसे का पूरा ब्योरा, पिज़्ज़ा और स्रोत आते हैं।",
+  "Read \"What sets them apart\" for what this candidate proposes that others do not.": "“उन्हें क्या अलग बनाता है” पढ़ें और जानें कि यह उम्मीदवार ऐसा क्या प्रस्ताव रखता है जो बाकी नहीं रखते।",
+  "Said once here, so no candidate's page repeats it.": "यहाँ एक बार कहा गया है, ताकि किसी उम्मीदवार के पेज पर यह दोहराया न जाए।",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the elections tab.": "चुनाव टैब पर सभी उम्मीदवारों से एक साथ पूछने के लिए “हर उम्मीदवार से एक सवाल पूछें” टैप करें।",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first. Between the games and the ballot, \"Where they split\" lists the questions the candidates give different answers to.": "चुनाव टैब, जिसमें सबसे आगे मेयर के खेल हैं: 23 फ़रवरी, 2027 को शिकागो के मेयर पद के लिए खड़े सभी लोगों से मिलने के पाँच तरीके। ब्लाइंड डेट, यानी बड़ा कार्ड, एक उम्मीदवार के विचार दिखाती है और यह बताने से पहले कि वह कौन था, पूछती है कि क्या आप उनसे फिर मिलना चाहेंगे। पिकअप लाइनें खेल एक असली उद्धरण और तीन चेहरे दिखाता है, और आप बताते हैं कि किसने कहा। स्पीड डेट हर उम्मीदवार को एक मिनट देती है। सस्ती डेट पैसे का पीछा करती है: हर अभियान ने क्या खर्च किया और उससे कितना समर्थन खरीदा गया। पिज़्ज़ा डेट उन्हें पिज़्ज़ा पर सही होने के हिसाब से रैंक करती है। खेलों के नीचे, लाल पट्टी में, फ़रवरी के मतपत्र का बाकी हिस्सा है: कब और कहाँ वोट दें, वह सवाल जिसका हर उम्मीदवार जवाब देता है, बाकी चुनाव, और मेयर पद के लिए खड़े सभी लोग बेतरतीब क्रम में, ताकि कोई हमेशा सबसे पहले न रहे। खेलों और मतपत्र के बीच, “जहाँ उनकी राय अलग है” में वे सवाल सूचीबद्ध हैं जिनके उम्मीदवार अलग-अलग जवाब देते हैं।",
+  "The questions that divide the field, and this candidate's side.": "वे सवाल जिन पर उम्मीदवार बँटे हैं, और इस उम्मीदवार का पक्ष।",
+  "The questions that divide the field, and who stands where. Tap a name for their page.": "वे सवाल जिन पर उम्मीदवार बँटे हैं, और कौन किस तरफ़ है। किसी का पेज खोलने के लिए उसके नाम पर टैप करें।",
+  "Under \"Where they split\", read the questions that divide the field and who stands on each side. Tap a name for their page. Tap \"What nearly all of them say\" for the positions that do not tell them apart.": "“जहाँ उनकी राय अलग है” के नीचे पढ़ें कि किन सवालों पर उम्मीदवार बँटे हैं और हर तरफ़ कौन है। किसी का पेज खोलने के लिए उसके नाम पर टैप करें। उन पक्षों के लिए जिनसे उम्मीदवारों में फ़र्क नहीं दिखता, “लगभग सभी क्या कहते हैं” टैप करें।",
+  "Under \"Where they split\", see this candidate's side of each question and who is on the other sides. Tap a name to open that candidate.": "“जहाँ उनकी राय अलग है” के नीचे देखें कि हर सवाल पर इस उम्मीदवार का पक्ष क्या है और बाकी पक्षों में कौन है। उस उम्मीदवार को खोलने के लिए किसी नाम पर टैप करें।",
+  "What nearly all of them say": "लगभग सभी क्या कहते हैं",
+  "What sets them apart": "उन्हें क्या अलग बनाता है",
+  "Where they split": "जहाँ उनकी राय अलग है",
+  "Written by AI from the campaign's platform and the candidate's own words, under one set of rules for every candidate. What nearly all of them say is left out.": "AI द्वारा अभियान के प्लेटफ़ॉर्म और उम्मीदवार के अपने शब्दों से लिखा गया, हर उम्मीदवार के लिए एक ही नियमों के तहत। जो बात लगभग सभी कहते हैं, वह छोड़ दी गई है।",
+  "Written by AI on {date} from the policies listed below and the candidate's public statements, under one set of rules for every candidate. What nearly all candidates say is left out. It can miss things. The policies are the source.": "{date} को AI द्वारा नीचे दी गई नीतियों और उम्मीदवार के सार्वजनिक बयानों से लिखा गया, हर उम्मीदवार के लिए एक ही नियमों के तहत। जो बात लगभग सभी उम्मीदवार कहते हैं, वह छोड़ दी गई है। इसमें कुछ छूट सकता है। असली स्रोत नीतियाँ हैं।",
+  "in their words": "उनके अपने शब्दों में",
+  "what sets them apart": "उन्हें क्या अलग बनाता है",
+  "where they split": "जहाँ उनकी राय अलग है",
+
+  // Mayor games, round five (2026-11-09)
+  "former mayor trivia": "पूर्व मेयरों के रोचक तथ्य",
+  "Another fact": "दूसरा तथ्य",
+  "only one of them would": "सिर्फ़ एक उम्मीदवार यह करेगा",
+  "Proposals no other candidate makes.": "ऐसे प्रस्ताव जो कोई और उम्मीदवार नहीं रखता।",
+  "Under \"Former mayor trivia\", read a fact about a past mayor and tap the shuffle button for another. A fact does not come back until you have seen them all. Tap the small arrow under the shuffle button to go back to the fact before.": "“पूर्व मेयरों के रोचक तथ्य” के नीचे, किसी पूर्व मेयर के बारे में एक तथ्य पढ़ें और दूसरे के लिए शफ़ल बटन टैप करें। जब तक आप सभी नहीं देख लेते, कोई तथ्य दोबारा नहीं आता। पिछले तथ्य पर लौटने के लिए शफ़ल बटन के नीचे का छोटा तीर टैप करें।",
+  "Under \"Only one of them would\", read what a single candidate proposes that no one else does. Tap a name for their page.": "“सिर्फ़ एक उम्मीदवार यह करेगा” के नीचे, पढ़ें कि कौन सा प्रस्ताव केवल एक उम्मीदवार रखता है और कोई और नहीं। उनके पेज के लिए नाम टैप करें।",
+  "Previous fact": "पिछला तथ्य",
+  "Source shown with the reveal": "स्रोत खुलासे के साथ दिखेगा",
+  "Correct": "सही",
+  "Hedging": "गोलमोल",
+  "Incorrect": "गलत",
+  "No position on record": "कोई दर्ज राय नहीं",
 };

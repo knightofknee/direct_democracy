@@ -28,10 +28,12 @@ const ROWS: { type: keyof Districts; label: string }[] = [
 ];
 
 /**
- * Find your districts from your home address (findMyDistricts), so the
- * election tab shows your own races first. A match goes straight back to
- * the ballot, where "Your races" lists them. The server keeps the district
- * numbers only; the address goes to the Census geocoder and is dropped.
+ * Find your districts from your home address (findMyDistricts). Since the
+ * November 2026 ballot passed, what it decides in the app is which police
+ * district council race is yours on the February 2027 ballot (the other
+ * district numbers are kept for the next time they matter). A match goes
+ * straight back to the ballot. The server keeps the district numbers only;
+ * the address goes to the Census geocoder and is dropped.
  */
 export default function MyDistrictsScreen() {
   const router = useRouter();
@@ -65,7 +67,8 @@ export default function MyDistrictsScreen() {
     try {
       const r = await findMyDistricts(address.trim());
       if (r.result === 'ok') {
-        // Straight back to the ballot, where "Your races" now lists them.
+        // Straight back to the ballot, where the ward races now lead with
+        // this person's police district council.
         setAddress('');
         if (router.canGoBack()) router.back();
         else router.replace('/election');
@@ -106,7 +109,7 @@ export default function MyDistrictsScreen() {
       <Card>
         <ThemedText type="smallBold">{t(found ? 'Use a different address' : 'Your home address')}</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          {t('Your ballot depends on your address, not just your ward. We send it to the US Census Bureau to place it on the map and keep only your district numbers, never the address.')}
+          {t('Your police district council race depends on your address, not just your ward. We send it to the US Census Bureau to place it on the map and keep only your district numbers, never the address.')}
         </ThemedText>
         <Field
           value={address}

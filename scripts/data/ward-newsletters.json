@@ -61,8 +61,12 @@
     "archiveUrl": "https://www.6wardchicago.com/general-5",
     "archiveOldestFirst": true,
     "note": "Constant Contact monthly archive",
-    "inbox": "signed up 2026-10-05; no mail yet",
-    "checked": "2026-10-05"
+    "inbox": "receiving since 2026-10-12",
+    "checked": "2026-10-05",
+    "senders": [
+      "william@6thwardcentral.ccsend.com",
+      "ward06-cityofchicago.org@shared1.ccsend.com"
+    ]
   },
   {
     "ward": 7,
@@ -275,8 +279,11 @@
     "sourceUrl": "https://building27together.com/",
     "rssUrl": null,
     "note": "own site, 2 issues posted, latest 2026-06-15",
-    "inbox": "signed up 2026-10-05; no mail yet",
-    "checked": "2026-10-05"
+    "inbox": "receiving since 2026-10-13",
+    "checked": "2026-10-05",
+    "senders": [
+      "ward27@redburnett.com"
+    ]
   },
   {
     "ward": 28,

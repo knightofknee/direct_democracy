@@ -47,7 +47,7 @@ export function OfficialRow({ official }: { official: Official }) {
   );
 }
 
-/** A candidate's public row card, as listed on the election tab. */
+/** A candidate's public row card, as listed on the elections tab. */
 export function CandidateRow({ candidate }: { candidate: Candidate }) {
   const router = useRouter();
   const theme = useTheme();

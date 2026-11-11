@@ -1,6 +1,6 @@
 import { doc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useCelebration } from '@/components/celebration';
@@ -57,10 +57,10 @@ export function PollCard({
   );
 
   // The moment the server tally moves, the optimistic overlay hands back.
+  // Checked while drawing (React's pattern for state that follows props),
+  // so there is no extra render with stale numbers.
   const talliesJson = JSON.stringify(poll.tallies);
-  useEffect(() => {
-    if (optimistic && talliesJson !== optimistic.baseline) setOptimistic(null);
-  }, [talliesJson, optimistic]);
+  if (optimistic && talliesJson !== optimistic.baseline) setOptimistic(null);
 
   const recordedKeys = myVote ? (Array.isArray(myVote.value) ? myVote.value : [myVote.value]) : [];
   // The overlayed ballot wins while in flight so the tap highlights NOW.

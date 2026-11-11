@@ -23,7 +23,7 @@
  * src/lib/ward-posting.ts; keep them in sync.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RATE_LIMITS = exports.MAX_OTHER_WARDS = exports.LOCK_AFTER_THREE_MS = exports.LOCK_AFTER_TWO_MS = exports.AWAY_POST_GAP_MS = exports.HOME_POSTS_PER_DAY = void 0;
+exports.SIGNED_OUT_LOOKUPS = exports.SIGNED_OUT_FEEDBACK = exports.RATE_LIMITS = exports.MAX_OTHER_WARDS = exports.LOCK_AFTER_THREE_MS = exports.LOCK_AFTER_TWO_MS = exports.AWAY_POST_GAP_MS = exports.HOME_POSTS_PER_DAY = void 0;
 exports.judgeWardPost = judgeWardPost;
 exports.otherWardsOpenAt = otherWardsOpenAt;
 exports.judgeRate = judgeRate;
@@ -108,7 +108,21 @@ exports.RATE_LIMITS = {
     wardChanges: [{ windowMs: DAY_MS, max: 5 }],
     edits: [{ windowMs: HOUR_MS, max: 30 }],
     addressLookups: [{ windowMs: DAY_MS, max: 5 }],
+    feedback: [{ windowMs: DAY_MS, max: 5 }],
 };
+/**
+ * Feedback from people who are not signed in (sendFeedback) shares one
+ * ledger, so a script can't bury the operator's inbox: 30 a day, everyone
+ * signed out together. Signed-in people get their own 5 (`feedback`).
+ */
+exports.SIGNED_OUT_FEEDBACK = [{ windowMs: DAY_MS, max: 30 }];
+/**
+ * Address lookups by people who are not signed in (the police district
+ * finder on the elections tab, 2026-11-09), for everyone together: each is
+ * one call to the Census geocoder and nothing is stored, so the cap only
+ * has to stop a script from leaning on the geocoder through us.
+ */
+exports.SIGNED_OUT_LOOKUPS = [{ windowMs: DAY_MS, max: 1000 }];
 function judgeRate(rules, times, at) {
     const sorted = [...times].sort((a, b) => a - b);
     let nextAt = 0;

@@ -14,8 +14,11 @@
  * Store takes only exact sizes per slot: 1284x2778 for "iPhone with Face
  * ID (large display)" (the slot App Store Connect required for this app on
  * 2026-10-09), 1320x2868 for "iPhone with Dynamic Island (large display)",
- * 1206x2622 for the Dynamic Island medium display. One size per slot;
- * `--size=apple-6.5` (or apple-6.9, apple-6.3, play) makes just one. The app is
+ * 1206x2622 for the Dynamic Island medium display. `--apple` makes only
+ * 1320x2868, the "iPhone with Dynamic Island (large display)" slot Brian
+ * uploads to (2026-10-13: one size, the same one every time, one set per
+ * language); `--size=apple-6.5` / `apple-6.3` exist only if a slot ever
+ * demands them. The app is
  * iPhone-only (no supportsTablet), so no iPad set is needed.
  *
  * Point it at the local web dev server (`npx expo start --web --port 8085`,
@@ -24,9 +27,10 @@
  * comes back empty. The dev server uses the registered debug token.
  *
  * Neutral on purpose: the alderman shot is the fictional ward 51 alderman
- * (never a real official's grade in a store image), and the ballot shot is a
- * race with no pick made (a picked real candidate would read as an
- * endorsement). Upload is by hand in Play Console / App Store Connect.
+ * (never a real official's grade in a store image), and the ballot shots
+ * (a race, My ballot) have no pick made (a picked real candidate would read
+ * as an endorsement). The browser signs in to no one; the ballot planner
+ * shows because the dev build stands in with City Hall's districts. Upload is by hand in Play Console / App Store Connect.
  */
 import { spawn } from 'child_process';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
@@ -37,6 +41,8 @@ const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const SITE = process.env.SHOTS_SITE ?? 'http://localhost:8085';
 const PORT = 9333;
 const spanish = process.argv.includes('--es');
+/** Where the app keeps the chosen language (LOCALE_KEY in src/lib/i18n.tsx). */
+const LOCALE_KEY = 'locale';
 const lang = spanish ? 'es' : 'en';
 /**
  * One store size: the final image, the app's viewport (points) and the
@@ -62,8 +68,19 @@ const only = process.argv.find((a) => a.startsWith('--size='))?.slice('--size='.
 const presets = only
   ? [PRESETS[only]]
   : process.argv.includes('--apple')
-    ? [PRESETS['apple-6.5'], PRESETS['apple-6.9'], PRESETS['apple-6.3']]
+    ? [PRESETS['apple-6.9']]
     : [PRESETS.play];
+/** City Hall's districts (121 N LaSalle), from districtsForPoint, for the ballot shots. */
+const CITY_HALL_DISTRICTS = {
+  usHouse: 7,
+  ilSenate: 3,
+  ilHouse: 6,
+  cookCommissioner: 2,
+  boardOfReview: 3,
+  subcircuit: 5,
+  schoolBoard: '6b',
+  police: 1,
+};
 /** The fictional test alderman (ward 51). */
 const FICTIONAL_ALDERMAN = 'GM8UnlsrkRYYcEqi0lR0U5PRqs33';
 
@@ -75,26 +92,34 @@ interface Shot {
   prepare?: string;
 }
 
+// The numbers are the order in the store: the mayor games lead (2026-11-10,
+// they are what the app is until February 23), then the rest of the app.
 const SHOTS: Shot[] = [
   {
-    name: '1-alderman',
+    name: '4-alderman',
     path: `/official/${FICTIONAL_ALDERMAN}`,
     caption: { en: 'Ask your alderman anything', es: 'Pregúntale lo que quieras a tu concejal' },
   },
   {
-    name: '2-big-board',
+    name: '5-big-board',
+    // A fresh load of "/" is a plain launch, which the app sends on to the
+    // elections tab (src/lib/launch.ts): tap the home tab to get the board.
     path: '/',
     caption: { en: "Chicago's concerns, ranked by the people", es: 'Las preocupaciones de Chicago, ordenadas por la gente' },
+    prepare: `
+      const home = document.querySelector('[role=tab][href="/"]');
+      if (home) home.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 }));
+      await new Promise((r) => setTimeout(r, 5000));`,
   },
   {
-    name: '3-ballot',
-    // An open seat with no incumbent, listed alphabetically: no famous
-    // politician leads the image.
-    path: '/election-race/comptroller',
-    caption: { en: 'Plan your ballot, race by race', es: 'Planea tu boleta, contienda por contienda' },
+    name: '2-blind-date',
+    // Blind date keeps every name and portrait hidden until the reveal, so
+    // the store image shows the game and no candidate's face.
+    path: '/game/blind',
+    caption: { en: 'Blind-date your next mayor', es: 'Una cita a ciegas con tu próximo alcalde' },
   },
   {
-    name: '4-take-part',
+    name: '6-take-part',
     path: '/ward',
     caption: { en: 'Meetings, zoning and your ward office', es: 'Reuniones, zonificación y tu oficina de distrito' },
     prepare: `
@@ -108,24 +133,32 @@ const SHOTS: Shot[] = [
       if (head && box) box.scrollTop += head.getBoundingClientRect().top - box.getBoundingClientRect().top - 24;`,
   },
   {
-    name: '5-news',
+    name: '7-news',
     path: '/news',
     caption: { en: 'Chicago news in one place', es: 'Las noticias de Chicago en un solo lugar' },
     // The live feed is whatever happened today; a store image leaves out
     // crime, investigations, deaths, and stories naming a politician, so it
     // never looks like the app picked a side. Every row shown is real.
     prepare: `
-      const risky = /candidate|probe|alleg|charg|shot|shoot|kill|murder|dies|died|death|dead|arrest|sue|lawsuit|police|ICE|Trump|Johnson|Pritzker|mayor|alderm|election|campaign|school board|board president|consejo escolar|candidat|alcald|concejal|eleccion|elección/i;
+      const risky = /candidate|probe|alleg|charg|shot|shoot|kill|murder|dies|died|death|dead|arrest|sue|lawsuit|police|ICE|Trump|Johnson|Pritzker|mayor|alderm|election|campaign|school board|board president|consejo escolar|candidat|alcald|concejal|eleccion|elección|crash|hit-and-run|impeach|secretary|congress|senat|stab|robb|carjack|victim|injur|wound|fatal|crime|gun|furious|fire\\b|missing|tip\\b|porn|abuse|assault|marine|sergeant|resting place|funeral|trial|guilty|sentenc|indict/i;
       const rows = [...document.querySelectorAll('[role=link]')].filter((a) => / ago|hace /.test(a.innerText));
+      // The headline alone decides: the outlet's name ("CBS News Chicago")
+      // must not make a national story count as local.
+      const headline = (row) => row.innerText.split('\\n').filter(Boolean).slice(1).join(' ') || row.innerText;
       // ...and keeps to stories plainly about Chicago or Illinois (the feed
       // also carries national wire stories), since that is what it shows off.
       const local = /Chicago|CTA|Cubs|White Sox|Sox|Bears|Bulls|Blackhawks|Sky|Fire FC|Lake Michigan|Illinois|CPS|Loop|Bronzeville|Pilsen|Wicker Park|Logan Square|Hyde Park|Lincoln Park|Navy Pier|O'Hare|Midway|Cook County|Rate Field|Wrigley|Soldier Field|Shedd|Ryan Field/i;
-      for (const row of rows) if (risky.test(row.innerText) || !local.test(row.innerText)) row.remove();`,
+      for (const row of rows) if (risky.test(headline(row)) || !local.test(headline(row))) row.remove();`,
   },
   {
-    name: '6-election',
+    name: '1-mayor-games',
     path: '/election',
-    caption: { en: 'Every race on your ballot', es: 'Cada contienda de tu boleta' },
+    caption: { en: 'Five games to meet the mayoral field', es: 'Cinco juegos para conocer a los candidatos' },
+  },
+  {
+    name: '3-pizza-date',
+    path: '/game/pizza',
+    caption: { en: 'Every candidate, ranked by pizza', es: 'Cada candidato, en orden de pizza' },
   },
 ];
 
@@ -174,6 +207,12 @@ async function evaluate(cdp: Cdp, expression: string) {
   await cdp.send('Runtime.evaluate', { expression: `(async () => { ${expression} })()`, awaitPromise: true });
 }
 
+/** Whether an expression is true in the page right now. */
+async function isTrue(cdp: Cdp, expression: string): Promise<boolean> {
+  const res = await cdp.send('Runtime.evaluate', { expression: `!!(${expression})`, returnByValue: true });
+  return res?.result?.value === true;
+}
+
 async function main() {
   const profile = mkdtempSync(join(tmpdir(), 'dd-shots-'));
   const chrome = spawn(CHROME, [
@@ -191,45 +230,67 @@ async function main() {
     await cdp.send('Emulation.setDeviceMetricsOverride', { ...presets[0].phone, deviceScaleFactor: presets[0].scale, mobile: true });
     await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'dark' }] });
 
-    // First visit: language chosen, welcome seen, so no first-run sheets
-    // cover the screens.
+    // First visit: the welcome is marked seen and the language is set the
+    // way the app stores it, so no first-run card covers the screens. (The
+    // app has no language prompt to click any more: it opens in English.)
     await cdp.send('Page.navigate', { url: SITE });
     await sleep(6000);
     await evaluate(
       cdp,
-      `localStorage.setItem('welcome.v1', 'seen');
-       for (const k of Object.keys(localStorage)) if (/locale|language/i.test(k)) localStorage.removeItem(k);`
+      `localStorage.setItem('welcome.v2', 'seen');
+       localStorage.setItem(${JSON.stringify(LOCALE_KEY)}, ${JSON.stringify(spanish ? 'es' : 'en')});`
     );
-    // The language prompt stores the choice itself: click it once.
     await cdp.send('Page.reload');
     await sleep(6000);
+    // The police district grid waits for districts, and the browser is
+    // signed in to no one: stand in with City Hall's (121 N LaSalle, 42nd
+    // Ward), which the dev build reads (useMyDistricts).
     await evaluate(
       cdp,
-      `const b = [...document.querySelectorAll('[role=button]')].find((x) => x.innerText.trim() === ${JSON.stringify(spanish ? 'Español' : 'English')});
-       b && b.click();`
+      `localStorage.setItem('dev.shotDistricts', ${JSON.stringify(JSON.stringify(CITY_HALL_DISTRICTS))});
+       localStorage.removeItem('mayorGames.blind.seen');`
     );
-    await sleep(1500);
-    await evaluate(cdp, `localStorage.setItem('welcome.v1', 'seen');`);
 
     for (const preset of presets) {
     const dir = join('store-screenshots', lang, preset.folder);
     mkdirSync(dir, { recursive: true });
     const { out: OUT, phone: PHONE } = preset;
     await cdp.send('Emulation.setDeviceMetricsOverride', { ...PHONE, deviceScaleFactor: preset.scale, mobile: true });
-    for (const shot of SHOTS) {
+    // --shot=<name> retakes one image (e.g. --shot=7-news) without the rest.
+    const onlyShot = process.argv.find((a) => a.startsWith('--shot='))?.slice('--shot='.length);
+    for (const shot of SHOTS.filter((x) => !onlyShot || x.name === onlyShot)) {
       await cdp.send('Page.navigate', { url: `${SITE}${shot.path}` });
-      await sleep(8000);
+      // Wait for the app to draw, not for a fixed time: a slow bundle left
+      // blank white shots (2026-11-10). Then let data and images settle.
+      for (let i = 0; i < 60; i++) {
+        await sleep(500);
+        if (await isTrue(cdp, `document.body && document.body.innerText.trim().length > 80`)) break;
+      }
+      // A dead dev server gives Chrome's own error page, which would be
+      // photographed like any other (it was, 2026-11-10): stop instead.
+      if (await isTrue(cdp, `/refused to connect|can.t be reached|ERR_CONNECTION/i.test(document.body.innerText)`)) {
+        throw new Error(`The web dev server at ${SITE} is not answering; nothing was saved for ${shot.name}.`);
+      }
+      await sleep(6000);
       // A welcome or update card that still shows is closed.
       await evaluate(
         cdp,
-        `for (const label of ['Got it', 'Entendido', 'Maybe later', 'Quizás después']) {
+        `for (const label of ['Look around first', 'Primero echar un vistazo', 'Got it', 'Entendido', 'Maybe later', 'Quizás después']) {
            const b = [...document.querySelectorAll('[role=button]')].find((x) => x.innerText.trim() === label);
            if (b) b.click();
          }`
       );
       if (shot.prepare) await evaluate(cdp, shot.prepare);
       await sleep(1500);
+      if (process.argv.includes('--debug')) {
+        const seen = await cdp.send('Runtime.evaluate', {
+          expression: `JSON.stringify({ text: document.body.innerText.trim().length, bg: getComputedStyle(document.body).backgroundColor, w: innerWidth, h: innerHeight, first: document.body.innerText.trim().slice(0, 60) })`,
+          returnByValue: true,
+        });
+        console.log(shot.name, seen?.result?.value);
+      }
       const screen = (await cdp.send('Page.captureScreenshot', { format: 'png' })).data as string;
+      if (process.argv.includes('--debug')) console.log(shot.name, 'png bytes', Math.round((screen.length * 3) / 4));
 
       // Caption band over the screen, rendered by the same browser.
       const html = `<!doctype html><html><head><meta charset="utf-8"><style>

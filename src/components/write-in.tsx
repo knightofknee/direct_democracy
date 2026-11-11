@@ -1,9 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Card, Chip } from '@/components/ui';
-import { WRITE_IN_2026 } from '@/constants/elections';
+import { WRITE_IN } from '@/constants/elections';
 import { Spacing } from '@/constants/theme';
 import { useT } from '@/lib/i18n';
 import { openLink } from '@/lib/open-link';
@@ -15,18 +14,27 @@ export function WriteInChip() {
   return <Chip label={t('Write-in')} icon="create-outline" tone="warning" />;
 }
 
-/** Heads the write-in group on a race: what a write-in is and how to cast one. */
+/**
+ * Heads the write-in group on a race: just the title, starred (2026-10-13:
+ * the explainer above the cards buried them); `WriteInFootnote` under the
+ * group says what the star means.
+ */
 export function WriteInHeader() {
   const t = useT();
   return (
-    <View style={{ gap: 2, marginTop: Spacing.two }}>
-      <ThemedText type="smallBold" style={{ textTransform: 'uppercase', letterSpacing: 1 }}>
-        {t('Write-in candidates')}
-      </ThemedText>
-      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, lineHeight: 17 }}>
-        {t(WRITE_IN_2026.explainer)}
-      </ThemedText>
-    </View>
+    <ThemedText type="smallBold" style={{ textTransform: 'uppercase', letterSpacing: 1, marginTop: Spacing.two }}>
+      {t('Write-in candidates')}*
+    </ThemedText>
+  );
+}
+
+/** Under the write-in group: what a write-in is and how to cast one. */
+export function WriteInFootnote() {
+  const t = useT();
+  return (
+    <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, lineHeight: 17 }}>
+      * {t(WRITE_IN.explainer)}
+    </ThemedText>
   );
 }
 
@@ -37,14 +45,14 @@ export function WriteInNote() {
   return (
     <Card>
       <ThemedText type="small" style={{ fontSize: 13, lineHeight: 19 }}>
-        {t(WRITE_IN_2026.explainer)}
+        {t(WRITE_IN.explainer)}
       </ThemedText>
       <ThemedText
         type="smallBold"
         style={{ color: theme.primary, fontSize: 13 }}
-        onPress={() => openLink(WRITE_IN_2026.url)}
+        onPress={() => openLink(WRITE_IN.url)}
         accessibilityRole="link">
-        {t(WRITE_IN_2026.urlLabel)}
+        {t(WRITE_IN.urlLabel)}
       </ThemedText>
     </Card>
   );

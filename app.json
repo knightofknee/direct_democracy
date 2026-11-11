@@ -2,7 +2,7 @@
   "expo": {
     "name": "direct democracy",
     "slug": "direct-democracy",
-    "version": "1.0.16",
+    "version": "1.0.18",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "directdemocracy",
@@ -25,7 +25,7 @@
     },
     "android": {
       "package": "com.briancarlisle.directdemocracy",
-      "versionCode": 9,
+      "versionCode": 11,
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

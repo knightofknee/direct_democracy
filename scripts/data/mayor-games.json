@@ -1,0 +1,2388 @@
+{
+  "election": "2027-municipal",
+  "asOf": "2026-11-09",
+  "financeNote": "Money figures are each committee's quarterly reports to the Illinois State Board of Elections: spent is total expenditures from January 1 to September 30, 2026 (or since the committee formed), cash is funds available on September 30.",
+  "financeNoteEs": "Las cifras de dinero son los informes trimestrales de cada comité a la Junta Electoral del Estado de Illinois: lo gastado es el total de egresos del 1 de enero al 30 de septiembre de 2026 (o desde que se formó el comité), y el efectivo son los fondos disponibles al 30 de septiembre.",
+  "pollNote": "Support is the first choice of likely voters in the ChicagoSpeaks poll by the University of Chicago's Mansueto Institute and NORC, taken September 13 to 23, 2026 (935 likely voters); candidates the poll did not ask about count as not listed.",
+  "pollNoteEs": "El apoyo es la primera opción de los votantes probables en la encuesta ChicagoSpeaks del Instituto Mansueto de la Universidad de Chicago y NORC, levantada del 13 al 23 de septiembre de 2026 (935 votantes probables); los candidatos por los que la encuesta no preguntó cuentan como no incluidos.",
+  "candidates": [
+    {
+      "slug": "brandon-johnson",
+      "name": "Brandon Johnson",
+      "shortName": "Johnson",
+      "title": "Mayor of Chicago since 2023",
+      "titleEs": "Alcalde de Chicago desde 2023",
+      "bio": "Mayor since May 2023, seeking a second term. A former CPS teacher, Chicago Teachers Union organizer, and Cook County commissioner; 50, lives in Austin, married with three children, one of ten siblings. Filed 33,000 signatures on October 23.",
+      "bioEs": "Alcalde desde mayo de 2023, busca un segundo periodo. Exmaestro de CPS, exorganizador del Sindicato de Maestros de Chicago y excomisionado del Condado de Cook; 50 años, vive en Austin, casado y con tres hijos, uno de diez hermanos. Presentó 33,000 firmas el 23 de octubre.",
+      "website": "https://www.brandonforchicago.com/",
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/6aa09698d150a04e70e66785/05161ae9-6539-4d61-b6ce-3d760814a3e9/MayorBrandonJohnson_HeroPhoto.jpg",
+      "photoFrame": null,
+      "candidateUid": null,
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces two objections to his nominating petitions; the one filed for Willie Wilson's campaign says some signatures were photocopies and some pages were petitions for City Treasurer Melissa Conyears-Ervin. His campaign says he has more than enough valid signatures. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta dos objeciones a sus peticiones de candidatura; la presentada por la campaña de Willie Wilson dice que algunas firmas eran fotocopias y que algunas páginas eran peticiones de la tesorera municipal Melissa Conyears-Ervin. Su campaña dice que tiene firmas válidas de sobra. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Reopen every closed public school and hand it back to its neighborhood.",
+          "textEs": "Reabrir cada escuela pública cerrada y devolverla a su vecindario.",
+          "quote": {
+            "text": "We're gonna make sure that we reopen every single closed school and turn it back over to the people.",
+            "source": "Reelection launch speech, Sept. 13, 2026 (The TRiiBE)",
+            "url": "https://thetriibe.com/2026/09/read-mayor-brandon-johnsons-full-speech-from-his-reelection-campaign-launch-at-dusable-museum/"
+          }
+        },
+        {
+          "text": "Reopen every closed city mental health clinic.",
+          "textEs": "Reabrir cada clínica municipal de salud mental cerrada.",
+          "quote": {
+            "text": "We will not be satisfied until every mental health clinic is reopened.",
+            "source": "Reelection launch speech, Sept. 13, 2026 (The TRiiBE)",
+            "url": "https://thetriibe.com/2026/09/read-mayor-brandon-johnsons-full-speech-from-his-reelection-campaign-launch-at-dusable-museum/"
+          }
+        },
+        {
+          "text": "Make the ultra-rich pay more in taxes.",
+          "textEs": "Que los ultrarricos paguen más impuestos.",
+          "quote": {
+            "text": "We will not be satisfied until the ultra-rich finally pay their fair share in taxes.",
+            "source": "ABC7 Chicago, Sept. 13, 2026",
+            "url": "https://abc7chicago.com/post/chicago-mayor-brandon-johnson-make-special-announcement-sunday/19826432/"
+          }
+        },
+        {
+          "text": "Keep sending TIF surplus money to the public schools.",
+          "textEs": "Seguir enviando el excedente de los TIF a las escuelas públicas.",
+          "quote": {
+            "text": "we release more than $1 billion dollars into our public schools through TIF (Tax Increment Financing) surplus.",
+            "source": "Reelection launch speech, Sept. 13, 2026 (The TRiiBE)",
+            "url": "https://thetriibe.com/2026/09/read-mayor-brandon-johnsons-full-speech-from-his-reelection-campaign-launch-at-dusable-museum/"
+          }
+        }
+      ],
+      "summary": "Only Johnson: Reopen every closed public school and hand it back to its neighborhood.\n\nMental health: Reopen every closed city mental health clinic. Quigley would also reopen them.\n\nTaxes: Make the ultra-rich pay more. Giannoulias says the same; Kelly and Kitover want no new taxes.\n\nTIF money: Sends the surplus to public schools. Mendoza and Quigley would keep it in the neighborhoods it came from.",
+      "summaryEs": "Solo Johnson: Reabrir cada escuela pública cerrada y devolverla a su vecindario.\n\nSalud mental: Reabrir cada clínica municipal de salud mental cerrada. Quigley también las reabriría.\n\nImpuestos: Que los ultrarricos paguen más. Giannoulias dice lo mismo; Kelly y Kitover no quieren impuestos nuevos.\n\nDinero de los TIF: Envía el excedente a las escuelas públicas. Mendoza y Quigley lo dejarían en los vecindarios de donde salió.",
+      "money": {
+        "summary": "Says the city should not balance its budget on working people and that the very rich should pay more in taxes; counts the TIF surplus sent to the public schools as his way of finding money.",
+        "summaryEs": "Dice que la ciudad no debe cuadrar su presupuesto a costa de la gente trabajadora y que los muy ricos deben pagar más impuestos; cuenta el excedente de los TIF enviado a las escuelas públicas como su forma de conseguir dinero.",
+        "quotes": [
+          {
+            "text": "We will not be satisfied until the ultra-rich finally pay their fair share in taxes.",
+            "source": "ABC7 Chicago, Sept. 13, 2026",
+            "url": "https://abc7chicago.com/post/chicago-mayor-brandon-johnson-make-special-announcement-sunday/19826432/"
+          },
+          {
+            "text": "When times get hard, we do not balance the budget off the backs of working people.",
+            "source": "Reelection launch speech, Sept. 13, 2026 (The TRiiBE)",
+            "url": "https://thetriibe.com/2026/09/read-mayor-brandon-johnsons-full-speech-from-his-reelection-campaign-launch-at-dusable-museum/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Friends of Brandon Johnson",
+        "raised": 122980,
+        "spent": 857931,
+        "cashOnHand": 379472,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=34198",
+        "note": null,
+        "noteEs": null
+      },
+      "support": {
+        "pct": 13.6,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "The first mayor from the West Side in nearly a century, and an all-conference defensive lineman at Elgin High.",
+          "textEs": "El primer alcalde del West Side en casi un siglo, y liniero defensivo de toda la conferencia en la preparatoria de Elgin.",
+          "url": "https://news.wttw.com/2023/04/14/touring-chicago-s-austin-community-mayor-elect-brandon-johnson"
+        },
+        {
+          "text": "Opened his reelection speech with a joke that he would hurry because it was already as long as a City Council meeting.",
+          "textEs": "Abrió su discurso de reelección con la broma de que se apuraría porque ya era tan largo como una reunión del Concejo Municipal.",
+          "url": "https://thetriibe.com/2026/09/read-mayor-brandon-johnsons-full-speech-from-his-reelection-campaign-launch-at-dusable-museum/"
+        }
+      ],
+      "sourceUrls": [
+        "https://chicago.suntimes.com/elections/2026/10/26/chicago-mayoral-race-last-day-of-filing-mendoza-pappas-2027-election",
+        "https://thetriibe.com/2026/09/read-mayor-brandon-johnsons-full-speech-from-his-reelection-campaign-launch-at-dusable-museum/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=34198",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://www.cbsnews.com/chicago/news/chicago-board-of-elections-challenges-nominating-petitions-mayor/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "alexi-giannoulias",
+      "name": "Alexi Giannoulias",
+      "shortName": "Giannoulias",
+      "title": "Illinois Secretary of State",
+      "titleEs": "Secretario de Estado de Illinois",
+      "bio": "Secretary of State since 2023 and state treasurer before that; 50, born in Chicago to Greek immigrants, married with four daughters. Filed about 60,000 signatures on the first day and leads the field in money and in the one public poll.",
+      "bioEs": "Secretario de Estado desde 2023 y antes tesorero estatal; 50 años, nacido en Chicago de inmigrantes griegos, casado y con cuatro hijas. Presentó unas 60,000 firmas el primer día y encabeza el campo en dinero y en la única encuesta pública.",
+      "website": "https://alexiforchi.com/",
+      "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Alexi_Giannoulias_at_Senate_Judiciary_Committee_hearing_2023_(cropped).png?width=400",
+      "photoFrame": null,
+      "candidateUid": "wsDeB2jwTGR6XgX96uoOsG2y3hm2",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces two objections; one is from candidate Bill Quinlan, who argues state law barred running for mayor while also on the November 2026 ballot for a current office; a judge dismissed his earlier lawsuit on the question as filed too early. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta dos objeciones; una es del candidato Bill Quinlan, quien argumenta que la ley estatal prohibía postularse a la alcaldía mientras aparecía en la boleta de noviembre de 2026 para un cargo actual; un juez desestimó su demanda anterior sobre el tema por haberse presentado demasiado pronto. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "A $22 minimum wage by 2032, up from $17.",
+          "textEs": "Un salario mínimo de $22 para 2032, desde $17.",
+          "quote": {
+            "text": "Chicago should never become a city reserved only for the wealthy,",
+            "source": "CBS Chicago, Aug. 2, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/illinois-secretary-of-state-alexi-giannoulias-campaign-chicago-mayor/"
+          }
+        },
+        {
+          "text": "Hold the city's property tax levy flat and have the wealthy pay a bigger share.",
+          "textEs": "Mantener fija la recaudación del impuesto a la propiedad y que los ricos paguen una parte mayor.",
+          "quote": {
+            "text": "Glittery possible revenue is not responsible.",
+            "source": "NPR Illinois, Aug. 3, 2026",
+            "url": "https://www.nprillinois.org/chicago-il/2026-08-03/joining-the-chicago-mayors-race-giannoulias-casts-himself-as-a-coalition-builder"
+          }
+        },
+        {
+          "text": "Merge the four city pension funds and offer voluntary buyouts.",
+          "textEs": "Fusionar los cuatro fondos de pensiones de la ciudad y ofrecer retiros voluntarios.",
+          "quote": null
+        },
+        {
+          "text": "Make new data centers pay the full cost of the power they use, and offer free full-day preschool for 3- and 4-year-olds.",
+          "textEs": "Que los nuevos centros de datos paguen el costo total de la electricidad que usan, y ofrecer preescolar gratuito de día completo para niños de 3 y 4 años.",
+          "quote": null
+        }
+      ],
+      "summary": "Only Giannoulias: A $22 minimum wage by 2032, up from $17, and a law making new data centers pay for the power they use.\n\nTaxes: Hold the city's property tax levy flat and have the wealthy pay a bigger share. Kelly and Kitover want no new taxes.\n\nPensions: Merge the four pension funds and offer voluntary buyouts. Quigley and Cardenas would have workers share the cost.\n\nChildren: Free full-day preschool for 3- and 4-year-olds, with the state. Cardenas also proposes universal pre-K.",
+      "summaryEs": "Solo Giannoulias: Un salario mínimo de $22 para 2032, desde $17, y una ley para que los nuevos centros de datos paguen la electricidad que usan.\n\nImpuestos: Mantener fija la recaudación del impuesto a la propiedad y que los ricos paguen una parte mayor. Kelly y Kitover no quieren impuestos nuevos.\n\nPensiones: Fusionar los cuatro fondos de pensiones y ofrecer retiros voluntarios. Quigley y Cardenas harían que los trabajadores compartan el costo.\n\nNiñez: Preescolar gratuito de día completo para niños de 3 y 4 años, con el estado. Cardenas también propone pre-K universal.",
+      "money": {
+        "summary": "Would hold the city's property tax levy flat and grow the economy instead of raising rates, consolidate the four pension funds, and cut what he calls waste and bureaucracy. Warns against counting on revenue that may not come.",
+        "summaryEs": "Mantendría fija la tasa del impuesto a la propiedad de la ciudad y haría crecer la economía en vez de subir las tasas, consolidaría los cuatro fondos de pensiones y recortaría lo que llama desperdicio y burocracia. Advierte contra contar con ingresos que quizá no lleguen.",
+        "quotes": [
+          {
+            "text": "People want competence. People want to know that someone is there that will get things done, that will cut bureaucracy, that will reduce waste, that will make government easier.",
+            "source": "ABC7 Chicago, Aug. 2, 2026",
+            "url": "https://abc7chicago.com/amp/post/illinois-sec-state-alexi-giannoulias-officially-announces-bid-mayor-chicago/19615117/"
+          },
+          {
+            "text": "Glittery possible revenue is not responsible.",
+            "source": "NPR Illinois, Aug. 3, 2026",
+            "url": "https://www.nprillinois.org/chicago-il/2026-08-03/joining-the-chicago-mayors-race-giannoulias-casts-himself-as-a-coalition-builder"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Citizens for Giannoulias",
+        "raised": 3066674,
+        "spent": 5954582,
+        "cashOnHand": 19152633,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=19323",
+        "note": "Most of the third quarter's $5.8 million went to paid media; the committee also reported $2.3 million in debts.",
+        "noteEs": "La mayor parte de los $5.8 millones del tercer trimestre se fue a publicidad pagada; el comité también reportó $2.3 millones en deudas."
+      },
+      "support": {
+        "pct": 24.9,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "Played professional basketball in Greece for Panionios in 1998 and 1999, and was once headlined as Obama's basketball pal.",
+          "textEs": "Jugó baloncesto profesional en Grecia con el Panionios en 1998 y 1999, y una vez fue titular como el compañero de baloncesto de Obama.",
+          "url": "https://en.wikipedia.org/wiki/Alexi_Giannoulias"
+        },
+        {
+          "text": "Says his mother worked at Sears and his father sold pickles seven days a week.",
+          "textEs": "Dice que su madre trabajaba en Sears y que su padre vendía pepinillos siete días a la semana.",
+          "url": "https://www.cbsnews.com/chicago/news/illinois-secretary-of-state-alexi-giannoulias-campaign-chicago-mayor/"
+        }
+      ],
+      "sourceUrls": [
+        "https://alexiforchi.com/policy",
+        "https://www.cbsnews.com/chicago/news/illinois-secretary-of-state-alexi-giannoulias-campaign-chicago-mayor/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=19323",
+        "https://chicago.suntimes.com/elections/2026/10/16/brandon-johnson-alexi-giannoulias-campaign-cash-chicago-mayor",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://www.cbsnews.com/chicago/news/chicago-board-of-elections-challenges-nominating-petitions-mayor/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "susana-mendoza",
+      "name": "Susana Mendoza",
+      "shortName": "Mendoza",
+      "title": "Illinois Comptroller",
+      "titleEs": "Contralora de Illinois",
+      "bio": "State Comptroller since 2016, Chicago City Clerk before that, and a state representative before that; 54, grew up in Little Village and lives in Portage Park with her husband and son. Filed 26,000 signatures on the last day, in a tamale cart.",
+      "bioEs": "Contralora estatal desde 2016, antes secretaria municipal de Chicago y antes representante estatal; 54 años, creció en La Villita y vive en Portage Park con su esposo y su hijo. Presentó 26,000 firmas el último día, en un carrito de tamales.",
+      "website": "https://susanamendoza.com/",
+      "photoUrl": "https://susanamendoza.com/wp-content/uploads/2025/03/Meet-Susana-Bio.webp",
+      "photoFrame": null,
+      "candidateUid": "xJE4JOm5uIgUG16LnC67XvZEUZl1",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces an objection to her nominating petitions; her campaign says she has more than the number of signatures required. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta una objeción a sus peticiones de candidatura; su campaña dice que tiene más firmas de las requeridas. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Change the state's SAFE-T Act so people accused of murder or predatory sexual assault cannot be released on electronic monitoring.",
+          "textEs": "Cambiar la ley estatal SAFE-T para que las personas acusadas de asesinato o agresión sexual depredadora no puedan quedar libres con monitoreo electrónico.",
+          "quote": {
+            "text": "The SAFE-T Act needs to be amended by repealing this provision.",
+            "source": "Campaign platform (susanamendoza.com)",
+            "url": "https://susanamendoza.com/priorities/public-safety/"
+          }
+        },
+        {
+          "text": "Stop using neighborhood TIF funds to balance the city budget.",
+          "textEs": "Dejar de usar los fondos TIF de los vecindarios para cuadrar el presupuesto de la ciudad.",
+          "quote": {
+            "text": "They were not created to be slush funds that a mayor or council snatches to balance a budget.",
+            "source": "Campaign platform (susanamendoza.com)",
+            "url": "https://susanamendoza.com/priorities/finances/"
+          }
+        },
+        {
+          "text": "Cut housing approval and permitting times in half and get cranes back up across the city.",
+          "textEs": "Reducir a la mitad los tiempos de aprobación y permisos de vivienda y volver a levantar grúas en toda la ciudad.",
+          "quote": {
+            "text": "As mayor, I will make the construction crane the official bird of Chicago,",
+            "source": "City Club speech, Oct. 28, 2026 (Sun-Times)",
+            "url": "https://chicago.suntimes.com/elections/2026/10/28/mayor-election-mendoza-city-club-brandon-johnson-proposed-budget-head-tax-business-community"
+          }
+        },
+        {
+          "text": "Extend the Riverwalk to Chinatown and Little Village.",
+          "textEs": "Extender el Riverwalk hasta Chinatown y La Villita.",
+          "quote": {
+            "text": "I'm gonna like lean into one of my dreams, and that is to grow beyond the current Riverwalk,",
+            "source": "Streetsblog Chicago, Nov. 4, 2026",
+            "url": "https://chi.streetsblog.org/2026/11/04/mayoral-hopeful-mendoza-discusses-one-of-my-dreams-extending-the-riverwalk-to-chinatown-and-little-village"
+          }
+        }
+      ],
+      "summary": "Only Mendoza: Change the state's SAFE-T Act so people accused of murder or predatory sexual assault cannot be released on electronic monitoring.\n\nTIF money: Stop using neighborhood TIF funds to balance the budget. Quigley agrees; Johnson sends the surplus to public schools.\n\nPensions: Pay pensions ahead whenever revenue beats forecasts, as her state office did. Quigley and Cardenas would have workers share the cost.\n\nAlso: Extend the Riverwalk to Chinatown and Little Village, and post Chicago's permit times next to other cities'.",
+      "summaryEs": "Solo Mendoza: Cambiar la ley estatal SAFE-T para que las personas acusadas de asesinato o agresión sexual depredadora no puedan quedar libres con monitoreo electrónico.\n\nDinero de los TIF: Dejar de usar los fondos TIF de los vecindarios para cuadrar el presupuesto. Quigley está de acuerdo; Johnson envía el excedente a las escuelas públicas.\n\nPensiones: Pagar las pensiones por adelantado cuando los ingresos superen lo previsto, como hizo su oficina estatal. Quigley y Cardenas harían que los trabajadores compartan el costo.\n\nAdemás: Extender el Riverwalk hasta Chinatown y La Villita, y publicar los tiempos de permisos de Chicago junto a los de otras ciudades.",
+      "money": {
+        "summary": "Would grow the economy rather than tax it, review every line of the budget, meet the credit rating agencies on her first morning, and treat businesses as partners instead of piggy banks.",
+        "summaryEs": "Haría crecer la economía en vez de gravarla, revisaría cada línea del presupuesto, se reuniría con las agencias calificadoras en su primera mañana y trataría a los negocios como socios y no como alcancías.",
+        "quotes": [
+          {
+            "text": "I can't wait to get my hands into that budget, look over every line item,",
+            "source": "CBS Chicago, June 3, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/illinois-comptroller-susana-mendoza-mayoral-chicago/"
+          },
+          {
+            "text": "Chicago businesses deserve to stop feeling like piggy banks and start feeling like partners.",
+            "source": "City Club speech, Oct. 28, 2026 (Sun-Times)",
+            "url": "https://chicago.suntimes.com/elections/2026/10/28/mayor-election-mendoza-city-club-brandon-johnson-proposed-budget-head-tax-business-community"
+          },
+          {
+            "text": "In the morning, I'm gonna meet with every single credit rating agency",
+            "source": "City Club speech, Oct. 28, 2026 (Sun-Times)",
+            "url": "https://chicago.suntimes.com/elections/2026/10/28/mayor-election-mendoza-city-club-brandon-johnson-proposed-budget-head-tax-business-community"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Susana For Chicago",
+        "raised": 276932,
+        "spent": 416001,
+        "cashOnHand": 1728015,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=18308",
+        "note": null,
+        "noteEs": null
+      },
+      "support": {
+        "pct": 9.5,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "An all-state soccer midfielder in high school who played at Truman State, with 68 appearances and 10 goals.",
+          "textEs": "Mediocampista de fútbol de todo el estado en la preparatoria que jugó en Truman State, con 68 partidos y 10 goles.",
+          "url": "https://en.wikipedia.org/wiki/Susana_Mendoza"
+        },
+        {
+          "text": "Delivered her nominating petitions in a tamale cart.",
+          "textEs": "Entregó sus peticiones de nominación en un carrito de tamales.",
+          "url": "https://chicago.suntimes.com/elections/2026/10/26/chicago-mayoral-race-last-day-of-filing-mendoza-pappas-2027-election"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/illinois-comptroller-susana-mendoza-mayoral-chicago/",
+        "https://chicago.suntimes.com/elections/2026/10/28/mayor-election-mendoza-city-club-brandon-johnson-proposed-budget-head-tax-business-community",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=18308",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf",
+        "https://susanamendoza.com/priorities/public-safety/",
+        "https://susanamendoza.com/priorities/finances/"
+      ]
+    },
+    {
+      "slug": "maria-pappas",
+      "name": "Maria Pappas",
+      "shortName": "Pappas",
+      "title": "Cook County Treasurer",
+      "titleEs": "Tesorera del Condado de Cook",
+      "bio": "County Treasurer since 1998 and a county commissioner before that; 77, born in a Greek family restaurant in West Virginia, with four degrees including a PhD and a law degree. Filed just under 40,000 signatures on the last day and says her campaign starts in earnest after the November treasurer race.",
+      "bioEs": "Tesorera del condado desde 1998 y antes comisionada del condado; 77 años, nacida en el restaurante griego de su familia en West Virginia, con cuatro títulos, incluidos un doctorado y uno en derecho. Presentó poco menos de 40,000 firmas el último día y dice que su campaña empieza en serio después de la contienda de noviembre por la tesorería.",
+      "website": null,
+      "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Maria_Pappas_October_2026_(cropped).jpg?width=400",
+      "photoFrame": null,
+      "candidateUid": null,
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "No campaign website yet; she told reporters she would formally announce after November 3. Faces an objection from candidate Bill Quinlan, who argues state law barred running for mayor while also on the November 2026 ballot for a current office; a judge dismissed his earlier lawsuit on the question as filed too early. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Todavía no tiene sitio de campaña; dijo a los reporteros que anunciaría formalmente después del 3 de noviembre. Enfrenta una objeción del candidato Bill Quinlan, quien argumenta que la ley estatal prohibía postularse a la alcaldía mientras aparecía en la boleta de noviembre de 2026 para un cargo actual; un juez desestimó su demanda anterior sobre el tema por haberse presentado demasiado pronto. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Argues that what happens to the Loop decides what happens to every neighborhood's property taxes.",
+          "textEs": "Sostiene que lo que pasa en el Loop decide lo que pasa con los impuestos a la propiedad de cada vecindario.",
+          "quote": {
+            "text": "When the Loop gets a cold, the rest of the city gets pneumonia,",
+            "source": "Treasurer's office release, Nov. 18, 2025 (Sun-Times)",
+            "url": "https://chicago.suntimes.com/elections/2025/11/18/cook-county-treasurer-maria-pappas-mayoral-campaign-chicago-brandon-johnson"
+          }
+        },
+        {
+          "text": "Would dig through the city budget line by line.",
+          "textEs": "Revisaría el presupuesto de la ciudad línea por línea.",
+          "quote": {
+            "text": "Get down to all the dirt, dig it up, and go 'Oh, this is the mess we've created? How am I gonna fix it?'",
+            "source": "WBBM Newsradio, Nov. 18, 2025",
+            "url": "https://www.audacy.com/wbbm780/news/local/pappas-im-going-to-get-in-the-mayors-race"
+          }
+        },
+        {
+          "text": "Says the city can be fixed but needs a plan, and promises to be a mayor out in the streets.",
+          "textEs": "Dice que la ciudad se puede arreglar pero necesita un plan, y promete ser alcalde en la calle.",
+          "quote": {
+            "text": "The city's salvageable. It can be fixed. But you need a plan.",
+            "source": "WBBM Newsradio, Nov. 18, 2025",
+            "url": "https://www.audacy.com/wbbm780/news/local/pappas-im-going-to-get-in-the-mayors-race"
+          }
+        },
+        {
+          "text": "Says what the city needs is a grandmother in charge.",
+          "textEs": "Dice que lo que la ciudad necesita es una abuela al mando.",
+          "quote": {
+            "text": "The city NEEDS a grey-haired grandmother!",
+            "source": "WBBM Newsradio, Nov. 18, 2025",
+            "url": "https://www.audacy.com/wbbm780/news/local/pappas-im-going-to-get-in-the-mayors-race"
+          }
+        }
+      ],
+      "summary": "Not published: No campaign site and no positions on taxes, pensions, housing, or schools as of November. Pappas said the campaign would start after the November 3 county election.\n\nThe pitch: County treasurer since 1998, promising to dig through the city budget line by line.\n\nOnly Pappas: Ties every neighborhood's property tax bill to the health of the Loop, citing her office's tax studies.",
+      "summaryEs": "Sin publicar: Sin sitio de campaña y sin posiciones sobre impuestos, pensiones, vivienda o escuelas a noviembre. Pappas dijo que la campaña empezaría después de la elección del condado del 3 de noviembre.\n\nLa propuesta: Tesorera del condado desde 1998, que promete revisar el presupuesto de la ciudad línea por línea.\n\nSolo Pappas: Liga el impuesto a la propiedad de cada vecindario a la salud del Loop, citando los estudios de su oficina.",
+      "money": {
+        "summary": "Would go through the city budget with what she calls a fork and a shovel, and ties the whole city's property tax burden to the health of the Loop.",
+        "summaryEs": "Revisaría el presupuesto de la ciudad con lo que llama un tenedor y una pala, y liga la carga de impuestos a la propiedad de toda la ciudad a la salud del Loop.",
+        "quotes": [
+          {
+            "text": "Get down to all the dirt, dig it up, and go 'Oh, this is the mess we've created? How am I gonna fix it?'",
+            "source": "WBBM Newsradio, Nov. 18, 2025",
+            "url": "https://www.audacy.com/wbbm780/news/local/pappas-im-going-to-get-in-the-mayors-race"
+          },
+          {
+            "text": "When the Loop gets a cold, the rest of the city gets pneumonia,",
+            "source": "Treasurer's office release, Nov. 18, 2025 (Sun-Times)",
+            "url": "https://chicago.suntimes.com/elections/2025/11/18/cook-county-treasurer-maria-pappas-mayoral-campaign-chicago-brandon-johnson"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Committee to Elect Maria Pappas",
+        "raised": 0,
+        "spent": 52096,
+        "cashOnHand": 226303,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026",
+        "url": "https://illinoissunshine.org/committees/6051/",
+        "note": "Her committee was running for county treasurer, not mayor, through September.",
+        "noteEs": "Su comité estaba en campaña por la tesorería del condado, no por la alcaldía, hasta septiembre."
+      },
+      "support": {
+        "pct": 3.3,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "A prize-winning baton twirler who twirled a plunger on camera when no baton was handy.",
+          "textEs": "Bastonera premiada que hizo girar un destapacaños ante la cámara cuando no había bastón a la mano.",
+          "url": "https://www.axios.com/local/chicago/2025/05/09/cook-county-treasurer-maria-pappas-announcement"
+        },
+        {
+          "text": "Filed her petitions wearing a shirt that read No biceps, just brains.",
+          "textEs": "Presentó sus peticiones con una camiseta que decía No biceps, just brains.",
+          "url": "https://chicago.suntimes.com/elections/2026/10/26/chicago-mayoral-race-last-day-of-filing-mendoza-pappas-2027-election"
+        }
+      ],
+      "sourceUrls": [
+        "https://chicago.suntimes.com/elections/2025/11/18/cook-county-treasurer-maria-pappas-mayoral-campaign-chicago-brandon-johnson",
+        "https://www.audacy.com/wbbm780/news/local/pappas-im-going-to-get-in-the-mayors-race",
+        "https://illinoissunshine.org/committees/6051/",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://www.cbsnews.com/chicago/news/chicago-board-of-elections-challenges-nominating-petitions-mayor/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "lisa-nee",
+      "name": "Lisa Nee",
+      "shortName": "Nee",
+      "title": "Cardiologist and former ICU nurse",
+      "titleEs": "Cardióloga y exenfermera de cuidados intensivos",
+      "bio": "Interventional cardiologist, former ICU nurse, and the whistleblower on unnecessary heart procedures at the Hines VA hospital; 59, grew up in Humboldt Park and lives on the North Side. A first-time candidate who filed 31,000 signatures.",
+      "bioEs": "Cardióloga intervencionista, exenfermera de cuidados intensivos y la denunciante de procedimientos cardíacos innecesarios en el hospital Hines VA; 59 años, creció en Humboldt Park y vive en el North Side. Candidata por primera vez que presentó 31,000 firmas.",
+      "website": "https://www.lisaneeforchicago.com/",
+      "photoUrl": "https://run.imgix.net/1b30bb13-49a4-43a9-ab24-648182a64aae/1223ee1c-57f3-4c08-907c-af998e08252b/1223ee1c-57f3-4c08-907c-af998e08252b.jpg?ixlib=js-3.8.0&bri=0&con=0&sat=0&high=0&shad=0&usm=0&rect=0%2C0%2C1174%2C1066&auto=compress%2Cformat&fit=fillmax&w=640&q=75&s=d85469c99b008b23796ac8de1e82eaaf",
+      "photoFrame": {
+        "x": 0.61,
+        "y": 0.335,
+        "zoom": 2.77
+      },
+      "candidateUid": null,
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces an objection to her nominating petitions. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta una objeción a sus peticiones de candidatura. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Will not promise that a property tax increase is off the table.",
+          "textEs": "No promete que un aumento del impuesto a la propiedad esté descartado.",
+          "quote": {
+            "text": "I'm never going to lie to people and say that it's completely off the table.",
+            "source": "WTTW Chicago Tonight, July 29, 2026, on property taxes (auto-transcript)",
+            "url": "https://www.pbs.org/video/mayoral-candidate-lisa-nee-on-plans-for-chicago-zluusq/"
+          }
+        },
+        {
+          "text": "Runs as an outsider who has watched systems fail people and is done accepting it.",
+          "textEs": "Se postula como alguien ajeno a la política que ha visto fallar a los sistemas y ya no lo acepta.",
+          "quote": {
+            "text": "I'm running because I believe we deserve a city where public service actually serves the public",
+            "source": "Campaign statement, July 7, 2026 (NBC Chicago)",
+            "url": "https://www.nbcchicago.com/news/local/chicago-politics/chicago-cardiologist-enters-2027-mayoral-race/3958259/"
+          }
+        },
+        {
+          "text": "Speed up the permit process and run the mayor's office as a collaborator.",
+          "textEs": "Acelerar el proceso de permisos y dirigir la alcaldía como colaboradora.",
+          "quote": {
+            "text": "The role of the mayor should be collaborating.",
+            "source": "WTTW Chicago Tonight, July 29, 2026 (auto-transcript)",
+            "url": "https://www.pbs.org/video/mayoral-candidate-lisa-nee-on-plans-for-chicago-zluusq/"
+          }
+        }
+      ],
+      "summary": "Property taxes: The one candidate who says an increase is not completely off the table. Holberg, Kelly, and Kitover would freeze or lower them.\n\nThe pitch: A cardiologist and hospital whistleblower who has never run for office.\n\nNot published: No platform page. The site names three themes, affordability, safety, and fiscal responsibility, with no policy behind them yet.",
+      "summaryEs": "Impuestos a la propiedad: La única candidata que dice que un aumento no está completamente descartado. Holberg, Kelly y Kitover los congelarían o bajarían.\n\nLa propuesta: Una cardióloga y denunciante de un hospital que nunca se ha postulado a un cargo.\n\nSin publicar: No hay página de plataforma. El sitio nombra tres temas, asequibilidad, seguridad y responsabilidad fiscal, sin políticas detrás todavía.",
+      "money": {
+        "summary": "Would grow the tax base and add transparency and accountability to the budget, and says she will not promise that property taxes are completely off the table.",
+        "summaryEs": "Ampliaría la base tributaria y sumaría transparencia y rendición de cuentas al presupuesto, y dice que no prometerá que los impuestos a la propiedad están completamente descartados.",
+        "quotes": [
+          {
+            "text": "I think you have to grow the tax base.",
+            "source": "WTTW Chicago Tonight, July 29, 2026 (auto-transcript)",
+            "url": "https://www.pbs.org/video/mayoral-candidate-lisa-nee-on-plans-for-chicago-zluusq/"
+          },
+          {
+            "text": "I'm never going to lie to people and say that it's completely off the table.",
+            "source": "WTTW Chicago Tonight, July 29, 2026, on property taxes (auto-transcript)",
+            "url": "https://www.pbs.org/video/mayoral-candidate-lisa-nee-on-plans-for-chicago-zluusq/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Lisa Nee for Chicago",
+        "raised": 139324,
+        "spent": 88627,
+        "cashOnHand": 50698,
+        "period": "Since the committee formed July 8, 2026, through Sept. 30",
+        "periodEs": "Desde que se formó el comité el 8 de julio de 2026 hasta el 30 de septiembre",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41265",
+        "note": "Includes a $50,000 loan from the candidate.",
+        "noteEs": "Incluye un préstamo de $50,000 de la candidata."
+      },
+      "support": {
+        "pct": null,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "Ran Division I track at Loyola, and lives with her husband, children, and two dogs.",
+          "textEs": "Corrió atletismo de la División I en Loyola, y vive con su esposo, sus hijos y dos perros.",
+          "url": "https://chicago.suntimes.com/city-hall/2026/07/07/dr-lisa-nee-joins-growing-field-of-candidates-for-chicago-mayor"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.nbcchicago.com/news/local/chicago-politics/chicago-cardiologist-enters-2027-mayoral-race/3958259/",
+        "https://www.cbsnews.com/chicago/news/cardiologist-lisa-nee-chicago-mayoral-race/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41265",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "willie-wilson",
+      "name": "Willie Wilson",
+      "shortName": "Wilson",
+      "title": "Businessman, fourth run for mayor",
+      "titleEs": "Empresario, cuarta candidatura a la alcaldía",
+      "bio": "Founder of Omar Medical Supplies, former McDonald's franchisee, and producer of the gospel show Singsation; 78, a sharecropper's son from Louisiana who left school in the seventh grade. This is his fourth run for mayor, funded mostly with his own money.",
+      "bioEs": "Fundador de Omar Medical Supplies, exfranquiciatario de McDonald's y productor del programa de góspel Singsation; 78 años, hijo de un aparcero de Luisiana que dejó la escuela en séptimo grado. Esta es su cuarta candidatura a la alcaldía, financiada sobre todo con su propio dinero.",
+      "website": "https://williewilson2027.com/",
+      "photoUrl": "https://assets.cdn.filesafe.space/jb9ryXhVvTRLSQx5LNDm/media/6a3cbe89ae7d4768395ba0d5.png",
+      "photoFrame": null,
+      "candidateUid": "Mg0DTiPuSyRCjXnNjBWneSPfX5u1",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": null,
+      "statusNoteEs": null,
+      "points": [
+        {
+          "text": "No CPS diploma without a trade certificate, and no promotion to the next grade without meeting state standards.",
+          "textEs": "Sin diploma de CPS sin un certificado en un oficio, y sin pasar de grado sin cumplir los estándares estatales.",
+          "quote": {
+            "text": "I will expand trade programs in schools and require students to be certified in a trade before they can graduate.",
+            "source": "Campaign platform (williewilson2027.com)",
+            "url": "https://williewilson2027.com/"
+          }
+        },
+        {
+          "text": "Ask voters to change the state constitution so the city can deal with its pension costs.",
+          "textEs": "Pedir a los votantes cambiar la constitución del estado para que la ciudad pueda enfrentar sus costos de pensiones.",
+          "quote": {
+            "text": "If we do not make some difficult decisions the pension debt will consume our budget.",
+            "source": "Campaign platform (williewilson2027.com)",
+            "url": "https://williewilson2027.com/"
+          }
+        },
+        {
+          "text": "Cut taxes for working people and businesses.",
+          "textEs": "Recortar impuestos a la gente trabajadora y a los negocios.",
+          "quote": {
+            "text": "I will cut taxes for working class citizens and businesses.",
+            "source": "Campaign platform (williewilson2027.com)",
+            "url": "https://williewilson2027.com/"
+          }
+        },
+        {
+          "text": "Treats housing as a right, and supports keeping the Bears in Chicago.",
+          "textEs": "Considera la vivienda un derecho, y apoya que los Bears se queden en Chicago.",
+          "quote": {
+            "text": "I view housing as a right. Homeownership is the cornerstone of wealth building.",
+            "source": "williewilson2027.com",
+            "url": "https://williewilson2027.com/"
+          }
+        }
+      ],
+      "summary": "Only Wilson: No CPS diploma without a trade certificate, and no promotion to the next grade without meeting state standards.\n\nPensions: Ask voters to change the state constitution so pension costs can be dealt with. Quigley and Cardenas would have workers share the cost.\n\nTaxes: Cut taxes for working people and businesses. Kelly and Kitover promise no new ones; Johnson and Giannoulias want the wealthy to pay more.\n\nBears: Supports keeping the Bears in Chicago. No other platform mentions the team.",
+      "summaryEs": "Solo Wilson: Sin diploma de CPS sin un certificado en un oficio, y sin pasar de grado sin cumplir los estándares estatales.\n\nPensiones: Pedir a los votantes cambiar la constitución del estado para poder enfrentar los costos de las pensiones. Quigley y Cardenas harían que los trabajadores compartan el costo.\n\nImpuestos: Recortar impuestos a la gente trabajadora y a los negocios. Kelly y Kitover prometen no crear nuevos; Johnson y Giannoulias quieren que los ricos paguen más.\n\nBears: Apoya que los Bears se queden en Chicago. Ninguna otra plataforma menciona al equipo.",
+      "money": {
+        "summary": "Would cut taxes for working people and businesses, bring in revenue through new businesses, and ask voters to change the state constitution so pension costs can be dealt with.",
+        "summaryEs": "Recortaría impuestos a la gente trabajadora y a los negocios, atraería ingresos con negocios nuevos y pediría a los votantes cambiar la constitución del estado para poder enfrentar los costos de las pensiones.",
+        "quotes": [
+          {
+            "text": "I will cut taxes for working class citizens and businesses.",
+            "source": "Campaign platform (williewilson2027.com)",
+            "url": "https://williewilson2027.com/"
+          },
+          {
+            "text": "If we do not make some difficult decisions the pension debt will consume our budget.",
+            "source": "Campaign platform (williewilson2027.com)",
+            "url": "https://williewilson2027.com/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Willie Wilson for Mayor 2027",
+        "raised": 404407,
+        "spent": 412515,
+        "cashOnHand": 48454,
+        "period": "Since the committee formed May 19, 2026, through Sept. 30",
+        "periodEs": "Desde que se formó el comité el 19 de mayo de 2026 hasta el 30 de septiembre",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41192",
+        "note": "$400,000 of the third quarter's money was loans from the candidate; the committee owes him $450,000.",
+        "noteEs": "$400,000 del dinero del tercer trimestre fueron préstamos del candidato; el comité le debe $450,000."
+      },
+      "support": {
+        "pct": 6,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "Produces Singsation, the first nationally syndicated Black-owned gospel TV show, and has run for president and the US Senate under his own Willie Wilson Party.",
+          "textEs": "Produce Singsation, el primer programa de góspel de propiedad afroamericana con distribución nacional, y se ha postulado a la presidencia y al Senado de EE. UU. bajo su propio Partido Willie Wilson.",
+          "url": "https://en.wikipedia.org/wiki/Willie_Wilson_(businessman)"
+        }
+      ],
+      "sourceUrls": [
+        "https://williewilson2027.com/",
+        "https://chicago.suntimes.com/politics/2026/08/10/willie-wilson-announces-4th-run-for-chicago-mayor",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41192"
+      ]
+    },
+    {
+      "slug": "mike-quigley",
+      "name": "Mike Quigley",
+      "shortName": "Quigley",
+      "title": "US Representative, 5th District",
+      "titleEs": "Representante de EE. UU., Distrito 5",
+      "bio": "In Congress since 2009 and a Cook County commissioner for a decade before that; 68, has lived in Lakeview since 1982, married with two daughters. Filed on the first day and calls this his last and biggest fight.",
+      "bioEs": "En el Congreso desde 2009 y comisionado del Condado de Cook durante una década antes; 68 años, vive en Lakeview desde 1982, casado y con dos hijas. Presentó sus firmas el primer día y llama a esta su última y más grande pelea.",
+      "website": "https://www.quigleyforchicago.com/",
+      "photoUrl": "https://images.squarespace-cdn.com/content/v1/69eb87c23def6450b1afe9b6/5565fcc0-d627-43db-b5e8-4b695411b052/QuigleyJuly2120170128.jpg",
+      "photoFrame": null,
+      "candidateUid": "4oD2IFEWjzeL4Q7iu3zq8EefPqY2",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces an objection from candidate Bill Quinlan, who argues state law barred running for mayor while also on the November 2026 ballot for a current office; a judge dismissed his earlier lawsuit on the question as filed too early. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta una objeción del candidato Bill Quinlan, quien argumenta que la ley estatal prohibía postularse a la alcaldía mientras aparecía en la boleta de noviembre de 2026 para un cargo actual; un juez desestimó su demanda anterior sobre el tema por haberse presentado demasiado pronto. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Replace the city's eight police oversight bodies with one board elected by Chicagoans.",
+          "textEs": "Reemplazar los ocho organismos de supervisión policial de la ciudad con una junta elegida por los habitantes de Chicago.",
+          "quote": {
+            "text": "Chicago should emulate Los Angeles and consolidate to a single, empowered police oversight body elected by Chicagoans.",
+            "source": "Campaign platform (quigleyforchicago.com)",
+            "url": "https://quigleyforchicago.com/public-safety"
+          }
+        },
+        {
+          "text": "Before any new revenue, carry out the $530 million to $1.3 billion in yearly savings a city-paid report already found.",
+          "textEs": "Antes de cualquier ingreso nuevo, aplicar los $530 millones a $1,300 millones de ahorro anual que un informe pagado por la ciudad ya encontró.",
+          "quote": {
+            "text": "Every dollar that we are wasting is a dollar we can't spend on housing, public safety, parks, mental health, our kids.",
+            "source": "quigleyforchicago.com",
+            "url": "https://www.quigleyforchicago.com/"
+          }
+        },
+        {
+          "text": "Build or preserve 50,000 homes in four years, legalize four-flats and backyard units citywide, and add no new rent restrictions.",
+          "textEs": "Construir o conservar 50,000 viviendas en cuatro años, legalizar edificios de cuatro unidades y unidades de patio trasero en toda la ciudad, y no agregar restricciones nuevas a las rentas.",
+          "quote": {
+            "text": "Our goal is to provide affordable housing, which is critical for safety and generational wealth",
+            "source": "Sun-Times, Aug. 13, 2026",
+            "url": "https://chicago.suntimes.com/fran-spielman-show/2026/08/13/rep-mike-quigley-mayoral-candidate-chicago"
+          }
+        },
+        {
+          "text": "Says the pension funds will fail unless workers pay in more or collect later.",
+          "textEs": "Dice que los fondos de pensiones quebrarán a menos que los trabajadores aporten más o cobren más tarde.",
+          "quote": {
+            "text": "We're not gonna take away your pension, but it will fail,",
+            "source": "Sun-Times, Aug. 13, 2026",
+            "url": "https://chicago.suntimes.com/fran-spielman-show/2026/08/13/rep-mike-quigley-mayoral-candidate-chicago"
+          }
+        }
+      ],
+      "summary": "Only Quigley: One board elected by Chicagoans in place of the city's eight police oversight bodies. No other candidate proposes changing who oversees the police.\n\nSavings first: Before any new revenue, carry out the $530 million to $1.3 billion in yearly savings a city-paid report already found.\n\nHousing: 50,000 homes in four years, four-flats and backyard units legal citywide, and no new rent restrictions. Giannoulias sets the same 50,000 for 2032.\n\nPensions: Says the funds will fail unless workers pay in more or collect later. Cardenas agrees; Giannoulias and Mendoza would restructure and pay ahead.",
+      "summaryEs": "Solo Quigley: Una junta elegida por los habitantes de Chicago en lugar de los ocho organismos de supervisión policial de la ciudad. Ningún otro candidato propone cambiar quién supervisa a la policía.\n\nPrimero ahorros: Antes de cualquier ingreso nuevo, aplicar los $530 millones a $1,300 millones de ahorro anual que un informe pagado por la ciudad ya encontró.\n\nVivienda: 50,000 viviendas en cuatro años, edificios de cuatro unidades y unidades de patio trasero legales en toda la ciudad, y ninguna restricción nueva a las rentas. Giannoulias fija las mismas 50,000 para 2032.\n\nPensiones: Dice que los fondos quebrarán a menos que los trabajadores aporten más o cobren más tarde. Cardenas está de acuerdo; Giannoulias y Mendoza reestructurarían y pagarían por adelantado.",
+      "money": {
+        "summary": "Would start with the hundreds of millions in yearly savings a city-paid report already identified before asking for any new revenue, and tell people plainly that the pension funds will fail without trade-offs.",
+        "summaryEs": "Empezaría con los cientos de millones en ahorros anuales que un informe pagado por la ciudad ya identificó antes de pedir cualquier ingreso nuevo, y diría sin rodeos que los fondos de pensiones quebrarán sin concesiones.",
+        "quotes": [
+          {
+            "text": "We're not gonna take away your pension, but it will fail,",
+            "source": "Sun-Times, Aug. 13, 2026",
+            "url": "https://chicago.suntimes.com/fran-spielman-show/2026/08/13/rep-mike-quigley-mayoral-candidate-chicago"
+          },
+          {
+            "text": "Every dollar that we are wasting is a dollar we can't spend on housing, public safety, parks, mental health, our kids.",
+            "source": "quigleyforchicago.com",
+            "url": "https://www.quigleyforchicago.com/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Friends of Mike Quigley",
+        "raised": 332333,
+        "spent": 543609,
+        "cashOnHand": 343482,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=40800",
+        "note": "Includes a $200,000 transfer from his congressional committee.",
+        "noteEs": "Incluye una transferencia de $200,000 de su comité para el Congreso."
+      },
+      "support": {
+        "pct": 3.6,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "thin",
+        "preference": "Tavern-style. His pick is Pat's Pizzeria on Lincoln Avenue, and he delivered for Leona's and served slices at Al & Joe's on his Undercover Congressman shifts.",
+        "preferenceEs": "Estilo taberna. Su elección es Pat's Pizzeria en Lincoln Avenue, y repartió pizzas para Leona's y sirvió rebanadas en Al & Joe's en sus turnos como Congresista Encubierto.",
+        "quote": {
+          "text": "My visit to Pat's made it clear that there's nothing quite like Chicago's tavern-style pizza",
+          "source": "Press release, May 31, 2024",
+          "url": "https://quigley.house.gov/media-center/press-releases/quigley-defends-chicago-pizza-superiority"
+        }
+      },
+      "fun": [
+        {
+          "text": "Has taken 200 stitches playing hockey, which he has played since he was six, and co-chairs the Congressional Hockey Caucus.",
+          "textEs": "Lleva 200 puntadas por jugar hockey, que practica desde los seis años, y copreside el Caucus de Hockey del Congreso.",
+          "url": "https://www.quigleyforchicago.com/"
+        },
+        {
+          "text": "Worked a garbage truck, a hot dog stand, and the Dinkel's bakery counter as the Undercover Congressman.",
+          "textEs": "Trabajó en un camión de basura, un puesto de hot dogs y el mostrador de la panadería Dinkel's como el Congresista Encubierto.",
+          "url": "https://quigley.house.gov/about/undercover-congressman"
+        }
+      ],
+      "sourceUrls": [
+        "https://chicago.suntimes.com/fran-spielman-show/2026/08/13/rep-mike-quigley-mayoral-candidate-chicago",
+        "https://www.cbsnews.com/chicago/news/mike-quigley-chicago-mayoral-campaign-kickoff/",
+        "https://quigley.house.gov/media-center/press-releases/quigley-defends-chicago-pizza-superiority",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=40800",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://www.cbsnews.com/chicago/news/chicago-board-of-elections-challenges-nominating-petitions-mayor/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf",
+        "https://quigleyforchicago.com/public-safety"
+      ]
+    },
+    {
+      "slug": "john-kelly",
+      "name": "John Kelly",
+      "shortName": "Kelly",
+      "title": "Lobbyist and security company founder",
+      "titleEs": "Cabildero y fundador de una empresa de seguridad",
+      "bio": "Runs the lobbying firm All-Circo, whose clients include Bally's casino, and co-founded Sentinel Security; 53, from a four-generation Chicago family, married to the commentator Julie Kelly with two adult daughters. Filed on the first day; NBC has raised questions about a suburban home he calls a summer house.",
+      "bioEs": "Dirige la firma de cabildeo All-Circo, con clientes como el casino Bally's, y cofundó Sentinel Security; 53 años, de una familia con cuatro generaciones en Chicago, casado con la comentarista Julie Kelly y con dos hijas adultas. Presentó sus firmas el primer día; NBC ha planteado preguntas sobre una casa suburbana que él llama casa de verano.",
+      "website": "https://johnkellyforchi.com/",
+      "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Lobbyist_John_Kelly_(cropped).jpg?width=400",
+      "photoFrame": null,
+      "candidateUid": "tNryhx8sZkX1HFkBZmOCdkCte9F2",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces an objection; his campaign answered it by saying Chicago has been his legal residence since October 2024. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta una objeción; su campaña respondió que Chicago es su residencia legal desde octubre de 2024. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Give Chicago a city charter, a written constitution for city government.",
+          "textEs": "Darle a Chicago una carta municipal, una constitución escrita para el gobierno de la ciudad.",
+          "quote": {
+            "text": "A new City Charter changes who government works for.",
+            "source": "Campaign platform (johnkellyforchi.com)",
+            "url": "https://johnkellyforchi.com/issues/"
+          }
+        },
+        {
+          "text": "No new taxes of any kind, starting with property taxes.",
+          "textEs": "Ningún impuesto nuevo de ningún tipo, empezando por los de la propiedad.",
+          "quote": {
+            "text": "you are able to bring property taxes down, and at least, at the very least, stabilize them,",
+            "source": "CBS Chicago, Aug. 12, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/lobbyist-mayoral-candidate-john-kelly-chicago-career-politicians/"
+          }
+        },
+        {
+          "text": "Judge the public schools on whether students can read and do math.",
+          "textEs": "Medir a las escuelas públicas por si los estudiantes saben leer y hacer matemáticas.",
+          "quote": {
+            "text": "Teachers in Chicago’s classrooms work hard every day. They are not the problem.",
+            "source": "Campaign platform (johnkellyforchi.com)",
+            "url": "https://johnkellyforchi.com/issues/"
+          }
+        },
+        {
+          "text": "Cut positions in the mayor's own office and spend the money on ambulances.",
+          "textEs": "Recortar puestos en la propia oficina del alcalde y gastar ese dinero en ambulancias.",
+          "quote": {
+            "text": "you can cut 20 of those and buy five ambulances",
+            "source": "Sun-Times, Aug. 20, 2026, on positions in the mayor's office",
+            "url": "https://chicago.suntimes.com/fran-spielman-show/2026/08/20/chicago-mayoral-candidate-john-kelly-lobbyist-brandon-johnson-february-2027-election"
+          }
+        }
+      ],
+      "summary": "Only Kelly: A city charter, a written constitution for city government. Kelly says Chicago is the only one of the 15 largest US cities without one.\n\nTaxes: No new taxes of any kind, starting with property taxes. Johnson and Giannoulias want the wealthy to pay more; Nee will not rule out an increase.\n\nSchools: Says CPS spends about 75 percent above the national average per student and should be judged on reading and math.\n\nFirst cut: Says cutting 20 positions from the mayor's office would pay for five ambulances.",
+      "summaryEs": "Solo Kelly: Una carta municipal, una constitución escrita para el gobierno de la ciudad. Kelly dice que Chicago es la única de las 15 ciudades más grandes del país que no tiene una.\n\nImpuestos: Ningún impuesto nuevo de ningún tipo, empezando por los de la propiedad. Johnson y Giannoulias quieren que los ricos paguen más; Nee no descarta un aumento.\n\nEscuelas: Dice que CPS gasta cerca de 75 por ciento más que el promedio nacional por estudiante y que debe medirse por la lectura y las matemáticas.\n\nPrimer recorte: Dice que recortar 20 puestos de la oficina del alcalde pagaría cinco ambulancias.",
+      "money": {
+        "summary": "Promises no new taxes, starting with property taxes, would judge every expense by whether it is a good deal for taxpayers, and would start cutting with positions in the mayor's own office.",
+        "summaryEs": "Promete ningún impuesto nuevo, empezando por los de la propiedad, juzgaría cada gasto por si es un buen trato para los contribuyentes y empezaría los recortes con puestos en la propia oficina del alcalde.",
+        "quotes": [
+          {
+            "text": "Is this a good deal for the taxpayers?",
+            "source": "Sun-Times, Aug. 20, 2026, his stated guiding question",
+            "url": "https://chicago.suntimes.com/fran-spielman-show/2026/08/20/chicago-mayoral-candidate-john-kelly-lobbyist-brandon-johnson-february-2027-election"
+          },
+          {
+            "text": "you can cut 20 of those and buy five ambulances",
+            "source": "Sun-Times, Aug. 20, 2026, on positions in the mayor's office",
+            "url": "https://chicago.suntimes.com/fran-spielman-show/2026/08/20/chicago-mayoral-candidate-john-kelly-lobbyist-brandon-johnson-february-2027-election"
+          },
+          {
+            "text": "you are able to bring property taxes down, and at least, at the very least, stabilize them,",
+            "source": "CBS Chicago, Aug. 12, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/lobbyist-mayoral-candidate-john-kelly-chicago-career-politicians/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Citizens for John Kelly",
+        "raised": 1546430,
+        "spent": 1350869,
+        "cashOnHand": 2522826,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=40942",
+        "note": "$1 million of the third quarter's money was loans from two companies, one of them his own security firm; the committee owes $1.25 million.",
+        "noteEs": "$1 millón del dinero del tercer trimestre fueron préstamos de dos empresas, una de ellas su propia firma de seguridad; el comité debe $1.25 millones."
+      },
+      "support": {
+        "pct": null,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "His great-grandfather opened the Hayes Hotel in Woodlawn and his grandfather was a Chicago police officer.",
+          "textEs": "Su bisabuelo abrió el Hotel Hayes en Woodlawn y su abuelo fue policía de Chicago.",
+          "url": "https://www.newswire.com/news/john-kelly-launches-campaign-for-mayor-of-chicago-pledges-to-restore-22835571"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/lobbyist-mayoral-candidate-john-kelly-chicago-career-politicians/",
+        "https://chicago.suntimes.com/fran-spielman-show/2026/08/20/chicago-mayoral-candidate-john-kelly-lobbyist-brandon-johnson-february-2027-election",
+        "https://www.nbcchicago.com/news/local/documents-raise-questions-about-chicago-mayoral-candidate-john-kellys-residency/3981444/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=40942",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf",
+        "https://johnkellyforchi.com/issues/"
+      ]
+    },
+    {
+      "slug": "matt-brewer",
+      "name": "Matt Brewer",
+      "shortName": "Brewer",
+      "title": "Trial lawyer, former CHA board chair",
+      "titleEs": "Abogado litigante, expresidente de la junta de la CHA",
+      "bio": "Partner at the law firm Bartlit Beck, former chair and interim CEO of the Chicago Housing Authority, and co-owner of The Wiener's Circle; 46, raised by his mother in Grand Crossing, Stanford's first Black student body president, Yale Law. Filed on the first day.",
+      "bioEs": "Socio del despacho Bartlit Beck, expresidente de la junta y director interino de la Autoridad de Vivienda de Chicago, y copropietario de The Wiener's Circle; 46 años, criado por su madre en Grand Crossing, primer presidente estudiantil afroamericano de Stanford, abogado por Yale. Presentó sus firmas el primer día.",
+      "website": "https://www.mattbrewer.com/",
+      "photoUrl": "https://run.imgix.net/9e231b13-3c59-4e21-94f1-d4e0232af310/4a739082-7ec4-4df3-af38-d03940b46b09/4a739082-7ec4-4df3-af38-d03940b46b09.jpg?ixlib=js-3.8.0&bri=0&con=0&sat=0&high=0&shad=0&usm=0&rect=0%2C0%2C7008%2C4672&auto=compress%2Cformat&fit=fillmax&w=640&q=75&s=c8550c87789c81b78d275583eb7b7293",
+      "photoFrame": {
+        "x": 0.353,
+        "y": 0.44,
+        "zoom": 1.33
+      },
+      "candidateUid": "yEOHKeU0AAQnb91496PDiIjOmZg2",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": null,
+      "statusNoteEs": null,
+      "points": [
+        {
+          "text": "Pick the neighborhoods with the most violence and put every city service there at once, not only police.",
+          "textEs": "Elegir los vecindarios con más violencia y llevar ahí todos los servicios de la ciudad a la vez, no solo la policía.",
+          "quote": {
+            "text": "For too long, we've been presented with a false choice about Chicago's future.",
+            "source": "Block Club Chicago, Oct. 26, 2026",
+            "url": "https://blockclubchicago.org/2026/10/26/who-is-running-for-chicago-mayor/"
+          }
+        },
+        {
+          "text": "Every public school graduate leaves with a plan: college, a trade, the military, or a job.",
+          "textEs": "Cada graduado de escuela pública sale con un plan: universidad, un oficio, las fuerzas armadas o un empleo.",
+          "quote": {
+            "text": "A child's future should not be determined by their zipcode.",
+            "source": "mattbrewer.com",
+            "url": "https://www.mattbrewer.com/priorities"
+          }
+        },
+        {
+          "text": "Says taxing businesses more would mean the city has failed.",
+          "textEs": "Dice que gravar más a los negocios significaría que la ciudad fracasó.",
+          "quote": {
+            "text": "If the main source of revenue is taxing businesses, then taxing businesses more. Then, we've failed,",
+            "source": "ABC7 Chicago, June 25, 2026",
+            "url": "https://abc7chicago.com/post/former-chicago-housing-authority-cha-ceo-matt-brewer-announces-run-mayor/19381797/"
+          }
+        }
+      ],
+      "summary": "Only Brewer: Pick the neighborhoods with the most violence and put every city service there at once: housing, jobs, streetlights, schools, and police together.\n\nSchools: Every CPS graduate leaves with a plan: college, a trade, the military, or a job.\n\nWith most of the field: On taxes, housing, and policing the platform says what most candidates say: grow the tax base, build more, reform the police.",
+      "summaryEs": "Solo Brewer: Elegir los vecindarios con más violencia y llevar ahí todos los servicios de la ciudad a la vez: vivienda, empleos, alumbrado, escuelas y policía juntos.\n\nEscuelas: Cada graduado de CPS sale con un plan: universidad, un oficio, las fuerzas armadas o un empleo.\n\nCon la mayoría del campo: En impuestos, vivienda y policía la plataforma dice lo que dice la mayoría: ampliar la base tributaria, construir más, reformar la policía.",
+      "money": {
+        "summary": "Says the city cannot tax its way to prosperity and that taxing businesses more would mean the city has failed; would grow the tax base with residents, businesses, and jobs instead.",
+        "summaryEs": "Dice que la ciudad no puede llegar a la prosperidad a base de impuestos y que gravar más a los negocios significaría que la ciudad fracasó; ampliaría la base tributaria con residentes, negocios y empleos en su lugar.",
+        "quotes": [
+          {
+            "text": "If the main source of revenue is taxing businesses, then taxing businesses more. Then, we've failed,",
+            "source": "ABC7 Chicago, June 25, 2026",
+            "url": "https://abc7chicago.com/post/former-chicago-housing-authority-cha-ceo-matt-brewer-announces-run-mayor/19381797/"
+          },
+          {
+            "text": "Chicago cannot tax its way to prosperity.",
+            "source": "mattbrewer.com",
+            "url": "https://www.mattbrewer.com/priorities"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Brewer for Chicago",
+        "raised": 404572,
+        "spent": 271369,
+        "cashOnHand": 239290,
+        "period": "Since the committee formed June 25, 2026, through Sept. 30",
+        "periodEs": "Desde que se formó el comité el 25 de junio de 2026 hasta el 30 de septiembre",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41238",
+        "note": null,
+        "noteEs": null
+      },
+      "support": {
+        "pct": 0.1,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "Co-owns The Wiener's Circle, the hot dog stand famous for insulting its customers.",
+          "textEs": "Es copropietario de The Wiener's Circle, el puesto de hot dogs famoso por insultar a sus clientes.",
+          "url": "https://blockclubchicago.org/2026/09/29/wieners-circle-has-always-had-something-to-say-what-happens-when-its-owner-runs-for-mayor/"
+        },
+        {
+          "text": "Worked in the Chinese music industry in Beijing as a Luce fellow, and co-founded Chicago's first Black-owned cannabis dispensary with his mother and brother.",
+          "textEs": "Trabajó en la industria musical china en Pekín como becario Luce, y cofundó el primer dispensario de cannabis de propiedad afroamericana de Chicago con su madre y su hermano.",
+          "url": "https://www.mattbrewer.com/about"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.mattbrewer.com/priorities",
+        "https://abc7chicago.com/post/former-chicago-housing-authority-cha-ceo-matt-brewer-announces-run-mayor/19381797/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41238"
+      ]
+    },
+    {
+      "slug": "george-cardenas",
+      "name": "George Cardenas",
+      "shortName": "Cardenas",
+      "title": "Cook County Board of Review commissioner, former alderman",
+      "titleEs": "Comisionado de la Junta de Revisión del Condado de Cook, exconcejal",
+      "bio": "On the Board of Review since 2022 after twenty years as 12th Ward alderman; 62, born in Durango, Mexico, a Navy veteran and former auditor who lives in McKinley Park. Filed 31,500 signatures within an hour of the deadline.",
+      "bioEs": "En la Junta de Revisión desde 2022 tras veinte años como concejal del Distrito 12; 62 años, nacido en Durango, México, veterano de la Marina y exauditor que vive en McKinley Park. Presentó 31,500 firmas a menos de una hora del plazo.",
+      "website": "https://cardenas4chicago.com/",
+      "photoUrl": "https://cardenas4chicago.com/assets/branding/george-cardenas-headshot.jpg",
+      "photoFrame": null,
+      "candidateUid": "wPkdvjAnedapNl1KNSw1YANnKEB2",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": null,
+      "statusNoteEs": null,
+      "points": [
+        {
+          "text": "Send $3,000 a year to 150,000 working families, and expand pre-K to every child.",
+          "textEs": "Enviar $3,000 al año a 150,000 familias trabajadoras, y ampliar el pre-K a todos los niños.",
+          "quote": {
+            "text": "$3,000 annual stipends for qualified working families",
+            "source": "Campaign platform (cardenas4chicago.com)",
+            "url": "https://www.cardenas4chicago.com/pillar-parenting-matters.html"
+          }
+        },
+        {
+          "text": "After years of documented abandonment, take long-empty lots and buildings by eminent domain, with payment, and put them back to use.",
+          "textEs": "Tras años de abandono documentado, tomar por expropiación, con pago, lotes y edificios vacíos desde hace mucho y devolverlos al uso.",
+          "quote": {
+            "text": "It targets chronic abandonment that imposes costs on surrounding families.",
+            "source": "Campaign platform (cardenas4chicago.com)",
+            "url": "https://www.cardenas4chicago.com/pillar-economic-growth.html"
+          }
+        },
+        {
+          "text": "Fix pensions through shared sacrifice from the city and its workers, with current retirees' benefits protected.",
+          "textEs": "Arreglar las pensiones con sacrificio compartido entre la ciudad y sus trabajadores, protegiendo los beneficios de los jubilados actuales.",
+          "quote": {
+            "text": "Shared sacrifice from city and workers",
+            "source": "Campaign platform (cardenas4chicago.com)",
+            "url": "https://www.cardenas4chicago.com/pillar-pensions.html"
+          }
+        },
+        {
+          "text": "Create an auditor general to track waste, contracts, and unfinished audit findings.",
+          "textEs": "Crear un auditor general que dé seguimiento al desperdicio, los contratos y los hallazgos de auditoría pendientes.",
+          "quote": {
+            "text": "When city government is disorganized, families pay the price, and when fiscal controls are weak, neighborhoods will suffer,",
+            "source": "CBS Chicago, June 16, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/former-ald-george-cardenas-to-run-for-mayor/"
+          }
+        }
+      ],
+      "summary": "Only Cardenas: $3,000 a year to 150,000 working families, a $250 million program, plus universal pre-K.\n\nVacant property: After years of documented abandonment, the city could take long-empty lots and buildings by eminent domain, with payment, and put them back to use.\n\nPensions: Shared sacrifice from the city and its workers, with current retirees protected. Quigley agrees; Giannoulias and Mendoza would restructure and pay ahead.\n\nCity Hall: A new auditor general for waste and contracts, and $5 billion in bonds to start rebuilding water mains, roads, and transit.",
+      "summaryEs": "Solo Cardenas: $3,000 al año para 150,000 familias trabajadoras, un programa de $250 millones, más pre-K universal.\n\nPropiedades vacías: Tras años de abandono documentado, la ciudad podría tomar por expropiación, con pago, lotes y edificios vacíos desde hace mucho y devolverlos al uso.\n\nPensiones: Sacrificio compartido entre la ciudad y sus trabajadores, con los jubilados actuales protegidos. Quigley está de acuerdo; Giannoulias y Mendoza reestructurarían y pagarían por adelantado.\n\nAyuntamiento: Un nuevo auditor general para el desperdicio y los contratos, y $5,000 millones en bonos para empezar a reconstruir tuberías de agua, calles y transporte.",
+      "money": {
+        "summary": "Would create an auditor general to chase waste and contract overruns, reserve a fifth of city purchasing for small businesses, and send $3,000 a year to 150,000 working families.",
+        "summaryEs": "Crearía un auditor general para perseguir el desperdicio y los sobrecostos de contratos, reservaría una quinta parte de las compras de la ciudad para pequeños negocios y enviaría $3,000 al año a 150,000 familias trabajadoras.",
+        "quotes": [
+          {
+            "text": "Put the numbers on the table, control spending and rebuild confidence in city finances.",
+            "source": "cardenas4chicago.com",
+            "url": "https://cardenas4chicago.com/"
+          },
+          {
+            "text": "$3,000 annual stipends for qualified working families",
+            "source": "Campaign platform (cardenas4chicago.com)",
+            "url": "https://www.cardenas4chicago.com/pillar-parenting-matters.html"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Cardenas4Chicago and Friends of George A. Cardenas",
+        "raised": 173643,
+        "spent": 149327,
+        "cashOnHand": 208167,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026, both committees combined",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026, ambos comités sumados",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41169",
+        "note": "His older committee from the City Council did most of the year's spending.",
+        "noteEs": "Su comité más antiguo, del Concejo Municipal, hizo la mayor parte del gasto del año."
+      },
+      "support": {
+        "pct": 0.5,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "A four-year Navy veteran and Lane Tech graduate who came to Chicago from Durango at 13.",
+          "textEs": "Veterano de la Marina por cuatro años y graduado de Lane Tech que llegó a Chicago desde Durango a los 13 años.",
+          "url": "https://en.wikipedia.org/wiki/George_Cardenas"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/former-ald-george-cardenas-to-run-for-mayor/",
+        "https://cardenas4chicago.com/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41169",
+        "https://www.cardenas4chicago.com/pillar-parenting-matters.html",
+        "https://www.cardenas4chicago.com/pillar-economic-growth.html",
+        "https://www.cardenas4chicago.com/pillar-pensions.html"
+      ]
+    },
+    {
+      "slug": "joe-holberg",
+      "name": "Joe Holberg",
+      "shortName": "Holberg",
+      "title": "Fintech founder and former West Side teacher",
+      "titleEs": "Fundador de una fintech y exmaestro del West Side",
+      "bio": "Founded the wealth advisory firm Spring, sold to Mariner in 2023, after teaching middle school math on the West Side; 38, a first-generation college graduate who lives in Lincoln Park with his wife and two children. The first candidate to enter, in October 2025, and filed 32,000 signatures.",
+      "bioEs": "Fundó la firma de asesoría financiera Spring, vendida a Mariner en 2023, después de dar clases de matemáticas de secundaria en el West Side; 38 años, universitario de primera generación que vive en Lincoln Park con su esposa y sus dos hijos. El primer candidato en entrar, en octubre de 2025, y presentó 32,000 firmas.",
+      "website": "https://www.joeforchicago.com/",
+      "photoUrl": "https://www.joeforchicago.com/images/campaign-photo-joe.jpg",
+      "photoFrame": null,
+      "candidateUid": "1oCf1IYduwev0n0JU8tgdNzcZyx2",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": null,
+      "statusNoteEs": null,
+      "points": [
+        {
+          "text": "Reverse Chicago's population loss with more visitors, big events, and an easier move for new residents.",
+          "textEs": "Revertir la pérdida de población de Chicago con más visitantes, grandes eventos y una mudanza más fácil para nuevos residentes.",
+          "quote": {
+            "text": "I am running for Mayor of Chicago because I have a vision to turn our economic engine back on",
+            "source": "NBC Chicago, Oct. 2026",
+            "url": "https://www.nbcchicago.com/news/local/who-is-running-for-chicago-mayor-what-to-know-as-nominating-period-ends/4008071/"
+          }
+        },
+        {
+          "text": "Freeze property taxes, then lower them.",
+          "textEs": "Congelar los impuestos a la propiedad y luego bajarlos.",
+          "quote": {
+            "text": "If we grow and expand our tax base, not only will we have more revenue, but each of us will pay less,",
+            "source": "CBS Chicago, Aug. 5, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-joe-holberg/"
+          }
+        },
+        {
+          "text": "Bring down the 30 percent chronic absentee rate in the public schools.",
+          "textEs": "Bajar la tasa de ausentismo crónico de 30 por ciento en las escuelas públicas.",
+          "quote": {
+            "text": "I was a teacher on the West Side, first and foremost,",
+            "source": "CBS Chicago, Aug. 5, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-joe-holberg/"
+          }
+        },
+        {
+          "text": "Fix the CTA as a daily rider, starting with clean trains.",
+          "textEs": "Arreglar la CTA como pasajero diario, empezando por trenes limpios.",
+          "quote": {
+            "text": "When riders sit in cars that reek of urine, their first thought is whether they can take an Uber next time.",
+            "source": "Streetsblog Chicago op-ed, July 16, 2026",
+            "url": "https://chi.streetsblog.org/2026/07/16/op-ed-from-mayoral-candidate-joe-holberg-chicago-deserves-a-safe-clean-cta-here-are-five-commonsense-solutions-from-a-daily-rider"
+          }
+        }
+      ],
+      "summary": "Only Holberg: A plan to reverse Chicago's population loss: more visitors and big events, short work stints in the city, and one sign-up for new residents.\n\nProperty taxes: Freeze them, then lower them. Kitover and Kelly say much the same; Giannoulias would hold the levy flat; Nee will not rule out an increase.\n\nSchools: Names one target, the 30 percent chronic absentee rate.\n\nWith most of the field: On housing, policing, transit, and pensions the platform lists goals most candidates share.",
+      "summaryEs": "Solo Holberg: Un plan para revertir la pérdida de población de Chicago: más visitantes y grandes eventos, estancias cortas de trabajo en la ciudad y un solo registro para nuevos residentes.\n\nImpuestos a la propiedad: Congelarlos y luego bajarlos. Kitover y Kelly dicen casi lo mismo; Giannoulias mantendría fija la recaudación; Nee no descarta un aumento.\n\nEscuelas: Nombra una meta, la tasa de ausentismo crónico de 30 por ciento.\n\nCon la mayoría del campo: En vivienda, policía, transporte y pensiones la plataforma enumera metas que comparte la mayoría.",
+      "money": {
+        "summary": "Would balance the budget first, grow the tax base so each person pays less, freeze and then lower property taxes, and start cutting with the city's vehicle purchases.",
+        "summaryEs": "Equilibraría el presupuesto primero, ampliaría la base tributaria para que cada persona pague menos, congelaría y luego bajaría los impuestos a la propiedad y empezaría los recortes con las compras de vehículos de la ciudad.",
+        "quotes": [
+          {
+            "text": "If we grow and expand our tax base, not only will we have more revenue, but each of us will pay less,",
+            "source": "CBS Chicago, Aug. 5, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-joe-holberg/"
+          },
+          {
+            "text": "We buy $25 million too many vehicles a year,",
+            "source": "CBS Chicago, Aug. 5, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-joe-holberg/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Joe For Chicago",
+        "raised": 154644,
+        "spent": 200687,
+        "cashOnHand": 1059552,
+        "period": "Raised July 1 to Sept. 30, 2026; spent Jan. 1 to Sept. 30, 2026",
+        "periodEs": "Recaudado del 1 de julio al 30 de septiembre de 2026; gastado del 1 de enero al 30 de septiembre de 2026",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=40876",
+        "note": "The committee owes the candidate $950,000 in loans, about 70 percent of what it has raised.",
+        "noteEs": "El comité le debe al candidato $950,000 en préstamos, cerca del 70 por ciento de lo que ha recaudado."
+      },
+      "support": {
+        "pct": 1.7,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "Was homeless in college and slept in his car; his parents were a lighting technician and a school aide.",
+          "textEs": "Estuvo sin hogar en la universidad y dormía en su auto; sus padres eran técnico de iluminación y asistente escolar.",
+          "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-joe-holberg/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-joe-holberg/",
+        "https://www.joeforchicago.com/priorities",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=40876"
+      ]
+    },
+    {
+      "slug": "bill-quinlan",
+      "name": "Bill Quinlan",
+      "shortName": "Quinlan",
+      "title": "Attorney, former general counsel to the governor",
+      "titleEs": "Abogado, exasesor jurídico general del gobernador",
+      "bio": "General counsel to Gov. Rod Blagojevich from 2005 to 2008, chair of the youth agency Lawrence Hall, and a former Lincoln Park High School council chair; 56, from the Northwest Side, son of Richard J. Daley's corporation counsel. Entered in September and filed on the last day.",
+      "bioEs": "Asesor jurídico general del gobernador Rod Blagojevich de 2005 a 2008, presidente de la agencia juvenil Lawrence Hall y expresidente del consejo escolar de Lincoln Park High School; 56 años, del Northwest Side, hijo del abogado corporativo de Richard J. Daley. Entró en septiembre y presentó sus firmas el último día.",
+      "website": "https://www.quinlanforchicago.com/",
+      "photoUrl": "https://run.imgix.net/66a326a8-8ec3-4f97-950b-26347b35ce5d/ac378ce5-c11f-4450-b247-81cad6b965ed/ac378ce5-c11f-4450-b247-81cad6b965ed.jpg?ixlib=js-3.8.0&bri=0&con=0&sat=0&high=0&shad=0&usm=0&rect=916%2C1243%2C3951%2C4063&auto=compress%2Cformat&fit=fillmax&w=640&q=75&s=ac77757ce228edab2468235d4d02d7be",
+      "photoFrame": {
+        "x": 0.506,
+        "y": 0.28,
+        "zoom": 1.95
+      },
+      "candidateUid": "y9NHaWwD6sefeXgZfUQgaxEOHCX2",
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces an objection to his nominating petitions; Giannoulias campaign attorney Michael Dorf said he filed challenges to them. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta una objeción a sus peticiones de candidatura; el abogado de la campaña de Giannoulias, Michael Dorf, dijo que presentó las impugnaciones. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "A written 10-year budget plan instead of a yearly choice between higher taxes and blind cuts.",
+          "textEs": "Un plan presupuestario escrito a 10 años en vez de elegir cada año entre impuestos más altos y recortes a ciegas.",
+          "quote": {
+            "text": "We are on the brink of financial collapse that was created by politicians that were worried about getting reelected.",
+            "source": "CBS Chicago, Sept. 15, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/attorney-bill-quinlan-announces-run-for-chicago-mayor/"
+          }
+        },
+        {
+          "text": "Says what City Hall is missing is leadership that decides for people and not for special interests.",
+          "textEs": "Dice que lo que le falta al Ayuntamiento es liderazgo que decida por la gente y no por los intereses especiales.",
+          "quote": {
+            "text": "I'm willing to make decisions that matter for the people, not special interests.",
+            "source": "Announcement video, Sept. 15, 2026 (CBS Chicago)",
+            "url": "https://www.cbsnews.com/chicago/news/attorney-bill-quinlan-announces-run-for-chicago-mayor/"
+          }
+        },
+        {
+          "text": "Add vocational and technical classes in the public schools.",
+          "textEs": "Agregar clases vocacionales y técnicas en las escuelas públicas.",
+          "quote": null
+        }
+      ],
+      "summary": "Only Quinlan: A written 10-year budget plan in place of year-to-year fixes.\n\nWith most of the field: The six planks, on safety, schools, growth, and affordability, state goals most candidates share.",
+      "summaryEs": "Solo Quinlan: Un plan presupuestario escrito a 10 años en lugar de arreglos de un año para otro.\n\nCon la mayoría del campo: Los seis ejes, sobre seguridad, escuelas, crecimiento y asequibilidad, plantean metas que comparte la mayoría.",
+      "money": {
+        "summary": "Calls the city's finances a collapse created by politicians worried about reelection, and would replace the yearly choice between higher taxes and blind cuts with a ten-year budget plan.",
+        "summaryEs": "Llama a las finanzas de la ciudad un colapso creado por políticos preocupados por la reelección, y reemplazaría la elección anual entre impuestos más altos y recortes a ciegas con un plan presupuestario a diez años.",
+        "quotes": [
+          {
+            "text": "We are on the brink of financial collapse that was created by politicians that were worried about getting reelected.",
+            "source": "CBS Chicago, Sept. 15, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/attorney-bill-quinlan-announces-run-for-chicago-mayor/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Quinlan for Chicago",
+        "raised": 282431,
+        "spent": 78216,
+        "cashOnHand": 204215,
+        "period": "Since the committee formed Sept. 15, 2026, through Sept. 30",
+        "periodEs": "Desde que se formó el comité el 15 de septiembre de 2026 hasta el 30 de septiembre",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41442",
+        "note": "Sixteen days of fundraising, no loans.",
+        "noteEs": "Dieciséis días de recaudación, sin préstamos."
+      },
+      "support": {
+        "pct": null,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "Represented the fired CPS chief Pedro Martinez for free, and sued (unsuccessfully) to make three rivals choose one office to run for.",
+          "textEs": "Representó gratis al despedido director de CPS Pedro Martinez, y demandó (sin éxito) para obligar a tres rivales a elegir un solo cargo.",
+          "url": "https://www.cbsnews.com/chicago/news/attorney-bill-quinlan-announces-run-for-chicago-mayor/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/attorney-bill-quinlan-announces-run-for-chicago-mayor/",
+        "https://www.quinlanforchicago.com/issues",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41442",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "danielle-carter-walters",
+      "name": "Danielle Carter-Walters",
+      "shortName": "Carter-Walters",
+      "title": "Co-founder of Chicago Flips Red",
+      "titleEs": "Cofundadora de Chicago Flips Red",
+      "bio": "A conservative organizer, fitness trainer, and small business owner married to a retired Chicago police officer, running as a law-and-order outsider. Filed 13,000 signatures within an hour of the deadline.",
+      "bioEs": "Organizadora conservadora, entrenadora física y dueña de un pequeño negocio, casada con un policía retirado de Chicago, que se postula como una candidata de ley y orden ajena a la política. Presentó 13,000 firmas a menos de una hora del plazo.",
+      "website": "https://www.dannicformayor.com/",
+      "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Danielle_Carter_Walters_in_2026_(cropped).jpg?width=400",
+      "photoFrame": null,
+      "candidateUid": null,
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Filed about 13,000 signatures against a 12,500 minimum, so a petition challenge could decide her place on the ballot; no campaign committee is on file with the State Board of Elections. Faces an objection to her nominating petitions. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Presentó unas 13,000 firmas frente a un mínimo de 12,500, así que una impugnación podría decidir su lugar en la boleta; no hay comité de campaña registrado ante la Junta Electoral del Estado. Enfrenta una objeción a sus peticiones de candidatura. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "A Chicago DOGE accountability office to cut waste, expose fraud, and fund the basics.",
+          "textEs": "Una oficina de rendición de cuentas al estilo DOGE para Chicago que recorte desperdicio, exponga fraude y financie lo básico.",
+          "quote": {
+            "text": "Cut waste. Expose fraud. Fund the basics.",
+            "source": "dannicformayor.com",
+            "url": "https://www.dannicformayor.com/"
+          }
+        },
+        {
+          "text": "Restore law and order.",
+          "textEs": "Restaurar la ley y el orden.",
+          "quote": {
+            "text": "Restore law and order.",
+            "source": "dannicformayor.com",
+            "url": "https://www.dannicformayor.com/"
+          }
+        },
+        {
+          "text": "Stop what the campaign calls taxing the city into decline.",
+          "textEs": "Detener lo que llama gravar la ciudad hasta la decadencia.",
+          "quote": {
+            "text": "Stop taxing decline.",
+            "source": "dannicformayor.com",
+            "url": "https://www.dannicformayor.com/"
+          }
+        }
+      ],
+      "summary": "Only Carter-Walters: A Chicago DOGE office to audit city spending.\n\nNot published: Nineteen issue headings on the site, each a slogan with no policy behind it yet.",
+      "summaryEs": "Solo Carter-Walters: Una oficina DOGE para Chicago que audite el gasto de la ciudad.\n\nSin publicar: Diecinueve encabezados de temas en el sitio, cada uno un lema sin políticas detrás todavía.",
+      "money": {
+        "summary": "Would cut waste and expose fraud through a Chicago DOGE accountability office, and stop raising taxes on a shrinking city.",
+        "summaryEs": "Recortaría desperdicio y expondría fraude mediante una oficina de rendición de cuentas al estilo DOGE para Chicago, y dejaría de subir impuestos en una ciudad que se encoge.",
+        "quotes": [
+          {
+            "text": "Cut waste. Expose fraud. Fund the basics.",
+            "source": "dannicformayor.com",
+            "url": "https://www.dannicformayor.com/"
+          }
+        ]
+      },
+      "finance": null,
+      "support": {
+        "pct": null,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [],
+      "sourceUrls": [
+        "https://www.dannicformayor.com/",
+        "https://chicago.suntimes.com/elections/2026/10/26/chicago-mayoral-race-last-day-of-filing-mendoza-pappas-2027-election",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "zoe-ma",
+      "name": "Zoe Ma",
+      "shortName": "Ma",
+      "title": "Affordable housing developer",
+      "titleEs": "Desarrolladora de vivienda asequible",
+      "bio": "Builds and manages affordable apartment buildings, chairs the Cook County Green Party, and says she would be the city's first Chinese American, Muslim, and naturalized mayor; grew up working-class in China and arrived in Chicago in 1994 with $40. Filed 17,000 signatures.",
+      "bioEs": "Construye y administra edificios de departamentos asequibles, preside el Partido Verde del Condado de Cook y dice que sería la primera alcaldesa chino-estadounidense, musulmana y naturalizada de la ciudad; creció en una familia obrera en China y llegó a Chicago en 1994 con $40. Presentó 17,000 firmas.",
+      "website": "https://zoemaformayor.com/",
+      "photoUrl": null,
+      "photoFrame": null,
+      "candidateUid": null,
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Faces an objection to her nominating petitions. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Enfrenta una objeción a sus peticiones de candidatura. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "A guaranteed income, starting with 1,000 people at about $6 million a year.",
+          "textEs": "Un ingreso garantizado, empezando con 1,000 personas por unos $6 millones al año.",
+          "quote": {
+            "text": "Even if we find like 1,000 people for guaranteed income for a year, that's only $6 million",
+            "source": "CBS Chicago, Sept. 1, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-zoe-ma-poverty-inequality/"
+          }
+        },
+        {
+          "text": "Audit where the city's affordable housing money goes.",
+          "textEs": "Auditar a dónde va el dinero de vivienda asequible de la ciudad.",
+          "quote": {
+            "text": "Let's see how much money actually goes toward affordable housing, while we have $425 million could really help.",
+            "source": "CBS Chicago, Sept. 1, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-zoe-ma-poverty-inequality/"
+          }
+        },
+        {
+          "text": "Says the city is never short of money, only of priorities.",
+          "textEs": "Dice que a la ciudad nunca le falta dinero, solo prioridades.",
+          "quote": {
+            "text": "Chicago's never short on money. It's about priority.",
+            "source": "CBS Chicago, Sept. 1, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-zoe-ma-poverty-inequality/"
+          }
+        }
+      ],
+      "summary": "Only Ma: A guaranteed income, starting with 1,000 people at about $6 million a year. Cardenas would send $3,000 a year to working families instead.\n\nHousing money: Wants an audit of where the city's affordable housing dollars go. Ma builds affordable housing for a living.\n\nNot published: No platform page. Property tax reform and free career tutoring in CPS are named without detail.",
+      "summaryEs": "Solo Ma: Un ingreso garantizado, empezando con 1,000 personas por unos $6 millones al año. Cardenas enviaría en cambio $3,000 al año a familias trabajadoras.\n\nDinero para vivienda: Quiere una auditoría de a dónde van los dólares de vivienda asequible de la ciudad. Ma se dedica a construir vivienda asequible.\n\nSin publicar: No hay página de plataforma. La reforma del impuesto a la propiedad y la tutoría profesional gratuita en CPS se nombran sin detalle.",
+      "money": {
+        "summary": "Says the city has the money and lacks only the priorities; would trace where the affordable housing money goes and fund guaranteed income at a few million dollars a year.",
+        "summaryEs": "Dice que la ciudad tiene el dinero y solo le faltan prioridades; rastrearía a dónde va el dinero de la vivienda asequible y financiaría el ingreso garantizado con unos pocos millones al año.",
+        "quotes": [
+          {
+            "text": "Even if we find like 1,000 people for guaranteed income for a year, that's only $6 million",
+            "source": "CBS Chicago, Sept. 1, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-zoe-ma-poverty-inequality/"
+          },
+          {
+            "text": "Let's see how much money actually goes toward affordable housing, while we have $425 million could really help.",
+            "source": "CBS Chicago, Sept. 1, 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-zoe-ma-poverty-inequality/"
+          }
+        ]
+      },
+      "finance": {
+        "committee": "Friends of Zoe Ma for Mayor",
+        "raised": 60000,
+        "spent": 65469,
+        "cashOnHand": 3228,
+        "period": "Since the committee formed May 28, 2026, through Sept. 30",
+        "periodEs": "Desde que se formó el comité el 28 de mayo de 2026 hasta el 30 de septiembre",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41198",
+        "note": "Nearly all of it was loans from one Wilmette company.",
+        "noteEs": "Casi todo fueron préstamos de una sola empresa de Wilmette."
+      },
+      "support": {
+        "pct": null,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [
+        {
+          "text": "Says she joined the 1989 Tiananmen Square protests before coming to Chicago with $40.",
+          "textEs": "Dice que participó en las protestas de la Plaza de Tiananmén de 1989 antes de llegar a Chicago con $40.",
+          "url": "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-zoe-ma-poverty-inequality/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/chicago-mayoral-candidate-zoe-ma-poverty-inequality/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41198",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "john-kitover",
+      "name": "John Kitover",
+      "shortName": "Kitover",
+      "title": "Businessman and Army National Guard veteran",
+      "titleEs": "Empresario y veterano de la Guardia Nacional del Ejército",
+      "bio": "A self-described Republican-Libertarian businessman, podcast host, and National Guard veteran who ran for Congress in the 16th District in 2026. Filed on the last day.",
+      "bioEs": "Empresario que se describe como republicano-libertario, presentador de un pódcast y veterano de la Guardia Nacional que se postuló al Congreso por el Distrito 16 en 2026. Presentó sus firmas el último día.",
+      "website": "https://johnkitover45.com/",
+      "photoUrl": null,
+      "photoFrame": null,
+      "candidateUid": null,
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Reported to be short on signatures; Giannoulias campaign attorney Michael Dorf said he challenged his petitions, and the objection is on the Board's list. No campaign committee is on file with the State Board of Elections. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Se reportó que le faltan firmas; el abogado de la campaña de Giannoulias, Michael Dorf, dijo que impugnó sus peticiones, y la objeción está en la lista de la Junta. No hay comité de campaña registrado ante la Junta Electoral del Estado. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Would put city bankruptcy on the table to deal with the pension debt.",
+          "textEs": "Pondría la quiebra de la ciudad sobre la mesa para enfrentar la deuda de pensiones.",
+          "quote": {
+            "text": "We cannot borrow and spend our way out of this crisis.",
+            "source": "CBS Chicago, Oct. 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayor-election-candidates-2027-petitions-filed/"
+          }
+        },
+        {
+          "text": "Freeze the property tax levy in the first year, and no new taxes until Springfield reforms pensions.",
+          "textEs": "Congelar la recaudación del impuesto a la propiedad el primer año, y ningún impuesto nuevo hasta que Springfield reforme las pensiones.",
+          "quote": {
+            "text": "I will freeze the property tax levy in my first year as mayor and demand structural pension reform from Springfield before any new tax increases are considered.",
+            "source": "Campaign site",
+            "url": "https://johnkitover45.com/"
+          }
+        }
+      ],
+      "summary": "Only Kitover: Would put city bankruptcy on the table to deal with the pension debt.\n\nProperty taxes: Freeze the levy in the first year, and no new taxes until Springfield reforms pensions. Holberg and Kelly would also freeze or lower them.\n\nNot published: Nothing on housing, schools, or transit.",
+      "summaryEs": "Solo Kitover: Pondría la quiebra de la ciudad sobre la mesa para enfrentar la deuda de pensiones.\n\nImpuestos a la propiedad: Congelar la recaudación el primer año, y ningún impuesto nuevo hasta que Springfield reforme las pensiones. Holberg y Kelly también los congelarían o bajarían.\n\nSin publicar: Nada sobre vivienda, escuelas o transporte.",
+      "money": {
+        "summary": "Would freeze the property tax levy in his first year, refuse new taxes until the state reforms pensions, cut borrowing, and consider bankruptcy for the pension debt.",
+        "summaryEs": "Congelaría la tasa del impuesto a la propiedad en su primer año, rechazaría impuestos nuevos hasta que el estado reforme las pensiones, recortaría el endeudamiento y consideraría la quiebra por la deuda de pensiones.",
+        "quotes": [
+          {
+            "text": "We cannot borrow and spend our way out of this crisis.",
+            "source": "CBS Chicago, Oct. 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayor-election-candidates-2027-petitions-filed/"
+          }
+        ]
+      },
+      "finance": null,
+      "support": {
+        "pct": null,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/chicago-mayor-election-candidates-2027-petitions-filed/",
+        "https://www.nbcchicago.com/news/local/who-is-running-for-chicago-mayor-what-to-know-as-nominating-period-ends/4008071/",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    },
+    {
+      "slug": "jessica-maronto",
+      "name": "Jessica Maronto",
+      "shortName": "Maronto",
+      "title": "City traffic signal repair worker",
+      "titleEs": "Trabajadora de reparación de semáforos de la ciudad",
+      "bio": "Repairs traffic signals for the Chicago Department of Transportation. Filed on the last day, told reporters her petitions would fall short, and does not plan to campaign actively.",
+      "bioEs": "Repara semáforos para el Departamento de Transporte de Chicago. Presentó sus firmas el último día, dijo a los reporteros que sus peticiones no alcanzarían y no planea hacer campaña activa.",
+      "website": "https://marontoforchicago.com/",
+      "photoUrl": null,
+      "photoFrame": null,
+      "candidateUid": null,
+      "platformUrl": null,
+      "status": "filed",
+      "statusNote": "Said her petitions would fall short of 12,500 valid signatures and that she may run as a write-in. Faces an objection; Giannoulias campaign attorney Michael Dorf said he challenged her petitions. Board of Elections hearings began November 9, 2026, and the Board certifies the ballot by December 17.",
+      "statusNoteEs": "Dijo que sus peticiones no llegarían a 12,500 firmas válidas y que podría postularse como candidata por escrito. Enfrenta una objeción; el abogado de la campaña de Giannoulias, Michael Dorf, dijo que impugnó sus peticiones. Las audiencias de la Junta de Elecciones comenzaron el 9 de noviembre de 2026, y la Junta certifica la boleta a más tardar el 17 de diciembre.",
+      "points": [
+        {
+          "text": "Says the campaign's energy goes to its projects and mission rather than to campaigning.",
+          "textEs": "Dice que la energía de la campaña va a sus proyectos y su misión y no a hacer campaña.",
+          "quote": {
+            "text": "we're focusing our efforts on the projects and mission",
+            "source": "CBS Chicago, Oct. 2026",
+            "url": "https://www.cbsnews.com/chicago/news/chicago-mayor-election-candidates-2027-petitions-filed/"
+          }
+        },
+        {
+          "text": "A city worker's run for the top job, funded mostly out of pocket.",
+          "textEs": "La candidatura de una trabajadora de la ciudad al puesto más alto, financiada sobre todo con su propio dinero.",
+          "quote": null
+        }
+      ],
+      "summary": "Not campaigning: Says the petitions will fall short and that the effort goes to the campaign's projects, not to campaigning. No positions on record.",
+      "summaryEs": "Sin campaña activa: Dice que las peticiones no alcanzarán y que el esfuerzo va a los proyectos de la campaña, no a hacer campaña. Sin posiciones en el registro.",
+      "money": {
+        "summary": "No position on taxes or the budget on the record.",
+        "summaryEs": "Ninguna posición sobre impuestos o el presupuesto en el registro.",
+        "quotes": []
+      },
+      "finance": {
+        "committee": "Committee to Elect Jessica Maronto for Mayor",
+        "raised": 32918,
+        "spent": 3853,
+        "cashOnHand": 29315,
+        "period": "Since the committee formed, through Sept. 30, 2026",
+        "periodEs": "Desde que se formó el comité hasta el 30 de septiembre de 2026",
+        "url": "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41339",
+        "note": "Mostly loans from the candidate.",
+        "noteEs": "Sobre todo préstamos de la candidata."
+      },
+      "support": {
+        "pct": null,
+        "poll": "ChicagoSpeaks poll, Sept. 2026 (Mansueto Institute / NORC)",
+        "url": "https://miurban.uchicago.edu/news-and-announcement-fall-2026-chicagospeaks-mayor/"
+      },
+      "pizza": {
+        "verdict": "none",
+        "preference": null,
+        "preferenceEs": null,
+        "quote": null
+      },
+      "fun": [],
+      "sourceUrls": [
+        "https://www.cbsnews.com/chicago/news/chicago-mayor-election-candidates-2027-petitions-filed/",
+        "https://elections.il.gov/CampaignDisclosure/CommitteeDetail.aspx?id=41339",
+        "https://blockclubchicago.org/2026/11/02/johnson-other-candidates-face-challenges-to-nominating-petitions-for-mayors-race/",
+        "https://cboeprod.blob.core.usgovcloudapi.net/prod/2026-11/Candidate%20Objection%20List%20by%20Case%20Number%207Nov2026_0.pdf"
+      ]
+    }
+  ],
+  "consensus": [
+    {
+      "text": "Put more police officers on the street and on CTA trains, and fund violence prevention programs.",
+      "textEs": "Poner más policías en la calle y en los trenes de la CTA, y financiar programas de prevención de la violencia."
+    },
+    {
+      "text": "Build more housing by cutting permit times and red tape.",
+      "textEs": "Construir más vivienda reduciendo los tiempos de permisos y los trámites."
+    },
+    {
+      "text": "Grow the tax base and cut waste at City Hall.",
+      "textEs": "Ampliar la base tributaria y recortar el desperdicio en el Ayuntamiento."
+    },
+    {
+      "text": "Recruit employers and train workers for new industries.",
+      "textEs": "Atraer empleadores y capacitar a trabajadores para nuevas industrias."
+    },
+    {
+      "text": "Schools where students read and do math at grade level, with paths to trades and careers.",
+      "textEs": "Escuelas donde los estudiantes lean y hagan matemáticas a su nivel de grado, con caminos hacia oficios y carreras."
+    }
+  ],
+  "splits": [
+    {
+      "id": "property-taxes",
+      "title": "Property taxes",
+      "titleEs": "Impuestos a la propiedad",
+      "sides": [
+        {
+          "label": "Freeze or lower them",
+          "labelEs": "Congelarlos o bajarlos",
+          "slugs": [
+            "joe-holberg",
+            "john-kitover",
+            "john-kelly"
+          ]
+        },
+        {
+          "label": "Hold the city's levy flat",
+          "labelEs": "Mantener fija la recaudación de la ciudad",
+          "slugs": [
+            "alexi-giannoulias"
+          ]
+        },
+        {
+          "label": "An increase is not off the table",
+          "labelEs": "Un aumento no está descartado",
+          "slugs": [
+            "lisa-nee"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "new-taxes",
+      "title": "New taxes",
+      "titleEs": "Impuestos nuevos",
+      "sides": [
+        {
+          "label": "Make the wealthy pay more",
+          "labelEs": "Que los ricos paguen más",
+          "slugs": [
+            "brandon-johnson",
+            "alexi-giannoulias"
+          ]
+        },
+        {
+          "label": "No new taxes",
+          "labelEs": "Ningún impuesto nuevo",
+          "slugs": [
+            "john-kelly",
+            "john-kitover"
+          ]
+        },
+        {
+          "label": "Cut taxes",
+          "labelEs": "Recortar impuestos",
+          "slugs": [
+            "willie-wilson"
+          ]
+        },
+        {
+          "label": "Savings first, before any new revenue",
+          "labelEs": "Primero ahorros, antes de cualquier ingreso nuevo",
+          "slugs": [
+            "mike-quigley"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pensions",
+      "title": "Pensions",
+      "titleEs": "Pensiones",
+      "sides": [
+        {
+          "label": "Workers share the cost",
+          "labelEs": "Los trabajadores comparten el costo",
+          "slugs": [
+            "mike-quigley",
+            "george-cardenas"
+          ]
+        },
+        {
+          "label": "Restructure the funds and pay ahead",
+          "labelEs": "Reestructurar los fondos y pagar por adelantado",
+          "slugs": [
+            "alexi-giannoulias",
+            "susana-mendoza"
+          ]
+        },
+        {
+          "label": "Change the state constitution",
+          "labelEs": "Cambiar la constitución del estado",
+          "slugs": [
+            "willie-wilson"
+          ]
+        },
+        {
+          "label": "Bankruptcy on the table",
+          "labelEs": "La quiebra sobre la mesa",
+          "slugs": [
+            "john-kitover"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tif",
+      "title": "TIF money",
+      "titleEs": "Dinero de los TIF",
+      "sides": [
+        {
+          "label": "Send the surplus to public schools",
+          "labelEs": "Enviar el excedente a las escuelas públicas",
+          "slugs": [
+            "brandon-johnson"
+          ]
+        },
+        {
+          "label": "Keep it in the neighborhoods it came from",
+          "labelEs": "Dejarlo en los vecindarios de donde salió",
+          "slugs": [
+            "susana-mendoza",
+            "mike-quigley"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "households",
+      "title": "Money for households",
+      "titleEs": "Dinero para los hogares",
+      "sides": [
+        {
+          "label": "$3,000 a year to working families",
+          "labelEs": "$3,000 al año para familias trabajadoras",
+          "slugs": [
+            "george-cardenas"
+          ]
+        },
+        {
+          "label": "A guaranteed income",
+          "labelEs": "Un ingreso garantizado",
+          "slugs": [
+            "zoe-ma"
+          ]
+        },
+        {
+          "label": "A $22 minimum wage",
+          "labelEs": "Un salario mínimo de $22",
+          "slugs": [
+            "alexi-giannoulias"
+          ]
+        }
+      ]
+    }
+  ],
+  "trivia": [
+    {
+      "id": "ogden-first-mayor",
+      "mayor": "William B. Ogden",
+      "years": "1837-1838",
+      "text": "William B. Ogden became Chicago's first mayor in 1837. The first city census, which he ordered, counted 4,170 residents.",
+      "textEs": "William B. Ogden fue el primer alcalde de Chicago, en 1837. El primer censo de la ciudad, que él ordenó, contó 4,170 habitantes.",
+      "url": "https://www.wbez.org/culture/2013/03/04/chicagos-first-mayor"
+    },
+    {
+      "id": "ogden-first-railroad",
+      "mayor": "William B. Ogden",
+      "years": "1837-1838",
+      "text": "William B. Ogden was president of the Galena and Chicago Union, the first railroad built out of Chicago. Its first locomotive was named the Pioneer.",
+      "textEs": "William B. Ogden fue presidente del Galena and Chicago Union, el primer ferrocarril construido desde Chicago. Su primera locomotora se llamó Pioneer.",
+      "url": "https://en.wikipedia.org/wiki/Galena_and_Chicago_Union_Railroad"
+    },
+    {
+      "id": "ogden-peshtigo",
+      "mayor": "William B. Ogden",
+      "years": "1837-1838",
+      "text": "William B. Ogden lost most of his prized possessions in the Great Chicago Fire of October 8, 1871. His lumber company in Peshtigo, Wisconsin, burned the same day.",
+      "textEs": "William B. Ogden perdió casi todas sus posesiones más preciadas en el Gran Incendio de Chicago del 8 de octubre de 1871. Su maderera en Peshtigo, Wisconsin, se quemó el mismo día.",
+      "url": "https://en.wikipedia.org/wiki/William_B._Ogden"
+    },
+    {
+      "id": "wentworth-height",
+      "mayor": "John Wentworth",
+      "years": "1857-1858, 1860-1861",
+      "text": "John Wentworth was nicknamed \"Long John.\" He stood 6 feet 6 inches tall and weighed 300 pounds.",
+      "textEs": "A John Wentworth le decían \"Long John\". Medía 6 pies 6 pulgadas (casi 2 metros) y pesaba 300 libras.",
+      "url": "https://www.chipublib.org/mayor-john-wentworth-biography/"
+    },
+    {
+      "id": "wentworth-fired-police",
+      "mayor": "John Wentworth",
+      "years": "1857-1858, 1860-1861",
+      "text": "In March 1861, Mayor John Wentworth fired the city's entire police force. Most of the men were rehired by the police board within a few hours.",
+      "textEs": "En marzo de 1861, el alcalde John Wentworth despidió a toda la policía de la ciudad. La junta de policía recontrató a la mayoría en pocas horas.",
+      "url": "https://en.wikipedia.org/wiki/Chicago_Police_Department"
+    },
+    {
+      "id": "wentworth-sands-raid",
+      "mayor": "John Wentworth",
+      "years": "1857-1858, 1860-1861",
+      "text": "In 1857, Mayor John Wentworth led a raid on the Sands, Chicago's red-light district. The raid ended with the area burned.",
+      "textEs": "En 1857, el alcalde John Wentworth encabezó una redada en the Sands, la zona roja de Chicago. La redada terminó con la zona quemada.",
+      "url": "https://en.wikipedia.org/wiki/John_Wentworth_(Illinois_politician)"
+    },
+    {
+      "id": "wentworth-obelisk",
+      "mayor": "John Wentworth",
+      "years": "1857-1858, 1860-1861",
+      "text": "At his own request, John Wentworth's tombstone is a 60-foot granite obelisk. It came from New Hampshire on two railroad cars.",
+      "textEs": "Por petición suya, la lápida de John Wentworth es un obelisco de granito de 60 pies. Llegó desde New Hampshire en dos vagones de tren.",
+      "url": "https://en.wikipedia.org/wiki/John_Wentworth_(Illinois_politician)"
+    },
+    {
+      "id": "boone-lager-beer-riot",
+      "mayor": "Levi Boone",
+      "years": "1855-1856",
+      "text": "Levi Boone, a great-nephew of Daniel Boone, raised liquor licenses from $50 to $300 a year and enforced Sunday tavern closing. The Lager Beer Riot followed.",
+      "textEs": "Levi Boone, sobrino nieto de Daniel Boone, subió las licencias de licor de $50 a $300 al año e hizo cerrar las cantinas los domingos. Después vino el Lager Beer Riot.",
+      "url": "https://en.wikipedia.org/wiki/Levi_Boone"
+    },
+    {
+      "id": "mason-great-fire",
+      "mayor": "Roswell B. Mason",
+      "years": "1869-1871",
+      "text": "Roswell B. Mason was mayor during the Great Chicago Fire of 1871. He directed General Philip Sheridan to place the city under martial law.",
+      "textEs": "Roswell B. Mason era alcalde durante el Gran Incendio de Chicago de 1871. Le encargó al general Philip Sheridan poner la ciudad bajo ley marcial.",
+      "url": "https://en.wikipedia.org/wiki/Roswell_B._Mason"
+    },
+    {
+      "id": "medill-fireproof",
+      "mayor": "Joseph Medill",
+      "years": "1871-1873",
+      "text": "Joseph Medill, co-owner and editor of the Chicago Tribune, was elected mayor after the 1871 fire as the \"Union Fireproof\" candidate. He created Chicago's first public library.",
+      "textEs": "Joseph Medill, copropietario y editor del Chicago Tribune, fue elegido alcalde tras el incendio de 1871 como candidato \"Union Fireproof\". Creó la primera biblioteca pública de Chicago.",
+      "url": "https://en.wikipedia.org/wiki/Joseph_Medill"
+    },
+    {
+      "id": "rice-actor",
+      "mayor": "John Blake Rice",
+      "years": "1865-1869",
+      "text": "John B. Rice made his acting debut in 1829 and later built Rice's Theater in Chicago. He was mayor from 1865 to 1869.",
+      "textEs": "John B. Rice debutó como actor en 1829 y después construyó el Rice's Theater en Chicago. Fue alcalde de 1865 a 1869.",
+      "url": "https://en.wikipedia.org/wiki/John_Blake_Rice"
+    },
+    {
+      "id": "harrison-sr-death",
+      "mayor": "Carter Harrison Sr.",
+      "years": "1879-1887, 1893",
+      "text": "Carter Harrison Sr. was killed in his home on October 28, 1893, two days before the close of the World's Columbian Exposition.",
+      "textEs": "Carter Harrison Sr. fue asesinado en su casa el 28 de octubre de 1893, dos días antes del cierre de la World's Columbian Exposition.",
+      "url": "https://en.wikipedia.org/wiki/Carter_Harrison_III"
+    },
+    {
+      "id": "harrisons-five-terms",
+      "mayor": "Carter Harrison Sr.",
+      "years": "1879-1887, 1893",
+      "text": "Carter Harrison Sr. was the first Chicago mayor elected five times. His son, Carter Harrison Jr., also served five terms as mayor.",
+      "textEs": "Carter Harrison Sr. fue el primer alcalde de Chicago elegido cinco veces. Su hijo, Carter Harrison Jr., también fue alcalde por cinco periodos.",
+      "url": "https://en.wikipedia.org/wiki/Carter_Harrison_III"
+    },
+    {
+      "id": "harrison-sr-eagle",
+      "mayor": "Carter Harrison Sr.",
+      "years": "1879-1887, 1893",
+      "text": "Carter Harrison Sr. campaigned in 1879 with a pet eagle and was nicknamed \"the Eagle.\" He was known to call Chicago his \"bride.\"",
+      "textEs": "Carter Harrison Sr. hizo campaña en 1879 con un águila como mascota y le decían \"the Eagle\". Solía llamar a Chicago su \"bride\", su novia.",
+      "url": "https://en.wikipedia.org/wiki/Carter_Harrison_III"
+    },
+    {
+      "id": "harrison-jr-born-in-chicago",
+      "mayor": "Carter Harrison Jr.",
+      "years": "1897-1905, 1911-1915",
+      "text": "Carter Harrison Jr., first elected in 1897, was the first Chicago mayor who was born in the city.",
+      "textEs": "Carter Harrison Jr., elegido por primera vez en 1897, fue el primer alcalde de Chicago nacido en la ciudad.",
+      "url": "https://en.wikipedia.org/wiki/Carter_Harrison_IV"
+    },
+    {
+      "id": "dunne-mayor-and-governor",
+      "mayor": "Edward F. Dunne",
+      "years": "1905-1907",
+      "text": "Edward Dunne, mayor from 1905 to 1907, is the only person elected both mayor of Chicago and governor of Illinois.",
+      "textEs": "Edward Dunne, alcalde de 1905 a 1907, es la única persona elegida tanto alcalde de Chicago como gobernador de Illinois.",
+      "url": "https://en.wikipedia.org/wiki/Edward_Fitzsimmons_Dunne"
+    },
+    {
+      "id": "dunne-oscar-wilde",
+      "mayor": "Edward F. Dunne",
+      "years": "1905-1907",
+      "text": "Edward Dunne and his wife had thirteen children. In his student days, one of his classmates was the author Oscar Wilde.",
+      "textEs": "Edward Dunne y su esposa tuvieron trece hijos. En sus días de estudiante, uno de sus compañeros de clase fue el escritor Oscar Wilde.",
+      "url": "https://en.wikipedia.org/wiki/Edward_Fitzsimmons_Dunne"
+    },
+    {
+      "id": "busse-four-year-term",
+      "mayor": "Fred A. Busse",
+      "years": "1907-1911",
+      "text": "Fred Busse, then Chicago's postmaster, won the 1907 election. It was the first election for a four-year mayoral term in the city's history.",
+      "textEs": "Fred Busse, entonces jefe de correos de Chicago, ganó la elección de 1907. Fue la primera elección para un periodo de cuatro años como alcalde en la historia de la ciudad.",
+      "url": "https://en.wikipedia.org/wiki/1907_Chicago_mayoral_election"
+    },
+    {
+      "id": "thompson-snoot",
+      "mayor": "William Hale Thompson",
+      "years": "1915-1923, 1927-1931",
+      "text": "\"Big Bill\" Thompson's often-cited threat against King George V: \"If George comes to Chicago, I'll crack him in the snoot.\"",
+      "textEs": "La amenaza más citada de \"Big Bill\" Thompson contra el rey George V: \"If George comes to Chicago, I'll crack him in the snoot.\"",
+      "url": "https://chicago.suntimes.com/entertainment/skip-wedding-prince-harry-meghan-markle-windsor-chicago-once-hated-british-royalty/"
+    },
+    {
+      "id": "thompson-rats",
+      "mayor": "William Hale Thompson",
+      "years": "1915-1923, 1927-1931",
+      "text": "In 1927, William Hale Thompson held a primary election debate between himself and two live rats, which he used to portray his opponents.",
+      "textEs": "En 1927, William Hale Thompson hizo un debate de primarias entre él y dos ratas vivas, a las que usó para representar a sus rivales.",
+      "url": "https://en.wikipedia.org/wiki/William_Hale_Thompson"
+    },
+    {
+      "id": "thompson-last-republican",
+      "mayor": "William Hale Thompson",
+      "years": "1915-1923, 1927-1931",
+      "text": "William Hale Thompson, who left office in 1931, is the most recent Republican to have served as mayor of Chicago.",
+      "textEs": "William Hale Thompson, que dejó el cargo en 1931, es el republicano más reciente que ha sido alcalde de Chicago.",
+      "url": "https://en.wikipedia.org/wiki/William_Hale_Thompson"
+    },
+    {
+      "id": "thompson-safe-deposit",
+      "mayor": "William Hale Thompson",
+      "years": "1915-1923, 1927-1931",
+      "text": "After William Hale Thompson died in 1944, two safe deposit boxes in his name were found to hold nearly $1.84 million in cash.",
+      "textEs": "Tras la muerte de William Hale Thompson en 1944, se descubrió que dos cajas de seguridad a su nombre guardaban casi $1.84 millones en efectivo.",
+      "url": "https://en.wikipedia.org/wiki/William_Hale_Thompson"
+    },
+    {
+      "id": "thompson-tree-climbing-fish",
+      "mayor": "William Hale Thompson",
+      "years": "1915-1923, 1927-1931",
+      "text": "Between terms, William Hale Thompson set off for the South Seas on July 5, 1924, to find a tree-climbing fish. He put up a $25,000 bet on his success. No one took it.",
+      "textEs": "Entre sus periodos, William Hale Thompson zarpó a los Mares del Sur el 5 de julio de 1924 para buscar un pez que trepa árboles. Apostó $25,000 a que lo lograría. Nadie aceptó.",
+      "url": "https://en.wikipedia.org/wiki/William_Hale_Thompson"
+    },
+    {
+      "id": "dever-capone-cicero",
+      "mayor": "William E. Dever",
+      "years": "1923-1927",
+      "text": "After William Dever was elected in 1923 and cracked down on bootlegging, the Torrio gang looked to the suburbs for a new base. Al Capone led its takeover of Cicero.",
+      "textEs": "Cuando William Dever fue elegido en 1923 y persiguió el contrabando de licor, la banda de Torrio buscó una nueva base en los suburbios. Al Capone encabezó la toma de Cicero.",
+      "url": "https://en.wikipedia.org/wiki/Chicago_Outfit"
+    },
+    {
+      "id": "cermak-miami",
+      "mayor": "Anton Cermak",
+      "years": "1931-1933",
+      "text": "Anton Cermak was shot in Miami on February 15, 1933, by a gunman trying to kill President-elect Franklin D. Roosevelt. He died on March 6, and 22nd Street was renamed Cermak Road.",
+      "textEs": "A Anton Cermak le dispararon en Miami el 15 de febrero de 1933; el atacante quería matar al presidente electo Franklin D. Roosevelt. Murió el 6 de marzo y la calle 22 pasó a llamarse Cermak Road.",
+      "url": "https://en.wikipedia.org/wiki/Anton_Cermak"
+    },
+    {
+      "id": "cermak-born-in-bohemia",
+      "mayor": "Anton Cermak",
+      "years": "1931-1933",
+      "text": "Anton Cermak was born in Kladno, Bohemia, now in the Czech Republic. He came to the United States with his parents in 1874.",
+      "textEs": "Anton Cermak nació en Kladno, Bohemia, hoy parte de la República Checa. Llegó a Estados Unidos con sus padres en 1874.",
+      "url": "https://en.wikipedia.org/wiki/Anton_Cermak"
+    },
+    {
+      "id": "cermak-mayflower",
+      "mayor": "Anton Cermak",
+      "years": "1931-1933",
+      "text": "Anton Cermak's reply to a jab from rival William Hale Thompson: he did not come over on the Mayflower, but \"I came over as soon as I could.\"",
+      "textEs": "La respuesta de Anton Cermak a una burla de su rival William Hale Thompson: no llegó en el Mayflower, pero \"I came over as soon as I could.\"",
+      "url": "https://en.wikipedia.org/wiki/Anton_Cermak"
+    },
+    {
+      "id": "corr-acting-mayor",
+      "mayor": "Frank J. Corr",
+      "years": "1933",
+      "text": "Frank J. Corr was acting mayor for less than a month, from March 15 to April 8, 1933. The City Council elected him to the job after Anton Cermak died.",
+      "textEs": "Frank J. Corr fue alcalde interino menos de un mes, del 15 de marzo al 8 de abril de 1933. El Concejo Municipal lo eligió para el cargo tras la muerte de Anton Cermak.",
+      "url": "https://en.wikipedia.org/wiki/Frank_J._Corr"
+    },
+    {
+      "id": "kelly-fourteen-years",
+      "mayor": "Edward J. Kelly",
+      "years": "1933-1947",
+      "text": "Edward J. Kelly was mayor for 14 years, from April 1933 to April 1947. In the 1920s he was chief engineer of the Chicago Sanitary District.",
+      "textEs": "Edward J. Kelly fue alcalde durante 14 años, de abril de 1933 a abril de 1947. En los años veinte fue ingeniero en jefe del Chicago Sanitary District.",
+      "url": "https://en.wikipedia.org/wiki/Edward_Joseph_Kelly"
+    },
+    {
+      "id": "kennelly-moving-business",
+      "mayor": "Martin H. Kennelly",
+      "years": "1947-1955",
+      "text": "Martin Kennelly was in the moving and storage business before he was mayor. He was the founder and first president of Allied Van Lines.",
+      "textEs": "Martin Kennelly se dedicaba a las mudanzas y el almacenaje antes de ser alcalde. Fue el fundador y primer presidente de Allied Van Lines.",
+      "url": "https://en.wikipedia.org/wiki/Martin_H._Kennelly"
+    },
+    {
+      "id": "daley-sr-21-years",
+      "mayor": "Richard J. Daley",
+      "years": "1955-1976",
+      "text": "Richard J. Daley won a sixth term in 1975, a record at the time. He had been mayor for 21 years when he died in office on December 20, 1976.",
+      "textEs": "Richard J. Daley ganó un sexto periodo en 1975, un récord en ese momento. Llevaba 21 años como alcalde cuando murió en el cargo el 20 de diciembre de 1976.",
+      "url": "https://en.wikipedia.org/wiki/Richard_J._Daley"
+    },
+    {
+      "id": "daley-sr-bridgeport",
+      "mayor": "Richard J. Daley",
+      "years": "1955-1976",
+      "text": "Richard J. Daley lived his entire life in Bridgeport, on Chicago's South Side.",
+      "textEs": "Richard J. Daley vivió toda su vida en Bridgeport, en el South Side de Chicago.",
+      "url": "https://en.wikipedia.org/wiki/Richard_J._Daley"
+    },
+    {
+      "id": "daley-sr-preserve-disorder",
+      "mayor": "Richard J. Daley",
+      "years": "1955-1976",
+      "text": "Richard J. Daley, in 1968: \"The policeman is not here to create disorder. The policeman is here to preserve disorder.\"",
+      "textEs": "Richard J. Daley, en 1968: \"The policeman is not here to create disorder. The policeman is here to preserve disorder.\"",
+      "url": "https://en.wikipedia.org/wiki/Richard_J._Daley"
+    },
+    {
+      "id": "bilandic-blizzard",
+      "mayor": "Michael A. Bilandic",
+      "years": "1976-1979",
+      "text": "Michael Bilandic narrowly lost the 1979 primary to Jane Byrne, 49% to 51%. The city's slow response to a debilitating blizzard was publicly blamed on him.",
+      "textEs": "Michael Bilandic perdió por poco la primaria de 1979 ante Jane Byrne, 49% contra 51%. La lenta respuesta de la ciudad a una fuerte tormenta de nieve se le achacó públicamente.",
+      "url": "https://en.wikipedia.org/wiki/Michael_A._Bilandic"
+    },
+    {
+      "id": "bilandic-chief-justice",
+      "mayor": "Michael A. Bilandic",
+      "years": "1976-1979",
+      "text": "After his time as mayor, Michael Bilandic served as chief justice of Illinois in the 1990s.",
+      "textEs": "Después de ser alcalde, Michael Bilandic fue presidente de la Corte Suprema de Illinois en los años noventa.",
+      "url": "https://en.wikipedia.org/wiki/Michael_A._Bilandic"
+    },
+    {
+      "id": "bilandic-fired-byrne",
+      "mayor": "Michael A. Bilandic",
+      "years": "1976-1979",
+      "text": "In 1977, Michael Bilandic fired Jane Byrne, the longtime head of the city's consumer affairs department. In 1979 she ran against him for mayor and won.",
+      "textEs": "En 1977, Michael Bilandic despidió a Jane Byrne, quien llevaba años al frente del departamento de asuntos del consumidor. En 1979 ella compitió contra él por la alcaldía y ganó.",
+      "url": "https://en.wikipedia.org/wiki/Michael_A._Bilandic"
+    },
+    {
+      "id": "bilandic-marathon",
+      "mayor": "Michael A. Bilandic",
+      "years": "1976-1979",
+      "text": "The Chicago Marathon had its first running in 1977, and Mayor Michael Bilandic ran in it. He also got married that year, on June 1.",
+      "textEs": "El Maratón de Chicago se corrió por primera vez en 1977, y el alcalde Michael Bilandic participó. Ese mismo año también se casó, el 1 de junio.",
+      "url": "https://en.wikipedia.org/wiki/Michael_A._Bilandic"
+    },
+    {
+      "id": "byrne-first-woman",
+      "mayor": "Jane Byrne",
+      "years": "1979-1983",
+      "text": "Jane Byrne won the 1979 election and became Chicago's first female mayor.",
+      "textEs": "Jane Byrne ganó la elección de 1979 y se convirtió en la primera alcaldesa de Chicago.",
+      "url": "https://en.wikipedia.org/wiki/Jane_Byrne"
+    },
+    {
+      "id": "byrne-cabrini-green",
+      "mayor": "Jane Byrne",
+      "years": "1979-1983",
+      "text": "Jane Byrne moved into the Cabrini-Green housing project on March 26, 1981. She stayed three weeks to bring attention to conditions there.",
+      "textEs": "Jane Byrne se mudó al complejo de vivienda pública Cabrini-Green el 26 de marzo de 1981. Se quedó tres semanas para llamar la atención sobre las condiciones del lugar.",
+      "url": "https://en.wikipedia.org/wiki/Jane_Byrne"
+    },
+    {
+      "id": "byrne-taste-of-chicago",
+      "mayor": "Jane Byrne",
+      "years": "1979-1983",
+      "text": "The first Taste of Chicago was held on Michigan Avenue on July 4, 1980, while Jane Byrne was mayor. Organizers expected 100,000 people. More than 250,000 came.",
+      "textEs": "El primer Taste of Chicago se hizo en Michigan Avenue el 4 de julio de 1980, cuando Jane Byrne era alcaldesa. Los organizadores esperaban 100,000 personas. Llegaron más de 250,000.",
+      "url": "https://en.wikipedia.org/wiki/Taste_of_Chicago"
+    },
+    {
+      "id": "byrne-blues-brothers",
+      "mayor": "Jane Byrne",
+      "years": "1979-1983",
+      "text": "The Blues Brothers was made with the cooperation of Mayor Jane Byrne. The Bluesmobile was even allowed to be driven through the lobby of the Daley Center.",
+      "textEs": "The Blues Brothers se filmó con la cooperación de la alcaldesa Jane Byrne. Hasta se permitió que el Bluesmobile atravesara el vestíbulo del Daley Center.",
+      "url": "https://en.wikipedia.org/wiki/The_Blues_Brothers_(film)"
+    },
+    {
+      "id": "washington-first-black-mayor",
+      "mayor": "Harold Washington",
+      "years": "1983-1987",
+      "text": "Harold Washington, mayor from 1983 to 1987, was the first Black mayor of Chicago. The Harold Washington Library Center is named for him.",
+      "textEs": "Harold Washington, alcalde de 1983 a 1987, fue el primer alcalde negro de Chicago. El Harold Washington Library Center lleva su nombre.",
+      "url": "https://en.wikipedia.org/wiki/Harold_Washington"
+    },
+    {
+      "id": "washington-council-wars",
+      "mayor": "Harold Washington",
+      "years": "1983-1987",
+      "text": "Harold Washington's first term was dominated by the \"Council Wars,\" a standoff with a 29-alderman City Council majority known as the \"Vrdolyak 29.\"",
+      "textEs": "El primer periodo de Harold Washington estuvo dominado por las \"Council Wars\", un enfrentamiento con una mayoría de 29 concejales conocida como los \"Vrdolyak 29\".",
+      "url": "https://en.wikipedia.org/wiki/Harold_Washington"
+    },
+    {
+      "id": "washington-died-in-office",
+      "mayor": "Harold Washington",
+      "years": "1983-1987",
+      "text": "Harold Washington slumped over at his desk in City Hall on the morning of November 25, 1987, and died that afternoon.",
+      "textEs": "Harold Washington se desplomó sobre su escritorio en el City Hall la mañana del 25 de noviembre de 1987 y murió esa tarde.",
+      "url": "https://en.wikipedia.org/wiki/Harold_Washington"
+    },
+    {
+      "id": "washington-parakeets",
+      "mayor": "Harold Washington",
+      "years": "1983-1987",
+      "text": "The wild monk parakeets of Harold Washington Park are known to many as \"Harold's parakeets.\" As mayor, Harold Washington foiled attempts to have the flock removed.",
+      "textEs": "A las cotorras argentinas silvestres del Harold Washington Park muchos las conocen como \"Harold's parakeets\". Como alcalde, Harold Washington frenó los intentos de sacar a la bandada.",
+      "url": "https://en.wikipedia.org/wiki/Harold_Washington_Park"
+    },
+    {
+      "id": "orr-one-week",
+      "mayor": "David Orr",
+      "years": "1987",
+      "text": "David Orr, the vice mayor, was acting mayor for one week in 1987 after Harold Washington died. It is the shortest time anyone has held the office.",
+      "textEs": "David Orr, el vicealcalde, fue alcalde interino durante una semana en 1987 tras la muerte de Harold Washington. Es el periodo más corto que alguien ha ocupado el cargo.",
+      "url": "https://en.wikipedia.org/wiki/Mayor_of_Chicago"
+    },
+    {
+      "id": "sawyer-4am",
+      "mayor": "Eugene Sawyer",
+      "years": "1987-1989",
+      "text": "After hours of heated debate, the City Council elected Eugene Sawyer mayor by a vote of 29 to 19. He was sworn in at 4:01 a.m. on December 2, 1987.",
+      "textEs": "Tras horas de debate acalorado, el Concejo Municipal eligió alcalde a Eugene Sawyer por 29 votos contra 19. Tomó protesta a las 4:01 a.m. del 2 de diciembre de 1987.",
+      "url": "https://www.chipublib.org/fa-eugene-sawyer-mayoral-records/"
+    },
+    {
+      "id": "sawyer-uncle-buck",
+      "mayor": "Eugene Sawyer",
+      "years": "1987-1989",
+      "text": "Eugene Sawyer briefly taught chemistry and math in Prentiss, Mississippi. As mayor, he was thanked in the 1989 movie Uncle Buck.",
+      "textEs": "Eugene Sawyer fue por un tiempo maestro de química y matemáticas en Prentiss, Mississippi. Como alcalde, recibió un agradecimiento en la película Uncle Buck, de 1989.",
+      "url": "https://en.wikipedia.org/wiki/Eugene_Sawyer"
+    },
+    {
+      "id": "daley-m-22-years",
+      "mayor": "Richard M. Daley",
+      "years": "1989-2011",
+      "text": "Richard M. Daley was mayor for 22 years, the longest tenure in Chicago history. He passed his father's 21 years on December 26, 2010.",
+      "textEs": "Richard M. Daley fue alcalde durante 22 años, el periodo más largo en la historia de Chicago. Superó los 21 años de su padre el 26 de diciembre de 2010.",
+      "url": "https://en.wikipedia.org/wiki/Richard_M._Daley"
+    },
+    {
+      "id": "daley-m-meigs-field",
+      "mayor": "Richard M. Daley",
+      "years": "1989-2011",
+      "text": "Shortly before midnight on March 30, 2003, under Richard M. Daley, city crews moved onto Meigs Field. By early morning they had dug six large X's into its only runway.",
+      "textEs": "Poco antes de la medianoche del 30 de marzo de 2003, con Richard M. Daley como alcalde, cuadrillas de la ciudad entraron a Meigs Field. Al amanecer habían cavado seis grandes X en su única pista.",
+      "url": "https://en.wikipedia.org/wiki/Richard_M._Daley"
+    },
+    {
+      "id": "daley-m-parking-meters",
+      "mayor": "Richard M. Daley",
+      "years": "1989-2011",
+      "text": "In 2008, under Richard M. Daley, Chicago made a deal to hand over all 36,000 of its parking meter spots for 75 years for $1.15 billion.",
+      "textEs": "En 2008, con Richard M. Daley como alcalde, Chicago acordó ceder sus 36,000 espacios con parquímetro por 75 años a cambio de $1,150 millones.",
+      "url": "https://en.wikipedia.org/wiki/Chicago_Parking_Meters"
+    },
+    {
+      "id": "daley-m-millennium-park",
+      "mayor": "Richard M. Daley",
+      "years": "1989-2011",
+      "text": "Millennium Park, built under Richard M. Daley, opened on July 16, 2004, four years behind schedule. It sits atop parking garages and is considered the world's largest rooftop garden.",
+      "textEs": "Millennium Park, construido con Richard M. Daley como alcalde, abrió el 16 de julio de 2004, cuatro años tarde. Está sobre estacionamientos y se considera el jardín de azotea más grande del mundo.",
+      "url": "https://en.wikipedia.org/wiki/Millennium_Park"
+    },
+    {
+      "id": "daley-m-city-hall-green-roof",
+      "mayor": "Richard M. Daley",
+      "years": "1989-2011",
+      "text": "A green roof with more than 20,000 plants was completed on top of City Hall in 2001. Richard M. Daley and the city's Department of Environment promoted the project.",
+      "textEs": "En 2001 se terminó un techo verde con más de 20,000 plantas en la azotea del City Hall. Richard M. Daley y el Departamento de Medio Ambiente de la ciudad impulsaron el proyecto.",
+      "url": "https://www.tclf.org/city-chicago-city-hall-green-roof"
+    },
+    {
+      "id": "daley-m-nonpartisan-1999",
+      "mayor": "Richard M. Daley",
+      "years": "1989-2011",
+      "text": "Chicago's mayoral elections have officially been nonpartisan since 1999, when Richard M. Daley was mayor.",
+      "textEs": "Las elecciones para alcalde de Chicago son oficialmente no partidistas desde 1999, cuando Richard M. Daley era alcalde.",
+      "url": "https://en.wikipedia.org/wiki/Mayor_of_Chicago"
+    },
+    {
+      "id": "emanuel-ballet",
+      "mayor": "Rahm Emanuel",
+      "years": "2011-2019",
+      "text": "Rahm Emanuel took ballet lessons at his mother's encouragement and won a scholarship to the Joffrey Ballet.",
+      "textEs": "Rahm Emanuel tomó clases de ballet animado por su mamá y ganó una beca para el Joffrey Ballet.",
+      "url": "https://en.wikipedia.org/wiki/Rahm_Emanuel"
+    },
+    {
+      "id": "emanuel-2015-runoff",
+      "mayor": "Rahm Emanuel",
+      "years": "2011-2019",
+      "text": "Rahm Emanuel's 2015 race was the first to go to a runoff since mayoral elections became nonpartisan in 1999. He won the runoff with about 56% of the vote.",
+      "textEs": "La elección de 2015 de Rahm Emanuel fue la primera en irse a segunda vuelta desde que las elecciones para alcalde se volvieron no partidistas en 1999. La ganó con cerca del 56% de los votos.",
+      "url": "https://en.wikipedia.org/wiki/2015_Chicago_mayoral_election"
+    },
+    {
+      "id": "lightfoot-50-wards",
+      "mayor": "Lori Lightfoot",
+      "years": "2019-2023",
+      "text": "Lori Lightfoot won all 50 wards in the 2019 runoff, with more than 73% of the vote.",
+      "textEs": "Lori Lightfoot ganó en los 50 distritos (wards) en la segunda vuelta de 2019, con más del 73% de los votos.",
+      "url": "https://en.wikipedia.org/wiki/Lori_Lightfoot"
+    },
+    {
+      "id": "lightfoot-lost-reelection",
+      "mayor": "Lori Lightfoot",
+      "years": "2019-2023",
+      "text": "In 2023, Lori Lightfoot became the first Chicago mayor to lose reelection in 40 years.",
+      "textEs": "En 2023, Lori Lightfoot se convirtió en la primera persona al frente de la alcaldía de Chicago en perder la reelección en 40 años.",
+      "url": "https://en.wikipedia.org/wiki/Lori_Lightfoot"
+    },
+    {
+      "id": "term-lengths",
+      "mayor": "Chicago mayors",
+      "years": "1837-1907",
+      "text": "Chicago mayors served one-year terms from 1837 through 1863, when the term became two years. In 1907 it changed again, to four years.",
+      "textEs": "Los alcaldes de Chicago tenían periodos de un año desde 1837 hasta 1863, cuando el periodo pasó a dos años. En 1907 cambió otra vez, a cuatro años.",
+      "url": "https://en.wikipedia.org/wiki/Mayor_of_Chicago"
+    },
+    {
+      "id": "two-women-mayors",
+      "mayor": "Jane Byrne and Lori Lightfoot",
+      "years": "1979-1983, 2019-2023",
+      "text": "Two women have held the office of mayor of Chicago: Jane Byrne, from 1979 to 1983, and Lori Lightfoot, from 2019 to 2023.",
+      "textEs": "Dos mujeres han ocupado la alcaldía de Chicago: Jane Byrne, de 1979 a 1983, y Lori Lightfoot, de 2019 a 2023.",
+      "url": "https://en.wikipedia.org/wiki/Mayor_of_Chicago"
+    },
+    {
+      "id": "father-and-son-mayors",
+      "mayor": "The Harrisons and the Daleys",
+      "years": "1879-1915, 1955-2011",
+      "text": "Two sets of father and son have been elected mayor of Chicago: Carter Harrison Sr. and Jr., and Richard J. Daley and Richard M. Daley.",
+      "textEs": "Dos parejas de padre e hijo han sido elegidas a la alcaldía de Chicago: Carter Harrison Sr. y Jr., y Richard J. Daley y Richard M. Daley.",
+      "url": "https://en.wikipedia.org/wiki/Mayor_of_Chicago"
+    },
+    {
+      "id": "morris-lyceum",
+      "mayor": "Buckner Stith Morris",
+      "years": "1838-1839",
+      "text": "Buckner Morris, mayor from 1838 to 1839, helped create the Chicago Lyceum, the city's first literary society.",
+      "textEs": "Buckner Morris, alcalde de 1838 a 1839, ayudó a crear el Chicago Lyceum, la primera sociedad literaria de la ciudad.",
+      "url": "https://en.wikipedia.org/wiki/Buckner_Stith_Morris"
+    },
+    {
+      "id": "raymond-state-street",
+      "mayor": "Benjamin Wright Raymond",
+      "years": "1839-1840, 1842-1843",
+      "text": "As mayor, Benjamin Raymond made sure State Street would be a wide thoroughfare. Later he agreed to put up the money for what became the Elgin Watch Company.",
+      "textEs": "Como alcalde, Benjamin Raymond se aseguró de que State Street fuera una avenida ancha. Después aceptó poner el dinero para lo que llegó a ser la Elgin Watch Company.",
+      "url": "https://en.wikipedia.org/wiki/Benjamin_Wright_Raymond"
+    },
+    {
+      "id": "sherman-brickmaker-hotel",
+      "mayor": "Francis Cornwall Sherman",
+      "years": "1841-1842, 1862-1865",
+      "text": "Francis Sherman, a brickmaker, opened the City Hotel in 1837. It later became the Sherman House. His 1863 win was the city's first election to a two-year term.",
+      "textEs": "Francis Sherman, fabricante de ladrillos, abrió el City Hotel en 1837. Después se convirtió en la Sherman House. Su triunfo de 1863 fue la primera elección de la ciudad para un periodo de dos años.",
+      "url": "https://en.wikipedia.org/wiki/Francis_Cornwall_Sherman"
+    },
+    {
+      "id": "garrett-auctioneer-seminary",
+      "mayor": "Augustus Garrett",
+      "years": "1843-1844, 1845-1846",
+      "text": "Augustus Garrett, twice mayor, was a land speculator and auctioneer. After he died, his wife, Eliza, established what is now Garrett-Evangelical Theological Seminary.",
+      "textEs": "Augustus Garrett, dos veces alcalde, fue especulador de tierras y subastador. Tras su muerte, su esposa, Eliza, fundó lo que hoy es el Garrett-Evangelical Theological Seminary.",
+      "url": "https://en.wikipedia.org/wiki/Augustus_Garrett"
+    },
+    {
+      "id": "gurnee-village-namesake",
+      "mayor": "Walter S. Gurnee",
+      "years": "1851-1853",
+      "text": "Walter S. Gurnee, a tannery owner who was mayor from 1851 to 1853, is the namesake of the village of Gurnee, Illinois.",
+      "textEs": "Walter S. Gurnee, dueño de una curtiduría y alcalde de 1851 a 1853, le dio su nombre al pueblo de Gurnee, Illinois.",
+      "url": "https://en.wikipedia.org/wiki/Walter_S._Gurnee"
+    },
+    {
+      "id": "milliken-blacksmith",
+      "mayor": "Isaac Lawrence Milliken",
+      "years": "1854-1855",
+      "text": "Isaac Milliken set up a blacksmith shop on Randolph Street after moving to Chicago in 1837. He taught himself law and was mayor from 1854 to 1855.",
+      "textEs": "Isaac Milliken puso una herrería en Randolph Street tras mudarse a Chicago en 1837. Aprendió leyes por su cuenta y fue alcalde de 1854 a 1855.",
+      "url": "https://en.wikipedia.org/wiki/Isaac_Lawrence_Milliken"
+    },
+    {
+      "id": "colvin-two-mayors",
+      "mayor": "Harvey Doolittle Colvin",
+      "years": "1873-1876",
+      "text": "In 1876, Thomas Hoyne received 33,064 of the 40,000 votes cast for mayor, but Harvey Colvin refused to give up the office. A court voided Hoyne's claim, and a special election followed.",
+      "textEs": "En 1876, Thomas Hoyne recibió 33,064 de los 40,000 votos para alcalde, pero Harvey Colvin se negó a dejar el cargo. Un tribunal anuló el reclamo de Hoyne y hubo una elección especial.",
+      "url": "https://en.wikipedia.org/wiki/Thomas_Hoyne"
+    },
+    {
+      "id": "cregier-hydrant",
+      "mayor": "DeWitt Clinton Cregier",
+      "years": "1889-1891",
+      "text": "DeWitt Cregier, once chief engineer of Chicago's water system, patented a combination drinking fountain, fire hydrant, and watering basin for animals in 1876.",
+      "textEs": "DeWitt Cregier, quien fue ingeniero en jefe del sistema de agua de Chicago, patentó en 1876 una combinación de bebedero, hidrante contra incendios y abrevadero para animales.",
+      "url": "https://en.wikipedia.org/wiki/DeWitt_Clinton_Cregier"
+    },
+    {
+      "id": "hopkins-youngest",
+      "mayor": "John Patrick Hopkins",
+      "years": "1893-1895",
+      "text": "John Patrick Hopkins took office in 1893 as the youngest mayor the city had ever had. He had once worked as a timekeeper and paymaster at the Pullman works.",
+      "textEs": "John Patrick Hopkins asumió el cargo en 1893 como el alcalde más joven que la ciudad había tenido. Antes había trabajado como tomador de tiempo y pagador en los talleres Pullman.",
+      "url": "https://en.wikipedia.org/wiki/John_Patrick_Hopkins"
+    }
+  ]
+}

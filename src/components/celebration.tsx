@@ -86,9 +86,11 @@ export function CelebrationProvider({ children }: { children: React.ReactNode })
   // Refs so anticipate() reads the freshest profile without re-creating the
   // callback (and the context value) on every stats tick.
   const uidRef = useRef(uid);
-  uidRef.current = uid;
   const statsRef = useRef(stats);
-  statsRef.current = stats;
+  useEffect(() => {
+    uidRef.current = uid;
+    statsRef.current = stats;
+  });
 
   const anticipate = useCallback(
     (stat: keyof UserStats) => {

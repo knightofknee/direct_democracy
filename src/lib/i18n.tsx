@@ -58,7 +58,6 @@ function isLocale(v: string | null): v is Locale {
 }
 
 const LOCALE_KEY = 'locale';
-const PROMPTED_KEY = 'locale.prompted';
 
 // Mirror of the active locale for code that runs outside React (time
 // formatting, notify fallbacks). The provider keeps it in sync.
@@ -75,32 +74,35 @@ export function tr(source: string): string {
 
 interface LocaleState {
   locale: Locale;
-  /** Null until storage has been read; the prompt waits for it. */
+  /** False until storage has been read; the welcome waits for it. */
   ready: boolean;
-  prompted: boolean;
   setLocale: (locale: Locale) => void;
 }
 
 const LocaleContext = createContext<LocaleState>({
   locale: 'en',
   ready: false,
-  prompted: true,
   setLocale: () => {},
 });
 
+/**
+ * The app opens in English and stays there until someone picks another
+ * language (2026-11-09, Brian: nearly every user reads English, so asking
+ * everyone on first launch cost more than it gave). The way to another
+ * language is the globe on the welcome screen and the switch in Settings,
+ * both labeled with the language's own name, never the word "language".
+ */
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('en');
-  const [prompted, setPrompted] = useState(true);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    Promise.all([AsyncStorage.getItem(LOCALE_KEY), AsyncStorage.getItem(PROMPTED_KEY)])
-      .then(([saved, wasPrompted]) => {
+    AsyncStorage.getItem(LOCALE_KEY)
+      .then((saved) => {
         if (isLocale(saved)) {
           activeLocale = saved;
           setLocaleState(saved);
         }
-        setPrompted(wasPrompted === '1');
       })
       .catch(() => {})
       .finally(() => setReady(true));
@@ -109,14 +111,10 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const setLocale = useCallback((next: Locale) => {
     activeLocale = next;
     setLocaleState(next);
-    setPrompted(true);
-    AsyncStorage.multiSet([
-      [LOCALE_KEY, next],
-      [PROMPTED_KEY, '1'],
-    ]).catch(() => {});
+    AsyncStorage.setItem(LOCALE_KEY, next).catch(() => {});
   }, []);
 
-  const value = useMemo(() => ({ locale, ready, prompted, setLocale }), [locale, ready, prompted, setLocale]);
+  const value = useMemo(() => ({ locale, ready, setLocale }), [locale, ready, setLocale]);
   // Nothing draws until the saved language is known (the splash screen
   // covers these few milliseconds). The React Compiler caches render-time
   // calls like wardLabel() and plural() by their arguments alone, so a first

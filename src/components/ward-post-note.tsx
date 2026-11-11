@@ -39,6 +39,7 @@ const DAILY_NOTES: Record<DailyBucket, string> = {
   cityConcerns: 'You can raise up to 2 citywide concerns a day. You can raise another {date}.',
   cityQuestions: 'You can ask citywide officials up to 3 questions a day. You can ask again {date}.',
   electionQuestions: 'You can ask up to 3 election questions a day. You can ask again {date}.',
+  feedback: 'You can send up to 5 messages a day. You can send another {date}.',
 };
 
 /** The daily limit line under a post box, shown only once the limit is reached. */

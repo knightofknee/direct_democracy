@@ -79,7 +79,14 @@ import {
   type Districts,
   type WardResult,
 } from './ward';
-import { judgeRate, judgeWardPost, RATE_LIMITS, type RateBucket } from './posting';
+import {
+  judgeRate,
+  judgeWardPost,
+  RATE_LIMITS,
+  SIGNED_OUT_FEEDBACK,
+  SIGNED_OUT_LOOKUPS,
+  type RateBucket,
+} from './posting';
 import { syncCouncilMembers, syncRollCalls, syncUpcomingMeetings } from './council';
 import { syncCivicMeetings } from './civic';
 import { syncZoning } from './zoning';
@@ -631,7 +638,7 @@ async function gateWardPost(
 }
 
 /** What each refusal notice says the limit is, in both languages. */
-const RATE_NOTICE: Record<Exclude<RateBucket, 'wardChanges' | 'edits' | 'addressLookups'>, { en: string; es: string }> = {
+const RATE_NOTICE: Record<Exclude<RateBucket, 'wardChanges' | 'edits' | 'addressLookups' | 'feedback'>, { en: string; es: string }> = {
   cityConcerns: {
     en: 'you can raise up to 2 citywide concerns a day',
     es: 'puedes plantear hasta 2 preocupaciones de toda la ciudad al día',
@@ -664,7 +671,7 @@ const RATE_NOTICE: Record<Exclude<RateBucket, 'wardChanges' | 'edits' | 'address
 async function gateRate(
   eventKey: string,
   authorUid: unknown,
-  bucket: Exclude<RateBucket, 'wardChanges' | 'edits' | 'addressLookups'>,
+  bucket: Exclude<RateBucket, 'wardChanges' | 'edits' | 'addressLookups' | 'districtSets' | 'feedback'>,
   postRef: FirebaseFirestore.DocumentReference,
   post: { createdAt: unknown; excerpt: string; link: string }
 ): Promise<boolean> {
@@ -749,7 +756,73 @@ export const onReportCreated = onDocumentCreated('reports/{reportId}', async (ev
     (r.authorUid as string | undefined) ??
     null;
   await event.data.ref.update({ excerpt: excerpt(text, 500), authorUid });
+  const reasons = Array.isArray(r.reasons) ? (r.reasons as string[]) : [r.reason as string];
+  if (reasons.includes('childSafety')) {
+    await notifyOperator(
+      `report-${event.id}`,
+      { title: 'Child safety report', body: `${r.contentType} ${r.contentPath}: ${excerpt(text, 120)}` },
+      'childSafety'
+    );
+  }
   if (authorUid) await shadowbanIfReported(authorUid);
+});
+
+const FEEDBACK_TOPICS = ['childSafety', 'safety', 'bug', 'idea', 'other'] as const;
+
+/**
+ * Feedback and problem reports from Settings (2026-10-22, for Google Play's
+ * child safety rule: a way to raise a concern without leaving the app, open
+ * to anyone, signed in or not). Stored in `feedback` (admin read only) for
+ * the admin screen and `npm run moderate`; a child safety message alerts the
+ * operator at once, phone included. Signed in: 5 a day per account, and the
+ * answer goes to the account's email. Signed out: 30 a day for everyone
+ * together, with an optional email to answer.
+ */
+export const sendFeedback = onCall(APP_CHECK, async (request) => {
+  const d = request.data ?? {};
+  const topic = FEEDBACK_TOPICS.find((x) => x === d.topic);
+  if (!topic) throw new HttpsError('invalid-argument', 'Pick what this is about.');
+  const message = typeof d.message === 'string' ? d.message.trim() : '';
+  if (message.length < 10 || message.length > 2000) {
+    throw new HttpsError('invalid-argument', '10 character minimum');
+  }
+  const typedEmail = typeof d.email === 'string' ? d.email.trim() : '';
+  if (typedEmail && (typedEmail.length > 200 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(typedEmail))) {
+    throw new HttpsError('invalid-argument', 'That email address does not look right.');
+  }
+  const uid = request.auth?.uid ?? null;
+  const ledger = uid ? db.doc(`users/${uid}/rateLimits/feedback`) : db.doc('feedbackLimits/signedOut');
+  const rate = judgeRate(
+    uid ? RATE_LIMITS.feedback : SIGNED_OUT_FEEDBACK,
+    (((await ledger.get()).data()?.times ?? []) as Timestamp[]).map((t) => t.toMillis()),
+    Date.now()
+  );
+  if (!rate.ok) {
+    throw new HttpsError('resource-exhausted', 'Too many messages today. Try again tomorrow.', {
+      retryAt: rate.nextAt,
+    });
+  }
+  await ledger.set({ times: rate.times.map((t) => Timestamp.fromMillis(t)) });
+  const short = (v: unknown, n: number) => (typeof v === 'string' ? v.slice(0, n) : null);
+  const ref = await db.collection('feedback').add({
+    topic,
+    message,
+    uid,
+    email: (request.auth?.token.email as string | undefined) ?? (typedEmail || null),
+    platform: short(d.platform, 20),
+    appVersion: short(d.appVersion, 20),
+    locale: short(d.locale, 5),
+    status: 'open',
+    createdAt: FieldValue.serverTimestamp(),
+  });
+  if (topic === 'childSafety') {
+    await notifyOperator(
+      `feedback-${ref.id}`,
+      { title: 'Child safety message', body: excerpt(message, 160) },
+      'childSafety'
+    );
+  }
+  return { ok: true };
 });
 
 /** Distinct accounts with open reports against one person that hide them. */
@@ -934,12 +1007,15 @@ async function sendPush(
   notificationId: string,
   data: { type: string; title: string; titleEs: string; body: string; bodyEs: string; link: string }
 ): Promise<void> {
+  // A child safety alarm reaches the operator's phone with no switch: it
+  // can't wait for the weekly review.
+  const urgent = data.type === 'childSafety';
   const pref = PUSH_PREF_FOR_TYPE[data.type];
-  if (!pref) return;
+  if (!pref && !urgent) return;
   try {
     const user = (await db.doc(`users/${uid}`).get()).data();
-    if (user?.pushPrefs?.[pref] !== true) return;
-    const tokens = Object.entries((user.pushTokens ?? {}) as Record<string, { locale?: string }>);
+    if (!urgent && user?.pushPrefs?.[pref] !== true) return;
+    const tokens = Object.entries((user?.pushTokens ?? {}) as Record<string, { locale?: string }>);
     if (tokens.length === 0) return;
     const messages = tokens.map(([to, t]) => {
       const es = t.locale === 'es';
@@ -1009,11 +1085,15 @@ export const onPushTokensChanged = onDocumentWritten('users/{uid}', async (event
 /** The platform operator (the rules' isAdmin account), for abuse alarms. */
 const OPERATOR_EMAIL = 'bricarlis@gmail.com';
 
-async function notifyOperator(eventKey: string, msg: { title: string; body: string }) {
+async function notifyOperator(
+  eventKey: string,
+  msg: { title: string; body: string },
+  type: 'operator' | 'childSafety' = 'operator'
+) {
   try {
     const operator = await getAuth().getUserByEmail(OPERATOR_EMAIL);
     await sendNotification(operator.uid, eventKey, {
-      type: 'operator',
+      type,
       title: msg.title,
       titleEs: msg.title,
       body: msg.body,
@@ -2228,7 +2308,7 @@ export const editPost = onCall(APP_CHECK, async (request) => {
   // Fixed sentences (not built from the numbers) so the app can translate
   // them; the edit boxes already stop at the maximum.
   if (body.length < min) {
-    throw new HttpsError('invalid-argument', min >= 10 ? 'Write at least 10 characters.' : 'Write something first.');
+    throw new HttpsError('invalid-argument', min >= 10 ? '10 character minimum' : 'Write something first.');
   }
   if (body.length > max) throw new HttpsError('invalid-argument', 'That’s longer than this box allows.');
   if (kind === 'concern' && (title == null || title.length < 4 || title.length > 140)) {
@@ -2502,53 +2582,25 @@ const VOTING_MILESTONES: {
   bodyEs: string;
 }[] = [
   {
-    date: '2026-10-01',
-    title: 'Early voting opens downtown',
-    titleEs: 'La votación anticipada abre en el centro',
-    body: 'Any Chicago voter can vote early downtown starting Thursday, October 1, at 137 S. State St. or 69 W. Washington St. (6th floor). Sites in every ward open October 19.',
-    bodyEs: 'A partir del jueves 1 de octubre, cualquier votante de Chicago puede votar por anticipado en el centro, en 137 S. State St. o en 69 W. Washington St. (6.º piso). Los sitios de cada distrito abren el 19 de octubre.',
-  },
-  {
-    date: '2026-10-06',
-    title: 'Last day to register with a paper form by mail',
-    titleEs: 'Último día para registrarte con un formulario en papel por correo',
-    body: 'Paper registration forms sent by mail must be postmarked by Tuesday, October 6. Online registration stays open through October 18, and in-person registration runs through election day with two forms of ID.',
-    bodyEs: 'Los formularios de registro en papel enviados por correo deben llevar matasellos a más tardar del martes 6 de octubre. El registro en línea sigue abierto hasta el 18 de octubre, y el registro en persona sigue hasta el día de la elección con dos formas de identificación.',
-  },
-  {
-    date: '2026-10-18',
-    title: 'Last day to register online',
-    titleEs: 'Último día para registrarte en línea',
-    body: 'Online registration closes Sunday, October 18 (needs an Illinois license or state ID). After that, register in person at an early voting site or at your polling place on election day, with two forms of ID.',
-    bodyEs: 'El registro en línea cierra el domingo 18 de octubre (requiere una licencia o identificación estatal de Illinois). Después, regístrate en persona en un sitio de votación anticipada o en tu lugar de votación el día de la elección, con dos formas de identificación.',
-  },
-  {
-    date: '2026-10-19',
-    title: 'Early voting opens in every ward',
-    titleEs: 'La votación anticipada abre en cada distrito',
-    body: 'One early voting site in every ward opens Monday, October 19, joining the two downtown, and any Chicago voter can use any site.',
-    bodyEs: 'El lunes 19 de octubre abre un sitio de votación anticipada en cada distrito, junto a los dos del centro, y cualquier votante de Chicago puede usar cualquier sitio.',
-  },
-  {
-    date: '2026-10-29',
-    title: 'Last day to apply for a mail ballot',
-    titleEs: 'Último día para pedir una boleta por correo',
-    body: 'Mail ballot applications close Thursday, October 29. Already have a mail ballot? Mail it back postmarked by November 3 (it must arrive by November 17), or leave it in the drop box at any early voting site.',
-    bodyEs: 'Las solicitudes de boleta por correo cierran el jueves 29 de octubre. ¿Ya tienes tu boleta por correo? Envíala con matasellos a más tardar el 3 de noviembre (debe llegar antes del 17 de noviembre), o déjala en el buzón de cualquier sitio de votación anticipada.',
-  },
-  {
-    date: '2026-11-03',
-    title: 'General election day',
-    titleEs: 'Día de la elección general',
-    body: 'Polls are open 6 am to 7 pm at your precinct or any vote center in the city. Same-day registration is available with two forms of ID. Mail ballots must be postmarked by November 3.',
-    bodyEs: 'Las urnas abren de 6 am a 7 pm en tu precinto o en cualquier centro de votación de la ciudad. Puedes registrarte el mismo día con dos formas de identificación. Las boletas por correo deben llevar matasellos a más tardar del 3 de noviembre.',
+    date: '2026-11-25',
+    title: 'Mail ballot applications open',
+    titleEs: 'Abren las solicitudes de boleta por correo',
+    body: 'Starting Wednesday, November 25, any Chicago voter can apply for a mail ballot for the February 23, 2027 municipal election, online or on paper. The ballot itself is mailed later.',
+    bodyEs: 'A partir del miércoles 25 de noviembre, cualquier votante de Chicago puede solicitar una boleta por correo para la elección municipal del 23 de febrero de 2027, en línea o en papel. La boleta se envía más adelante.',
   },
   {
     date: '2027-02-23',
     title: 'Municipal election day',
     titleEs: 'Día de la elección municipal',
-    body: 'Mayor, city clerk, city treasurer, your alderman, and your police district council are on the ballot. Polls are open 6 am to 7 pm.',
-    bodyEs: 'En la boleta están la alcaldía, la secretaría y la tesorería de la ciudad, tu concejal y tu consejo de distrito policial. Las urnas abren de 6 am a 7 pm.',
+    body: 'Mayor, city clerk, city treasurer, your alderman, and your police district council are on the ballot Tuesday, February 23. Polls are open 6 am to 7 pm. Mail ballots must be postmarked by February 23.',
+    bodyEs: 'En la boleta del martes 23 de febrero están la alcaldía, la secretaría y la tesorería de la ciudad, tu concejal y tu consejo de distrito policial. Las urnas abren de 6 am a 7 pm. Las boletas por correo deben llevar matasellos a más tardar del 23 de febrero.',
+  },
+  {
+    date: '2027-04-06',
+    title: 'Runoff election day',
+    titleEs: 'Día de la segunda vuelta',
+    body: 'Tuesday, April 6, is the runoff in every race where nobody won a majority on February 23. Polls are open 6 am to 7 pm.',
+    bodyEs: 'El martes 6 de abril es la segunda vuelta en cada contienda donde nadie ganó la mayoría el 23 de febrero. Las urnas abren de 6 am a 7 pm.',
   },
 ];
 
@@ -2901,26 +2953,33 @@ export const declareWard = onCall(APP_CHECK, async (request) => {
  * belong to: the address goes to the Census geocoder and is dropped. An
  * address in another ward than the person's home ward is refused rather
  * than stored, so their districts always match their ward screens. 5
- * lookups a day (each costs a geocoder call).
+ * lookups a day (each costs a geocoder call). Someone who is not signed in
+ * gets the same answer with nothing stored (SIGNED_OUT_LOOKUPS).
  */
 export const findMyDistricts = onCall(APP_CHECK, async (request) => {
-  if (!request.auth) throw new HttpsError('unauthenticated', 'Sign in first.');
-  const uid = request.auth.uid;
+  // Signed out (2026-11-09, the police district finder on the elections
+  // tab): the same lookup, answered and forgotten. Nothing is stored
+  // anywhere, the phone keeps the numbers itself, and everyone signed out
+  // shares one daily cap.
+  const uid = request.auth?.uid ?? null;
   const typed = request.data?.address;
   if (typeof typed !== 'string' || typed.trim().length < 5 || typed.length > 200) {
     throw new HttpsError('invalid-argument', 'Type a street address.');
   }
-  const userRef = db.doc(`users/${uid}`);
-  const lookupsRef = db.doc(`users/${uid}/rateLimits/addressLookups`);
+  const lookupsRef = uid ? db.doc(`users/${uid}/rateLimits/addressLookups`) : db.doc('lookupLimits/signedOut');
   const rate = judgeRate(
-    RATE_LIMITS.addressLookups,
+    uid ? RATE_LIMITS.addressLookups : SIGNED_OUT_LOOKUPS,
     (((await lookupsRef.get()).data()?.times ?? []) as Timestamp[]).map((t) => t.toMillis()),
     Date.now()
   );
   if (!rate.ok) {
-    throw new HttpsError('resource-exhausted', 'You have looked up 5 addresses today. Try again tomorrow.', {
-      retryAt: rate.nextAt,
-    });
+    throw new HttpsError(
+      'resource-exhausted',
+      uid
+        ? 'You have looked up 5 addresses today. Try again tomorrow.'
+        : 'Too many address lookups today. Sign in to look up yours, or try again tomorrow.',
+      { retryAt: rate.nextAt }
+    );
   }
   // A lookup counts once it finds a place; a typo that matches nothing
   // doesn't use one up.
@@ -2946,6 +3005,9 @@ export const findMyDistricts = onCall(APP_CHECK, async (request) => {
   const districts: Districts | null = districtsForPoint(point.lon, point.lat);
   if (!districts) return { result: 'notFound' };
 
+  if (!uid) return { result: 'ok', wardId, districts };
+
+  const userRef = db.doc(`users/${uid}`);
   const u = (await userRef.get()).data();
   if (!u) throw new HttpsError('not-found', 'No profile.');
   const home = (u.wardId as number | null | undefined) ?? null;

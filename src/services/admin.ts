@@ -16,7 +16,10 @@ export interface Report {
   reporterUid: string;
   contentPath: string;
   contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy' | 'electionQuestion';
+  /** The most serious reason picked. */
   reason: ReportReason;
+  /** Every reason picked (binaries before 2026-10-22 sent only `reason`). */
+  reasons?: ReportReason[];
   excerpt: string;
   /** The reporter's own words (required for "Something else"). */
   note?: string;

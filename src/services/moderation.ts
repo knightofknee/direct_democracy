@@ -22,29 +22,42 @@ export const REPORT_REASONS: { key: ReportReason; label: string }[] = [
   { key: 'other', label: 'Something else' },
 ];
 
+/**
+ * The most serious of the reasons picked, sent as `reason` beside the full
+ * `reasons` list: older review tools and the shadowban read the one field.
+ */
+const SEVERITY: ReportReason[] = ['childSafety', 'harassment', 'misleading', 'spam', 'other'];
+
+/** The kinds of post a report can name. */
+export type ReportContentType = 'concern' | 'comment' | 'question' | 'response' | 'policy' | 'electionQuestion';
+
 export async function reportContent(
   profile: UserProfile,
   input: {
     /** Firestore path of the offending document. */
     contentPath: string;
-    contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy' | 'electionQuestion';
-    reason: ReportReason;
+    contentType: ReportContentType;
+    /** Every reason the reporter picked (at least one). */
+    reasons: ReportReason[];
     /** Snapshot of the offending text so the report is reviewable even if edited. */
     excerpt: string;
     authorUid?: string;
-    /** What's wrong, in the reporter's words: required for "Other". */
+    /** What's wrong, in the reporter's words: required for "Something else". */
     note?: string;
   }
 ): Promise<void> {
   const note = input.note?.trim() ?? '';
-  if (input.reason === 'other' && note.length < 5) {
+  const reasons = SEVERITY.filter((r) => input.reasons.includes(r));
+  if (reasons.length === 0) throw new Error(tr('Pick at least one reason.'));
+  if (reasons.includes('other') && note.length < 5) {
     throw new Error(tr('Say what’s wrong with it (at least 5 characters).'));
   }
   await addDoc(collection(db, 'reports'), {
     reporterUid: profile.uid,
     contentPath: input.contentPath,
     contentType: input.contentType,
-    reason: input.reason,
+    reason: reasons[0],
+    reasons,
     excerpt: input.excerpt.slice(0, 300),
     authorUid: input.authorUid ?? null,
     ...(note ? { note: note.slice(0, 500) } : {}),

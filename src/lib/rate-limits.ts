@@ -17,6 +17,7 @@ export const DAILY_LIMITS = {
   cityConcerns: 2,
   cityQuestions: 3,
   electionQuestions: 3,
+  feedback: 5,
 } as const;
 
 export type DailyBucket = keyof typeof DAILY_LIMITS;

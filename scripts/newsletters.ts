@@ -207,7 +207,9 @@ async function pull(out: string) {
   const sources: Source[] = JSON.parse(readFileSync(join(__dirname, 'data', 'ward-newsletters.json'), 'utf8'));
   const queue: QueuedIssue[] = [];
   const problems: string[] = [];
-  for (const src of sources) {
+  // Sources are read 8 at a time: one slow feed waiting out its 30 second
+  // timeout no longer holds up all the others.
+  const pullSource = async (src: Source) => {
     const firstRun = (await db.collection('newsletterSeen').where('ward', '==', src.ward).limit(1).get()).empty;
     try {
       if (src.rssUrl) {
@@ -247,7 +249,15 @@ async function pull(out: string) {
     } catch (err) {
       problems.push(`ward ${src.ward}: ${(err as Error).message}`);
     }
-  }
+  };
+  const pending = [...sources];
+  await Promise.all(
+    Array.from({ length: 8 }, async () => {
+      for (let src = pending.shift(); src; src = pending.shift()) await pullSource(src);
+    })
+  );
+  queue.sort((a, b) => a.ward - b.ward);
+  problems.sort();
   const inbox = await pullInbox(sources, queue, problems);
   const undated = new Map<number, QueuedIssue['undated']>();
   for (const ward of new Set(queue.map((q) => q.ward))) {

@@ -3,12 +3,14 @@
  * candidate's page: the platform note (platformNote / platformNoteEs /
  * platformNoteTone) and the expandable AI summary (aiSummary).
  *
- * The summaries are written by Claude with ONE fixed prompt for every
- * candidate (scripts/data/platform-summary-prompt.md), from the policies
- * exactly as they are listed in the app, and live in
- * scripts/data/platform-summaries.json keyed by candidate uid. Each entry
- * records the policiesHash it was written from, so a platform that changed
- * since shows up as stale.
+ * The summaries are written by Claude under ONE set of rules for every
+ * candidate (scripts/data/platform-summary-prompt.md). For a candidate in
+ * the mayor games the words live in scripts/data/mayor-games.json and this
+ * script copies them onto the page (what sets them apart, and their side
+ * of every split); platform-summaries.json keeps only the note and the
+ * policiesHash the summary was written from, so a platform that changed
+ * since shows up as stale. A candidate outside the games keeps both pieces
+ * in platform-summaries.json.
  *
  *   gcloud auth application-default login
  *   npm run set-platform-summaries                 write the JSON to production
@@ -26,6 +28,8 @@ import { join } from 'path';
 import { applicationDefault, initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 
+import { inTheRace, splitText, type MayorGamesDoc } from '../src/lib/mayor-games-data';
+
 const app = initializeApp({ credential: applicationDefault(), projectId: 'direct-democracy-e338a' });
 const db = getFirestore(app);
 
@@ -35,14 +39,37 @@ interface Entry {
   note: string | null;
   noteEs: string | null;
   noteTone: 'warning' | 'success' | null;
-  summary: string;
-  summaryEs: string;
-  comparison: string;
-  comparisonEs: string;
+  /**
+   * Only for a candidate who is NOT in the mayor games (no petitions
+   * filed): the two pieces, hand-written under the same rules. For
+   * everyone in the games these are absent on purpose and come from
+   * mayor-games.json (2026-11-09: two copies of every summary had drifted
+   * apart, and the one on this page was the staler).
+   */
+  summary?: string;
+  summaryEs?: string;
+  comparison?: string;
+  comparisonEs?: string;
   policiesHash: string;
 }
 
 const DATA = join(__dirname, 'data', 'platform-summaries.json');
+const GAMES = JSON.parse(readFileSync(join(__dirname, 'data', 'mayor-games.json'), 'utf8')) as MayorGamesDoc;
+
+/**
+ * The summary as the mayor games carry it, for a candidate in the race:
+ * what sets them apart, and their side of every split as text.
+ */
+function fromGames(uid: string) {
+  const c = inTheRace(GAMES.candidates).find((x) => x.candidateUid === uid);
+  if (!c) return null;
+  return {
+    summary: c.summary,
+    summaryEs: c.summaryEs ?? c.summary,
+    comparison: splitText(GAMES, c.slug, 'en') ?? '',
+    comparisonEs: splitText(GAMES, c.slug, 'es') ?? '',
+  };
+}
 
 /** The live platform as the app lists it: unarchived policies in order. */
 async function livePlatform(uid: string): Promise<{ text: string; hash: string; count: number }> {
@@ -96,8 +123,15 @@ function validate(entries: Record<string, Entry>) {
     for (const [key, value] of Object.entries(fields)) {
       if (value && /[\u2014\u2013]/.test(value)) problems.push(`${e.name} (${uid}).${key}: contains an em or en dash`);
     }
-    for (const key of ['summary', 'summaryEs', 'comparison', 'comparisonEs', 'policiesHash'] as const) {
-      if (!e[key]?.trim()) problems.push(`${e.name} (${uid}).${key}: missing`);
+    if (!e.policiesHash?.trim()) problems.push(`${e.name} (${uid}).policiesHash: missing`);
+    if (fromGames(uid)) {
+      for (const key of ['summary', 'summaryEs', 'comparison', 'comparisonEs'] as const) {
+        if (e[key] != null) problems.push(`${e.name} (${uid}).${key}: this candidate is in the mayor games; edit mayor-games.json instead`);
+      }
+    } else {
+      for (const key of ['summary', 'summaryEs'] as const) {
+        if (!e[key]?.trim()) problems.push(`${e.name} (${uid}).${key}: missing`);
+      }
     }
     if (e.note && !e.noteEs) problems.push(`${e.name} (${uid}): note without noteEs`);
     if (e.noteTone && !['warning', 'success'].includes(e.noteTone)) problems.push(`${e.name} (${uid}).noteTone: invalid`);
@@ -123,21 +157,24 @@ async function write() {
     if (live.hash !== e.policiesHash) {
       console.warn(`! ${e.name}: platform changed since this summary was written (${e.policiesHash} -> ${live.hash}). Rewrite it.`);
     }
+    const text = fromGames(uid) ?? {
+      summary: e.summary ?? '',
+      summaryEs: e.summaryEs ?? e.summary ?? '',
+      comparison: e.comparison ?? '',
+      comparisonEs: e.comparisonEs ?? e.comparison ?? '',
+    };
     // The date shown in the app moves only when the words or their source do.
     const unchanged =
       prev &&
-      prev.summary === e.summary &&
-      prev.comparison === e.comparison &&
+      prev.summary === text.summary &&
+      prev.comparison === text.comparison &&
       prev.policiesHash === e.policiesHash;
     await ref.set(
       {
         ...(e.note !== null ? { platformNote: e.note, platformNoteTone: e.noteTone } : {}),
         platformNoteEs: e.noteEs,
         aiSummary: {
-          summary: e.summary,
-          summaryEs: e.summaryEs,
-          comparison: e.comparison,
-          comparisonEs: e.comparisonEs,
+          ...text,
           policiesHash: e.policiesHash,
           generatedAt: unchanged ? prev.generatedAt : FieldValue.serverTimestamp(),
         },

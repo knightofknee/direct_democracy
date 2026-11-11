@@ -1,12 +1,15 @@
 /**
- * The operator's moderation desk (2026-09-29). There is no in-app alert:
+ * The operator's moderation desk (2026-09-29). Apart from child safety
+ * (reports and feedback alert the operator at once), there is no alert:
  * the weekly task runs the review and tells Brian what's waiting, and Brian
  * decides what happens.
  *
  *   npm run moderate
  *     Open reports grouped by the person reported (name, role, how many
  *     different accounts reported them, each report's reason and the
- *     reported text), and everyone shadowbanned right now.
+ *     reported text), everyone shadowbanned right now, and open feedback
+ *     from Settings (child safety first; those also alert the operator the
+ *     moment they arrive, as child safety reports do).
  *
  *   npm run moderate -- --clear <uid>
  *     Nothing wrong: dismiss their open reports. Their posts stay up, and
@@ -23,6 +26,9 @@
  *     Delete the account, remove its posts (unless --keep-posts), and ban
  *     its verified ID so it can't verify another account. Runs server-side
  *     (onModerationAction) so it's the same deletion users get.
+ *
+ *   npm run moderate -- --handled <feedbackId>
+ *     Mark a feedback message dealt with.
  *
  * A shadowban starts on its own once 5 different accounts have open reports
  * against a citizen (onReportCreated): their posts are hidden from everyone
@@ -84,11 +90,33 @@ async function review() {
     console.log(`  ${reports.length} open report(s) from ${reporters.size} account(s)`);
     for (const r of reports) {
       const d = r.data();
-      console.log(`  - ${when(d.createdAt)} ${d.reason} on ${d.contentType} ${d.contentPath} (report ${r.id})`);
+      const reasons = (d.reasons as string[] | undefined)?.join(' + ') ?? d.reason;
+      console.log(`  - ${when(d.createdAt)} ${reasons} on ${d.contentType} ${d.contentPath} (report ${r.id})`);
       if (d.note) console.log(`    reporter says: "${String(d.note).replace(/\s+/g, ' ')}"`);
-      else if (d.reason === 'other') console.log('    reporter gave no reason');
+      else if (d.reason === 'other' || d.reasons?.includes('other')) console.log('    reporter gave no reason');
       if (d.excerpt) console.log(`    post: "${String(d.excerpt).replace(/\s+/g, ' ').slice(0, 300)}"`);
     }
+  }
+}
+
+/** Open messages from Settings > Send feedback, child safety first. */
+async function reviewFeedback() {
+  const open = await db.collection('feedback').where('status', '==', 'open').get();
+  if (open.empty) {
+    console.log('\nNo open feedback.');
+    return;
+  }
+  const items = open.docs.sort(
+    (a, b) =>
+      Number(b.data().topic === 'childSafety') - Number(a.data().topic === 'childSafety') ||
+      (b.data().createdAt?.toMillis() ?? 0) - (a.data().createdAt?.toMillis() ?? 0)
+  );
+  console.log(`\nFeedback (${items.length} open)`);
+  for (const f of items) {
+    const d = f.data();
+    const who = [d.email ?? 'no email', d.uid ?? 'signed out', d.platform, d.appVersion].filter(Boolean).join(', ');
+    console.log(`  - ${when(d.createdAt)} ${d.topic === 'childSafety' ? 'CHILD SAFETY' : d.topic} (${who}) (feedback ${f.id})`);
+    console.log(`    "${String(d.message).replace(/\s+/g, ' ')}"`);
   }
 }
 
@@ -118,6 +146,7 @@ async function main() {
   const remove = arg('remove');
   const removePosts = arg('remove-posts');
   const deleteUser = arg('delete-user');
+  const handled = arg('handled');
 
   if (clear) {
     const n = await markReports(clear, 'dismissed');
@@ -146,8 +175,12 @@ async function main() {
     const keep = process.argv.includes('--keep-posts');
     const r = await act({ type: 'deleteUser', uid: deleteUser, removePosts: !keep, ban: true });
     console.log(`Deleted ${deleteUser} and banned their ID${keep ? '' : `; ${r.removed} post(s) removed`}.`);
+  } else if (handled) {
+    await db.doc(`feedback/${handled}`).update({ status: 'handled' });
+    console.log(`Feedback ${handled} marked handled.`);
   } else {
     await review();
+    await reviewFeedback();
   }
 }
 

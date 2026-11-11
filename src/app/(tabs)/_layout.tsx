@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 import { useAuth } from '@/hooks/use-auth';
 import { useTheme } from '@/hooks/use-theme';
@@ -58,18 +58,30 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => <Ionicons name="location" size={size} color={color} />,
         }}
       />
+      {/* The mayor games take the middle of the bar, ahead of news
+          (2026-10-13): the ballot matters more than the headlines. */}
+      <Tabs.Screen
+        // A group with its own stack ((election)/_layout.tsx): the games and
+        // every race page keep the tab bar, and the URLs stay /election etc.
+        name="(election)"
+        options={{
+          // Web only: the link otherwise points at whichever of the group's
+          // pages sorts first. Never on phones: there an href turns the tap
+          // into a jump to /election that slides forward onto a blank screen
+          // before settling, instead of the tab's own pop back to the top
+          // (the same motion as Back).
+          href: Platform.OS === 'web' ? '/election' : undefined,
+          // Still "elections" (2026-11-09, Brian): the mayor games lead the
+          // tab, but it holds the whole February ballot.
+          title: t('elections'),
+          tabBarIcon: ({ color, size }) => <Ionicons name="ribbon" size={size} color={color} />,
+        }}
+      />
       <Tabs.Screen
         name="news"
         options={{
           title: t('news'),
           tabBarIcon: ({ color, size }) => <Ionicons name="newspaper" size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="election"
-        options={{
-          title: t('election'),
-          tabBarIcon: ({ color, size }) => <Ionicons name="ribbon" size={size} color={color} />,
         }}
       />
 

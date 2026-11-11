@@ -860,7 +860,7 @@ export const KO: Record<string, string> = {
   'Something went wrong on the server. Try again.': '서버에 문제가 생겼어요. 다시 시도하세요.',
   'home': '홈',
   'wards': '선거구',
-  'election': '선거',
+  'elections': '선거',
   'notifications': '알림',
   'profile': '프로필',
   'command': '업무',
@@ -920,7 +920,7 @@ export const KO: Record<string, string> = {
   'We\'ve been busy making direct democracy better. Would you mind grabbing the update? Thank you!': 'direct democracy를 더 좋게 만들려고 열심히 작업했어요. 업데이트를 받아 주시겠어요? 감사합니다!',
   'Your districts': '내 선거구역',
   'Districts found': '선거구역을 찾았어요',
-  'The election tab now shows your races first.': '이제 선거 탭에서 내 선거가 먼저 표시돼요.',
+  'The elections tab now shows your races first.': '이제 선거 탭에서 내 선거가 먼저 표시돼요.',
   'Could not look up that address': '그 주소를 찾아보지 못했어요',
   'You can look up 5 addresses a day. Try again tomorrow.': '주소는 하루에 5번까지 찾아볼 수 있어요. 내일 다시 시도하세요.',
   'Your districts ({ward})': '내 선거구역({ward})',
@@ -945,7 +945,7 @@ export const KO: Record<string, string> = {
   'Your district': '내 선거구역',
   'Your ward’s districts': '내 선거구에 걸친 선거구역',
   'If you verify: a yes/no verified flag, your ward and district numbers, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.': '인증한 경우: 인증 예/아니오 표시, 선거구와 선거구역 번호, 중복 계정을 막는 고유 식별자. 그 외에는 없으며, 계정을 삭제하면 함께 삭제돼요.',
-  'If you look up your districts without verifying: the district numbers only, so the election tab can show your races first.': '인증 없이 선거구역을 찾은 경우: 선거 탭에서 내 선거를 먼저 보여 주기 위한 선거구역 번호만.',
+  'If you look up your districts without verifying: the district numbers only, so the elections tab can show your races first.': '인증 없이 선거구역을 찾은 경우: 선거 탭에서 내 선거를 먼저 보여 주기 위한 선거구역 번호만.',
   'If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.': '휴대폰 알림을 켠 경우: 각 휴대폰의 알림 주소와 알림을 표시하는 언어. 로그아웃하면 그 휴대폰은 삭제돼요.',
   'Your address. It is used only at the moment you verify or look up your districts, to find your ward and districts, and is never saved.': '주소. 인증하거나 선거구역을 찾는 순간 선거구와 선거구역을 찾는 데만 쓰이고, 저장되지 않아요.',
   'Delete your account any time from Settings: your sign-in, profile, verification status, and every vote you cast are removed, and the tallies drop your votes. Anything you posted is re-attributed to [deleted].': '설정에서 언제든 계정을 삭제할 수 있어요: 로그인 정보, 프로필, 인증 상태, 행사한 모든 투표가 삭제되고, 집계에서도 내 표가 빠져요. 게시한 내용은 [deleted]로 표시돼요.',
@@ -1006,7 +1006,6 @@ export const KO: Record<string, string> = {
   'Type a street address.': '도로명 주소를 입력하세요.',
   'The address lookup is not answering right now. Try again in a few minutes.':
     '지금은 주소 검색이 응답하지 않아요. 몇 분 뒤에 다시 시도하세요.',
-  'Write at least 10 characters.': '5자 이상 입력하세요.',
   'That’s longer than this box allows.': '이 입력란에 넣을 수 있는 길이를 넘었어요.',
   'You have looked up 5 addresses today. Try again tomorrow.': '오늘 주소를 5번 찾아봤어요. 내일 다시 시도하세요.',
   // Moderation, priority scale, grade basis, early voting (2026-09-29).
@@ -1019,8 +1018,6 @@ export const KO: Record<string, string> = {
   'Don’t pose as someone else, officials included.': '다른 사람을 사칭하지 마세요. 공직자도 마찬가지예요.',
   'Nothing sexual involving minors. We report it to the authorities.':
     '미성년자가 관련된 성적인 내용은 절대 금지예요. 당국에 신고해요.',
-  'Reported posts are reviewed every week. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.':
-    '신고된 글은 매주 검토해요. 이 규칙을 어긴 글은 삭제되고, 심각하거나 반복된 경우에는 계정이 삭제돼요. 5명 이상이 신고한 계정은 검토가 끝날 때까지 숨겨져요.',
   'From {residents} · {questions}': '기준: {residents} · {questions}',
   'Your ward’s site, from {date}': '내 선거구 투표소, {date}부터',
   'Election officials there speak your language.': '그곳 선거 요원은 내 언어를 할 수 있어요.',
@@ -1085,8 +1082,8 @@ export const KO: Record<string, string> = {
     '통과 권고',
   'Your ward’s site, open starting {date}':
     '내 선거구 투표소, {date} 운영 시작',
-  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site.':
-    '다운타운(137 S. State St., 69 W. Washington St. 6층)은 10월 1일, 50개 선거구 전체는 10월 19일에 시작해요. 시카고 유권자는 어느 투표소든 이용할 수 있어요.',
+  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site, and the two downtown sites stay open until 7 pm on weekdays October 26 to November 2.':
+    '다운타운(137 S. State St., 69 W. Washington St. 6층)은 10월 1일, 50개 선거구 전체는 10월 19일에 시작해요. 시카고 유권자는 어느 투표소든 이용할 수 있어요. 10월 26일부터 11월 2일까지 평일에는 다운타운 두 곳이 오후 7시까지 열려요.',
   'November 3, 2026 ballot':
     '2026년 11월 3일 투표용지',
   'February 23, 2027 ballot':
@@ -1192,7 +1189,7 @@ export const KO: Record<string, string> = {
     '내가 게시한 모든 것을 최신순으로 보여줘요: 내가 제기한 사안과 공직자에게 한 질문.',
   'Fill in a "Title" of at least 3 characters, an optional "Section", and "The policy", which can be up to 20,000 characters.':
     '3자 이상의 “제목”, 선택 사항인 “섹션”, 최대 20,000자까지 쓸 수 있는 “정책 공약”을 채우세요.',
-  'Find your school board district with "Find my races" on the election tab. School board districts do not follow ward lines.':
+  'Find your school board district with "Find my races" on the elections tab. School board districts do not follow ward lines.':
     '선거 탭의 “내 선거 찾기”로 내 교육위원회 선거구역을 찾으세요. 교육위원회 선거구역은 선거구 경계를 따르지 않아요.',
   'For multiple choice or approval, list 2 to 12 options under "Options (one per line)".':
     '객관식이나 지지 투표는 “선택지(한 줄에 하나씩)”에 선택지를 2-12개 적으세요.',
@@ -1230,8 +1227,6 @@ export const KO: Record<string, string> = {
     '서로 다른 5명 이상이 신고한 계정은 검토 전까지 숨겨져요.',
   'Know that an address outside Chicago changes nothing. A new ward replaces your old one, and you can move once every 3 months.':
     '시카고 밖의 주소로는 아무것도 바뀌지 않아요. 새 선거구가 기존 선거구를 대신하며, 이사는 3개월에 한 번 할 수 있어요.',
-  'Know that reports are reviewed every week. Posts that break the rules come down, and serious or repeated cases lose the account.':
-    '신고는 매주 검토돼요. 규칙을 어긴 게시물은 내려가고, 심각하거나 반복된 경우에는 계정이 삭제돼요.',
   'Know that saving a policy imported from your campaign site takes it over. It becomes yours to manage here, its comments stay, and the site stops updating it.':
     '선거 캠프 사이트에서 가져온 정책 공약을 저장하면 직접 관리하게 돼요. 이제 여기서 내가 관리하고, 댓글은 그대로 남으며, 사이트는 더 이상 업데이트하지 않아요.',
   'Know that the app keeps only a verified yes or no, your ward and district numbers, and an identifier that stops one ID from verifying twice.':
@@ -1556,8 +1551,6 @@ export const KO: Record<string, string> = {
     '다른 사람의 질문에서 화살표와 숫자를 누르면 동참해요(“저도 답을 원해요”). 다시 누르면 빠져요. 동참한 사람이 많은 질문일수록 답변 등급에서 더 크게 계산돼요.',
   'Tap the arrow and count to join the question ("I want this answered too"), and tap again to leave. You cannot join a question you asked.':
     '화살표와 숫자를 눌러 질문에 동참하고(“저도 답을 원해요”), 다시 누르면 빠져요. 내가 한 질문에는 동참할 수 없어요.',
-  'Tap the flag icon on a post or comment to report it, or to block its author so you stop seeing their content.':
-    '게시물이나 댓글의 깃발 아이콘을 누르면 신고하거나, 작성자를 차단해 그 사람의 콘텐츠를 더 이상 보지 않을 수 있어요.',
   'Tap the flag icon to report the concern or block its author. Tap the share icon to send a web link that anyone can open.':
     '깃발 아이콘을 누르면 사안을 신고하거나 작성자를 차단할 수 있어요. 공유 아이콘을 누르면 누구나 열 수 있는 웹 링크를 보내요.',
   'Tap the flag icon to report the policy or a comment, or to block its author. Tap the share icon to send a web link.':
@@ -1606,7 +1599,7 @@ export const KO: Record<string, string> = {
     '“이메일”과 “비밀번호”를 입력하고 “들어가기”를 누르세요. 새 비밀번호는 6자 이상이어야 해요. “보기”를 누르면 입력한 내용을 볼 수 있어요.',
   'Type your answer under a question and tap "Post answer". Voters see every candidate\'s answer side by side. You can revise it later with "Update answer", but it cannot be taken down.':
     '질문 아래에 답변을 입력하고 “답변 게시”를 누르세요. 유권자는 모든 후보의 답변을 나란히 봐요. 나중에 “답변 수정”으로 고칠 수 있지만 내릴 수는 없어요.',
-  'Type your home address and tap "Find my districts". If it matches, you go back to the election tab with your own races listed first.':
+  'Type your home address and tap "Find my districts". If it matches, you go back to the elections tab with your own races listed first.':
     '집 주소를 입력하고 “내 선거구역 찾기”를 누르세요. 주소가 확인되면 선거 탭으로 돌아가 내 선거가 먼저 표시돼요.',
   'Under "Audience", choose your ward\'s residents or "Citywide (everyone)". Officials without a ward can only post citywide.':
     '“대상”에서 내 선거구 주민 또는 “시 전체(모든 사람)”를 고르세요. 선거구가 없는 공직자는 시 전체에만 게시할 수 있어요.',
@@ -1696,8 +1689,6 @@ export const KO: Record<string, string> = {
     '{ward}의 내 주소를 바탕으로 내 선거를 먼저 보여줘요.',
   'Your record: concerns {concerns}, comments {comments}, votes {votes}, judgments {judgments}.':
     '내 기록: 사안 {concerns}, 댓글 {comments}, 투표 {votes}, 판정 {judgments}.',
-  'Your settings: language, phone notifications, verification and moving, privacy, deleting your account, and the community rules.':
-    '내 설정: 언어, 휴대폰 알림, 인증과 이사, 개인정보, 계정 삭제, 커뮤니티 규칙.',
   'Your vote: {n}.':
     '내 투표: {n}.',
   'Your work as a candidate: "ask every candidate" questions you haven\'t answered, the latest comments on your policies, your public card, and your platform.':
@@ -1952,8 +1943,6 @@ export const KO: Record<string, string> = {
     "미정",
   "Yes: {yes}. No: {no}. Not decided: {open}.":
     "예: {yes}. 아니오: {no}. 미정: {open}.",
-  "Share my picks":
-    "내 선택 공유",
   "Clear my picks":
     "내 선택 지우기",
   "Clear my picks?":
@@ -1974,10 +1963,6 @@ export const KO: Record<string, string> = {
     "이 판사를 유임할까요?",
   "My ballot":
     "내 투표용지",
-  "{n} made so far. Your picks stay on this phone.":
-    "지금까지 {n}. 선택한 내용은 이 휴대폰에만 남아요.",
-  "Pick a candidate in each race and take the list with you to vote.":
-    "선거마다 후보를 선택하고 투표하러 갈 때 목록을 가져가세요.",
   "Not now":
     "나중에",
   "Turn on":
@@ -2002,8 +1987,6 @@ export const KO: Record<string, string> = {
     "“내 투표용지”를 누르면 11월 3일 투표용지의 모든 선택 항목과 내가 고른 것을 볼 수 있어요. 선택한 내용은 이 휴대폰에만 남아요.",
   "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
     "11월 3일 선거에서 후보의 “선택”을 누르면 내 투표용지에 추가되고, “내 선택”을 누르면 취소돼요. 유임 심사 판사는 “이 판사를 유임할까요?” 아래 “예” 또는 “아니오”를 누르세요. 선택한 내용은 이 휴대폰에만 남아요.",
-  "Tap \"My ballot\" at the top to see all your picks.":
-    "위쪽의 “내 투표용지”를 누르면 모든 선택을 볼 수 있어요.",
   "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
     "후보의 “선택”을 누르면 내 투표용지에 추가되고, “내 선택”을 누르면 취소돼요. 선택한 내용은 이 휴대폰에만 남아요.",
   "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
@@ -2014,8 +1997,6 @@ export const KO: Record<string, string> = {
     "권고 질문에 “예” 또는 “아니오”를 누르세요.",
   "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
     "“내 선거 찾기”를 눌러 주소를 추가하면 연방 하원, 주 의회, 카운티 위원회, 교육위원회 선거가 나와요.",
-  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
-    "“내 선택 공유”를 누르면 목록을 메시지로 보내거나 저장할 수 있어요. 직접 써야 하는 이름에는 “직접 기입” 표시가 붙어요.",
   "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
     "“내 선택 지우기”를 누르고 확인하면 이 휴대폰의 모든 선택이 지워져요.",
   "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
@@ -2081,4 +2062,381 @@ export const KO: Record<string, string> = {
     "선거구 사무실에 전화: {phone}",
   "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
     "\"선거구 회의\" 아래 \"소식지에서 시간을 찾지 못함\"에는 선거구 사무실 소식지가 시간 없이 알린 회의가 나와요. \"선거구 사무실에 전화\"를 눌러 언제 열리는지 물어보세요.",
+  "{n} of {total} chosen":
+    "{total}개 중 {n}개 선택함",
+  "Next: {race}":
+    "다음: {race}",
+  "Done":
+    "완료",
+  "Next to decide: {race}":
+    "다음에 정할 선거: {race}",
+  "My cheat sheet":
+    "내 투표 메모",
+  "Made with direct democracy":
+    "direct democracy로 만들었어요",
+  "Could not make the image":
+    "이미지를 만들지 못했어요",
+  "Could not make the PDF":
+    "PDF를 만들지 못했어요",
+  "Save as image":
+    "이미지로 저장",
+  "Save as PDF":
+    "PDF로 저장",
+  "Share as text":
+    "텍스트로 공유",
+  "Tap \"My ballot\" at the top to see all your picks. The number on it counts the choices you have made out of all the choices on your ballot.":
+    "위쪽의 “내 투표용지”를 눌러 내 선택을 모두 보세요. 버튼의 숫자는 투표용지 전체 선택 중 몇 개를 정했는지 보여 줘요.",
+  "After you pick, tap \"Next\" at the bottom to go to the next race on your ballot, in ballot order, or tap \"Skip\" to go on without picking. On your last race \"Next\" says \"Done\" and takes you back to My ballot. Picking needs your districts first: tap \"Find my races\".":
+    "고른 뒤 아래쪽의 “다음”을 눌러 투표용지 순서대로 다음 선거로 가거나, “건너뛰기”를 눌러 고르지 않고 넘어가세요. 마지막 선거에서는 “다음”이 “완료”로 바뀌고 내 투표용지로 돌아가요. 고르려면 먼저 내 선거구역이 필요해요. “내 선거 찾기”를 누르세요.",
+  "Tap \"Next to decide\" to open the first race you have not picked in. From there, \"Next\" at the bottom of each race takes you down the ballot.":
+    "“다음에 정할 선거”를 눌러 아직 고르지 않은 첫 선거를 여세요. 그다음부터는 각 선거 아래쪽의 “다음”이 투표용지를 따라 내려가게 해 줘요.",
+  "Your picks for the November 3, 2026 ballot laid out as a cheat sheet, in about the order the ballot prints them, to read while you vote or fill in a mail ballot. It is made on this phone from the picks kept on it.":
+    "2026년 11월 3일 투표용지에서 내가 고른 것을 투표 메모로 정리했어요. 투표용지에 인쇄된 순서와 거의 같아서 투표하거나 우편 투표용지를 채울 때 볼 수 있어요. 이 휴대폰에 저장된 선택으로 이 휴대폰에서 만들어요.",
+  "Tap \"Save as image\" to save the sheet as a picture. On an iPhone, choose \"Save Image\" in the share sheet to put it in your photos.":
+    "“이미지로 저장”을 눌러 메모를 사진으로 저장하세요. iPhone에서는 공유 시트에서 “이미지 저장”을 고르면 사진 앱에 들어가요.",
+  "Tap \"Save as PDF\" to make a PDF you can print or keep in your files.":
+    "“PDF로 저장”을 눌러 인쇄하거나 파일에 보관할 수 있는 PDF를 만드세요.",
+  "Tap \"Share as text\" to send your picks as a message.":
+    "“텍스트로 공유”를 눌러 내 선택을 메시지로 보내세요.",
+  "Look for \"write in\" after a name: that person's name is not printed on the ballot, so you write it in.":
+    "이름 뒤의 “직접 기입”을 확인하세요. 그 사람의 이름은 투표용지에 인쇄되어 있지 않아서 직접 써야 해요.",
+  "Skip":
+    "건너뛰기",
+  "Rated negatively by a bar association: {n}. They are listed first.":
+    "변호사협회의 부정적 평가를 받은 판사: {n}명. 맨 앞에 나와요.",
+  "On judge races, judges rated negatively by at least one bar association are listed first, those with the most negative ratings at the top.":
+    "판사 선거에서는 변호사협회 한 곳 이상에서 부정적 평가를 받은 판사가 먼저 나오고, 부정적 평가가 가장 많은 판사가 맨 위에 있어요.",
+  "{name} (rated negatively)":
+    "{name} (부정적 평가)",
+  "Rated negatively by a bar association":
+    "변호사협회의 부정적 평가",
+  "Judges up for retention whom a bar association rated negatively come first, in red, each with your answer; every other judge is listed once below them. A negatively rated judge you picked for a vacancy is marked \"rated negatively\".":
+    "변호사협회의 부정적 평가를 받은 유임 대상 판사는 빨간색으로 맨 앞에 내 답과 함께 나오고, 나머지 판사는 그 아래에 한 번씩만 나와요. 공석에 고른 판사가 부정적 평가를 받았으면 “부정적 평가” 표시가 붙어요.",
+  "Under the judges up for retention, the ones a bar association rated negatively are named in red with your answer for each.":
+    "유임 여부를 묻는 판사 아래에 변호사협회의 부정적 평가를 받은 판사가 빨간색으로 각각 내 답과 함께 나와요.",
+  "Tap \"My cheat sheet\", at the top or the bottom, to see your picks laid out to vote with, and save them as an image or a PDF or share them as text.":
+    "위나 아래의 “내 투표 메모”를 눌러 투표할 때 볼 수 있게 정리된 내 선택을 보고, 이미지나 PDF로 저장하거나 텍스트로 공유하세요.",
+  "choices made":
+    "개 선택함",
+  "Complete":
+    "완료",
+  // Report dialog and Settings > Send feedback (2026-10-22).
+  'Pick at least one reason.': '이유를 하나 이상 고르세요.',
+  'Pick every reason that applies.': '해당하는 이유를 모두 고르세요.',
+  'Add a note (optional)': '메모 추가 (선택)',
+  'Sign in to send': '로그인하고 보내기',
+  'Blocking hides everything they post, for you only. They are not told.': '차단하면 그 사람이 올리는 모든 글이 나에게만 숨겨집니다. 상대방에게는 알리지 않습니다.',
+  'A child’s safety': '아동의 안전',
+  'A post or a person in the app': '앱의 게시물이나 사람',
+  'Something isn’t working': '작동하지 않는 기능',
+  'An idea for the app': '앱에 대한 아이디어',
+  'Answers go to {email}.': '답변은 {email}(으)로 갑니다.',
+  'You are signed in.': '로그인되어 있습니다.',
+  'You are signed out. Add an email if you want an answer.': '로그인하지 않았습니다. 답변을 원하면 이메일을 남겨 주세요.',
+  'Message sent': '메시지를 보냈습니다',
+  'Thank you. The operators read every message.': '감사합니다. 운영자가 모든 메시지를 읽습니다.',
+  'Could not send your message': '메시지를 보낼 수 없습니다',
+  'To report a post or comment, tap the flag on it. For anything else, write to the operators here.': '게시물이나 댓글을 신고하려면 그 위의 깃발을 누르세요. 그 밖의 일은 여기에서 운영자에게 써 주세요.',
+  'What is this about?': '무엇에 관한 내용인가요?',
+  'Child safety messages reach the operator right away. If a child is in danger now, call 911.': '아동 안전에 관한 메시지는 운영자에게 바로 전달됩니다. 지금 아이가 위험에 처해 있다면 911에 전화하세요.',
+  'Your message': '메시지',
+  'What happened, and where in the app?': '무슨 일이 있었고, 앱의 어디에서였나요?',
+  'Your email (optional)': '이메일 (선택)',
+  'Only if you want an answer': '답변을 원할 때만',
+  'Send': '보내기',
+  '10 character minimum': '최소 10자',
+  'You can send up to 5 messages a day. You can send another {date}.': '하루에 메시지를 5개까지 보낼 수 있습니다. {date}에 다시 보낼 수 있습니다.',
+  'Send feedback': '의견 보내기',
+  'Send feedback or report a problem': '의견 보내기 또는 문제 신고',
+  'Pick what this is about.': '무엇에 관한 내용인지 고르세요.',
+  'That email address does not look right.': '이메일 주소가 올바르지 않은 것 같습니다.',
+  'Too many messages today. Try again tomorrow.': '오늘 보낸 메시지가 너무 많습니다. 내일 다시 시도하세요.',
+  'Feedback you send from Settings is visible only to the platform operators, with your account or the email you give, so they can answer.': '설정에서 보낸 의견은 플랫폼 운영자만 볼 수 있으며, 답변할 수 있도록 내 계정이나 내가 남긴 이메일이 함께 전달됩니다.',
+  'Reported posts are reviewed every week, and child safety reports right away. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.': '신고된 게시물은 매주 검토하며, 아동 안전 신고는 즉시 검토합니다. 이 규칙을 어긴 게시물은 삭제되고, 심각하거나 반복되는 경우 계정을 잃습니다. 5명 이상이 신고한 계정은 검토할 때까지 숨겨집니다.',
+  'Tap the flag icon on a post or comment, pick every reason that applies, and tap "Send report". The same window blocks its author so you stop seeing their content.': '게시물이나 댓글의 깃발을 누르고, 해당하는 이유를 모두 고른 뒤 "신고 보내기"를 누르세요. 같은 창에서 작성자를 차단해 그 사람의 글을 더 이상 보지 않을 수도 있습니다.',
+  'Know that reports are reviewed every week, and child safety reports right away. Posts that break the rules come down, and serious or repeated cases lose the account.': '신고는 매주 검토하며, 아동 안전 신고는 즉시 검토합니다. 규칙을 어긴 게시물은 삭제되고, 심각하거나 반복되는 경우 계정을 잃습니다.',
+  'Your settings: language, phone notifications, feedback to the operators, verification and moving, privacy, deleting your account, and the community rules.': '내 설정: 언어, 휴대폰 알림, 운영자에게 보내는 의견, 인증과 이사, 개인정보, 계정 삭제, 커뮤니티 규칙.',
+  'Tap "Send feedback or report a problem" to write to the operators without leaving the app, signed in or not. Child safety messages reach them right away.': '"의견 보내기 또는 문제 신고"를 눌러 앱을 떠나지 않고 운영자에게 쓸 수 있습니다. 로그인하지 않아도 됩니다. 아동 안전에 관한 메시지는 바로 전달됩니다.',
+  'A message to the operators from inside the app, for anything but a single post: a child safety concern, a person in the app, something that isn\'t working, or an idea.': '앱 안에서 운영자에게 보내는 메시지로, 게시물 하나가 아닌 모든 일에 씁니다: 아동 안전에 대한 걱정, 앱의 어떤 사람, 작동하지 않는 기능, 또는 아이디어.',
+  'Pick what it is about, write what happened and where, and tap "Send".': '주제를 고르고, 무슨 일이 어디에서 있었는지 쓴 다음 "보내기"를 누르세요.',
+  'Pick "A child’s safety" for any concern about a child. Those messages reach the operator right away. If a child is in danger now, call 911.': '아이에 관한 걱정이라면 무엇이든 "아동의 안전"을 고르세요. 이 메시지는 운영자에게 바로 전달됩니다. 지금 아이가 위험에 처해 있다면 911에 전화하세요.',
+  'To report one post or comment, tap the flag on it instead.': '게시물이나 댓글 하나를 신고하려면 대신 그 위의 깃발을 누르세요.',
+  'Signed out, add an email if you want an answer. Signed in, the answer goes to your account\'s email.': '로그인하지 않았다면 답변을 원할 때 이메일을 남기세요. 로그인했다면 답변은 계정 이메일로 갑니다.',
+  'Send up to 5 messages a day.': '하루에 메시지를 5개까지 보내세요.',
+  "Leave blank":
+    "비워 두기",
+  "Left blank":
+    "비워 둠",
+  "Leave blank: {seat}":
+    "비워 두기: {seat}",
+  "On a judge vacancy, tap \"Leave blank\" if you do not want to vote for that judge. Each vacancy has one candidate, so leaving it blank is the only other choice your ballot gives, and it counts as a choice made.":
+    "판사 공석에서 그 판사에게 투표하고 싶지 않다면 “비워 두기”를 누르세요. 공석마다 후보가 한 명뿐이라 비워 두는 것이 투표용지의 유일한 다른 선택이고, 결정한 것으로 셉니다.",
+  // Mayor games (2026-11-04)
+  "6 am to 7 pm": "오전 6시부터 오후 7시까지",
+  "Applications for a February mail ballot open November 25, 2026, online or on paper.": "2월 우편 투표 신청은 2026년 11월 25일부터 온라인이나 서면으로 할 수 있어요.",
+  "April 6, 2027": "2027년 4월 6일",
+  "Be nice. They collected 12,500 signatures and they have feelings.": "친절하게 대하세요. 서명 12,500개를 모은 사람들이고, 감정도 있어요.",
+  "Blind date": "블라인드 데이트",
+  "Candidate for mayor": "시장 후보",
+  "Candidates in the race: {n}.": "이 선거의 후보: {n}명.",
+  "Cash on hand": "보유 현금",
+  "Cheap date": "저렴한 데이트",
+  "Check your registration, see your sample ballot, and find your polling place.": "유권자 등록을 확인하고, 견본 투표용지를 보고, 내 투표소를 찾으세요.",
+  "Checked {date}.": "{date} 확인.",
+  "Compare candidates on this page. Each card shows an \"Incumbent\" chip if they hold the seat and a preview of what they are running on.": "이 페이지에서 후보들을 비교하세요. 각 카드에는 현직인 경우 “현직” 표시와 주요 공약 미리보기가 나와요.",
+  "Data checked {date}.": "{date} 자료 확인.",
+  "Election day is {date}.": "선거일은 {date}이에요.",
+  "Every alderman's seat and every police district council is on the {date} ballot with the mayor's race above.": "모든 시의원 의석과 모든 경찰 지구 위원회가 {date} 투표용지에 오르고, 그 위에 시장 선거가 있어요.",
+  "Everyone running for mayor on February 23, 2027. Four ways to meet them.": "2027년 2월 23일 시장 선거에 출마한 모든 후보. 그들을 만나는 네 가지 방법.",
+  "Everyone who filed to run for mayor, in alphabetical order. Tap a name for everything the games know.": "시장 출마를 신청한 모든 후보를 알파벳 순으로. 이름을 누르면 게임이 아는 모든 것을 볼 수 있어요.",
+  "Everything about {name}": "{name}의 모든 것",
+  "Everything the mayor games know about one candidate for mayor, with sources: who they are, their full platform, their campaign money as reported to the State Board of Elections, their standing in the latest public poll, what they say they would do in their own words, what they say about money, their pizza position, and the odd fact on the record.": "시장 게임이 한 시장 후보에 대해 아는 모든 것을 출처와 함께 보여 줘요: 누구인지, 전체 공약, 주 선거관리위원회에 신고된 선거 자금, 최신 공개 여론조사에서의 위치, 본인의 말로 무엇을 하겠다고 하는지, 돈에 대해 무엇을 말하는지, 피자 입장, 그리고 기록에 남은 특이한 사실.",
+  "For the February 23 municipal election. Apply online or on paper; the ballot itself is mailed later.": "2월 23일 시 선거용이에요. 온라인이나 서면으로 신청하세요. 투표용지는 나중에 우편으로 발송돼요.",
+  "Fun fact: the lake is right there. Nobody has promised to fix it.": "재미있는 사실: 호수가 바로 저기 있어요. 아직 아무도 고치겠다고 약속하지 않았어요.",
+  "Game not found.": "게임을 찾을 수 없어요.",
+  "House rule: no Bears stadium talk on a first date.": "하우스 룰: 첫 데이트에서 베어스 경기장 이야기는 금지예요.",
+  "If nobody wins a majority, the top two meet in a runoff on Tuesday, April 6, 2027.": "과반을 얻은 후보가 없으면 상위 두 명이 2027년 4월 6일 화요일 결선 투표에서 맞붙어요.",
+  "If they say \"fiscal responsibility\", take a sip of water. Hydrate.": "“재정 책임”이라고 말하면 물을 한 모금 마시세요. 수분 보충은 중요해요.",
+  "If you look up your districts without verifying: the district numbers only, so the ward races can show your police district council first.": "인증 없이 선거구역을 조회한 경우: 선거구역 번호만 저장해요. 선거구 선거에서 내 경찰 지구 위원회를 먼저 보여 주기 위해서예요.",
+  "In their words where we have them.": "확보한 경우 본인의 말 그대로.",
+  "Jumps to when and where to vote": "투표 시간과 장소로 이동",
+  "Key points listed: {n}.": "나열된 핵심 사항: {n}개.",
+  "Mail ballot applications open": "우편 투표 신청 시작:",
+  "Main points": "주요 내용",
+  "Mayor games": "시장 게임",
+  "Mayor, city clerk and treasurer, alderman, and police district council. Polls are open 6 am to 7 pm.": "시장, 시 서기와 시 재무관, 시의원, 경찰 지구 위원회. 투표소는 오전 6시부터 오후 7시까지 열어요.",
+  "Met {n} of {total}": "{total}명 중 {n}명 만남",
+  "Mystery candidate": "미스터리 후보",
+  "Next date": "다음 데이트",
+  "Next to the others": "다른 후보와 비교",
+  "No candidates are on record yet. Petitions were filed October 19-26, 2026; the districts fill in here as the Board certifies the ballot.": "아직 기록된 후보가 없어요. 청원서는 2026년 10월 19일부터 26일까지 제출되었고, 선거관리위원회가 투표용지를 확정하는 대로 선거구역이 여기에 채워져요.",
+  "No candidates in the race yet.": "아직 이 선거에 후보가 없어요.",
+  "No pizza position found on the record. If one of them goes public, tell us and we will rank them.": "기록에서 피자 입장을 찾지 못했어요. 누군가 공개적으로 밝히면 알려 주세요. 순위를 매겨 드릴게요.",
+  "No poll has listed this candidate yet.": "아직 이 후보를 포함한 여론조사가 없어요.",
+  "No spending report found for these campaigns yet. They wait here, which is the cheapest place to stand.": "이 선거 캠프들의 지출 보고서를 아직 찾지 못했어요. 여기서 기다리고 있는데, 서 있기에 가장 저렴한 자리예요.",
+  "No spending report found for this campaign yet.": "이 선거 캠프의 지출 보고서를 아직 찾지 못했어요.",
+  "Nobody has mentioned the parking meters yet. Give it time.": "아직 아무도 주차 요금 징수기를 언급하지 않았어요. 조금만 기다려 보세요.",
+  "Not listed in the poll": "여론조사에 없음",
+  "Not listed in the poll · {spent} spent": "여론조사에 없음 · {spent} 지출",
+  "Off the ballot": "투표용지에서 제외",
+  "On Blind date, read the points, then tap \"Reveal who it is\" to see the name and face, then \"Next date\" for another. Tap \"Skip this one\" to move on without revealing.": "블라인드 데이트에서는 핵심 사항을 읽고 “누구인지 공개”를 눌러 이름과 얼굴을 확인한 뒤, “다음 데이트”를 눌러 다른 후보를 만나세요. “이 사람은 건너뛰기”를 누르면 공개하지 않고 넘어가요.",
+  "On Cheap date and Pizza date, tap any card for everything about that candidate.": "저렴한 데이트와 피자 데이트에서는 아무 카드나 누르면 그 후보의 모든 것을 볼 수 있어요.",
+  "On Speed date, tap \"Next date\" and \"Back\" to move through the field. The clock only counts; it never cuts you off.": "스피드 데이트에서는 “다음 데이트”와 “뒤로”를 눌러 후보들을 차례로 만나세요. 시계는 시간을 셀 뿐, 절대 끊지 않아요.",
+  "One ballot candidate's card, put together from public sources. It shows what they say they are running on, their background, and their campaign site. These candidates do not have accounts in the app.": "공개 자료로 정리한 투표용지 후보 한 명의 카드예요. 주요 공약, 경력, 선거 캠프 사이트가 나와요. 이 후보들은 앱에 계정이 없어요.",
+  "One candidate at a time, the whole platform in a minute.": "한 번에 후보 한 명, 전체 공약을 1분 안에.",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, with their own words where we have them, and their name and face behind \"Reveal who it is\"; candidates come in random order and this phone remembers who you have met. Speed date: one candidate at a time, in a random order, with the AI summary of their main points and how they compare to the others. Cheap date: everyone with a spending report, ordered by poll support per dollar spent, with what they say about money. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end.": "네 가지 시장 게임 중 하나예요. 블라인드 데이트: 미스터리 후보의 핵심 사항을 확보한 경우 본인의 말과 함께 보여 주고, 이름과 얼굴은 “누구인지 공개” 뒤에 숨겨요. 후보는 무작위 순서로 나오고, 이 휴대폰이 누구를 만났는지 기억해요. 스피드 데이트: 한 번에 후보 한 명씩 무작위 순서로, 주요 내용의 AI 요약과 다른 후보와의 비교를 함께 보여 줘요. 저렴한 데이트: 지출 보고서가 있는 모든 후보를 지출 1달러당 여론조사 지지율 순으로, 돈에 대해 하는 말과 함께 보여 줘요. 피자 데이트: 피자 입장이 있는 모든 후보를 누가 옳은지(씬 크러스트) 순으로 보여 주고, 나머지는 끝에 목록으로 나와요.",
+  "One race on the February 23, 2027 ballot: city clerk, city treasurer, or a police district council. It lists every candidate, with the first lines of what each says they are running on, so you can compare them here.": "2027년 2월 23일 투표용지의 선거 하나: 시 서기, 시 재무관, 또는 경찰 지구 위원회예요. 모든 후보와 각자의 주요 공약 첫 줄을 보여 주어 여기서 비교할 수 있어요.",
+  "Only in races where nobody won a majority on February 23. Polls are open 6 am to 7 pm.": "2월 23일에 과반을 얻은 후보가 없는 선거에만 해당해요. 투표소는 오전 6시부터 오후 7시까지 열어요.",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line.": "지출 1달러당 여론조사 지지율 순이에요. 지금 자리에 오기까지 가장 많이 썼다면 줄 맨 뒤에 서야 해요.",
+  "Petitions filed": "청원서 제출",
+  "Petitions were filed October 19-26, 2026, and the Board of Elections certifies the ballot by December 17. This page follows the field as it settles.": "청원서는 2026년 10월 19일부터 26일까지 제출되었고, 선거관리위원회는 12월 17일까지 투표용지를 확정해요. 이 페이지는 후보 구도가 정해지는 과정을 따라가요.",
+  "Petitions were filed October 19-26, 2026; the Board of Elections certifies the ballot by December 17": "청원서는 2026년 10월 19일부터 26일까지 제출되었고, 선거관리위원회는 12월 17일까지 투표용지를 확정해요",
+  "Pizza date": "피자 데이트",
+  "Poll support: {pct}%.": "여론조사 지지율: {pct}%.",
+  "Polls are open": "투표소 운영 시간:",
+  "Put a question to every candidate": "모든 후보에게 질문하기",
+  "Raised": "모금",
+  "Ranked by who is right about pizza. No questions.": "피자에 대해 누가 옳은지 순으로. 질문은 받지 않아요.",
+  "Ranked by who is right about pizza. Tavern-style thin crust is right. We do not explain ourselves.": "피자에 대해 누가 옳은지 순으로. 태번 스타일 씬 크러스트가 옳아요. 설명은 하지 않아요.",
+  "Register online with an Illinois license or state ID, or in person at any early voting site and at your polling place on election day, with two forms of ID (one showing your address).": "Illinois 운전면허증이나 주 신분증으로 온라인 등록하거나, 조기 투표소 어디서든, 그리고 선거일에 내 투표소에서 신분증 두 가지(하나는 주소가 표시된 것)로 직접 등록하세요.",
+  "Reminder: the city is the one paying for dinner.": "참고: 저녁값은 시가 내요.",
+  "Reveal who it is": "누구인지 공개",
+  "Runoff election day is": "결선 투표일:",
+  "Skip this one": "이 사람은 건너뛰기",
+  "Somewhere, a ward meeting is running late. Your date left it early for you.": "어딘가에서 선거구 회의가 길어지고 있어요. 데이트 상대는 당신을 위해 일찍 빠져나왔어요.",
+  "Speed date": "스피드 데이트",
+  "Spent": "지출",
+  "Spent {spent} ({period}).": "{spent} 지출({period}).",
+  "Start over": "처음부터 다시",
+  "Tap \"Blind date\", \"Speed date\", \"Cheap date\", or \"Pizza date\" to play. Every game links to each candidate's page, with sources.": "“블라인드 데이트”, “스피드 데이트”, “저렴한 데이트”, “피자 데이트” 중 하나를 눌러 시작하세요. 모든 게임은 각 후보의 페이지로 연결되고, 출처가 함께 있어요.",
+  "Tap \"Everything about\" a candidate for their page, or \"Full platform\" for every policy they have published.": "후보의 “모든 것”을 누르면 그 후보의 페이지로, “전체 공약”을 누르면 발표한 모든 정책 공약으로 이동해요.",
+  "Tap \"Full platform\" to read every policy they have published. On the platform, you can comment on any policy. Candidates without a page in the app link to their own site.": "“전체 공약”을 누르면 발표한 모든 정책 공약을 읽을 수 있어요. 공약 페이지에서는 어떤 정책 공약에든 댓글을 달 수 있어요. 앱에 페이지가 없는 후보는 자신의 사이트로 연결돼요.",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the mayor games tab.": "시장 게임 탭에서 “모든 후보에게 질문하기”를 누르면 모든 후보에게 한 번에 질문할 수 있어요.",
+  "Tap \"Source\" under any quote to read it where it was said.": "인용문 아래 “출처”를 누르면 그 말이 나온 곳에서 읽을 수 있어요.",
+  "Tap City Clerk, City Treasurer, a ward number, or a police district number to see who is running. \"Your ward\" shows your alderman's record next to their challengers.": "시 서기, 시 재무관, 선거구 번호, 경찰 지구 번호를 누르면 누가 출마했는지 볼 수 있어요. “내 선거구”에는 내 시의원의 기록이 도전자들과 나란히 나와요.",
+  "Tap the countdown line to jump to when and where to vote.": "카운트다운 줄을 누르면 투표 시간과 장소로 이동해요.",
+  "Tap the share icon at the top to send this page. The link opens on the web for people without the app.": "상단의 공유 아이콘을 누르면 이 페이지를 보낼 수 있어요. 앱이 없는 사람에게는 링크가 웹에서 열려요.",
+  "Taxes, the budget, and what it costs to live here.": "세금, 예산, 그리고 여기서 사는 데 드는 비용.",
+  "The Board has not posted February early voting dates or sites yet. Any Chicago voter can use any early voting site, and same-day registration is available at all of them.": "선거관리위원회가 2월 조기 투표 날짜와 장소를 아직 발표하지 않았어요. 시카고 유권자는 어느 조기 투표소든 이용할 수 있고, 모든 투표소에서 당일 등록이 가능해요.",
+  "The mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date shows a candidate's ideas before their name. Speed date walks the field one at a time with an AI summary. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the ward races, and the field A to Z.": "시장 게임: 2027년 2월 23일 시카고 시장 선거에 출마한 모든 후보를 만나는 네 가지 방법이에요. 블라인드 데이트는 후보의 생각을 이름보다 먼저 보여 줘요. 스피드 데이트는 AI 요약과 함께 후보를 한 명씩 차례로 보여 줘요. 저렴한 데이트는 지출 1달러당 여론조사 지지율로 순위를 매겨요. 피자 데이트는 피자에 대해 옳은지로 순위를 매겨요. 게임 아래 빨간 띠에는 2월 투표용지의 나머지가 있어요: 투표 시간과 장소, 모든 후보가 답하는 질문, 선거구 선거, 그리고 후보 명단 A부터 Z까지.",
+  "The pizza is cut in squares. The candidates are not.": "피자는 네모나게 잘려 나와요. 후보들은 잘리지 않았어요.",
+  "Their ideas first. Their name when you say so.": "생각이 먼저. 이름은 당신이 원할 때.",
+  "These names are not printed on the ballot. To vote for one, write the name in the blank write-in space for that office and fill in the oval (on a touchscreen, follow the write-in steps on screen). Votes count only for write-ins who filed a declaration; election judges at your polling place have the official list.": "이 이름들은 투표용지에 인쇄되어 있지 않아요. 이 중 한 명에게 투표하려면 해당 직위의 빈 기명란에 이름을 쓰고 타원을 채우세요(터치스크린에서는 화면의 기명 투표 안내를 따르세요). 신고서를 제출한 기명 후보의 표만 집계돼요. 공식 목록은 내 투표소의 선거 관리원이 갖고 있어요.",
+  "They all say they will fix the potholes. Ask how.": "모두 도로 구멍을 메우겠다고 해요. 어떻게 할 건지 물어보세요.",
+  "This date: {clock}": "이번 데이트: {clock}",
+  "Tuesday, February 23, 2027": "2027년 2월 23일 화요일",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first.": "집 주소를 입력하고 “내 선거구역 찾기”를 누르세요. 주소가 확인되면 투표용지로 돌아가 내 경찰 지구 위원회가 먼저 표시돼요.",
+  "Under \"Campaign money\", read what the campaign raised, spent, and has on hand, and tap \"Source\" to open the State Board of Elections report.": "“선거 자금” 아래에서 선거 캠프가 모금한 돈, 지출한 돈, 보유 현금을 읽고, “출처”를 누르면 주 선거관리위원회 보고서가 열려요.",
+  "Under \"Support\", tap the poll's name to open it.": "“지지율” 아래에서 여론조사 이름을 누르면 열려요.",
+  "Under \"The field, A to Z\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "“후보 명단, A부터 Z까지” 아래에서 아무 이름이나 누르면 게임이 그 후보에 대해 아는 모든 것을 볼 수 있어요: 공약, 선거 자금, 여론조사 위치, 인용문, 그리고 피자.",
+  "Use the \"When and where to vote\" links to register, apply for a mail ballot, find early voting sites, or find your polling place. Tap \"More help voting\" for accessible voting, language help, and poll work.": "“투표 시간과 장소” 링크로 유권자 등록, 우편 투표 신청, 조기 투표소 찾기, 내 투표소 찾기를 할 수 있어요. “투표 도움말 더 보기”를 누르면 장애인 접근 투표, 언어 지원, 투표소 근무 안내가 나와요.",
+  "What they would do as mayor, in their words where we have them.": "시장이 되면 무엇을 할지, 확보한 경우 본인의 말 그대로.",
+  "Which mayoral candidates you have already met in the games. That list stays on your phone only.": "게임에서 이미 만난 시장 후보 목록. 이 목록은 내 휴대폰에만 남아요.",
+  "Who gets the most support for the least money.": "누가 가장 적은 돈으로 가장 많은 지지를 얻는지.",
+  "Withdrew": "사퇴",
+  "Your date has arrived. They brought a budget.": "데이트 상대가 도착했어요. 예산안을 들고 왔네요.",
+  "Your district numbers for races that depend on your street address, not just your ward. On the February 23, 2027 ballot that is your police district council; the other numbers (US House, Illinois Senate and House, county districts, judicial subcircuit, school board) are kept for the next election that uses them.": "선거구만이 아니라 집 주소에 따라 정해지는 선거의 내 선거구역 번호예요. 2027년 2월 23일 투표용지에서는 경찰 지구 위원회가 해당하고, 나머지 번호(연방 하원, Illinois 주 상원과 하원, 카운티 선거구역, 사법 하위 순회구, 교육위원회)는 그것을 쓰는 다음 선거를 위해 보관돼요.",
+  "Your police district council race depends on your address, not just your ward. We send it to the US Census Bureau to place it on the map and keep only your district numbers, never the address.": "내 경찰 지구 위원회 선거는 선거구만이 아니라 주소에 따라 정해져요. 주소를 미국 인구조사국에 보내 지도 위에서 위치를 찾고, 선거구역 번호만 보관하며 주소는 절대 저장하지 않아요.",
+  "also on the record": "기록에 남은 또 다른 사실",
+  "campaign money": "선거 자금",
+  "candidates who don't care about pizza": "피자에 관심 없는 후보들",
+  "games": "게임",
+  "not found": "찾을 수 없음",
+  "on": "·",
+  "on money": "돈에 대해",
+  "pizza": "피자",
+  "spending not on record": "지출 기록 없음",
+  "support": "지지율",
+  "the ai summary": "AI 요약",
+  "the field, a to z": "후보 명단, A부터 Z까지",
+  "the mayor games": "시장 게임",
+  "waldgrave.com/directdemocracy": "waldgrave.com/directdemocracy",
+  "what they would do": "무엇을 할 것인가",
+  "when and where to vote": "투표 시간과 장소",
+  "{n} of {total}": "{total}명 중 {n}번째",
+  "{n} people want to be mayor on February 23, 2027. Four ways to meet them.": "{n}명이 2027년 2월 23일에 시장이 되고 싶어 해요. 그들을 만나는 네 가지 방법.",
+  "{n} points of support per $1 million spent": "지출 100만 달러당 지지율 {n}포인트",
+  "{pct}% support · {spent} spent": "지지율 {pct}% · {spent} 지출",
+  // Mayor games, round two (2026-11-09)
+  "A \"?\" on every screen says what you can do there.": "모든 화면의 “?”가 그곳에서 무엇을 할 수 있는지 알려 줘요.",
+  "After the reveal, tap \"Next date\" or swipe left for another. Tap the heart to change your mind about a second date.": "공개된 뒤에는 “다음 데이트”를 누르거나 왼쪽으로 밀어 다른 후보를 만나세요. 하트를 누르면 두 번째 데이트에 대한 마음을 바꿀 수 있어요.",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, four ways.": "시카고는 2027년 2월 23일에 시장을 뽑아요. 출마한 모든 후보를 네 가지 방법으로 만나 보세요.",
+  "Chicago's top concerns, ranked by the people.": "시민이 순위를 매긴 시카고의 주요 현안.",
+  "Compare them on a speed date": "스피드 데이트로 비교하기",
+  "Date {n} of {total}": "{total}번 중 {n}번째 데이트",
+  "Find my police district": "내 경찰 지구 찾기",
+  "Finish": "마치기",
+  "Four more races share the {date} ballot with the mayor's: two citywide, one by your ward, and one by your address.": "{date} 투표용지에는 시장 선거 말고도 선거가 네 개 더 있어요: 시 전체 선거 둘, 내 선거구에 따른 선거 하나, 내 주소에 따른 선거 하나.",
+  "Full platform": "전체 공약",
+  "Full platform on their site": "후보 사이트에서 전체 공약 보기",
+  "Full platform, open to your comments": "전체 공약, 댓글을 달 수 있어요",
+  "Go again": "다시 하기",
+  "Go on a blind date": "블라인드 데이트 하러 가기",
+  "In a random order, so no one is always listed first. Tap a name for everything the games know.": "무작위 순서라서 누구도 항상 맨 앞에 나오지 않아요. 이름을 누르면 게임이 아는 모든 것을 볼 수 있어요.",
+  "Judge the ideas first. Find out who it was after.": "생각을 먼저 판단하세요. 누구였는지는 그다음에 알게 돼요.",
+  "Just reveal": "그냥 공개",
+  "Less help voting": "투표 도움말 접기",
+  "Look around first": "먼저 둘러보기",
+  "Look up a different address": "다른 주소 찾기",
+  "No ketchup was involved in the making of this date.": "이 데이트를 만드는 데 케첩은 한 방울도 쓰이지 않았어요.",
+  "No pizza position found on the record, listed in random order. If one of them goes public, tell us and we will rank them.": "기록에서 피자 입장을 찾지 못한 후보들이에요. 무작위 순서로 나와요. 누군가 공개적으로 밝히면 알려 주세요. 순위를 매겨 드릴게요.",
+  "No second dates this round. Tough crowd.": "이번 라운드에는 두 번째 데이트가 없네요. 눈이 높으시네요.",
+  "On Blind date, read the card, then tap \"Second date\" or \"Pass\", or swipe the card right or left. Either one reveals who it was. Tap \"Just reveal\" to see the name without a verdict.": "블라인드 데이트에서는 카드를 읽은 뒤 “두 번째 데이트”나 “패스”를 누르거나, 카드를 오른쪽이나 왼쪽으로 미세요. 어느 쪽이든 누구였는지 공개돼요. “그냥 공개”를 누르면 판정 없이 이름을 볼 수 있어요.",
+  "On Cheap date, tap a row to open what that candidate says about money. The bar shows their support per dollar next to the best in the field.": "저렴한 데이트에서는 줄을 누르면 그 후보가 돈에 대해 하는 말이 열려요. 막대는 그 후보의 1달러당 지지율을 전체 후보 중 최고 기록과 나란히 보여 줘요.",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What they would do\" or \"Next to the others\" to turn the card. The clock runs down from a minute and never cuts you off.": "스피드 데이트에서는 “다음 데이트”와 “뒤로”를 누르거나 화면을 밀어서 후보들을 차례로 만나세요. “무엇을 할 것인가”나 “다른 후보와 비교”를 누르면 카드가 뒤집혀요. 시계는 1분부터 줄어들지만 절대 끊지 않아요.",
+  "On their ideas alone, you would see these again:": "생각만 보고 다시 만나고 싶다고 한 후보들:",
+  "One minute each. The whole field in a coffee break.": "한 명당 1분. 커피 한 잔 마실 시간에 모든 후보를.",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Candidates come in random order, and this phone remembers who you have met and who got a second date. Speed date: one candidate at a time, in a random order, a minute each, with what they would do on one side of the card and how they compare to the others on the other. Cheap date: everyone with a spending report, ordered by poll support per dollar spent. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "네 가지 시장 게임 중 하나예요. 블라인드 데이트: 미스터리 후보의 핵심 사항을 확보한 경우 본인의 말 그대로 보여 줘요. 다시 만나고 싶은지 답하면 초상이 뒤집히면서 누구였는지 드러나요. 후보는 무작위 순서로 나오고, 이 휴대폰이 누구를 만났는지와 누가 두 번째 데이트를 얻었는지 기억해요. 스피드 데이트: 한 번에 후보 한 명씩 무작위 순서로, 한 명당 1분씩 만나요. 카드 한쪽에는 무엇을 할 것인지, 반대쪽에는 다른 후보와의 비교가 나와요. 저렴한 데이트: 지출 보고서가 있는 모든 후보를 지출 1달러당 여론조사 지지율 순으로 보여 줘요. 피자 데이트: 피자 입장이 있는 모든 후보를 누가 옳은지(씬 크러스트) 순으로 보여 주고, 나머지는 끝에 무작위 순서의 목록으로 나와요.",
+  "Or see it on your sample ballot (Board of Elections)": "또는 내 견본 투표용지에서 확인하기(선거관리위원회)",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line. Tap anyone for what they say about money.": "지출 1달러당 여론조사 지지율 순이에요. 지금 자리에 오기까지 가장 많이 썼다면 줄 맨 뒤에 서야 해요. 누구든 누르면 돈에 대해 하는 말을 볼 수 있어요.",
+  "Pass": "패스",
+  "Picked on a blind date, on their ideas alone. Kept on this phone only.": "블라인드 데이트에서 생각만 보고 고른 후보들이에요. 이 휴대폰에만 보관돼요.",
+  "Play": "시작하기",
+  "Second date": "두 번째 데이트",
+  "Tap \"Everything about\" a candidate for their page, with their full platform.": "후보의 “모든 것”을 누르면 전체 공약이 담긴 그 후보의 페이지로 이동해요.",
+  "Tap \"Play\" on Blind date, or tap Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "블라인드 데이트에서 “시작하기”를 누르거나, 스피드 데이트, 저렴한 데이트, 피자 데이트를 누르세요. 모든 게임은 각 후보의 페이지로 연결되고, 출처가 함께 있어요.",
+  "That was everyone.": "여기까지가 전부예요.",
+  "The address goes to the US Census Bureau to place it on the map. Only the district numbers are kept, never the address.": "주소는 지도 위에서 위치를 찾기 위해 미국 인구조사국에 보내져요. 선거구역 번호만 보관하고 주소는 절대 저장하지 않아요.",
+  "The elections tab, led by the mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Speed date gives each candidate a minute. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "선거 탭이에요. 맨 앞에는 시장 게임이 있어요: 2027년 2월 23일 시카고 시장 선거에 출마한 모든 후보를 만나는 네 가지 방법이에요. 큰 카드인 블라인드 데이트는 후보의 생각을 보여 주고, 다시 만나고 싶은지 물은 다음에야 누구였는지 알려 줘요. 스피드 데이트는 후보마다 1분을 줘요. 저렴한 데이트는 지출 1달러당 여론조사 지지율로 순위를 매겨요. 피자 데이트는 피자에 대해 옳은지로 순위를 매겨요. 게임 아래 빨간 띠에는 2월 투표용지의 나머지가 있어요: 투표 시간과 장소, 모든 후보가 답하는 질문, 다른 선거들, 그리고 시장에 출마한 모든 후보예요. 후보는 무작위 순서로 나와서 누구도 항상 맨 앞에 나오지 않아요.",
+  "The marks across the top count the round: red for a second date, gray for the rest you have met, blue for the one on screen. When you have met everyone, you see your second dates and can go again.": "위쪽에 늘어선 표시는 이번 라운드를 세요: 빨간색은 두 번째 데이트, 회색은 그 밖에 만난 후보, 파란색은 지금 화면에 있는 후보예요. 모두 만나면 내 두 번째 데이트가 나오고 다시 할 수 있어요.",
+  "They ordered for the table. It was a plan with five bullet points.": "데이트 상대가 테이블 전체 메뉴를 알아서 주문했어요. 나온 건 다섯 항목짜리 계획이었어요.",
+  "This one asked for a table away from the dibs chairs.": "이번 상대는 눈 치운 주차 자리를 맡아 둔 의자들에서 먼 테이블을 달라고 했어요.",
+  "Three elected seats in each of the 22 police districts. Police districts do not follow ward lines, so yours goes by your address.": "22개 경찰 지구마다 선출직 3석이 있어요. 경찰 지구는 선거구 경계를 따르지 않아서, 내 지구는 주소로 정해져요.",
+  "Time. The next one is waiting.": "시간 다 됐어요. 다음 상대가 기다리고 있어요.",
+  "To find your police district, type your home address and tap \"Find my police district\". It works signed in or out, and only the district numbers are kept, never the address. Or tap \"Or see it on your sample ballot (Board of Elections)\".": "내 경찰 지구를 찾으려면 집 주소를 입력하고 “내 경찰 지구 찾기”를 누르세요. 로그인하지 않아도 되고, 선거구역 번호만 보관하며 주소는 절대 저장하지 않아요. 아니면 “또는 내 견본 투표용지에서 확인하기(선거관리위원회)”를 누르세요.",
+  "Too many address lookups today. Sign in to look up yours, or try again tomorrow.": "오늘은 주소 조회가 너무 많았어요. 로그인해서 내 주소를 찾거나 내일 다시 시도하세요.",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first. The police district card on the elections tab does the same lookup in place.": "집 주소를 입력하고 “내 선거구역 찾기”를 누르세요. 주소가 확인되면 투표용지로 돌아가 내 경찰 지구 위원회가 먼저 표시돼요. 선거 탭의 경찰 지구 카드에서도 그 자리에서 같은 조회를 할 수 있어요.",
+  "Under \"Everyone running for mayor\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "“시장에 출마한 모든 후보” 아래에서 아무 이름이나 누르면 게임이 그 후보에 대해 아는 모든 것을 볼 수 있어요: 공약, 선거 자금, 여론조사 위치, 인용문, 그리고 피자.",
+  "Under \"The rest of the ballot\", tap City Clerk or City Treasurer, pick your ward to see your alderman's record next to their challengers, or find your police district council.": "“투표용지의 나머지” 아래에서 시 서기나 시 재무관을 누르거나, 내 선거구를 골라 내 시의원의 기록을 도전자들과 나란히 보거나, 내 경찰 지구 위원회를 찾으세요.",
+  "Under \"Your second dates\", tap a name to open the page of a candidate you said you would see again on a blind date. That list is kept on this phone only.": "“내 두 번째 데이트” 아래에서 이름을 누르면 블라인드 데이트에서 다시 만나고 싶다고 한 후보의 페이지가 열려요. 이 목록은 이 휴대폰에만 보관돼요.",
+  "Which mayoral candidates you met on a blind date and which you said you would see again. Both lists stay on your phone only.": "블라인드 데이트에서 만난 시장 후보와 다시 만나고 싶다고 한 시장 후보 목록. 두 목록 모두 내 휴대폰에만 남아요.",
+  "Would you see them again?": "다시 만나고 싶나요?",
+  "You met the whole field.": "모든 후보를 만났어요.",
+  "Your date took the Blue Line here. They have thoughts.": "데이트 상대가 블루 라인을 타고 왔어요. 할 말이 많대요.",
+  "Your ward: your alderman's grade, meetings, and zoning.": "내 선거구: 내 시의원의 등급, 회의, 용도 지역.",
+  "also in the app": "앱에 더 있는 것",
+  "citywide": "시 전체",
+  "day until the runoff": "일 후 결선 투표예요",
+  "days until the runoff": "일 후 결선 투표예요",
+  "everyone running for mayor": "시장에 출마한 모든 후보",
+  "the rest of the ballot": "투표용지의 나머지",
+  "your police district council": "내 경찰 지구 위원회",
+  "your second dates": "내 두 번째 데이트",
+  "{n} dates. Now find out whose ideas you like when you cannot see the name.": "데이트 {n}번. 이제 이름이 보이지 않을 때 누구의 생각이 마음에 드는지 알아보세요.",
+  "You passed": "패스했어요",
+  "What they would do": "무엇을 할 것인가",
+  // Mayor games, round three (2026-11-09)
+  "A perfect round. You know the field.": "완벽한 라운드예요. 후보들을 잘 아시네요.",
+  "At the end of a round of Pick-up lines, tap anyone who got past you to open their page, or tap \"Play again\".": "작업 멘트 한 라운드가 끝나면 못 맞힌 후보를 눌러 그 후보의 페이지를 열거나 “한 번 더 하기”를 누르세요.",
+  "Best streak on this phone: {n}.": "이 휴대폰의 최고 연속 정답: {n}개.",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, one game at a time.": "시카고는 2027년 2월 23일에 시장을 뽑아요. 출마한 모든 후보를 게임 하나씩 하면서 만나 보세요.",
+  "Everyone running for mayor on February 23, 2027. Meet them one game at a time.": "2027년 2월 23일 시장 선거에 출마한 모든 후보. 게임 하나씩 하면서 만나 보세요.",
+  "Line {n} of {total}": "{total}개 중 {n}번째 멘트",
+  "Next line": "다음 멘트",
+  "No quotes on file yet.": "아직 확보한 인용문이 없어요.",
+  "No. {name} said it.": "아니에요. {name} 후보가 한 말이에요.",
+  "On Cheap date, tap \"Best bargain\", \"Most spent\", or \"Most support\" to reorder the line. Each row shows what the campaign spent, its support in the poll, and what it spent per point of support.": "저렴한 데이트에서는 “최고 가성비”, “최다 지출”, “최고 지지율”을 눌러 순서를 바꾸세요. 각 줄에는 선거 캠프가 쓴 돈, 여론조사 지지율, 지지율 1포인트당 쓴 돈이 나와요.",
+  "On Pick-up lines, read the quote and tap the candidate you think said it. You see at once who did, where they said it, and what it was about. Tap \"Next line\" or swipe left to go on. The flame counts your streak, and the best one is kept on this phone.": "작업 멘트에서는 인용문을 읽고 그 말을 했다고 생각하는 후보를 누르세요. 누가 했는지, 어디서 했는지, 무엇에 대한 말이었는지 바로 알 수 있어요. “다음 멘트”를 누르거나 왼쪽으로 밀어 넘어가세요. 불꽃은 연속 정답을 세고, 최고 기록은 이 휴대폰에 보관돼요.",
+  "One of the five mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Pick-up lines: a real quote and three candidates, and you tap who said it, ten lines a round, every candidate the answer once before anyone is the answer twice. Speed date: one candidate at a time, in a random order, a minute each. Cheap date: what the field has spent in all, then each campaign's spending, its support in the poll, and its cost per point of support. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "다섯 가지 시장 게임 중 하나예요. 블라인드 데이트: 미스터리 후보의 핵심 사항을 확보한 경우 본인의 말 그대로 보여 줘요. 다시 만나고 싶은지 답하면 초상이 뒤집히면서 누구였는지 드러나요. 작업 멘트: 실제 인용문 하나와 후보 세 명이 나오고, 누가 한 말인지 눌러요. 한 라운드에 멘트 열 개이고, 모든 후보가 한 번씩 정답이 된 뒤에야 누군가 두 번째로 정답이 돼요. 스피드 데이트: 한 번에 후보 한 명씩 무작위 순서로, 한 명당 1분씩 만나요. 저렴한 데이트: 후보 전체가 쓴 돈의 합계를 먼저 보여 주고, 이어서 선거 캠프별 지출, 여론조사 지지율, 지지율 1포인트당 비용을 보여 줘요. 피자 데이트: 피자 입장이 있는 모든 후보를 누가 옳은지(씬 크러스트) 순으로 보여 주고, 나머지는 끝에 무작위 순서의 목록으로 나와요.",
+  "One quote, three faces. Who said it?": "인용문 하나, 얼굴 셋. 누가 한 말일까요?",
+  "Per point": "포인트당",
+  "Pick-up lines": "작업 멘트",
+  "Play again": "한 번 더 하기",
+  "Poll support": "여론조사 지지율",
+  "Right. {name} said it.": "맞아요. {name} 후보가 한 말이에요.",
+  "See my score": "내 점수 보기",
+  "Streak: {n}": "연속 정답: {n}",
+  "Tap \"Play\" on Blind date, or tap Pick-up lines, Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "블라인드 데이트에서 “시작하기”를 누르거나, 작업 멘트, 스피드 데이트, 저렴한 데이트, 피자 데이트를 누르세요. 모든 게임은 각 후보의 페이지로 연결되고, 출처가 함께 있어요.",
+  "Tap a row on Cheap date to see what the campaign raised, spent, and has on hand, the State Board of Elections report it comes from, and what the candidate says about money.": "저렴한 데이트에서 줄을 누르면 선거 캠프가 모금한 돈, 지출한 돈, 보유 현금, 그 출처인 주 선거관리위원회 보고서, 그리고 후보가 돈에 대해 하는 말을 볼 수 있어요.",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "선거 탭이에요. 맨 앞에는 시장 게임이 있어요: 2027년 2월 23일 시카고 시장 선거에 출마한 모든 후보를 만나는 다섯 가지 방법이에요. 큰 카드인 블라인드 데이트는 후보의 생각을 보여 주고, 다시 만나고 싶은지 물은 다음에야 누구였는지 알려 줘요. 작업 멘트는 실제 인용문 하나와 얼굴 셋을 보여 주고, 누가 한 말인지 고르면 돼요. 스피드 데이트는 후보마다 1분을 줘요. 저렴한 데이트는 돈을 따라가요: 선거 캠프마다 얼마를 썼고 그 돈으로 지지를 얼마나 얻었는지 보여 줘요. 피자 데이트는 피자에 대해 옳은지로 순위를 매겨요. 게임 아래 빨간 띠에는 2월 투표용지의 나머지가 있어요: 투표 시간과 장소, 모든 후보가 답하는 질문, 다른 선거들, 그리고 시장에 출마한 모든 후보예요. 후보는 무작위 순서로 나와서 누구도 항상 맨 앞에 나오지 않아요.",
+  "These ones got past you. Tap one to get to know them.": "이 후보들은 못 맞혔어요. 눌러서 어떤 후보인지 알아보세요.",
+  "Who used this line?": "이 멘트, 누가 날렸을까요?",
+  "You got {n} of {total}.": "{total}개 중 {n}개를 맞혔어요.",
+  "no points": "포인트 없음",
+  "not polled": "여론조사에 없음",
+  "spent by the field so far": "지금까지 후보 전체가 쓴 돈",
+  "{n} campaigns have filed a spending report.": "선거 캠프 {n}곳이 지출 보고서를 제출했어요.",
+  "{n} people want to be mayor on February 23, 2027. Meet them one game at a time.": "{n}명이 2027년 2월 23일에 시장이 되고 싶어 해요. 게임 하나씩 하면서 만나 보세요.",
+  "{pct}% in the poll": "여론조사 {pct}%",
+  "Best bargain": "최고 가성비",
+  "Most spent": "최다 지출",
+  "Most support": "최고 지지율",
+  "Ordered by money spent so far, most first.": "지금까지 쓴 돈 순이에요. 가장 많이 쓴 후보부터 나와요.",
+  "Ordered by support in the poll, most first.": "여론조사 지지율 순이에요. 가장 높은 후보부터 나와요.",
+  // Mayor games, round four (2026-11-09)
+  "Also:": "같은 입장:",
+  "Has taken a side on {n} of the {total} questions that split the field.": "후보들의 입장이 갈리는 쟁점 {total}개 중 {n}개에서 입장을 밝혔어요.",
+  "No side found yet on any of the questions that divide the field.": "후보들의 입장이 갈리는 쟁점 중 어느 것에서도 아직 입장을 찾지 못했어요.",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What sets them apart\" or \"Where they split\" to turn the card. The clock runs down from a minute and never cuts you off.": "스피드 데이트에서는 “다음 데이트”와 “뒤로”를 누르거나 화면을 밀어서 후보들을 차례로 만나세요. “이 후보만의 차별점”이나 “입장이 갈리는 쟁점”을 누르면 카드가 뒤집혀요. 시계는 1분부터 줄어들지만 절대 끊지 않아요.",
+  "One candidate for mayor, most important first. Under the name are three numbers: support in the latest public poll, money spent, and dollars spent per point of support. Then what sets this candidate apart from the others, then their side of each question the field splits on, then their own words with sources. What nearly every candidate says is left out on purpose. Campaign money in full, pizza, and sources follow.": "시장 후보 한 명을 가장 중요한 것부터 보여 줘요. 이름 아래에는 숫자 세 개가 있어요: 최신 공개 여론조사 지지율, 지출한 돈, 지지율 1포인트당 쓴 돈. 그다음에는 이 후보가 다른 후보와 다른 점, 후보들의 입장이 갈리는 쟁점마다 이 후보의 입장, 출처가 함께 있는 본인의 말이 이어져요. 거의 모든 후보가 하는 말은 일부러 뺐어요. 그 뒤로 선거 자금 전체 내역, 피자, 출처가 나와요.",
+  "Read \"What sets them apart\" for what this candidate proposes that others do not.": "“이 후보만의 차별점”에서 다른 후보에게는 없는 이 후보만의 제안을 읽어 보세요.",
+  "Said once here, so no candidate's page repeats it.": "여기서 한 번만 말해요. 그래서 어느 후보의 페이지에서도 반복하지 않아요.",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the elections tab.": "선거 탭에서 “모든 후보에게 질문하기”를 누르면 모든 후보에게 한 번에 질문할 수 있어요.",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first. Between the games and the ballot, \"Where they split\" lists the questions the candidates give different answers to.": "선거 탭이에요. 맨 앞에는 시장 게임이 있어요: 2027년 2월 23일 시카고 시장 선거에 출마한 모든 후보를 만나는 다섯 가지 방법이에요. 큰 카드인 블라인드 데이트는 후보의 생각을 보여 주고, 다시 만나고 싶은지 물은 다음에야 누구였는지 알려 줘요. 작업 멘트는 실제 인용문 하나와 얼굴 셋을 보여 주고, 누가 한 말인지 고르면 돼요. 스피드 데이트는 후보마다 1분을 줘요. 저렴한 데이트는 돈을 따라가요: 선거 캠프마다 얼마를 썼고 그 돈으로 지지를 얼마나 얻었는지 보여 줘요. 피자 데이트는 피자에 대해 옳은지로 순위를 매겨요. 게임 아래 빨간 띠에는 2월 투표용지의 나머지가 있어요: 투표 시간과 장소, 모든 후보가 답하는 질문, 다른 선거들, 그리고 시장에 출마한 모든 후보예요. 후보는 무작위 순서로 나와서 누구도 항상 맨 앞에 나오지 않아요. 게임과 투표용지 사이의 “입장이 갈리는 쟁점”에는 후보들이 서로 다른 답을 내놓는 질문들이 나와요.",
+  "The questions that divide the field, and this candidate's side.": "후보들의 입장이 갈리는 쟁점과 이 후보의 입장.",
+  "The questions that divide the field, and who stands where. Tap a name for their page.": "후보들의 입장이 갈리는 쟁점과 누가 어느 쪽에 서 있는지. 이름을 누르면 그 후보의 페이지로 이동해요.",
+  "Under \"Where they split\", read the questions that divide the field and who stands on each side. Tap a name for their page. Tap \"What nearly all of them say\" for the positions that do not tell them apart.": "“입장이 갈리는 쟁점” 아래에서 후보들의 입장이 갈리는 쟁점과 누가 어느 쪽에 서 있는지 읽어 보세요. 이름을 누르면 그 후보의 페이지로 이동해요. “거의 모든 후보가 하는 말”을 누르면 후보를 구별해 주지 못하는 입장들이 나와요.",
+  "Under \"Where they split\", see this candidate's side of each question and who is on the other sides. Tap a name to open that candidate.": "“입장이 갈리는 쟁점” 아래에서 쟁점마다 이 후보의 입장과 다른 쪽에 선 후보들을 볼 수 있어요. 이름을 누르면 그 후보가 열려요.",
+  "What nearly all of them say": "거의 모든 후보가 하는 말",
+  "What sets them apart": "이 후보만의 차별점",
+  "Where they split": "입장이 갈리는 쟁점",
+  "Written by AI from the campaign's platform and the candidate's own words, under one set of rules for every candidate. What nearly all of them say is left out.": "선거 캠프의 공약과 후보 본인의 말을 바탕으로 AI가 작성했어요. 모든 후보에게 같은 규칙을 적용했어요. 거의 모든 후보가 하는 말은 뺐어요.",
+  "Written by AI on {date} from the policies listed below and the candidate's public statements, under one set of rules for every candidate. What nearly all candidates say is left out. It can miss things. The policies are the source.": "{date}에 아래 정책 공약과 후보의 공개 발언을 바탕으로 AI가 작성했어요. 모든 후보에게 같은 규칙을 적용했어요. 거의 모든 후보가 하는 말은 뺐어요. 빠진 내용이 있을 수 있어요. 원본은 정책 공약이에요.",
+  "in their words": "본인의 말 그대로",
+  "what sets them apart": "이 후보만의 차별점",
+  "where they split": "입장이 갈리는 쟁점",
+
+  // Mayor games, round five (2026-11-09)
+  "former mayor trivia": "전직 시장 토막 상식",
+  "Another fact": "다른 상식 보기",
+  "only one of them would": "단 한 후보만 하겠다는 것",
+  "Proposals no other candidate makes.": "다른 어떤 후보도 내놓지 않은 공약이에요.",
+  "Under \"Former mayor trivia\", read a fact about a past mayor and tap the shuffle button for another. A fact does not come back until you have seen them all. Tap the small arrow under the shuffle button to go back to the fact before.": "“전직 시장 토막 상식”에서 전직 시장에 관한 상식을 읽고, 섞기 버튼을 눌러 다른 상식을 보세요. 전부 볼 때까지 같은 상식은 다시 나오지 않아요. 섞기 버튼 아래의 작은 화살표를 누르면 이전 상식으로 돌아가요.",
+  "Under \"Only one of them would\", read what a single candidate proposes that no one else does. Tap a name for their page.": "“단 한 후보만 하겠다는 것”에서 한 후보만 내놓고 다른 누구도 내놓지 않은 공약을 읽어 보세요. 이름을 누르면 그 후보의 페이지가 열려요.",
+  "Previous fact": "이전 상식",
+  "Source shown with the reveal": "출처는 공개할 때 함께 보여 드려요",
+  "Correct": "정답",
+  "Hedging": "얼버무림",
+  "Incorrect": "오답",
+  "No position on record": "알려진 입장 없음",
 };

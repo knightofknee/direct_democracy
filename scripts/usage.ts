@@ -12,6 +12,7 @@ import { applicationDefault, initializeApp } from 'firebase-admin/app';
 import { FieldPath, getFirestore } from 'firebase-admin/firestore';
 
 import { PAGE_HELP } from '../src/constants/page-help';
+import { MAYOR_GAMES } from '../src/lib/mayor-games-data';
 
 const PROJECT_ID = 'direct-democracy-e338a';
 
@@ -89,7 +90,10 @@ async function main() {
   for (const r of others) console.log(row(r, r));
 
   // The command tab has one help entry per role; both are one screen.
-  const known = [...new Set(Object.keys(PAGE_HELP).map((k) => k.split('#')[0]))];
+  // The five games share one help entry and are counted apart (src/lib/usage.ts).
+  const known = [...new Set(Object.keys(PAGE_HELP).map((k) => k.split('#')[0]))].flatMap((k) =>
+    k === 'game/[kind]' ? MAYOR_GAMES.map((g) => `game/${g.kind}`) : [k]
+  );
   const never = known.filter((r) => !views[r]).sort();
   console.log('\nNever opened (has a help entry, no views in the window)');
   if (never.length === 0) console.log('  (none)');

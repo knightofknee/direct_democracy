@@ -23,12 +23,13 @@ import { useTheme } from '@/hooks/use-theme';
 import { db } from '@/lib/firebase';
 import type { Concern, Poll, TallyLens } from '@/lib/types';
 import { useT } from '@/lib/i18n';
+import { takeLaunchRedirect } from '@/lib/launch';
 import { usePageSummary } from '@/lib/page-help';
 
 const BOARD_FIRST = 10;
 const BOARD_MORE = 20;
 
-export default function BigBoardScreen() {
+function BigBoardScreen() {
   const router = useRouter();
   const t = useT();
   const { profile, loading: authLoading } = useAuth();
@@ -223,3 +224,25 @@ const styles = StyleSheet.create({
     marginTop: Spacing.two,
   },
 });
+
+/**
+ * The home tab. A plain launch of the app passes through here on its way
+ * to the elections tab, once (src/lib/launch.ts): nothing of the big board
+ * is drawn or subscribed to for that moment.
+ */
+export default function HomeTab() {
+  const router = useRouter();
+  const [passingThrough, setPassingThrough] = useState(takeLaunchRedirect);
+  useEffect(() => {
+    if (!passingThrough) return;
+    router.replace('/election');
+    // The board is drawn here once the app has moved on, so the home tab is
+    // ready when someone taps it.
+    const id = setTimeout(() => setPassingThrough(false), 0);
+    return () => clearTimeout(id);
+    // Only on the launch itself.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (passingThrough) return null;
+  return <BigBoardScreen />;
+}

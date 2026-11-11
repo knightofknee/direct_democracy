@@ -35,6 +35,13 @@ export function pageSummary(page: string): string[] {
 
 /** A route's help key, from useSegments(): 'concern/[id]', '(tabs)/ward'. */
 export function helpKey(segments: string[]): string {
+  // The elections tab is a group with its own stack (2026-10-14); its pages
+  // keep the keys they had before it: '(tabs)/election', 'my-ballot',
+  // 'election-race/[race]'.
+  if (segments[0] === '(tabs)' && segments[1] === '(election)') {
+    const rest = segments.slice(2);
+    segments = rest.length === 0 || (rest.length === 1 && rest[0] === 'election') ? ['(tabs)', 'election'] : rest;
+  }
   const key = segments.join('/');
   return key === '' || key === '(tabs)' ? '(tabs)/index' : key;
 }

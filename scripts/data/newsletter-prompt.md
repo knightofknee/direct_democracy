@@ -75,7 +75,11 @@ resident can show up and be heard or ask questions:
   the public (zoning advisory, public safety, youth council).
 - `community`: other public civic meetings the issue announces: CAPS beat
   meetings, police district council, LSC, SSA, park advisory council,
-  CDOT or city project meetings.
+  CDOT or city project meetings, and information sessions (webinars
+  included) on grants or funding residents or businesses can apply for, or
+  on laws, policy, and rights put on by an office, a Council committee, or
+  a public agency (an immigration or DACA briefing, a workshop on filing a
+  report).
 
 Not meetings: festivals, parties, fairs, giveaways, clinics, shredding days,
 mobile DMV, job fairs, volunteer shifts, filming notices.

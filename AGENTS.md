@@ -214,8 +214,9 @@ Conventions:
     it. Each queued issue carries its ward's open ones (`undated`); a later
     issue that gives the time lists them in `resolves`, and a dated meeting
     on the same day replaces one automatically.
-- News tab (2026-10-07): `news` (newspaper icon, between wards and
-  election) lists headlines from every newsroom that covers Chicago or
+- News tab (2026-10-07): `news` (newspaper icon, after elections since
+  2026-10-13: the ballot holds the middle of the bar, labeled
+  "elections" since it covers two ballots, the route stays `election`) lists headlines from every newsroom that covers Chicago or
   Illinois government, has a public feed, and is in the top million of the
   Tranco list (tranco-list.eu; Brian 2026-10-08: traffic is the main
   qualifier; `npm run news-ranks` rechecks every outlet, including the
@@ -253,7 +254,7 @@ Conventions:
 - Ward concerns end with a quiet "Report it to 311" link (311.chicago.gov);
   the how-to-vote card folds "More help voting" (accessible voting,
   language help, permanent vote by mail, pre-registration at 16, election
-  judges; each line verified on chicagoelections.gov, `VOTING_HELP_2026`).
+  judges; each line verified on chicagoelections.gov, `VOTING_HELP`).
 - Sharing and the web version (2026-09-29): `ShareButton` in the header of
   concern, official, candidate, policy, election question, and race pages
   shares https://www.waldgrave.com/directdemocracy/app/<path> (the web
@@ -332,27 +333,28 @@ Conventions:
   (`source: 'app'`) are the candidate's own. Candidates who never signed up
   are provisioned with `add-candidate --create` (passwordless account under
   the campaign's published contact email; they claim it via password reset).
-- Mayoral candidate pages carry two pieces of operator copy, both held in
-  `scripts/data/platform-summaries.json` and written by
+- Mayoral candidate pages carry two pieces of operator copy, written by
   `npm run set-platform-summaries` (`--check` lists stale ones, `--dump`
   writes every live platform out for rereading): the platform note
-  (`platformNote` / `platformNoteEs` / `platformNoteTone`) and the expandable
-  "AI summary" (`aiSummary`: "The platform" and "Next to the other
-  candidates", each a few short chunks that open with a bold "Topic: " lead,
-  shown at full body text size, never as a block of small print, with the
-  `policiesHash` it was written from). It is a summary for a voter on a
-  phone who will not read the policies: what the candidate would do, weighted
-  the way the platform weights it, with no description of the document, no
-  legal caveats, and nothing nearly every candidate says. A fact shared
-  across pages is worded the same on each. Every summary uses the ONE prompt in
-  `scripts/data/platform-summary-prompt.md`, Brian's own page included, and
-  its only source is the policies as listed in the app. Notes and summaries
+  (`platformNote` / `platformNoteEs` / `platformNoteTone`, held in
+  `scripts/data/platform-summaries.json`) and the expandable "AI summary"
+  (`aiSummary`: "What sets them apart" and "Where they split", short chunks
+  that open with a bold "Topic: " lead, shown at full body text size, never
+  as a block of small print, with the `policiesHash` it was written from).
+  Since 2026-11-09 the summary is NOT weighted the way the platform weights
+  it (that gave every candidate the same housing, police, budget chunks):
+  it says what separates this candidate from the field, under the candidate
+  content rules below, and for anyone in the mayor games its words come
+  from mayor-games.json, never from a second copy. Every summary uses the
+  ONE set of rules in `scripts/data/platform-summary-prompt.md`, Brian's
+  own page included. Notes and summaries
   describe and never rate: counts and structure are fine; praise words,
   superlatives, and ranking ("most detailed", "real platform",
   "well-formatted") are not, because under scrutiny they read as the app
-  picking favorites. Alexi Giannoulias's English note is Brian's wording
-  (`"note": null` in the JSON leaves it alone) until he publishes a mayoral
-  platform; the weekly task checks for that. Page order is fixed: name card
+  picking favorites. A `"note": null` in the JSON leaves the stored note
+  alone. Alexi Giannoulias published a mayoral platform on 2026-11-02
+  (alexiforchi.com/policy, his sourceUrl since then), so his note is a plain
+  description like the others. Page order is fixed: name card
   (no initials tile; the portrait shows only when a photo is linked), note,
   AI summary (a solid orange `highlight` bar, the one tap the page most
   wants; keep that color for nothing else), the centered "more perfect platform" header, "Imported from",
@@ -366,38 +368,31 @@ Conventions:
   purpose: it holds the language switch, so it has to be findable by someone
   who cannot read the current language.
 - Election directories: `electionCandidates/{election--slug}` +
-  `electionRaceNotes/{election--race}` are read-only voter directories for the
-  Nov 3, 2026 general ballot ('2026-general': statewide + Cook County races)
-  and the Feb 23, 2027 municipal ballot ('2027-municipal': citywide clerk /
-  treasurer + ward-N aldermanic races), seeded by `npm run seed-election` from
-  `scripts/data/general-2026.json` and `municipal-2027.json` (full sync per
-  election, same contract as the school board). Cards carry an optional
-  `photoUrl` (external https headshot, rendered by link like officials'
-  portraits, never stored) and, when the photo isn't a centered headshot, a
-  `photoFrame` {x, y, zoom} (focal point as image fractions + zoom past cover,
-  applied by `OfficialAvatar`); race screens show each candidate's runningOn
-  preview so the comparison happens without a tap. Declared write-ins carry
-  `writeIn: true` (school board cards too): listed after the printed names
-  under the sourced how-to-write-in explainer (`WRITE_IN_2026`), and only in
-  offices with a Chicago write-in line, since only filed write-ins count. Race ids/labels and the
-  how-to-vote dates live in `src/constants/elections.ts`; sections render on
-  the election tab (`november-section.tsx`, `ward-race-section.tsx`), and
-  `/ward-race/[ward]` pairs the incumbent's report card with declared
-  challengers. A weekly scheduled task (Mondays, "weekly-election-data-refresh")
-  re-verifies all three data files against current sources and re-seeds.
-- School board 2026: `schoolBoardCandidates/{slug}` is a read-only voter
-  directory (public read, no client writes), seeded by
-  `npm run seed-school-board` from `scripts/data/school-board-2026.json`.
-  Not accounts - nominee cards with race ('president' or '1a'..'10b'),
-  runningOn, priorCareer, website, and the sourceUrls each summary was
-  compiled from. Races/labels live in `src/constants/school-board.ts`.
-  Withdrawn/removed candidates are dropped from the JSON and the seed's
-  full sync deletes them. `ctuEndorsed: true` marks the Chicago Teachers
-  Union's published slate (ctulocal1.org school-board-election-2026, one
-  per seat at most, the seed checks): a green "CTU endorsed" chip
-  (`CtuChip`) on the race list and the nominee card, since for many voters
-  it is the deciding fact. Copy must stay neutral and sourced; candidates
-  with no findable platform say so plainly.
+  `electionRaceNotes/{election--race}` are read-only voter directories for
+  the Feb 23, 2027 municipal ballot ('2027-municipal': citywide clerk /
+  treasurer, ward-N aldermanic races, pdc-N police district councils),
+  seeded by `npm run seed-election` from `scripts/data/municipal-2027.json`
+  (full sync per election). The Nov 3, 2026 general election and the 2026
+  school board directory left the app on 2026-11-04, the day after the
+  vote: `RETIRED_ELECTIONS` in seed-election.ts deletes their docs
+  (`2026-general` cards and notes, the whole `schoolBoardCandidates`
+  collection) on every run, and their screens, constants, data files, and
+  the ballot planner (picks, My ballot, the cheat sheet, YourRaces, judges,
+  districts sections) were deleted rather than hidden. Cards carry an
+  optional `photoUrl` (external https headshot, rendered by link like
+  officials' portraits, never stored) and, when the photo isn't a centered
+  headshot, a `photoFrame` {x, y, zoom} (focal point as image fractions +
+  zoom past cover, applied by `OfficialAvatar`); race screens show each
+  candidate's runningOn preview so the comparison happens without a tap.
+  Declared write-ins carry `writeIn: true`: listed after the printed names
+  with the how-to-write-in explainer (`WRITE_IN`), since only filed
+  write-ins count. Race ids/labels and the how-to-vote facts live in
+  `src/constants/elections.ts` (`HOW_TO_VOTE_2027` says only what the
+  Board has posted; `VOTING_MILESTONES` is duplicated in functions for the
+  reminders), and `/ward-race/[ward]` pairs the incumbent's report card
+  with declared challengers. A weekly scheduled task (Mondays,
+  "weekly-election-data-refresh") re-verifies the municipal data file and
+  the mayor games data against current sources and re-seeds.
 - Officials are graded on two axes in `src/services/officials.ts`: constituent
   approval (5-ballot minimum) and the community-judged answer score, averaged
   into an overall letter. Approval ballots live at
@@ -497,8 +492,8 @@ Conventions:
   `usePlural()`, `useLocale()`) with strings keyed by their English source
   text in `src/i18n/es.ts` (and zh / pl / tl / ko / hi); a missing key
   renders the English. The locale lives on the device (AsyncStorage),
-  asked once in both languages on first launch (`language-prompt.tsx`) and
-  changeable in Settings. The ENTIRE app UI is covered (every screen and
+  English until someone picks another from the globe on the welcome screen
+  or in Settings (the first-launch prompt was removed 2026-11-09). The ENTIRE app UI is covered (every screen and
   component; only the operator-only admin screen and emulator-only dev
   strings are exempt), so every new user-facing string goes through `t()`
   with a matching `es.ts` entry - no exceptions. Non-hook code paths
@@ -510,27 +505,32 @@ Conventions:
   `useLocalized()` with English fallback) - every new or edited card in the
   data files gets its Spanish fields in the same change. Candidates' own
   quoted words inside a summary stay in their original language.
-- Judges and district races: `judicial-retention`, `judicial-appellate`,
-  `judicial-circuit`, `judicial-subcircuit-N` and the district families
-  (`us-house-N`, `il-senate-N`, `il-house-N`, `cook-commissioner-N`,
-  `cook-board-of-review-N`) are races in `electionCandidates`; cards carry
-  optional `seat`, `court`, `ratings[]` (quoted verbatim from each rating
-  body, never paraphrased), `photoUrl`. `pdc-N` (police district councils)
-  belong to the 2027 municipal election. Injustice Watch is presented as the
-  primary judicial tool; the app supplements it with the list and ratings.
-  `raceInfo()` in constants/elections.ts resolves any race id to its
-  election, label, and detail (the race screen serves both elections).
+- Judges and district races left with the November ballot (2026-11-04).
+  `pdc-N` (police district councils) belong to the 2027 municipal election
+  and are the one district race still in the app; `raceInfo()` in
+  constants/elections.ts resolves a February race id to its label and
+  detail.
 - Districts (2026-09-29): `users/{uid}.districts` holds one number per
   district type (US House, IL Senate / House, Cook commissioner, Board of
   Review, subcircuit, school board '1a'..'10b', police) plus the `wardId`
   they were found in, and never the address. The Didit webhook stores them
   from the verified address; anyone else types an address once on
   `/my-districts` (`findMyDistricts`, 5 a day, refused when the address is
-  outside their home ward; declaring another ward drops them). The
-  election tab's grids (`DistrictCells`, `useMyDistricts` in
-  src/lib/districts.ts) lead with the viewer's district, or with their
-  ward's few districts from `WARD_DISTRICTS` when no address is on file,
-  and "See all" opens every district. Boundaries: `npm run
+  outside their home ward; declaring another ward drops them). Since the
+  November ballot left (2026-11-04) the only grid still using them is the
+  police district councils in `WardRaceSection` (`DistrictCells`,
+  `useMyDistricts` in src/lib/districts.ts): it leads with the viewer's
+  district, or with their ward's few districts from `WARD_DISTRICTS` when
+  no address is on file, and "See all" opens every district. The other
+  district numbers are kept for the next election that uses them. The
+  police district card has its own address field (2026-11-09, Brian: it
+  said "your sample ballot names yours" and offered neither a lookup nor
+  the ballot): `findMyDistricts` also answers people who are not signed
+  in, storing nothing (one shared daily cap, `SIGNED_OUT_LOOKUPS`), and
+  the phone keeps the numbers itself (`rememberDeviceDistricts`,
+  AsyncStorage `districts.device`, read by `useMyDistricts` only while
+  signed out). The Board's own lookup, which shows the sample ballot, is
+  linked beside it. Boundaries: `npm run
   build-district-map` writes functions/data/district-boundaries.json and
   src/constants/ward-districts.ts (from populated 2020 census blocks, so a
   ward lists only districts where its residents live). Subcircuits 13 and
@@ -618,6 +618,23 @@ Conventions:
   Settings. An "Other" report must say what's wrong (`note`, 5-500
   characters, required by the app; rules keep it optional only for older
   binaries), and the review shows it.
+  Report dialog (2026-10-22, Brian: a report is the only thing the person
+  is doing): the flag in `ContentActions` opens a modal, never inline
+  chips, and nothing sends on a tap: check every reason that applies
+  (`ChoiceRow`), add a note, then Send report; Block sits in the same
+  dialog. Reports carry `reasons` (the list) plus `reason` (the most
+  serious, for older tools). Child safety reports notify the operator at
+  once, phone included (type `childSafety` pushes with no switch).
+- In-app feedback (2026-10-22, for Google Play's Child Safety Standards
+  "in-app feedback mechanism", which rejected versionCode 9): Settings >
+  "Send feedback or report a problem" opens `/feedback`, open signed in or
+  out: a topic (child safety first), a message, and an email when signed
+  out. `sendFeedback` callable stores it in `feedback` (admin read), 5 a day
+  per account and 30 a day for all signed-out senders together; child
+  safety messages alert the operator at once. The admin screen and `npm run
+  moderate` list open feedback (`--handled <id>` closes one). The public
+  standards page is waldgrave.com/directdemocracy/child-safety; keep it
+  describing both paths.
 - Concern priority is the `PriorityScale` (one joined bar, fill deepening
   toward 5, "Minor" / "Urgent" under the ends); every grade letter shows
   `GradeBasis` (verified residents who rated, questions graded) beside it.
@@ -639,56 +656,232 @@ Conventions:
   Maps / Google Maps / Waze when either is installed (their schemes are in
   app.json `LSApplicationQueriesSchemes`); on Android a geo: link, which the
   system's own app chooser handles; on the web, Google Maps directions.
-- Election tab layout (2026-09-30): each ballot is a full-width band of
-  its own color (`ElectionBand`, theme `novemberBand` / `februaryBand`,
-  headed by its date; the jump grid's cells wear the same colors). Order
-  (2026-10-08, the sooner ballot first): November band (`YourRaces`, how to
-  vote, the statewide and county offices, the advisory question, then the
-  school board, judges, and every district), then one February band (race
-  for mayor, mayoral AMA, ward races). Mayoral candidates are listed in a
-  random order (`shuffled`, seeded once per mount), never alphabetical. `YourRaces` (src/components/your-races.tsx) leads the November
-  ballot: with an address on file, every race that address decides, with
-  who is running, and the ones not up this year in one line; without one,
-  a prominent ask for the address ("Find my races"), since the address is
-  what puts a person's races first and folds the rest behind "See all". A
-  successful lookup on /my-districts goes straight back there. Jump targets
-  are measured at tap time (`measureLayout` against the tab's wrapper),
-  since the web's onLayout misses position-only changes. Ward 51 (test)
-  accounts may look up any Chicago address; the districts are stored under
-  ward 51 so the app treats them as theirs.
-- Each ward's early voting site (2026 general) is in
-  src/constants/early-voting-2026.ts, from the Board's poster; the
-  how-to-vote card shows the home ward's site with hours and a directions link.
-- Ballot planner (2026-10-09): a "Pick" on every candidate in a November 3
-  race (`PickButton`, src/components/ballot-pick.tsx; school board races
-  too), "Keep this judge?" yes/no on retention, and `/my-ballot`: every
-  choice on the person's ballot in about ballot order (their district
-  races from `useMyDistricts`, one choice per judicial vacancy, MWRD's
-  vote-for-three, the advisory question), share as text, clear. Picks live
-  ON THE DEVICE ONLY (src/lib/ballot.ts, AsyncStorage `ballot.v1.<election>`,
-  a useSyncExternalStore store): never sent to the server, never on the
-  account; the privacy pages say so. February races get no picks until
-  their fields settle. `MyBallotLink` sits under YourRaces and atop races.
-  Race ids are unique across both ballots (the February City Treasurer is
-  `city-treasurer` since 2026-10-09; 'treasurer' is the state race).
-- First run and sharing (2026-10-09, from the testers' report): a one-time
-  `Welcome` (src/components/welcome.tsx, AsyncStorage `welcome.v1`, after
-  the language prompt; updaters see it once too) names each tab in a line
-  and points at the "?"; Settings has "Share the app" (`ShareAppButton`,
+- The mayor games (2026-11-04, Brian: the November 3 election happened, and
+  the tab had to give people the tools to decide on a mayor in a format
+  that is actually fun): the middle tab (`(tabs)/(election)/election.tsx`,
+  route still `/election`, tab label "elections" again since 2026-11-09
+  because it holds the whole ballot; the page's own title is "the mayor
+  games") opens on the games (Blind date as a hero card with "Play", the
+  other four as rows), then "your second dates" when there are any, the
+  countdown, then one February band (`ElectionBand`, no ballot prop any
+  more): how to vote, the mayoral AMA, "the rest of the ballot"
+  (`WardRaceSection`: citywide, your alderman, your police district
+  council), and everyone running for mayor.
+  ORDER (Brian, 2026-11-09, after the field shipped A to Z: "we previously
+  agreed fairness requires randomness"): any list of mayoral candidates
+  that is not ranked by a stated measure is in random order (`shuffledBy`
+  with a seed per mount), never alphabetical: the field list, the cheap
+  date's no-report group, every pizza group, the SEO pages' "other
+  candidates". Only a stated ranking (support per dollar, pizza verdict)
+  or the person's own picks (second dates) may order them otherwise.
+  The app OPENS on this tab (2026-11-09): a plain launch at "/" passes
+  through the home tab once (`src/lib/launch.ts`, `HomeTab` in
+  (tabs)/index.tsx) and sign-in lands here; "/" itself is still the big
+  board for links and `router.replace('/')`. The data is ONE read-only doc, `mayorGames/2027`,
+  seeded by `npm run seed-mayor-games` from scripts/data/mayor-games.json
+  (`--check` validates and prints the orders); types and every ordering
+  rule live in src/lib/mayor-games-data.ts (no React Native imports, so
+  the seed and SEO scripts share them), the live hook and the blind-date
+  memory in src/lib/mayor-games.ts. Per candidate: slug, name, title, bio,
+  website, photo, `candidateUid` (their candidates/{uid} page) or
+  `platformUrl`, `status` (filed / certified / removed / withdrawn, with a
+  note), `points` (what they would do, each with a verbatim `quote`
+  {text, source, url} when there is one), `summary` ("what sets them
+  apart", see the content rules below), `money` (summary + quotes only about taxes, the
+  budget, and saving people money), `finance` (committee, raised, spent,
+  cash on hand, period, ISBE url: spent is total expenditures Jan 1 to
+  Sept 30, 2026 or since the committee formed), `support` (first-choice
+  pct in the latest public poll, null when not asked about), `pizza`
+  ({verdict thin | both | deep | none, preference, quote}: thin crust is
+  correct, we do not explain ourselves), `fun`, `sourceUrls`. Every
+  English field has its Spanish beside it (`textEs`, `summaryEs`, ...);
+  quotes stay in the language they were said in; no em or en dash
+  anywhere, a quote with one is cut before it. The games
+  (`/game/[kind]`, one screen, five components). Blind date and speed date
+  play on `GameStage` (src/components/game-stage.tsx; 2026-11-09, Brian:
+  the first version made you scroll up to see who was revealed and back
+  down to move on, and on a phone neither scroll should exist): three
+  fixed bands, who you are with pinned on top, the card in the middle (the
+  only part that scrolls, inside itself), the buttons pinned at the bottom.
+  Never put a date's identity or its controls inside the scrolling part.
+  The card swipes sideways (RNGH pan, horizontal only) and a swipe is the
+  same act as the button on that side. Blind date: the points, then a
+  verdict given blind, "Second date" (heart, or swipe right) or "Pass"
+  (or swipe left), or "Just reveal"; any of the three turns the portrait
+  over (`FlipAvatar`, a timing-only FLAT flip: the question mark narrows
+  to an edge and the portrait widens from it) and the name rises in
+  where "Mystery candidate" was. Never a 3D transform (rotateY with
+  perspective) in the games: on iPhone it left a blank layer over the
+  stage from the portrait's middle to the right edge that swallowed every
+  tap, on every reveal, and the web never showed it (found on the
+  simulator 2026-11-10, the day before the release build). Until the
+  reveal each quote's source reads "Source shown with the reveal"
+  (`QuoteBlock sealed`): most sources are the campaign's own site, named
+  after the candidate, and gave the date away. After the reveal: "Next date" (or swipe
+  left), a heart to change the verdict, and the candidate's page.
+  `RoundMarks` counts the round. This phone keeps the round and the
+  verdicts (`useBlindMemory` in src/lib/mayor-games.ts, AsyncStorage
+  `mayorGames.blind.seen` / `.verdicts`, never sent); when everyone has
+  been met the stage shows the second dates and "Go again". Blind points
+  are written without he / she / his / her so the wording does not give
+  the date away (quotes stay verbatim). Speed date: random order fixed per
+  visit, a 60-second bar that runs down and rings but never throws anyone
+  out, a two-sided card ("What they would do" / "Next to the others"),
+  swipe or buttons to move. Pick-up lines (added 2026-11-09, Brian: a game with a
+  TikTok attention span that teaches who the candidates are): one real
+  quote on the card, three faces under it, tap who said it; right or wrong
+  lands at once with the source and the point it came with; ten lines a
+  round, a streak, and the best streak kept on the phone
+  (`mayorGames.lines.best`). `dealLines` is fair by candidate, not by
+  quote count: every speaker gives one line before anyone gives a second.
+  `quoteLines` skips quotes under 28 characters and any that name their
+  speaker. More sourced quotes in mayor-games.json make this game better.
+  Cheap date leads with the money (2026-11-09, Brian: "it could obviously
+  use the total spent"; the first build buried spending in small print):
+  the field's total spent up top (`fieldSpending`), then per campaign three
+  numbers at full size, spent, poll support, and cost per point of support
+  (`costPerPoint`), with a bar for the current sort. Three sorts, each a
+  stated measure (`CheapSort`): best bargain (`supportPerMillion`, poll
+  points per $1M spent, the default; not polled counts as 0 and sorts by
+  least spent), most spent, most support. No spending report waits at the
+  end. Tap a row for the books (raised, spent, cash on hand, period, note,
+  ISBE link) and the money talk. LESSON: when reviewing a game, review
+  what it tells a voter, not only how it moves; the number in a game's
+  name belongs at full size. Blind and speed dates carry a one-line stat
+  under the name (poll support, money spent).
+  Pizza date (thin first, then hedging, then deep dish, then a plain list
+  of "candidates who don't care about pizza"). `HOST_LINES` are the
+  host's bits between dates: jokes about the games and the city, never
+  about a candidate. `/mayor/[slug]` is everything the games know about
+  one candidate, with sources, and links to their platform page in the
+  app or their site. Brian Carlisle and Toni Brooks have candidate
+  accounts but appear in no filing list, so they are not in the games. The
+  old "All other declared candidates" directory card
+  (candidates/other-declared-candidates, scripts/seed-other-candidates.ts)
+  is retired but kept: nothing lists it, nothing seeds it (Brian,
+  2026-11-04).
+  Seeded data falls back to English in the five non-Spanish languages.
+- Candidate content rules (2026-11-09, Brian: the summaries gave every
+  candidate a police section "yet across all candidates there is zero
+  ideological difference of note"; find how candidates distinguish
+  themselves and stop showing what is the same for everyone). The rules
+  are scripts/data/platform-summary-prompt.md; read it before touching any
+  candidate copy. In short: every sentence must fail the test "would this
+  still be true with another candidate's name on it?". The work starts
+  with a contrast sheet of every commitment across all platforms, sorted
+  into three piles. CONSENSUS (nearly everyone says it, or they differ
+  only in numbers): one line in `mayorGames/2027.consensus`, shown once
+  ("What nearly all of them say"), never on a candidate's page. Policing
+  is consensus: no summary chunk and no split is about it. SPLITS (two or
+  more answers to one question, each held by named candidates): the one
+  table `mayorGames/2027.splits`, from which EVERY comparison in the app
+  is drawn (`SplitList`, `splitsFor`, `splitText`), so a fact reads the
+  same on every screen and changes in one place. ONLY (one candidate
+  proposes it): leads that candidate's summary. A summary is at most four
+  chunks and 105 words: "Only <Name>", sides of splits with the other
+  side named, "With most of the field" (one line when a platform says
+  what most say), "Not published" (one line when there is nothing).
+  Short is the goal; a candidate with one idea gets one chunk. Sources are
+  the platform as listed in the app and the candidate's own words from
+  THIS campaign; never an earlier campaign, an opponent, or memory. The
+  seed (`seed-mayor-games --check`) refuses a police chunk, a fifth
+  chunk, rating words, a split with one live side, and a candidate on two
+  sides, and prints the splits and who is thin on quotes. There is ONE
+  copy of each summary: `set-platform-summaries` copies a games
+  candidate's summary and split text onto their candidates/{uid} page
+  (platform-summaries.json keeps only the note and policiesHash for them;
+  it still holds both pieces for someone outside the games), because two
+  copies drifted and one had wrong facts. Page order on `/mayor/[slug]`
+  is by importance: name, three numbers (poll support, spent, per
+  point), what sets them apart, where they split, in their words, then
+  platform links, money talk, the books, pizza, sources.
+- Former mayor trivia and "only one of them would" (2026-11-09). Trivia is
+  a SMALL card between the games and "where they split" (`MayorTrivia`;
+  Brian: the splits are the compelling part, so the fact stays small): one
+  fact about a former mayor, the mayor and years as a link to its source,
+  and a shuffle button. Facts live in `mayorGames/2027.trivia`
+  ({id, mayor, years, text, textEs, url}, at most 220 characters, each
+  confirmed on the page at its url; never the sitting mayor or anyone on
+  the ballot, which the seed refuses). They come at random and the phone
+  remembers which it has shown (AsyncStorage `mayorGames.trivia.seen`,
+  `pickTrivia`), so none repeats until all have had a turn. A
+  small arrow under the shuffle button (2026-11-10, hidden until there is
+  one) steps back through the facts shown since the card appeared; the
+  shuffle button walks forward again before it deals a new one. The card's
+  height (Brian, 2026-11-10: a shuffle that shifts its own button is
+  jarring, but long facts are the interesting ones and must not be
+  punished): one line shorter than its tallest fact at that width, text
+  size and language, so most facts fit and nothing moves, and only the
+  longest grow the card by a line and push "where they split" down. It is
+  done by measuring, not by a list of long facts: every fact is laid out
+  unseen behind the one on show in a clipped row (`triviaSizer`), that
+  row's height is the tallest fact's, and the area gets it less a line as
+  its minimum height. (A negative margin did this without measuring on the
+  web; phones ignore it.) Two lines shorter was tried on paper and
+  rejected: at 390pt most facts would then move the page. The shuffle
+  button and the arrow NEVER move: their column keeps the shorter card's
+  height (measured once) and stays at the top, the shuffle button at its
+  middle, the arrow halfway between it and that card's bottom edge with an
+  8pt gap between their touch areas. The header under the card sits 20pt
+  below it, not the usual 32. The weekly
+  task grows the list. "Only one of them would" (`OnlyList`) sits under
+  the splits and is read straight off each summary's leading "Only <Name>"
+  chunk (`onlyProposals`), four at a time in random order, so it cannot
+  say anything a candidate's page does not.
+- The elections tab is a group with its own stack, src/app/(tabs)/
+  (election)/ (2026-10-14, Brian: the tab bar must stay through the races,
+  and the back stack of races made getting out a long walk): the tab
+  itself, the games, the mayor pages, and the election-race,
+  election-candidate, ward-race, and election-question pages live there,
+  keep their URLs (a group adds no segment), and keep their help keys
+  (`helpKey` maps them). Tapping the tab while in it pops back to the tab.
+  Mayoral candidate and policy pages stay in the root stack (they serve
+  the command tab too).
+- No districts by hand (2026-10-13, Brian): races follow the street
+  address and nothing shorter, so the address lookup is the only way in.
+  Checked against the district maps: across Chicago the eight district
+  types form 613 different combinations, and knowing any one leaves 49 to
+  267 possibilities for the other seven. A hand-entry screen was built,
+  then removed the same day, and the `setMyDistricts` callable deleted.
+  Someone unwilling to give an address gets no police district council of
+  their own.
+- First run and sharing (2026-10-09, from the testers' report; welcome
+  rebuilt 2026-11-09): a one-time `Welcome` (src/components/welcome.tsx,
+  AsyncStorage `welcome.v2`; updaters see it once too) is about the mayor
+  games first (what they are, "Go on a blind date" /
+  "Look around first") and lists the rest of the app second, in small
+  print. It also carries the language choice: there is NO first-launch
+  language prompt any more (Brian: nearly every user reads English). The
+  app opens in English; a globe with the current language's own name in
+  the welcome's corner opens every language named in itself (never the
+  word "language", which would need seven translations), and Settings
+  keeps its switch; Settings has "Share the app" (`ShareAppButton`,
   the waldgrave.com/directdemocracy page, an editable message, no referral
   tracking). No rating prompt: Brian wants more good users before asking.
   Store copy lives in docs/store-listing.md (English and Spanish, within
   each store's limits); `npm run store-screenshots [-- --es]` captures
   captioned 1080x1920 shots with headless Chrome from the local web dev
   server on port 8085 (the live site's App Check turns headless Chrome
-  away); the alderman shot is the fictional ward 51 alderman, the ballot
-  shot an open seat with no pick, and the news shot leaves out crime,
-  investigations, deaths, and politicians. Output in store-screenshots/.
+  away); the three game shots come first (1 the tab, 2 blind date, 3 pizza
+  date), then alderman, big board, take part, news; the script marks the
+  welcome seen (`welcome.v2`) and sets the language the way the app stores
+  it, and waits for each page to draw (look at the images after a run: a
+  changed first-run card or a slow bundle shows up as a covered or blank
+  shot); the alderman shot is the fictional ward 51 alderman, the game shots
+  (blind date, which hides every name and face; pizza date; the tab) show
+  no pick or endorsement, and
+  the news shot leaves out crime, investigations, deaths, and politicians.
+  The headless browser signs in to no one; dev web builds read stand-in
+  districts from local storage (`dev.shotDistricts`, City Hall's;
+  `useMyDistricts`), which no release or published web build reads, so
+  the police council grid leads with one. Output in store-screenshots/. The App Store
+  set is ONE size, 1320x2868 (`--apple`), for the "iPhone with Dynamic
+  Island (large display)" slot Brian uploads to; don't switch it.
 - Search and link previews (2026-10-09): `npm run publish-web` runs
   `build-seo-pages` between the export and the copy: it reads production
   (needs gcloud application-default credentials) and writes an
-  extensionless HTML file per public page (candidates, races, school board,
-  mayoral candidates, aldermen 1-50, ward races, /officials) with its own
+  extensionless HTML file per public page (candidates, races, mayor game
+  pages, mayoral candidates, aldermen 1-50, ward races, /officials) with its own
   title, description, canonical and Open Graph tags, and the page's text in
   the root div (the app's createRoot replaces it on load), plus a
   sitemap.xml. Waldgrave's next.config.js serves those files as text/html
@@ -697,7 +890,9 @@ Conventions:
 - Screen counts (2026-10-09): anonymous, no ids, ever. `useUsageTracking`
   (src/lib/usage.ts, mounted once in `LocaleKeyedStack` in
   src/app/_layout.tsx, so navigator redraws don't count) counts views per
-  help key (route pattern, never an id) and sends one `usageEvents` doc a
+  help key (route pattern, never an id; the five mayor games are counted
+  apart as `game/blind`, `game/lines`, ..., one of five fixed words, so
+  the counts say which games get played) and sends one `usageEvents` doc a
   minute at most and on going to the background: day, platform, app
   version, `views`, and `reach` (first time today on this device, kept in
   AsyncStorage, which is how devices are counted without an id). Off in
@@ -707,4 +902,55 @@ Conventions:
   Never shown in the app, never add a uid, device id, or token to it.
 - Security posture and accepted limitations are documented in `docs/AUDIT.md`;
   update it when the trust model changes.
-- Typecheck with `npm run typecheck` before finishing.
+- Phones are not the web (2026-11-10): three bugs in the mayor games only
+  showed on the iOS simulator (the 3D portrait flip above; a negative
+  margin and an uneven `flex: 1` split that the trivia card's layout
+  leaned on). Anything that moves, flips, swipes, or is laid out with
+  negative margins or shared flex space gets a run on a simulator before a
+  build, not only in the browser. Use a simulator Brian is not using (boot
+  a spare one and launch the newest
+  DerivedData/.../Debug-iphonesimulator/directdemocracy.app; it loads from
+  the Metro that is already running), and check which app is in front
+  before touching anything.
+- Android testing (set up 2026-11-11, Brian: "we really need to be testing
+  android better"): Homebrew `android-commandlinetools` (SDK at
+  /opt/homebrew/share/android-commandlinetools: platform-tools, emulator,
+  android-36, build-tools 36, NDK 27.1, a Google APIs arm64 image) and
+  `openjdk@17` for Gradle. One virtual phone, `dd_pixel` (Pixel 7, Android
+  16, 2 GB: 4 GB starved this 16 GB Mac and hung adb). Test the RELEASE
+  build, not debug: the debug build on this emulator hung on launch (ANR).
+  `npx expo prebuild -p android` once, then from android/:
+  `JAVA_HOME=/opt/homebrew/opt/openjdk@17 EXPO_PUBLIC_APPCHECK_TEST_BUILD=1
+  ./gradlew app:assembleRelease -x lint` and `adb install -r
+  app/build/outputs/apk/release/app-release.apk`. android/ is generated
+  and gitignored, so EAS never sees it. EXPO_PUBLIC_APPCHECK_TEST_BUILD=1
+  (set in the shell only, never in a file or on EAS) makes a local release
+  build present the App Check debug token, since Play Integrity refuses
+  emulators; without it Firestore answers "Missing or insufficient
+  permissions". Android-only findings that day: the status bar icons were
+  white on white (fixed with expo-status-bar in the root layout), and with
+  edge to edge on (Android 15+ default, `edgeToEdgeEnabled=true`) the
+  keyboard covers the page instead of shrinking it, so every text field
+  near the bottom was hidden. `useKeyboardOverlap` / `useRevealFocusedField`
+  (src/hooks/use-keyboard-overlap.ts) fix it in the Screen shell, sign-in,
+  and the report dialog; a new scroll view with text fields outside the
+  Screen shell needs the same two hooks. The reveal half runs on iOS too:
+  iOS's own keyboard inset showed only the report note's top line and half
+  of sign-in's Enter. It keeps the field plus 88pt (its button) above the
+  keyboard, re-measures when the keyboard grows (iOS Passwords bar) or focus
+  moves to another field, and on iOS converts the keyboard's screen
+  position into an iOS sheet's coordinates (pass the sheet's root view).
+- Strings that reach `t()` through a variable (`t(s.title)`, a ternary, a
+  constant's field) are invisible to a search for `t('...')`: the pizza
+  verdict labels shipped to the web untranslated in six languages that way
+  (2026-11-10). When adding a list of labels, add their dictionary entries
+  in the same edit and look at the screen in Spanish.
+- Typecheck with `npm run typecheck` and lint with `npm run lint` before
+  finishing, and fix every error either one reports, including ones in
+  code you did not touch (2026-11-11, Brian: "pls dont tell me you decided
+  to not fix errors you found"). Lint was at 0 problems after that day.
+  The React Compiler rules matter here: no component defined inside
+  another, no setState in an effect body (derive while drawing, or set it
+  in the handler or callback that causes it), no ref reads or writes
+  while drawing, and Reanimated shared values set with `.set()` inside
+  gesture callbacks.

@@ -74,6 +74,7 @@ export default function SettingsScreen() {
     return (
       <Screen>
         {language}
+        <FeedbackButton />
         <ShareAppButton />
         <Button title={t('Privacy & data')} variant="secondary" onPress={() => router.push('/privacy')} />
         <RulesLink />
@@ -85,6 +86,7 @@ export default function SettingsScreen() {
     <Screen>
       {language}
       <NotificationsCard />
+      <FeedbackButton />
       <ShareAppButton />
       <Button title={t('Privacy & data')} variant="secondary" onPress={() => router.push('/privacy')} />
 
@@ -330,6 +332,22 @@ function VerificationCard() {
 }
 
 /** The community rules, kept out of the way at the very bottom. */
+/**
+ * The in-app way to reach the operators (Google Play's child safety rule
+ * asks for one that never leaves the app), signed in or out.
+ */
+function FeedbackButton() {
+  const router = useRouter();
+  const t = useT();
+  return (
+    <Button
+      title={t('Send feedback or report a problem')}
+      variant="secondary"
+      onPress={() => router.push('/feedback')}
+    />
+  );
+}
+
 function RulesLink() {
   const router = useRouter();
   const t = useT();

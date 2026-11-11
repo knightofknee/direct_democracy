@@ -860,7 +860,7 @@ export const ZH: Record<string, string> = {
   'Something went wrong on the server. Try again.': '服务器出错了。请重试。',
   'home': '首页',
   'wards': '选区',
-  'election': '选举',
+  'elections': '选举',
   'notifications': '通知',
   'profile': '我的',
   'command': '工作台',
@@ -920,7 +920,7 @@ export const ZH: Record<string, string> = {
   'We\'ve been busy making direct democracy better. Would you mind grabbing the update? Thank you!': '我们一直在努力让 direct democracy 变得更好。能麻烦你更新一下吗？谢谢！',
   'Your districts': '你的选区划分',
   'Districts found': '已找到你的选区划分',
-  'The election tab now shows your races first.': '选举页面现在会优先显示你的选举。',
+  'The elections tab now shows your races first.': '选举页面现在会优先显示你的选举。',
   'Could not look up that address': '无法查询该地址',
   'You can look up 5 addresses a day. Try again tomorrow.': '你每天最多可以查询5个地址。请明天再试。',
   'Your districts ({ward})': '你的选区划分（{ward}）',
@@ -945,7 +945,7 @@ export const ZH: Record<string, string> = {
   'Your district': '你所在的分区',
   'Your ward’s districts': '你所在选区涉及的分区',
   'If you verify: a yes/no verified flag, your ward and district numbers, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.': '如果你进行验证：一个“是/否”验证标记、你的选区和各分区编号，以及一个用于阻止重复账户的唯一标识符。除此之外没有其他信息，并会随你的账户一起删除。',
-  'If you look up your districts without verifying: the district numbers only, so the election tab can show your races first.': '如果你未经验证查询了你的选区划分：只保存各分区编号，以便选举页面优先显示你的选举。',
+  'If you look up your districts without verifying: the district numbers only, so the elections tab can show your races first.': '如果你未经验证查询了你的选区划分：只保存各分区编号，以便选举页面优先显示你的选举。',
   'If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.': '如果你开启手机通知：每部手机的通知地址及其显示通知所用的语言。退出登录会移除该手机。',
   'Your address. It is used only at the moment you verify or look up your districts, to find your ward and districts, and is never saved.': '你的地址。它只在你验证或查询选区划分的那一刻用于确定你的选区和各分区，从不保存。',
   'Delete your account any time from Settings: your sign-in, profile, verification status, and every vote you cast are removed, and the tallies drop your votes. Anything you posted is re-attributed to [deleted].': '随时可以在“设置”中删除你的账户：你的登录信息、个人资料、验证状态以及你投出的每一票都会被删除，计票也会扣除你的票。你发布的任何内容会改为署名 [deleted]。',
@@ -1006,7 +1006,6 @@ export const ZH: Record<string, string> = {
   'Type a street address.': '请输入街道地址。',
   'The address lookup is not answering right now. Try again in a few minutes.':
     '地址查询服务暂时没有响应。请过几分钟再试。',
-  'Write at least 10 characters.': '请至少写10个字符。',
   'That’s longer than this box allows.': '内容超出了此输入框允许的长度。',
   'You have looked up 5 addresses today. Try again tomorrow.': '你今天已经查询了5个地址。请明天再试。',
   // Moderation, priority scale, grade basis, early voting (2026-09-29).
@@ -1019,8 +1018,6 @@ export const ZH: Record<string, string> = {
   'Don’t pose as someone else, officials included.': '不得冒充他人，包括冒充官员。',
   'Nothing sexual involving minors. We report it to the authorities.':
     '不得发布任何涉及未成年人的色情内容。我们会向有关部门举报。',
-  'Reported posts are reviewed every week. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.':
-    '被举报的帖子每周审核一次。违反这些规则的帖子会被删除，情节严重或屡次违规的账户会被注销。被5人或以上举报的账户在审核完成前会被隐藏。',
   'From {residents} · {questions}': '依据：{residents} · {questions}',
   'Your ward’s site, from {date}': '你所在选区的投票点，{date}起',
   'Election officials there speak your language.': '那里的选举工作人员会说你的语言。',
@@ -1085,8 +1082,8 @@ export const ZH: Record<string, string> = {
     '建议通过',
   'Your ward’s site, open starting {date}':
     '你所在选区的投票点，{date}开始开放',
-  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site.':
-    '市中心自10月1日开始（137 S. State St. 和 69 W. Washington St. 6楼），全部50个选区自10月19日开始；任何 Chicago 选民都可以去任何投票点。',
+  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site, and the two downtown sites stay open until 7 pm on weekdays October 26 to November 2.':
+    '市中心自10月1日开始（137 S. State St. 和 69 W. Washington St. 6楼），全部50个选区自10月19日开始；任何 Chicago 选民都可以去任何投票点；10月26日至11月2日的工作日，市中心两个投票点开放至晚上7点。',
   'November 3, 2026 ballot':
     '2026年11月3日选票',
   'February 23, 2027 ballot':
@@ -1192,7 +1189,7 @@ export const ZH: Record<string, string> = {
     '你发布过的所有内容，最新的在前：你提出的关切和你向官员提的问题。',
   'Fill in a "Title" of at least 3 characters, an optional "Section", and "The policy", which can be up to 20,000 characters.':
     '填写至少3个字符的“标题”、可选的“分类”，以及最多20,000个字符的“政策主张”。',
-  'Find your school board district with "Find my races" on the election tab. School board districts do not follow ward lines.':
+  'Find your school board district with "Find my races" on the elections tab. School board districts do not follow ward lines.':
     '在选举页面用“查找我的选举”找到你的教育委员会学区。教育委员会学区不按选区划分。',
   'For multiple choice or approval, list 2 to 12 options under "Options (one per line)".':
     '对于多选或支持率投票，在“选项（每行一个）”下列出2到12个选项。',
@@ -1230,8 +1227,6 @@ export const ZH: Record<string, string> = {
     '请注意，被5个或更多不同用户举报的账户会被隐藏，直到审核完毕。',
   'Know that an address outside Chicago changes nothing. A new ward replaces your old one, and you can move once every 3 months.':
     '请注意，Chicago 以外的地址不会改变任何东西。新选区会替换你原来的选区，你每3个月可以更换一次地址。',
-  'Know that reports are reviewed every week. Posts that break the rules come down, and serious or repeated cases lose the account.':
-    '请注意，举报每周审核一次。违反规则的帖子会被删除，情节严重或屡次违规的会被封禁账户。',
   'Know that saving a policy imported from your campaign site takes it over. It becomes yours to manage here, its comments stay, and the site stops updating it.':
     '请注意，保存从你竞选网站导入的政策主张就等于接管它。它将由你在这里管理，评论保留，网站不再更新它。',
   'Know that the app keeps only a verified yes or no, your ward and district numbers, and an identifier that stops one ID from verifying twice.':
@@ -1556,8 +1551,6 @@ export const ZH: Record<string, string> = {
     '点按别人问题上的箭头和数字即可附议（“我也想得到回答”）。再次点按即可取消。附议人数越多的问题，在回答评分中的权重越大。',
   'Tap the arrow and count to join the question ("I want this answered too"), and tap again to leave. You cannot join a question you asked.':
     '点按箭头和数字附议这个问题（“我也想得到回答”），再次点按即可取消。你不能附议自己提出的问题。',
-  'Tap the flag icon on a post or comment to report it, or to block its author so you stop seeing their content.':
-    '点按帖子或评论上的旗帜图标即可举报，或屏蔽其作者，不再看到其内容。',
   'Tap the flag icon to report the concern or block its author. Tap the share icon to send a web link that anyone can open.':
     '点按旗帜图标举报这个关切或屏蔽其作者。点按分享图标发送任何人都能打开的网页链接。',
   'Tap the flag icon to report the policy or a comment, or to block its author. Tap the share icon to send a web link.':
@@ -1606,7 +1599,7 @@ export const ZH: Record<string, string> = {
     '输入你的“电子邮箱”和“密码”，然后点按“进入”。新密码至少需要6个字符。点按“显示”查看你输入的内容。',
   'Type your answer under a question and tap "Post answer". Voters see every candidate\'s answer side by side. You can revise it later with "Update answer", but it cannot be taken down.':
     '在问题下方输入你的回答，然后点按“发布回答”。选民会看到每位候选人的回答并排显示。你之后可以用“更新回答”修改，但不能删除。',
-  'Type your home address and tap "Find my districts". If it matches, you go back to the election tab with your own races listed first.':
+  'Type your home address and tap "Find my districts". If it matches, you go back to the elections tab with your own races listed first.':
     '输入你的住址，然后点按“查找我的选区划分”。如果匹配成功，你会回到选举页面，你自己的选举会排在最前面。',
   'Under "Audience", choose your ward\'s residents or "Citywide (everyone)". Officials without a ward can only post citywide.':
     '在“投票对象”下，选择你所在选区的居民或“全市（所有人）”。没有选区的官员只能发布全市投票。',
@@ -1696,8 +1689,6 @@ export const ZH: Record<string, string> = {
     '你的选举排在最前面，依据你在{ward}的地址。',
   'Your record: concerns {concerns}, comments {comments}, votes {votes}, judgments {judgments}.':
     '你的记录：关切{concerns}个，评论{comments}条，投票{votes}次，评判{judgments}次。',
-  'Your settings: language, phone notifications, verification and moving, privacy, deleting your account, and the community rules.':
-    '你的设置：语言、手机通知、验证和搬家、隐私、删除账户，以及社区规则。',
   'Your vote: {n}.':
     '你的投票：{n}。',
   'Your work as a candidate: "ask every candidate" questions you haven\'t answered, the latest comments on your policies, your public card, and your platform.':
@@ -1952,8 +1943,6 @@ export const ZH: Record<string, string> = {
     "未决定",
   "Yes: {yes}. No: {no}. Not decided: {open}.":
     "是：{yes}。否：{no}。未决定：{open}。",
-  "Share my picks":
-    "分享我的选择",
   "Clear my picks":
     "清除我的选择",
   "Clear my picks?":
@@ -1974,10 +1963,6 @@ export const ZH: Record<string, string> = {
     "留任这位法官？",
   "My ballot":
     "我的选票",
-  "{n} made so far. Your picks stay on this phone.":
-    "目前已做 {n}。你的选择只保存在这部手机上。",
-  "Pick a candidate in each race and take the list with you to vote.":
-    "在每项选举中选择一位候选人，投票时带上这份清单。",
   "Not now":
     "以后再说",
   "Turn on":
@@ -2002,8 +1987,6 @@ export const ZH: Record<string, string> = {
     "点按“我的选票”查看你 11 月 3 日选票上的每项选择以及你已做的选择。你的选择只保存在这部手机上。",
   "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
     "在 11 月 3 日的选举中，点按候选人上的“选择”将其加入“我的选票”，点按“你的选择”可撤回。对于寻求留任的法官，在“留任这位法官？”下点按“是”或“否”。你的选择只保存在这部手机上。",
-  "Tap \"My ballot\" at the top to see all your picks.":
-    "点按顶部的“我的选票”查看你的全部选择。",
   "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
     "点按候选人上的“选择”将其加入“我的选票”，点按“你的选择”可撤回。你的选择只保存在这部手机上。",
   "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
@@ -2014,8 +1997,6 @@ export const ZH: Record<string, string> = {
     "在咨询性问题上点按“是”或“否”。",
   "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
     "点按“查找我的选举”添加你的地址，即可列出你的国会、州议会、县委员会和教育委员会选举。",
-  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
-    "点按“分享我的选择”把清单作为消息发送或保存。需要手写的名字标有“需手写”。",
   "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
     "点按“清除我的选择”并确认，即可删除这部手机上的所有选择。",
   "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
@@ -2081,4 +2062,381 @@ export const ZH: Record<string, string> = {
     "致电选区办公室：{phone}",
   "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
     "在“选区会议”下，“简报中未找到时间”列出选区办公室简报中宣布但没有写时间的会议。点按“致电选区办公室”询问会议时间。",
+  "{n} of {total} chosen":
+    "已选择 {total} 项中的 {n} 项",
+  "Next: {race}":
+    "下一项：{race}",
+  "Done":
+    "完成",
+  "Next to decide: {race}":
+    "下一个待决定：{race}",
+  "My cheat sheet":
+    "我的投票小抄",
+  "Made with direct democracy":
+    "用 direct democracy 制作",
+  "Could not make the image":
+    "无法生成图片",
+  "Could not make the PDF":
+    "无法生成 PDF",
+  "Save as image":
+    "保存为图片",
+  "Save as PDF":
+    "保存为 PDF",
+  "Share as text":
+    "以文字分享",
+  "Tap \"My ballot\" at the top to see all your picks. The number on it counts the choices you have made out of all the choices on your ballot.":
+    "点按顶部的“我的选票”查看你的所有选择。上面的数字表示你在选票所有选择中已做了几项。",
+  "After you pick, tap \"Next\" at the bottom to go to the next race on your ballot, in ballot order, or tap \"Skip\" to go on without picking. On your last race \"Next\" says \"Done\" and takes you back to My ballot. Picking needs your districts first: tap \"Find my races\".":
+    "做出选择后，点按底部的“下一项”按选票顺序前往你选票上的下一个选举，或点按“跳过”不做选择继续。到最后一个选举时，“下一项”会变成“完成”，并带你回到“我的选票”。做选择之前需要先有你的选区划分：点按“查找我的选举”。",
+  "Tap \"Next to decide\" to open the first race you have not picked in. From there, \"Next\" at the bottom of each race takes you down the ballot.":
+    "点按“下一个待决定”，打开你还没做选择的第一个选举。之后，每个选举底部的“下一项”会带你沿着选票往下走。",
+  "Your picks for the November 3, 2026 ballot laid out as a cheat sheet, in about the order the ballot prints them, to read while you vote or fill in a mail ballot. It is made on this phone from the picks kept on it.":
+    "你对2026年11月3日选票的选择，整理成一张投票小抄，大致按选票印制的顺序排列，方便你投票或填写邮寄选票时查看。它在这部手机上根据保存在这里的选择生成。",
+  "Tap \"Save as image\" to save the sheet as a picture. On an iPhone, choose \"Save Image\" in the share sheet to put it in your photos.":
+    "点按“保存为图片”把小抄存成图片。在 iPhone 上，在分享菜单中选择“存储图像”即可存到相册。",
+  "Tap \"Save as PDF\" to make a PDF you can print or keep in your files.":
+    "点按“保存为 PDF”生成一个可以打印或存入文件的 PDF。",
+  "Tap \"Share as text\" to send your picks as a message.":
+    "点按“以文字分享”，把你的选择作为消息发送。",
+  "Look for \"write in\" after a name: that person's name is not printed on the ballot, so you write it in.":
+    "注意名字后面的“需手写”：这个人的名字没有印在选票上，所以要你自己写上。",
+  "Skip":
+    "跳过",
+  "Rated negatively by a bar association: {n}. They are listed first.":
+    "被律师协会给予负面评级：{n} 位。他们排在最前面。",
+  "On judge races, judges rated negatively by at least one bar association are listed first, those with the most negative ratings at the top.":
+    "在法官选举中，至少被一个律师协会给予负面评级的法官排在最前面，负面评级最多的排在最上方。",
+  "{name} (rated negatively)":
+    "{name}（负面评级）",
+  "Rated negatively by a bar association":
+    "被律师协会给予负面评级",
+  "Judges up for retention whom a bar association rated negatively come first, in red, each with your answer; every other judge is listed once below them. A negatively rated judge you picked for a vacancy is marked \"rated negatively\".":
+    "需要决定是否留任且被律师协会给予负面评级的法官排在最前面，以红色显示，并附上你的回答；其他法官在下方只列出一次。你为空缺选择的负面评级法官会标有“负面评级”。",
+  "Under the judges up for retention, the ones a bar association rated negatively are named in red with your answer for each.":
+    "在需要决定是否留任的法官下方，被律师协会给予负面评级的法官以红色列出，并附上你对每位的回答。",
+  "Tap \"My cheat sheet\", at the top or the bottom, to see your picks laid out to vote with, and save them as an image or a PDF or share them as text.":
+    "点按顶部或底部的“我的投票小抄”，查看整理好、可带去投票的选择，并保存为图片或 PDF，或以文字分享。",
+  "choices made":
+    "项已选择",
+  "Complete":
+    "已完成",
+  // Report dialog and Settings > Send feedback (2026-10-22).
+  'Pick at least one reason.': '请至少选择一个原因。',
+  'Pick every reason that applies.': '勾选所有适用的原因。',
+  'Add a note (optional)': '添加备注（选填）',
+  'Sign in to send': '登录后发送',
+  'Blocking hides everything they post, for you only. They are not told.': '屏蔽后，对方发布的所有内容只对你隐藏。对方不会收到通知。',
+  'A child’s safety': '儿童安全',
+  'A post or a person in the app': '应用里的某条内容或某个人',
+  'Something isn’t working': '有功能出了问题',
+  'An idea for the app': '对应用的建议',
+  'Answers go to {email}.': '回复会发送到 {email}。',
+  'You are signed in.': '你已登录。',
+  'You are signed out. Add an email if you want an answer.': '你尚未登录。如需回复，请留下邮箱。',
+  'Message sent': '消息已发送',
+  'Thank you. The operators read every message.': '谢谢。运营者会阅读每一条消息。',
+  'Could not send your message': '无法发送你的消息',
+  'To report a post or comment, tap the flag on it. For anything else, write to the operators here.': '要举报某条帖子或评论，请点它上面的旗子图标。其他任何事情，请在这里写给运营者。',
+  'What is this about?': '这是关于什么的？',
+  'Child safety messages reach the operator right away. If a child is in danger now, call 911.': '有关儿童安全的消息会立即送达运营者。如果有儿童现在正处于危险中，请拨打 911。',
+  'Your message': '你的消息',
+  'What happened, and where in the app?': '发生了什么？在应用的哪个地方？',
+  'Your email (optional)': '你的邮箱（选填）',
+  'Only if you want an answer': '仅在你需要回复时填写',
+  'Send': '发送',
+  '10 character minimum': '至少 10 个字符',
+  'You can send up to 5 messages a day. You can send another {date}.': '你每天最多可以发送 5 条消息。你可以在 {date} 再发送一条。',
+  'Send feedback': '发送反馈',
+  'Send feedback or report a problem': '发送反馈或报告问题',
+  'Pick what this is about.': '请选择这是关于什么的。',
+  'That email address does not look right.': '这个邮箱地址看起来不对。',
+  'Too many messages today. Try again tomorrow.': '今天的消息太多了。请明天再试。',
+  'Feedback you send from Settings is visible only to the platform operators, with your account or the email you give, so they can answer.': '你从设置里发送的反馈只有平台运营者能看到，并附有你的账号或你留下的邮箱，方便他们回复。',
+  'Reported posts are reviewed every week, and child safety reports right away. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.': '被举报的帖子每周审核一次，儿童安全举报则立即处理。违反这些规则的帖子会被删除，严重或屡次违规的会被封号。被 5 人或更多人举报的账号在审核前会被隐藏。',
+  'Tap the flag icon on a post or comment, pick every reason that applies, and tap "Send report". The same window blocks its author so you stop seeing their content.': '点帖子或评论上的旗子图标，勾选所有适用的原因，然后点"发送举报"。在同一个窗口里也可以屏蔽作者，不再看到其内容。',
+  'Know that reports are reviewed every week, and child safety reports right away. Posts that break the rules come down, and serious or repeated cases lose the account.': '举报每周审核一次，儿童安全举报则立即处理。违反规则的帖子会被删除，严重或屡次违规的会被封号。',
+  'Your settings: language, phone notifications, feedback to the operators, verification and moving, privacy, deleting your account, and the community rules.': '你的设置：语言、手机通知、给运营者的反馈、验证和搬家、隐私、删除账号，以及社区规则。',
+  'Tap "Send feedback or report a problem" to write to the operators without leaving the app, signed in or not. Child safety messages reach them right away.': '点"发送反馈或报告问题"，无需离开应用即可写给运营者，登录与否都可以。有关儿童安全的消息会立即送达。',
+  'A message to the operators from inside the app, for anything but a single post: a child safety concern, a person in the app, something that isn\'t working, or an idea.': '在应用内写给运营者的消息，用于单条帖子以外的任何事情：对儿童安全的担忧、应用里的某个人、出了问题的功能，或一个建议。',
+  'Pick what it is about, write what happened and where, and tap "Send".': '选择主题，写下发生了什么、在哪里，然后点"发送"。',
+  'Pick "A child’s safety" for any concern about a child. Those messages reach the operator right away. If a child is in danger now, call 911.': '任何关于儿童的担忧，请选择"儿童安全"。这类消息会立即送达运营者。如果有儿童现在正处于危险中，请拨打 911。',
+  'To report one post or comment, tap the flag on it instead.': '要举报某一条帖子或评论，请改为点它上面的旗子图标。',
+  'Signed out, add an email if you want an answer. Signed in, the answer goes to your account\'s email.': '未登录时，如需回复请留下邮箱。已登录时，回复会发送到你账号的邮箱。',
+  'Send up to 5 messages a day.': '每天最多发送 5 条消息。',
+  "Leave blank":
+    "留空",
+  "Left blank":
+    "已留空",
+  "Leave blank: {seat}":
+    "留空：{seat}",
+  "On a judge vacancy, tap \"Leave blank\" if you do not want to vote for that judge. Each vacancy has one candidate, so leaving it blank is the only other choice your ballot gives, and it counts as a choice made.":
+    "在法官空缺上，如果你不想投票给该法官，请点按“留空”。每个空缺只有一位候选人，所以留空是选票上唯一的另一个选择，也算作已做出的选择。",
+  // Mayor games (2026-11-04)
+  "6 am to 7 pm": "早上6点至晚上7点",
+  "Applications for a February mail ballot open November 25, 2026, online or on paper.": "2月选举的邮寄选票申请于2026年11月25日开放，可在网上或以纸质表格申请。",
+  "April 6, 2027": "2027年4月6日",
+  "Be nice. They collected 12,500 signatures and they have feelings.": "友善一点。他们收集了12,500个签名，他们也是有感情的。",
+  "Blind date": "盲约",
+  "Candidate for mayor": "市长候选人",
+  "Candidates in the race: {n}.": "参选候选人：{n}位。",
+  "Cash on hand": "手头现金",
+  "Cheap date": "省钱约会",
+  "Check your registration, see your sample ballot, and find your polling place.": "查询你的登记状态、查看你的样本选票，并查找你的投票站。",
+  "Checked {date}.": "核对日期：{date}。",
+  "Compare candidates on this page. Each card shows an \"Incumbent\" chip if they hold the seat and a preview of what they are running on.": "在本页比较候选人。如果候选人是现任者，卡片上会显示“现任”标签，并预览他们的竞选主张。",
+  "Data checked {date}.": "数据核对日期：{date}。",
+  "Election day is {date}.": "选举日是{date}。",
+  "Every alderman's seat and every police district council is on the {date} ballot with the mayor's race above.": "每个市议员席位和每个警区委员会都在{date}的选票上，市长选举位于其上方。",
+  "Everyone running for mayor on February 23, 2027. Four ways to meet them.": "2027年2月23日所有竞选市长的人。四种认识他们的方式。",
+  "Everyone who filed to run for mayor, in alphabetical order. Tap a name for everything the games know.": "所有登记竞选市长的人，按字母顺序排列。点按名字查看游戏所知的一切。",
+  "Everything about {name}": "关于{name}的一切",
+  "Everything the mayor games know about one candidate for mayor, with sources: who they are, their full platform, their campaign money as reported to the State Board of Elections, their standing in the latest public poll, what they say they would do in their own words, what they say about money, their pizza position, and the odd fact on the record.": "市长游戏对一位市长候选人所知的一切，并附来源：他们是谁、他们的完整政纲、向 Illinois 州选举委员会申报的竞选资金、在最新公开民调中的排名、他们亲口说会做什么、他们对钱的看法、他们的披萨立场，以及记录在案的奇闻。",
+  "For the February 23 municipal election. Apply online or on paper; the ballot itself is mailed later.": "适用于2月23日的市政选举。可在网上或以纸质表格申请；选票本身稍后寄出。",
+  "Fun fact: the lake is right there. Nobody has promised to fix it.": "趣闻：湖就在那儿。还没有人承诺要修好它。",
+  "Game not found.": "未找到该游戏。",
+  "House rule: no Bears stadium talk on a first date.": "本店规矩：第一次约会不许聊 Bears 体育场。",
+  "If nobody wins a majority, the top two meet in a runoff on Tuesday, April 6, 2027.": "如果没有人获得过半数票，得票最高的两人将于2027年4月6日（星期二）进行决选。",
+  "If they say \"fiscal responsibility\", take a sip of water. Hydrate.": "如果他们说“财政责任”，就喝一口水。记得补水。",
+  "If you look up your districts without verifying: the district numbers only, so the ward races can show your police district council first.": "如果你未经验证就查询你的选区划分：只保存各选区编号，以便选区选举页面优先显示你的警区委员会。",
+  "In their words where we have them.": "有原话的地方用他们自己的话。",
+  "Jumps to when and where to vote": "跳转到投票时间和地点",
+  "Key points listed: {n}.": "列出的要点：{n}条。",
+  "Mail ballot applications open": "邮寄选票申请开放",
+  "Main points": "要点",
+  "Mayor games": "市长游戏",
+  "Mayor, city clerk and treasurer, alderman, and police district council. Polls are open 6 am to 7 pm.": "市长、市书记官和市财务官、市议员，以及警区委员会。投票站开放时间为早上6点至晚上7点。",
+  "Met {n} of {total}": "已认识{total}位中的{n}位",
+  "Mystery candidate": "神秘候选人",
+  "Next date": "下一位",
+  "Next to the others": "与其他人相比",
+  "No candidates are on record yet. Petitions were filed October 19-26, 2026; the districts fill in here as the Board certifies the ballot.": "尚无登记在案的候选人。请愿书于2026年10月19日至26日提交；选举委员会认证选票后，各区会陆续显示在这里。",
+  "No candidates in the race yet.": "该选举尚无候选人。",
+  "No pizza position found on the record. If one of them goes public, tell us and we will rank them.": "记录中未找到披萨立场。如果有人公开表态，请告诉我们，我们会给他们排名。",
+  "No poll has listed this candidate yet.": "尚无民调列出这位候选人。",
+  "No spending report found for these campaigns yet. They wait here, which is the cheapest place to stand.": "尚未找到这些竞选团队的支出报告。他们在这里等候，这是最省钱的站位。",
+  "No spending report found for this campaign yet.": "尚未找到该竞选团队的支出报告。",
+  "Nobody has mentioned the parking meters yet. Give it time.": "还没有人提到停车计时器。给点时间。",
+  "Not listed in the poll": "未列入民调",
+  "Not listed in the poll · {spent} spent": "未列入民调 · 已花费 {spent}",
+  "Off the ballot": "已退出选票",
+  "On Blind date, read the points, then tap \"Reveal who it is\" to see the name and face, then \"Next date\" for another. Tap \"Skip this one\" to move on without revealing.": "在盲约中，先读要点，然后点按“揭晓是谁”查看名字和面孔，再点按“下一位”认识另一位。点按“跳过这位”可以不揭晓直接继续。",
+  "On Cheap date and Pizza date, tap any card for everything about that candidate.": "在省钱约会和披萨约会中，点按任意卡片查看关于该候选人的一切。",
+  "On Speed date, tap \"Next date\" and \"Back\" to move through the field. The clock only counts; it never cuts you off.": "在快速约会中，点按“下一位”和“返回”在候选人之间切换。计时器只是计时，绝不会打断你。",
+  "One ballot candidate's card, put together from public sources. It shows what they say they are running on, their background, and their campaign site. These candidates do not have accounts in the app.": "一位选票候选人的卡片，根据公开来源整理。显示他们自称的竞选主张、背景和竞选网站。这些候选人在应用中没有账户。",
+  "One candidate at a time, the whole platform in a minute.": "一次一位候选人，一分钟读完整个政纲。",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, with their own words where we have them, and their name and face behind \"Reveal who it is\"; candidates come in random order and this phone remembers who you have met. Speed date: one candidate at a time, in a random order, with the AI summary of their main points and how they compare to the others. Cheap date: everyone with a spending report, ordered by poll support per dollar spent, with what they say about money. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end.": "四个市长游戏之一。盲约：一位神秘候选人的要点，有原话的地方用他们自己的话，名字和面孔藏在“揭晓是谁”后面；候选人随机出场，这部手机会记住你已认识的人。快速约会：一次一位候选人，随机排序，附有他们要点的 AI 摘要以及与其他人的比较。省钱约会：所有有支出报告的候选人，按每花一美元获得的民调支持率排序，并附他们对钱的看法。披萨约会：所有有披萨立场的候选人，按谁是对的（薄底）排序，其余的列在最后。",
+  "One race on the February 23, 2027 ballot: city clerk, city treasurer, or a police district council. It lists every candidate, with the first lines of what each says they are running on, so you can compare them here.": "2027年2月23日选票上的一场选举：市书记官、市财务官或某个警区委员会。列出每位候选人及其竞选主张的开头几行，方便你在这里比较。",
+  "Only in races where nobody won a majority on February 23. Polls are open 6 am to 7 pm.": "仅限2月23日无人获得过半数票的选举。投票站开放时间为早上6点至晚上7点。",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line.": "按每花一美元获得的民调支持率排序。花钱最多才走到今天的，排在队尾。",
+  "Petitions filed": "已提交请愿书",
+  "Petitions were filed October 19-26, 2026, and the Board of Elections certifies the ballot by December 17. This page follows the field as it settles.": "请愿书于2026年10月19日至26日提交，选举委员会在12月17日前认证选票。本页会随着候选人阵容的确定而更新。",
+  "Petitions were filed October 19-26, 2026; the Board of Elections certifies the ballot by December 17": "请愿书于2026年10月19日至26日提交；选举委员会在12月17日前认证选票",
+  "Pizza date": "披萨约会",
+  "Poll support: {pct}%.": "民调支持率：{pct}%。",
+  "Polls are open": "投票站开放时间",
+  "Put a question to every candidate": "向每位候选人提问",
+  "Raised": "已筹集",
+  "Ranked by who is right about pizza. No questions.": "按谁对披萨的看法正确排名。不接受提问。",
+  "Ranked by who is right about pizza. Tavern-style thin crust is right. We do not explain ourselves.": "按谁对披萨的看法正确排名。酒馆式薄底才是对的。我们不作解释。",
+  "Register online with an Illinois license or state ID, or in person at any early voting site and at your polling place on election day, with two forms of ID (one showing your address).": "凭 Illinois 驾照或州身份证在网上登记，或携带两种身份证件（其中一种显示你的住址）到任何提前投票点现场登记，选举日当天也可在你的投票站登记。",
+  "Reminder: the city is the one paying for dinner.": "提醒：晚餐是市政府买单的。",
+  "Reveal who it is": "揭晓是谁",
+  "Runoff election day is": "决选日是",
+  "Skip this one": "跳过这位",
+  "Somewhere, a ward meeting is running late. Your date left it early for you.": "某个地方的选区会议正在超时。你的约会对象为了你提前离场了。",
+  "Speed date": "快速约会",
+  "Spent": "已花费",
+  "Spent {spent} ({period}).": "已花费 {spent}（{period}）。",
+  "Start over": "重新开始",
+  "Tap \"Blind date\", \"Speed date\", \"Cheap date\", or \"Pizza date\" to play. Every game links to each candidate's page, with sources.": "点按“盲约”“快速约会”“省钱约会”或“披萨约会”开始游戏。每个游戏都链接到每位候选人的页面，并附来源。",
+  "Tap \"Everything about\" a candidate for their page, or \"Full platform\" for every policy they have published.": "点按候选人的“关于……的一切”打开其页面，或点按“完整政纲”阅读他们发布的每项政策。",
+  "Tap \"Full platform\" to read every policy they have published. On the platform, you can comment on any policy. Candidates without a page in the app link to their own site.": "点按“完整政纲”阅读他们发布的每项政策。在政纲页面上，你可以对任何政策发表评论。在应用中没有页面的候选人会链接到他们自己的网站。",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the mayor games tab.": "在市长游戏标签页点按“向每位候选人提问”，一次向所有候选人提问。",
+  "Tap \"Source\" under any quote to read it where it was said.": "点按任何引言下方的“来源”，到原处阅读。",
+  "Tap City Clerk, City Treasurer, a ward number, or a police district number to see who is running. \"Your ward\" shows your alderman's record next to their challengers.": "点按市书记官、市财务官、选区编号或警区编号查看谁在参选。“你的选区”会把你的市议员的履历和挑战者并列显示。",
+  "Tap the countdown line to jump to when and where to vote.": "点按倒计时行跳转到投票时间和地点。",
+  "Tap the share icon at the top to send this page. The link opens on the web for people without the app.": "点按顶部的分享图标发送本页。没有安装应用的人可以在网页上打开链接。",
+  "Taxes, the budget, and what it costs to live here.": "税收、预算，以及在这里生活的开销。",
+  "The Board has not posted February early voting dates or sites yet. Any Chicago voter can use any early voting site, and same-day registration is available at all of them.": "选举委员会尚未公布2月的提前投票日期和地点。任何 Chicago 选民都可以去任何提前投票点，所有投票点都提供当日登记。",
+  "The mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date shows a candidate's ideas before their name. Speed date walks the field one at a time with an AI summary. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the ward races, and the field A to Z.": "市长游戏：四种方式认识2027年2月23日所有竞选 Chicago 市长的人。盲约先展示候选人的想法，再揭晓名字。快速约会带你一次一位地走遍全体候选人，并附 AI 摘要。省钱约会按每花一美元获得的民调支持率排名。披萨约会按对披萨的看法是否正确排名。游戏下方的红色区域是2月选票的其余部分：投票时间和地点、每位候选人都回答的问题、选区选举，以及按字母顺序排列的全体候选人。",
+  "The pizza is cut in squares. The candidates are not.": "披萨是切成方块的。候选人可不是。",
+  "Their ideas first. Their name when you say so.": "先看想法。你说了才看名字。",
+  "These names are not printed on the ballot. To vote for one, write the name in the blank write-in space for that office and fill in the oval (on a touchscreen, follow the write-in steps on screen). Votes count only for write-ins who filed a declaration; election judges at your polling place have the official list.": "这些名字没有印在选票上。要投给其中一人，请在该职位的空白手写栏中写下名字并涂满椭圆（在触摸屏上，请按照屏幕上的手写候选人步骤操作）。只有提交了声明的手写候选人才会计票；你所在投票站的选举工作人员持有正式名单。",
+  "They all say they will fix the potholes. Ask how.": "他们都说要修好路面坑洼。问问怎么修。",
+  "This date: {clock}": "本场约会：{clock}",
+  "Tuesday, February 23, 2027": "2027年2月23日，星期二",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first.": "输入你的家庭住址并点按“查找我的选区划分”。匹配成功后，你会回到选票页面，你的警区委员会排在最前。",
+  "Under \"Campaign money\", read what the campaign raised, spent, and has on hand, and tap \"Source\" to open the State Board of Elections report.": "在“竞选资金”下，查看竞选团队筹集、花费和手头持有的资金，点按“来源”打开 Illinois 州选举委员会的报告。",
+  "Under \"Support\", tap the poll's name to open it.": "在“支持率”下，点按民调名称打开它。",
+  "Under \"The field, A to Z\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "在“全体候选人，按字母排序”下，点按任何名字查看游戏所知的一切：政纲、竞选资金、民调排名、引言和披萨。",
+  "Use the \"When and where to vote\" links to register, apply for a mail ballot, find early voting sites, or find your polling place. Tap \"More help voting\" for accessible voting, language help, and poll work.": "使用“投票时间和地点”下的链接登记、申请邮寄选票、查找提前投票点或查找你的投票站。点按“更多投票帮助”了解无障碍投票、语言帮助和投票站工作。",
+  "What they would do as mayor, in their words where we have them.": "他们当上市长会做什么，有原话的地方用他们自己的话。",
+  "Which mayoral candidates you have already met in the games. That list stays on your phone only.": "你在游戏中已经认识了哪些市长候选人。这份名单只保存在你的手机上。",
+  "Who gets the most support for the least money.": "谁用最少的钱获得最多的支持。",
+  "Withdrew": "已退选",
+  "Your date has arrived. They brought a budget.": "你的约会对象到了。还带着预算。",
+  "Your district numbers for races that depend on your street address, not just your ward. On the February 23, 2027 ballot that is your police district council; the other numbers (US House, Illinois Senate and House, county districts, judicial subcircuit, school board) are kept for the next election that uses them.": "你在那些取决于街道地址而不只是选区的选举中的各选区编号。在2027年2月23日的选票上，这指的是你的警区委员会；其他编号（美国众议院、Illinois 州参议院和众议院、县级分区、司法分区、教育委员会）保留到下一次用到它们的选举。",
+  "Your police district council race depends on your address, not just your ward. We send it to the US Census Bureau to place it on the map and keep only your district numbers, never the address.": "你的警区委员会选举取决于你的地址，而不只是你的选区。我们会把地址发送给美国人口普查局以便在地图上定位，只保留你的各选区编号，从不保存地址。",
+  "also on the record": "记录中还有",
+  "campaign money": "竞选资金",
+  "candidates who don't care about pizza": "不在乎披萨的候选人",
+  "games": "游戏",
+  "not found": "未找到",
+  "on": "关于",
+  "on money": "关于钱",
+  "pizza": "披萨",
+  "spending not on record": "支出未记录在案",
+  "support": "支持率",
+  "the ai summary": "AI 摘要",
+  "the field, a to z": "全体候选人，按字母排序",
+  "the mayor games": "市长游戏",
+  "waldgrave.com/directdemocracy": "waldgrave.com/directdemocracy",
+  "what they would do": "他们会做什么",
+  "when and where to vote": "投票时间和地点",
+  "{n} of {total}": "{n}/{total}",
+  "{n} people want to be mayor on February 23, 2027. Four ways to meet them.": "{n}个人想在2027年2月23日当上市长。四种认识他们的方式。",
+  "{n} points of support per $1 million spent": "每花费100万美元获得{n}个百分点的支持率",
+  "{pct}% support · {spent} spent": "{pct}% 支持率 · 已花费 {spent}",
+  // Mayor games, round two (2026-11-09)
+  "A \"?\" on every screen says what you can do there.": "每个页面上的“?”会告诉你在那里能做什么。",
+  "After the reveal, tap \"Next date\" or swipe left for another. Tap the heart to change your mind about a second date.": "揭晓之后，点按“下一位”或向左滑动认识另一位。点按爱心可以改变是否再约的决定。",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, four ways.": "Chicago 将于2027年2月23日选出市长。四种方式认识所有参选的人。",
+  "Chicago's top concerns, ranked by the people.": "芝加哥最受关注的问题，由市民排序。",
+  "Compare them on a speed date": "在快速约会中比较他们",
+  "Date {n} of {total}": "第{n}场约会，共{total}场",
+  "Find my police district": "查找我的警区",
+  "Finish": "完成",
+  "Four more races share the {date} ballot with the mayor's: two citywide, one by your ward, and one by your address.": "除市长选举外，{date}的选票上还有四场选举：两场全市选举，一场按你的选区，一场按你的地址。",
+  "Full platform": "完整政纲",
+  "Full platform on their site": "他们网站上的完整政纲",
+  "Full platform, open to your comments": "完整政纲，欢迎你评论",
+  "Go again": "再来一轮",
+  "Go on a blind date": "来一场盲约",
+  "In a random order, so no one is always listed first. Tap a name for everything the games know.": "按随机顺序排列，没有人总是排在第一。点按名字查看游戏所知的一切。",
+  "Judge the ideas first. Find out who it was after.": "先评判想法。之后再知道是谁。",
+  "Just reveal": "直接揭晓",
+  "Less help voting": "收起投票帮助",
+  "Look around first": "先随便看看",
+  "Look up a different address": "查询其他地址",
+  "No ketchup was involved in the making of this date.": "本场约会全程没有用到一滴番茄酱。",
+  "No pizza position found on the record, listed in random order. If one of them goes public, tell us and we will rank them.": "记录中未找到披萨立场，按随机顺序排列。如果有人公开表态，请告诉我们，我们会给他们排名。",
+  "No second dates this round. Tough crowd.": "这一轮没有想再约的人。真难讨好。",
+  "On Blind date, read the card, then tap \"Second date\" or \"Pass\", or swipe the card right or left. Either one reveals who it was. Tap \"Just reveal\" to see the name without a verdict.": "在盲约中，先读卡片，然后点按“再约一次”或“不约了”，或者向右或向左滑动卡片。两种选择都会揭晓是谁。点按“直接揭晓”可以不作评判直接看名字。",
+  "On Cheap date, tap a row to open what that candidate says about money. The bar shows their support per dollar next to the best in the field.": "在省钱约会中，点按一行查看该候选人对钱的看法。横条显示他们每花一美元获得的支持率，并与全场最高者对比。",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What they would do\" or \"Next to the others\" to turn the card. The clock runs down from a minute and never cuts you off.": "在快速约会中，点按“下一位”和“返回”，或者滑动，在候选人之间切换。点按“他们会做什么”或“与其他人相比”翻转卡片。计时器从一分钟开始倒数，绝不会打断你。",
+  "On their ideas alone, you would see these again:": "只凭想法，你愿意再见这几位：",
+  "One minute each. The whole field in a coffee break.": "每人一分钟。喝杯咖啡的工夫就见完所有候选人。",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Candidates come in random order, and this phone remembers who you have met and who got a second date. Speed date: one candidate at a time, in a random order, a minute each, with what they would do on one side of the card and how they compare to the others on the other. Cheap date: everyone with a spending report, ordered by poll support per dollar spent. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "四个市长游戏之一。盲约：一位神秘候选人的要点，有原话的地方用他们自己的话。你说出是否愿意再见他们，画像随即翻转，揭晓是谁。候选人随机出场，这部手机会记住你已认识的人以及你想再约谁。快速约会：一次一位候选人，随机排序，每人一分钟，卡片一面是他们会做什么，另一面是与其他人的比较。省钱约会：所有有支出报告的候选人，按每花一美元获得的民调支持率排序。披萨约会：所有有披萨立场的候选人，按谁是对的（薄底）排序，其余的列在最后，按随机顺序排列。",
+  "Or see it on your sample ballot (Board of Elections)": "或在你的样本选票上查看（选举委员会）",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line. Tap anyone for what they say about money.": "按每花一美元获得的民调支持率排序。花钱最多才走到今天的，排在队尾。点按任何人查看他们对钱的看法。",
+  "Pass": "不约了",
+  "Picked on a blind date, on their ideas alone. Kept on this phone only.": "在盲约中只凭想法选出。只保存在这部手机上。",
+  "Play": "开始玩",
+  "Second date": "再约一次",
+  "Tap \"Everything about\" a candidate for their page, with their full platform.": "点按候选人的“关于……的一切”打开其页面，其中有他们的完整政纲。",
+  "Tap \"Play\" on Blind date, or tap Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "点按盲约上的“开始玩”，或点按快速约会、省钱约会或披萨约会。每个游戏都链接到每位候选人的页面，并附来源。",
+  "That was everyone.": "所有人都见过了。",
+  "The address goes to the US Census Bureau to place it on the map. Only the district numbers are kept, never the address.": "地址会发送给美国人口普查局以便在地图上定位。只保留各选区编号，从不保存地址。",
+  "The elections tab, led by the mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Speed date gives each candidate a minute. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "选举页面，以市长游戏打头：四种方式认识2027年2月23日所有竞选 Chicago 市长的人。盲约是那张大卡片，先展示候选人的想法，问你是否愿意再见他们，然后才告诉你是谁。快速约会给每位候选人一分钟。省钱约会按每花一美元获得的民调支持率排名。披萨约会按对披萨的看法是否正确排名。游戏下方的红色区域是2月选票的其余部分：投票时间和地点、每位候选人都回答的问题、其他选举，以及按随机顺序排列的所有竞选市长的人，没有人总是排在第一。",
+  "The marks across the top count the round: red for a second date, gray for the rest you have met, blue for the one on screen. When you have met everyone, you see your second dates and can go again.": "顶部的一排标记记录本轮进度：红色表示想再约的，灰色表示其他已认识的，蓝色表示屏幕上的这位。认识所有人之后，你会看到你想再约的人，并可以再来一轮。",
+  "They ordered for the table. It was a plan with five bullet points.": "他们替全桌点了菜。端上来的是一份列了五个要点的计划。",
+  "This one asked for a table away from the dibs chairs.": "这位特意要了一张离占车位的椅子远一点的桌子。",
+  "Three elected seats in each of the 22 police districts. Police districts do not follow ward lines, so yours goes by your address.": "22个警区各有三个民选席位。警区不按选区边界划分，所以你的警区取决于你的地址。",
+  "Time. The next one is waiting.": "时间到。下一位已经在等了。",
+  "To find your police district, type your home address and tap \"Find my police district\". It works signed in or out, and only the district numbers are kept, never the address. Or tap \"Or see it on your sample ballot (Board of Elections)\".": "要查找你的警区，请输入你的家庭住址并点按“查找我的警区”。登录或未登录都可以使用，只保留各选区编号，从不保存地址。或者点按“或在你的样本选票上查看（选举委员会）”。",
+  "Too many address lookups today. Sign in to look up yours, or try again tomorrow.": "今天的地址查询次数过多。请登录后查询你的地址，或明天再试。",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first. The police district card on the elections tab does the same lookup in place.": "输入你的家庭住址并点按“查找我的选区划分”。匹配成功后，你会回到选票页面，你的警区委员会排在最前。选举页面上的警区卡片可以在原处完成同样的查询。",
+  "Under \"Everyone running for mayor\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "在“所有竞选市长的人”下，点按任何名字查看游戏所知的一切：政纲、竞选资金、民调排名、引言和披萨。",
+  "Under \"The rest of the ballot\", tap City Clerk or City Treasurer, pick your ward to see your alderman's record next to their challengers, or find your police district council.": "在“选票上的其他选举”下，点按市书记官或市财务官，选择你的选区把你的市议员的履历和挑战者并列查看，或查找你的警区委员会。",
+  "Under \"Your second dates\", tap a name to open the page of a candidate you said you would see again on a blind date. That list is kept on this phone only.": "在“你想再约的人”下，点按名字打开你在盲约中说愿意再见的候选人的页面。这份名单只保存在这部手机上。",
+  "Which mayoral candidates you met on a blind date and which you said you would see again. Both lists stay on your phone only.": "你在盲约中认识了哪些市长候选人，以及你说愿意再见哪些人。两份名单都只保存在你的手机上。",
+  "Would you see them again?": "你愿意再见这位吗？",
+  "You met the whole field.": "你已认识所有候选人。",
+  "Your date took the Blue Line here. They have thoughts.": "你的约会对象是坐 Blue Line 地铁来的。对此有不少话要说。",
+  "Your ward: your alderman's grade, meetings, and zoning.": "你的选区：你的市议员的评分、会议和分区。",
+  "also in the app": "应用中还有",
+  "citywide": "全市",
+  "day until the runoff": "天后举行决选",
+  "days until the runoff": "天后举行决选",
+  "everyone running for mayor": "所有竞选市长的人",
+  "the rest of the ballot": "选票上的其他选举",
+  "your police district council": "你的警区委员会",
+  "your second dates": "你想再约的人",
+  "{n} dates. Now find out whose ideas you like when you cannot see the name.": "{n}场约会。来看看看不到名字时，你喜欢谁的想法。",
+  "You passed": "你选了不约",
+  "What they would do": "他们会做什么",
+  // Mayor games, round three (2026-11-09)
+  "A perfect round. You know the field.": "满分的一轮。你对候选人了如指掌。",
+  "At the end of a round of Pick-up lines, tap anyone who got past you to open their page, or tap \"Play again\".": "一轮搭讪金句结束时，点按任何把你难住的人打开其页面，或点按“再玩一次”。",
+  "Best streak on this phone: {n}.": "这部手机上的最佳连对纪录：{n}。",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, one game at a time.": "Chicago 将于2027年2月23日选出市长。一次一个游戏，认识所有参选的人。",
+  "Everyone running for mayor on February 23, 2027. Meet them one game at a time.": "2027年2月23日所有竞选市长的人。一次一个游戏，认识他们。",
+  "Line {n} of {total}": "第{n}句，共{total}句",
+  "Next line": "下一句",
+  "No quotes on file yet.": "尚无存档的引言。",
+  "No. {name} said it.": "不对。是{name}说的。",
+  "On Cheap date, tap \"Best bargain\", \"Most spent\", or \"Most support\" to reorder the line. Each row shows what the campaign spent, its support in the poll, and what it spent per point of support.": "在省钱约会中，点按“最划算”“花得最多”或“支持率最高”重新排队。每一行显示竞选团队的花费、其民调支持率，以及每个百分点支持率的花费。",
+  "On Pick-up lines, read the quote and tap the candidate you think said it. You see at once who did, where they said it, and what it was about. Tap \"Next line\" or swipe left to go on. The flame counts your streak, and the best one is kept on this phone.": "在搭讪金句中，先读引言，然后点按你认为说这句话的候选人。你马上就能看到是谁说的、在哪里说的，以及说的是什么事。点按“下一句”或向左滑动继续。火焰记录你的连对次数，最佳纪录保存在这部手机上。",
+  "One of the five mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Pick-up lines: a real quote and three candidates, and you tap who said it, ten lines a round, every candidate the answer once before anyone is the answer twice. Speed date: one candidate at a time, in a random order, a minute each. Cheap date: what the field has spent in all, then each campaign's spending, its support in the poll, and its cost per point of support. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "五个市长游戏之一。盲约：一位神秘候选人的要点，有原话的地方用他们自己的话。你说出是否愿意再见他们，画像随即翻转，揭晓是谁。搭讪金句：一句真实引言和三位候选人，你点按是谁说的，每轮十句，每位候选人都当过一次答案之后，才会有人第二次成为答案。快速约会：一次一位候选人，随机排序，每人一分钟。省钱约会：先看全体候选人一共花了多少，再看每个竞选团队的花费、其民调支持率，以及每个百分点支持率的成本。披萨约会：所有有披萨立场的候选人，按谁是对的（薄底）排序，其余的列在最后，按随机顺序排列。",
+  "One quote, three faces. Who said it?": "一句引言，三张面孔。是谁说的？",
+  "Per point": "每个百分点",
+  "Pick-up lines": "搭讪金句",
+  "Play again": "再玩一次",
+  "Poll support": "民调支持率",
+  "Right. {name} said it.": "答对了。是{name}说的。",
+  "See my score": "查看我的得分",
+  "Streak: {n}": "连对：{n}",
+  "Tap \"Play\" on Blind date, or tap Pick-up lines, Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "点按盲约上的“开始玩”，或点按搭讪金句、快速约会、省钱约会或披萨约会。每个游戏都链接到每位候选人的页面，并附来源。",
+  "Tap a row on Cheap date to see what the campaign raised, spent, and has on hand, the State Board of Elections report it comes from, and what the candidate says about money.": "在省钱约会中点按一行，查看竞选团队筹集、花费和手头持有的资金、这些数字所出自的 Illinois 州选举委员会报告，以及该候选人对钱的看法。",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "选举页面，以市长游戏打头：五种方式认识2027年2月23日所有竞选 Chicago 市长的人。盲约是那张大卡片，先展示候选人的想法，问你是否愿意再见他们，然后才告诉你是谁。搭讪金句展示一句真实引言和三张面孔，由你说出是谁说的。快速约会给每位候选人一分钟。省钱约会跟着钱走：每个竞选团队花了多少，以及这些钱换来了多少支持。披萨约会按对披萨的看法是否正确排名。游戏下方的红色区域是2月选票的其余部分：投票时间和地点、每位候选人都回答的问题、其他选举，以及按随机顺序排列的所有竞选市长的人，没有人总是排在第一。",
+  "These ones got past you. Tap one to get to know them.": "这几位把你难住了。点按其中一位，好好认识一下。",
+  "Who used this line?": "这句台词是谁用的？",
+  "You got {n} of {total}.": "{total}句中你答对了{n}句。",
+  "no points": "无百分点",
+  "not polled": "未列入民调",
+  "spent by the field so far": "全体候选人迄今的花费",
+  "{n} campaigns have filed a spending report.": "{n}个竞选团队已提交支出报告。",
+  "{n} people want to be mayor on February 23, 2027. Meet them one game at a time.": "{n}个人想在2027年2月23日当上市长。一次一个游戏，认识他们。",
+  "{pct}% in the poll": "民调 {pct}%",
+  "Best bargain": "最划算",
+  "Most spent": "花得最多",
+  "Most support": "支持率最高",
+  "Ordered by money spent so far, most first.": "按迄今花费的金额排序，最多的在前。",
+  "Ordered by support in the poll, most first.": "按民调支持率排序，最高的在前。",
+  // Mayor games, round four (2026-11-09)
+  "Also:": "还有：",
+  "Has taken a side on {n} of the {total} questions that split the field.": "在让候选人产生分歧的{total}个问题中，已对{n}个表明立场。",
+  "No side found yet on any of the questions that divide the field.": "在让候选人产生分歧的问题上，尚未找到其立场。",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What sets them apart\" or \"Where they split\" to turn the card. The clock runs down from a minute and never cuts you off.": "在快速约会中，点按“下一位”和“返回”，或者滑动，在候选人之间切换。点按“与众不同之处”或“分歧所在”翻转卡片。计时器从一分钟开始倒数，绝不会打断你。",
+  "One candidate for mayor, most important first. Under the name are three numbers: support in the latest public poll, money spent, and dollars spent per point of support. Then what sets this candidate apart from the others, then their side of each question the field splits on, then their own words with sources. What nearly every candidate says is left out on purpose. Campaign money in full, pizza, and sources follow.": "一位市长候选人，最重要的内容排在最前。名字下方有三个数字：最新公开民调中的支持率、已花费的资金，以及每个百分点支持率的花费。接着是这位候选人与其他人的不同之处，然后是他们在候选人产生分歧的每个问题上的立场，再往下是附有来源的原话。几乎每位候选人都说的话是特意略去的。之后是完整的竞选资金、披萨和来源。",
+  "Read \"What sets them apart\" for what this candidate proposes that others do not.": "阅读“与众不同之处”，了解这位候选人提出而其他人没有提出的主张。",
+  "Said once here, so no candidate's page repeats it.": "只在这里说一次，各候选人的页面不再重复。",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the elections tab.": "在选举页面点按“向每位候选人提问”，一次向所有候选人提问。",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first. Between the games and the ballot, \"Where they split\" lists the questions the candidates give different answers to.": "选举页面，以市长游戏打头：五种方式认识2027年2月23日所有竞选 Chicago 市长的人。盲约是那张大卡片，先展示候选人的想法，问你是否愿意再见他们，然后才告诉你是谁。搭讪金句展示一句真实引言和三张面孔，由你说出是谁说的。快速约会给每位候选人一分钟。省钱约会跟着钱走：每个竞选团队花了多少，以及这些钱换来了多少支持。披萨约会按对披萨的看法是否正确排名。游戏下方的红色区域是2月选票的其余部分：投票时间和地点、每位候选人都回答的问题、其他选举，以及按随机顺序排列的所有竞选市长的人，没有人总是排在第一。在游戏和选票之间，“分歧所在”列出候选人给出不同回答的问题。",
+  "The questions that divide the field, and this candidate's side.": "让候选人产生分歧的问题，以及这位候选人的立场。",
+  "The questions that divide the field, and who stands where. Tap a name for their page.": "让候选人产生分歧的问题，以及各人站在哪一边。点按名字打开其页面。",
+  "Under \"Where they split\", read the questions that divide the field and who stands on each side. Tap a name for their page. Tap \"What nearly all of them say\" for the positions that do not tell them apart.": "在“分歧所在”下，阅读让候选人产生分歧的问题，以及每一边都有谁。点按名字打开其页面。点按“几乎人人都说的话”查看那些无法把他们区分开的立场。",
+  "Under \"Where they split\", see this candidate's side of each question and who is on the other sides. Tap a name to open that candidate.": "在“分歧所在”下，查看这位候选人在每个问题上的立场，以及其他各边都有谁。点按名字打开该候选人的页面。",
+  "What nearly all of them say": "几乎人人都说的话",
+  "What sets them apart": "与众不同之处",
+  "Where they split": "分歧所在",
+  "Written by AI from the campaign's platform and the candidate's own words, under one set of rules for every candidate. What nearly all of them say is left out.": "由 AI 根据竞选团队的政纲和候选人的原话撰写，每位候选人适用同一套规则。几乎人人都说的话已略去。",
+  "Written by AI on {date} from the policies listed below and the candidate's public statements, under one set of rules for every candidate. What nearly all candidates say is left out. It can miss things. The policies are the source.": "由 AI 于{date}根据下方列出的政策主张和候选人的公开言论撰写，每位候选人适用同一套规则。几乎所有候选人都说的话已略去。可能有遗漏。请以政策主张原文为准。",
+  "in their words": "他们的原话",
+  "what sets them apart": "与众不同之处",
+  "where they split": "分歧所在",
+
+  // Mayor games, round five (2026-11-09)
+  "former mayor trivia": "前任市长趣闻",
+  "Another fact": "换一条",
+  "only one of them would": "只有一位会这么做",
+  "Proposals no other candidate makes.": "其他候选人都没有提出的主张。",
+  "Under \"Former mayor trivia\", read a fact about a past mayor and tap the shuffle button for another. A fact does not come back until you have seen them all. Tap the small arrow under the shuffle button to go back to the fact before.": "在“前任市长趣闻”下，阅读一条关于往届市长的趣闻，点按随机按钮换一条。全部看完之前，同一条不会再出现。点按随机按钮下方的小箭头，可回到上一条。",
+  "Under \"Only one of them would\", read what a single candidate proposes that no one else does. Tap a name for their page.": "在“只有一位会这么做”下，阅读只有一位候选人提出、其他人都没有提出的主张。点按姓名可查看其页面。",
+  "Previous fact": "上一条",
+  "Source shown with the reveal": "来源在揭晓时显示",
+  "Correct": "正确",
+  "Hedging": "两边都说",
+  "Incorrect": "错误",
+  "No position on record": "没有公开立场",
 };

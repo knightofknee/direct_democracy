@@ -160,18 +160,17 @@ export interface PhotoFrame {
 }
 
 /**
- * A nominee in an upcoming election - the general-purpose voter directory
- * (November 2026 statewide/county races, February 2027 municipal races).
- * Not an account: a read-only card seeded by the operator
- * (scripts/seed-election.ts) from public sources, same contract as
- * SchoolBoardCandidate. Race ids and labels live in
- * src/constants/elections.ts.
+ * A nominee in the February 2027 municipal election (clerk, treasurer,
+ * aldermanic, and police district council races). Not an account: a
+ * read-only card seeded by the operator (scripts/seed-election.ts) from
+ * public sources. Race ids and labels live in src/constants/elections.ts;
+ * the mayoral field is `mayorGames/2027` (src/lib/mayor-games.ts).
  */
 export interface ElectionCandidateCard {
   id: string;
-  /** Which ballot: '2026-general' or '2027-municipal'. */
+  /** Which ballot: '2027-municipal'. */
   election: string;
-  /** Race id, e.g. 'governor', 'cook-assessor', 'clerk', 'ward-25'. */
+  /** Race id, e.g. 'clerk', 'city-treasurer', 'ward-25', 'pdc-12'. */
   race: string;
   name: string;
   /** Ballot party; null for Chicago's nonpartisan municipal races. */
@@ -192,15 +191,6 @@ export interface ElectionCandidateCard {
   /** Operator-authored Spanish of the two fields above; English fallback. */
   runningOnEs?: string | null;
   priorCareerEs?: string | null;
-  /** Judicial races: the vacancy being filled ("Vacancy of Hon. ..."). */
-  seat?: string | null;
-  /** Judicial: the court ("Circuit Court of Cook County"). */
-  court?: string | null;
-  /**
-   * Bar association and Injustice Watch findings, quoted exactly as the
-   * rating body words them. Empty until a body publishes for this cycle.
-   */
-  ratings?: { source: string; rating: string; url?: string | null }[];
   /** Public sources the summary was compiled from. */
   sourceUrls: string[];
 }
@@ -218,33 +208,6 @@ export interface ElectionRaceNote {
   /** Operator-authored Spanish of the note; English fallback. */
   noteEs?: string | null;
   sourceUrls?: string[];
-}
-
-export interface SchoolBoardCandidate {
-  id: string;
-  name: string;
-  /** 'president' (citywide) or a district id like '4b'. */
-  race: string;
-  /** Sitting board member. */
-  incumbent: boolean;
-  /** A declared write-in: votes count, but the name is not on the ballot. */
-  writeIn?: boolean;
-  /** On the Chicago Teachers Union's published endorsement slate. */
-  ctuEndorsed?: boolean;
-  /** Official campaign site (https), if the campaign has one. */
-  website: string | null;
-  /** Externally hosted headshot (https), rendered by link, never stored. */
-  photoUrl?: string | null;
-  photoFrame?: PhotoFrame | null;
-  /** What the candidate has said they are running on, in neutral summary. */
-  runningOn: string;
-  /** Factual professional background, when public record has it. */
-  priorCareer: string | null;
-  /** Operator-authored Spanish of the two fields above; English fallback. */
-  runningOnEs?: string | null;
-  priorCareerEs?: string | null;
-  /** Public sources the summary was compiled from. */
-  sourceUrls: string[];
 }
 
 /** See Candidate.aiSummary. Each paragraph stands on its own. */
@@ -269,7 +232,7 @@ export interface Candidate {
   /**
    * A directory entry rather than a person: its "policies" are profiles of
    * the remaining declared candidates (operator-written, no comments). Listed
-   * after the real candidates on the election tab.
+   * after the real candidates on the elections tab.
    */
   directory?: boolean;
   /** Externally hosted portrait (https URL) - never stored or proxied. */

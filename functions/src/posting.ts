@@ -147,7 +147,23 @@ export const RATE_LIMITS = {
   wardChanges: [{ windowMs: DAY_MS, max: 5 }],
   edits: [{ windowMs: HOUR_MS, max: 30 }],
   addressLookups: [{ windowMs: DAY_MS, max: 5 }],
+  feedback: [{ windowMs: DAY_MS, max: 5 }],
 } satisfies Record<string, RateRule[]>;
+
+/**
+ * Feedback from people who are not signed in (sendFeedback) shares one
+ * ledger, so a script can't bury the operator's inbox: 30 a day, everyone
+ * signed out together. Signed-in people get their own 5 (`feedback`).
+ */
+export const SIGNED_OUT_FEEDBACK: RateRule[] = [{ windowMs: DAY_MS, max: 30 }];
+
+/**
+ * Address lookups by people who are not signed in (the police district
+ * finder on the elections tab, 2026-11-09), for everyone together: each is
+ * one call to the Census geocoder and nothing is stored, so the cap only
+ * has to stop a script from leaning on the geocoder through us.
+ */
+export const SIGNED_OUT_LOOKUPS: RateRule[] = [{ windowMs: DAY_MS, max: 1000 }];
 
 export type RateBucket = keyof typeof RATE_LIMITS;
 

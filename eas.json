@@ -23,7 +23,7 @@
   "submit": {
     "production": {
       "android": {
-        "track": "alpha",
+        "track": "production",
         "releaseStatus": "completed",
         "changesNotSentForReview": false
       }

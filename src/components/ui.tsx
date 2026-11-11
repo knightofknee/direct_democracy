@@ -273,6 +273,54 @@ export function ChicagoStar({ size = 14 }: { size?: number }) {
 }
 
 /**
+ * One option in a pick list with a full-width tap target: a checkbox (pick
+ * any number, like report reasons) or a radio (pick one). Nothing is sent
+ * on the tap; the form's own button sends.
+ */
+export function ChoiceRow({
+  label,
+  checked,
+  onPress,
+  disabled,
+  kind,
+}: {
+  label: string;
+  checked: boolean;
+  onPress: () => void;
+  disabled?: boolean;
+  kind: 'checkbox' | 'radio';
+}) {
+  const theme = useTheme();
+  const icon =
+    kind === 'checkbox'
+      ? checked
+        ? 'checkbox'
+        : 'square-outline'
+      : checked
+        ? 'radio-button-on'
+        : 'radio-button-off';
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityRole={kind}
+      accessibilityState={{ checked, disabled }}
+      // The web reads only the aria prop for the checked state.
+      aria-checked={checked}
+      style={[
+        styles.choiceRow,
+        {
+          borderColor: checked ? theme.primary : theme.border,
+          backgroundColor: checked ? theme.backgroundSelected : theme.backgroundElement,
+        },
+      ]}>
+      <Ionicons name={icon} size={22} color={checked ? theme.primary : theme.textSecondary} />
+      <ThemedText style={{ flex: 1 }}>{label}</ThemedText>
+    </Pressable>
+  );
+}
+
+/**
  * Centered explainer dialog behind an info icon: details that would clutter
  * the screen as visible text. Closes on the backdrop or the X.
  */
@@ -321,6 +369,15 @@ export function InfoModal({
 }
 
 const styles = StyleSheet.create({
+  choiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: Spacing.three,
+  },
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

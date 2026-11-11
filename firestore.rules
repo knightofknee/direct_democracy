@@ -224,9 +224,17 @@ service cloud.firestore {
       }
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly([
-          'reporterUid', 'contentPath', 'contentType', 'reason', 'excerpt',
+          'reporterUid', 'contentPath', 'contentType', 'reason', 'reasons', 'excerpt',
           'authorUid', 'note', 'status', 'createdAt'
         ])
+        // Every reason picked (2026-10-22); `reason` is the most serious of
+        // them. Binaries before then send `reason` alone.
+        && (!('reasons' in request.resource.data)
+          || (request.resource.data.reasons is list
+            && request.resource.data.reasons.size() >= 1
+            && request.resource.data.reasons.size() <= 5
+            && request.resource.data.reasons.hasOnly(['spam', 'harassment', 'misleading', 'childSafety', 'other'])
+            && request.resource.data.reasons.hasAny([request.resource.data.reason])))
         // What's wrong, in the reporter's words: the app requires it for
         // "Other" (binaries before 2026-09-30 send none, so it stays optional here).
         && (!('note' in request.resource.data)
@@ -247,6 +255,16 @@ service cloud.firestore {
       allow update: if isAdmin()
         && onlyChanges(['status'])
         && request.resource.data.status in ['open', 'resolved', 'dismissed'];
+    }
+
+    // ── Feedback (Settings > Send feedback) ──────────────────────────────
+    // Written only by the sendFeedback callable, which also takes messages
+    // from people who are signed out. Only the admin reads them.
+    match /feedback/{feedbackId} {
+      allow read: if isAdmin();
+      allow update: if isAdmin()
+        && onlyChanges(['status'])
+        && request.resource.data.status in ['open', 'handled'];
     }
 
     // ── Concerns (the big board) ─────────────────────────────────────────
@@ -801,19 +819,21 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // ── School board voter directory ─────────────────────────────────────
-    // Read-only nominee cards for the 2026 school board election, seeded by
-    // the operator (scripts/seed-school-board.ts) from public sources. Not
-    // accounts; nothing on them is client-writable.
-    match /schoolBoardCandidates/{nomineeId} {
+    // ── The mayor games ──────────────────────────────────────────────────
+    // One read-only doc (mayorGames/2027) holding the whole mayoral field
+    // for the games on the elections tab: key points with quotes, AI
+    // summaries, campaign finance, poll support, pizza. Seeded by the
+    // operator (scripts/seed-mayor-games.ts) from public sources; nothing
+    // on it is client-writable.
+    match /mayorGames/{electionId} {
       allow read: if true;
       allow write: if false;
     }
 
     // ── Election voter directory ─────────────────────────────────────────
-    // Same contract for every other upcoming race (November 2026 statewide
-    // and county, February 2027 municipal): read-only cards and race notes
-    // seeded by scripts/seed-election.ts from public sources.
+    // Read-only cards and race notes for the February 2027 municipal races
+    // (clerk, treasurer, aldermen, police district councils), seeded by
+    // scripts/seed-election.ts from public sources.
     match /electionCandidates/{cardId} {
       allow read: if true;
       allow write: if false;

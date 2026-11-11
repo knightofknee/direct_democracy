@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Application from 'expo-application';
-import { useSegments } from 'expo-router';
+import { useGlobalSearchParams, useSegments } from 'expo-router';
 import { addDoc, collection } from 'firebase/firestore';
 import { useEffect, useRef } from 'react';
 import { AppState, Platform } from 'react-native';
 
 import { db, usingEmulators } from '@/lib/firebase';
+import { MAYOR_GAMES } from '@/lib/mayor-games-data';
 import { helpKey } from '@/lib/page-help';
 
 /**
@@ -131,7 +132,12 @@ function start(): void {
  * module level, so a remount never counts a screen twice.
  */
 export function useUsageTracking(redrawKey: string): void {
-  const route = helpKey(useSegments());
+  const page = helpKey(useSegments());
+  // The five mayor games share one screen. They are counted apart
+  // ('game/blind', 'game/lines', ...) so the counts can say which games get
+  // played; the kind is one of five fixed words, never an id.
+  const { kind } = useGlobalSearchParams<{ kind?: string }>();
+  const route = page === 'game/[kind]' && MAYOR_GAMES.some((g) => g.kind === kind) ? `game/${kind}` : page;
   const drawn = useRef(redrawKey);
   useEffect(() => {
     if (drawn.current === redrawKey) return;

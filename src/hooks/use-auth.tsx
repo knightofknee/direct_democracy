@@ -87,14 +87,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authResolved, setAuthResolved] = useState(false);
   // True once the profile listener has reported for the current user - the
   // doc arrived, or it errored and we give up rather than spin forever.
-  const [profileSettled, setProfileSettled] = useState(false);
+  // The uid whose profile has settled (loaded, created, or failed). A new
+  // sign-in is unsettled until its own snapshot answers, with no reset
+  // needed in the effect.
+  const [settledFor, setSettledFor] = useState<string | null>(null);
   const creatingProfileFor = useRef<string | null>(null);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (u) => {
       setUser(u);
       setAuthResolved(true);
-      if (!u) setProfile(null);
+      if (!u) {
+        setProfile(null);
+        // Signing back in to the same account waits for its profile again.
+        setSettledFor(null);
+      }
     });
   }, []);
 
@@ -137,8 +144,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         // The link's continue URL lands on /sign-in (web) or wherever the
         // deep link opened; a signed-in user parked on the sign-in form
-        // looks like the link failed. Land on the big board instead.
-        router.replace('/');
+        // looks like the link failed. Land on the elections tab instead.
+        router.replace('/election');
       } catch (e) {
         notifyError(tr('Sign-in link failed'), e);
       }
@@ -157,19 +164,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // created on first sight - one registration path, enforced by the same
   // self-registration security rules.
   useEffect(() => {
-    setProfileSettled(false);
     if (!user) return;
+    const uid = user.uid;
+    const settle = () => setSettledFor(uid);
     const ref = doc(db, 'users', user.uid);
     return onSnapshot(
       ref,
       (snap) => {
         if (snap.exists()) {
           setProfile({ uid: snap.id, ...snap.data() } as UserProfile);
-          setProfileSettled(true);
+          settle();
         } else if (deletingAccount) {
           // The doc vanished because deletion is in flight - do NOT recreate.
           setProfile(null);
-          setProfileSettled(true);
+          settle();
         } else if (creatingProfileFor.current !== user.uid) {
           // Doc missing on first sign-in: still loading while we create it;
           // the snapshot refires once the write lands. If the write is
@@ -177,7 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           creatingProfileFor.current = user.uid;
           setDoc(ref, newProfileDoc()).catch(() => {
             creatingProfileFor.current = null;
-            setProfileSettled(true);
+            settle();
           });
         }
       },
@@ -186,12 +194,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // otherwise silently show signed-out UI to an authed user (this is
         // how the Android App Check outage surfaced). Say so instead.
         notifyError(tr('Signed in, but your account data could not be loaded'), err);
-        setProfileSettled(true);
+        settle();
       }
     );
   }, [user]);
 
-  const loading = !authResolved || (user != null && !profileSettled);
+  const loading = !authResolved || (user != null && settledFor !== user.uid);
 
   const value = useMemo<AuthContextValue>(
     () => ({

@@ -860,7 +860,7 @@ export const TL: Record<string, string> = {
   'Something went wrong on the server. Try again.': 'May nangyaring mali sa server. Subukan ulit.',
   'home': 'home',
   'wards': 'mga ward',
-  'election': 'halalan',
+  'elections': 'halalan',
   'notifications': 'abiso',
   'profile': 'profile',
   'command': 'command',
@@ -920,7 +920,7 @@ export const TL: Record<string, string> = {
   'We\'ve been busy making direct democracy better. Would you mind grabbing the update? Thank you!': 'Abala kami sa pagpapaganda ng direct democracy. Puwede mo bang kunin ang update? Salamat!',
   'Your districts': 'Ang iyong mga distrito',
   'Districts found': 'Nahanap ang mga distrito',
-  'The election tab now shows your races first.': 'Ipinapakita na ngayon ng tab ng halalan ang iyong mga halalan sa unahan.',
+  'The elections tab now shows your races first.': 'Ipinapakita na ngayon ng tab ng halalan ang iyong mga halalan sa unahan.',
   'Could not look up that address': 'Hindi mahanap ang address na iyon',
   'You can look up 5 addresses a day. Try again tomorrow.': 'Puwede kang maghanap ng 5 address sa isang araw. Subukan ulit bukas.',
   'Your districts ({ward})': 'Ang iyong mga distrito ({ward})',
@@ -945,7 +945,7 @@ export const TL: Record<string, string> = {
   'Your district': 'Ang iyong distrito',
   'Your ward’s districts': 'Mga distrito ng iyong ward',
   'If you verify: a yes/no verified flag, your ward and district numbers, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.': 'Kung mag-verify ka: isang beripikadong flag na oo/hindi, ang iyong ward at mga numero ng distrito, at isang natatanging identifier para harangan ang mga dobleng account. Wala nang iba, at binubura ito kasama ng iyong account.',
-  'If you look up your districts without verifying: the district numbers only, so the election tab can show your races first.': 'Kung hahanapin mo ang iyong mga distrito nang hindi nagve-verify: ang mga numero lang ng distrito, para maipakita ng tab ng halalan ang iyong mga halalan sa unahan.',
+  'If you look up your districts without verifying: the district numbers only, so the elections tab can show your races first.': 'Kung hahanapin mo ang iyong mga distrito nang hindi nagve-verify: ang mga numero lang ng distrito, para maipakita ng tab ng halalan ang iyong mga halalan sa unahan.',
   'If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.': 'Kung bubuksan mo ang mga notification sa phone: ang notification address ng bawat phone at ang wikang ginagamit nito sa pagpapakita ng mga ito. Tinatanggal ang phone na iyon kapag nag-sign out ka.',
   'Your address. It is used only at the moment you verify or look up your districts, to find your ward and districts, and is never saved.': 'Ang iyong address. Ginagamit lang ito sa sandaling mag-verify ka o hanapin ang iyong mga distrito, para mahanap ang iyong ward at mga distrito, at hindi kailanman sine-save.',
   'Delete your account any time from Settings: your sign-in, profile, verification status, and every vote you cast are removed, and the tallies drop your votes. Anything you posted is re-attributed to [deleted].': 'Burahin ang iyong account anumang oras mula sa Settings: tatanggalin ang iyong sign-in, profile, katayuan ng beripikasyon, at bawat botong ibinigay mo, at aalisin sa mga resulta ang iyong mga boto. Ang anumang ipinost mo ay ililipat sa [deleted].',
@@ -1014,7 +1014,6 @@ export const TL: Record<string, string> = {
   'Type a street address.': 'Mag-type ng street address.',
   'The address lookup is not answering right now. Try again in a few minutes.':
     'Hindi sumasagot ang paghahanap ng address sa ngayon. Subukan ulit pagkalipas ng ilang minuto.',
-  'Write at least 10 characters.': 'Sumulat ng hindi bababa sa 5 character.',
   'That’s longer than this box allows.': 'Mas mahaba iyan kaysa sa pinapayagan ng kahong ito.',
   'You have looked up 5 addresses today. Try again tomorrow.':
     'Nakapaghanap ka na ng 5 address ngayong araw. Subukan ulit bukas.',
@@ -1032,8 +1031,6 @@ export const TL: Record<string, string> = {
     'Huwag magpanggap bilang ibang tao, kasama na ang mga opisyal.',
   'Nothing sexual involving minors. We report it to the authorities.':
     'Walang anumang sekswal na may kinalaman sa mga menor de edad. Iniuulat namin ito sa mga awtoridad.',
-  'Reported posts are reviewed every week. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.':
-    'Sinusuri linggo-linggo ang mga iniulat na post. Tinatanggal ang mga post na lumalabag sa mga patakarang ito, at nawawalan ng account ang malulubha o paulit-ulit na kaso. Nakatago ang account na iniulat ng 5 o higit pang tao hanggang masuri ito.',
   'From {residents} · {questions}': 'Batay sa {residents} · {questions}',
   'Your ward’s site, from {date}': 'Ang lugar ng iyong ward, mula {date}',
   'Election officials there speak your language.':
@@ -1099,8 +1096,8 @@ export const TL: Record<string, string> = {
     'Inirekomendang ipasa',
   'Your ward’s site, open starting {date}':
     'Ang lugar ng iyong ward, bukas simula {date}',
-  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site.':
-    'sa downtown simula Oktubre 1 (137 S. State St. at 69 W. Washington St., ika-6 na palapag), at sa lahat ng 50 ward simula Oktubre 19; puwedeng gumamit ng anumang lugar ang sinumang botante ng Chicago.',
+  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site, and the two downtown sites stay open until 7 pm on weekdays October 26 to November 2.':
+    'sa downtown simula Oktubre 1 (137 S. State St. at 69 W. Washington St., ika-6 na palapag), at sa lahat ng 50 ward simula Oktubre 19; puwedeng gumamit ng anumang lugar ang sinumang botante ng Chicago, at bukas hanggang 7 pm ang dalawang lugar sa downtown tuwing weekday mula Oktubre 26 hanggang Nobyembre 2.',
   'November 3, 2026 ballot':
     'Balota ng Nobyembre 3, 2026',
   'February 23, 2027 ballot':
@@ -1206,7 +1203,7 @@ export const TL: Record<string, string> = {
     'Lahat ng ipinost mo, pinakabago muna: ang mga alalahaning inilahad mo at ang mga tanong mo sa mga opisyal.',
   'Fill in a "Title" of at least 3 characters, an optional "Section", and "The policy", which can be up to 20,000 characters.':
     'Punan ang "Pamagat" na hindi bababa sa 3 character, isang opsyonal na "Seksyon", at ang "Ang panukala", na puwedeng umabot ng 20,000 character.',
-  'Find your school board district with "Find my races" on the election tab. School board districts do not follow ward lines.':
+  'Find your school board district with "Find my races" on the elections tab. School board districts do not follow ward lines.':
     'Hanapin ang iyong distrito sa school board gamit ang "Hanapin ang aking mga halalan" sa tab ng halalan. Hindi sinusunod ng mga distrito ng school board ang hangganan ng ward.',
   'For multiple choice or approval, list 2 to 12 options under "Options (one per line)".':
     'Para sa maramihang pagpipilian o pag-apruba, maglista ng 2 hanggang 12 opsyon sa ilalim ng "Mga opsyon (isa bawat linya)".',
@@ -1244,8 +1241,6 @@ export const TL: Record<string, string> = {
     'Tandaan na ang account na iniulat ng 5 o higit pang magkakaibang tao ay nakatago hanggang masuri ito.',
   'Know that an address outside Chicago changes nothing. A new ward replaces your old one, and you can move once every 3 months.':
     'Tandaan na walang binabago ang address na nasa labas ng Chicago. Papalitan ng bagong ward ang dati mo, at puwede kang lumipat isang beses bawat 3 buwan.',
-  'Know that reports are reviewed every week. Posts that break the rules come down, and serious or repeated cases lose the account.':
-    'Tandaan na sinusuri linggo-linggo ang mga ulat. Tinatanggal ang mga post na lumalabag sa mga patakaran, at nawawalan ng account ang malulubha o paulit-ulit na kaso.',
   'Know that saving a policy imported from your campaign site takes it over. It becomes yours to manage here, its comments stay, and the site stops updating it.':
     'Tandaan na kapag sine-save mo ang panukalang na-import mula sa website ng iyong kampanya, ikaw na ang hahawak nito. Ikaw na ang mamamahala rito, mananatili ang mga komento nito, at hindi na ito ia-update ng site.',
   'Know that the app keeps only a verified yes or no, your ward and district numbers, and an identifier that stops one ID from verifying twice.':
@@ -1570,8 +1565,6 @@ export const TL: Record<string, string> = {
     'I-tap ang arrow at bilang sa tanong ng iba para sumali rito ("Gusto ko rin itong masagot"). I-tap ulit para umalis. Mas malaki ang timbang sa grado ng mga sagot ng mga tanong na mas maraming sumali.',
   'Tap the arrow and count to join the question ("I want this answered too"), and tap again to leave. You cannot join a question you asked.':
     'I-tap ang arrow at bilang para sumali sa tanong ("Gusto ko rin itong masagot"), at i-tap ulit para umalis. Hindi ka puwedeng sumali sa tanong na ikaw mismo ang nagtanong.',
-  'Tap the flag icon on a post or comment to report it, or to block its author so you stop seeing their content.':
-    'I-tap ang flag icon sa isang post o komento para iulat ito, o para i-block ang may-akda nito para hindi mo na makita ang kanilang content.',
   'Tap the flag icon to report the concern or block its author. Tap the share icon to send a web link that anyone can open.':
     'I-tap ang flag icon para iulat ang alalahanin o i-block ang may-akda nito. I-tap ang share icon para magpadala ng web link na mabubuksan ng sinuman.',
   'Tap the flag icon to report the policy or a comment, or to block its author. Tap the share icon to send a web link.':
@@ -1620,7 +1613,7 @@ export const TL: Record<string, string> = {
     'I-type ang iyong "Email" at "Password", pagkatapos ay i-tap ang "Pumasok". Kailangan ng bagong password ng hindi bababa sa 6 na character. I-tap ang "Ipakita" para makita ang na-type mo.',
   'Type your answer under a question and tap "Post answer". Voters see every candidate\'s answer side by side. You can revise it later with "Update answer", but it cannot be taken down.':
     'I-type ang iyong sagot sa ilalim ng isang tanong at i-tap ang "I-post ang sagot". Nakikita ng mga botante ang sagot ng bawat kandidato nang magkakatabi. Puwede mo itong baguhin mamaya gamit ang "I-update ang sagot", pero hindi ito maaaring tanggalin.',
-  'Type your home address and tap "Find my districts". If it matches, you go back to the election tab with your own races listed first.':
+  'Type your home address and tap "Find my districts". If it matches, you go back to the elections tab with your own races listed first.':
     'I-type ang address ng iyong tahanan at i-tap ang "Hanapin ang aking mga distrito". Kung tumugma ito, babalik ka sa tab ng halalan na nauuna ang iyong mga halalan.',
   'Under "Audience", choose your ward\'s residents or "Citywide (everyone)". Officials without a ward can only post citywide.':
     'Sa ilalim ng "Mga kalahok", piliin ang mga residente ng iyong ward o "Buong lungsod (lahat)". Ang mga opisyal na walang ward ay puwede lang mag-post para sa buong lungsod.',
@@ -1710,8 +1703,6 @@ export const TL: Record<string, string> = {
     'Nauuna sa listahan ang iyong mga halalan, mula sa iyong address sa {ward}.',
   'Your record: concerns {concerns}, comments {comments}, votes {votes}, judgments {judgments}.':
     'Ang iyong rekord: alalahanin {concerns}, komento {comments}, boto {votes}, paghuhusga {judgments}.',
-  'Your settings: language, phone notifications, verification and moving, privacy, deleting your account, and the community rules.':
-    'Ang iyong settings: wika, mga notification sa phone, beripikasyon at paglipat, privacy, pagbura ng iyong account, at ang mga patakaran ng komunidad.',
   'Your vote: {n}.':
     'Ang iyong boto: {n}.',
   'Your work as a candidate: "ask every candidate" questions you haven\'t answered, the latest comments on your policies, your public card, and your platform.':
@@ -1966,8 +1957,6 @@ export const TL: Record<string, string> = {
     "Hindi pa napagpasyahan",
   "Yes: {yes}. No: {no}. Not decided: {open}.":
     "Oo: {yes}. Hindi: {no}. Hindi pa napagpasyahan: {open}.",
-  "Share my picks":
-    "Ibahagi ang mga pinili ko",
   "Clear my picks":
     "Burahin ang mga pinili ko",
   "Clear my picks?":
@@ -1988,10 +1977,6 @@ export const TL: Record<string, string> = {
     "Panatilihin ang hukom na ito?",
   "My ballot":
     "Aking balota",
-  "{n} made so far. Your picks stay on this phone.":
-    "{n} sa ngayon. Nananatili sa teleponong ito ang mga pinili mo.",
-  "Pick a candidate in each race and take the list with you to vote.":
-    "Pumili ng kandidato sa bawat halalan at dalhin ang listahan sa pagboto.",
   "Not now":
     "Hindi muna",
   "Turn on":
@@ -2016,8 +2001,6 @@ export const TL: Record<string, string> = {
     "I-tap ang “Aking balota” para makita ang bawat pagpipilian sa balota mo sa Nobyembre 3 at ang mga napili mo na. Nananatili sa teleponong ito ang mga pinili mo.",
   "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
     "Sa isang halalan sa Nobyembre 3, i-tap ang “Piliin” sa isang kandidato para idagdag sila sa Aking balota, at i-tap ang “Pinili mo” para bawiin. Sa mga hukom na humihingi ng retention, i-tap ang “Oo” o “Hindi” sa ilalim ng “Panatilihin ang hukom na ito?”. Nananatili sa teleponong ito ang mga pinili mo.",
-  "Tap \"My ballot\" at the top to see all your picks.":
-    "I-tap ang “Aking balota” sa itaas para makita ang lahat ng pinili mo.",
   "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
     "I-tap ang “Piliin” sa isang kandidato para idagdag sila sa Aking balota, at i-tap ang “Pinili mo” para bawiin. Nananatili sa teleponong ito ang mga pinili mo.",
   "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
@@ -2028,8 +2011,6 @@ export const TL: Record<string, string> = {
     "I-tap ang “Oo” o “Hindi” sa advisory na tanong.",
   "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
     "I-tap ang “Hanapin ang aking mga halalan” para idagdag ang address mo, para makalista ang mga halalan mo para sa Kongreso, lehislatura ng estado, county board, at school board.",
-  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
-    "I-tap ang “Ibahagi ang mga pinili ko” para ipadala ang listahan mo bilang mensahe o i-save ito. May markang “isulat” ang mga pangalang kailangang isulat.",
   "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
     "I-tap ang “Burahin ang mga pinili ko” at kumpirmahin para alisin ang lahat ng pinili sa teleponong ito.",
   "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
@@ -2095,4 +2076,381 @@ export const TL: Record<string, string> = {
     "Tawagan ang ward office: {phone}",
   "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
     "Sa ilalim ng \"Mga pulong ng ward\", ang \"Hindi nakita ang oras sa newsletter\" ay naglilista ng mga pulong na inanunsyo ng newsletter ng ward office nang walang oras. I-tap ang \"Tawagan ang ward office\" para itanong kung kailan ang pulong.",
+  "{n} of {total} chosen":
+    "{n} sa {total} ang napili",
+  "Next: {race}":
+    "Susunod: {race}",
+  "Done":
+    "Tapos na",
+  "Next to decide: {race}":
+    "Susunod na pagpapasyahan: {race}",
+  "My cheat sheet":
+    "Aking gabay sa pagboto",
+  "Made with direct democracy":
+    "Ginawa gamit ang direct democracy",
+  "Could not make the image":
+    "Hindi magawa ang larawan",
+  "Could not make the PDF":
+    "Hindi magawa ang PDF",
+  "Save as image":
+    "I-save bilang larawan",
+  "Save as PDF":
+    "I-save bilang PDF",
+  "Share as text":
+    "Ibahagi bilang teksto",
+  "Tap \"My ballot\" at the top to see all your picks. The number on it counts the choices you have made out of all the choices on your ballot.":
+    "I-tap ang “Aking balota” sa itaas para makita ang lahat ng pinili mo. Binibilang ng numero rito ang mga napili mo na mula sa lahat ng pagpipilian sa iyong balota.",
+  "After you pick, tap \"Next\" at the bottom to go to the next race on your ballot, in ballot order, or tap \"Skip\" to go on without picking. On your last race \"Next\" says \"Done\" and takes you back to My ballot. Picking needs your districts first: tap \"Find my races\".":
+    "Pagkapili mo, i-tap ang “Susunod” sa ibaba para pumunta sa susunod na halalan sa iyong balota, ayon sa pagkakasunod sa balota, o i-tap ang “Laktawan” para magpatuloy nang hindi pumipili. Sa huling halalan, “Tapos na” ang “Susunod” at ibabalik ka nito sa Aking balota. Kailangan muna ang iyong mga distrito bago pumili: i-tap ang “Hanapin ang aking mga halalan”.",
+  "Tap \"Next to decide\" to open the first race you have not picked in. From there, \"Next\" at the bottom of each race takes you down the ballot.":
+    "I-tap ang “Susunod na pagpapasyahan” para buksan ang unang halalan na wala ka pang napili. Mula roon, dadalhin ka ng “Susunod” sa ibaba ng bawat halalan pababa sa balota.",
+  "Your picks for the November 3, 2026 ballot laid out as a cheat sheet, in about the order the ballot prints them, to read while you vote or fill in a mail ballot. It is made on this phone from the picks kept on it.":
+    "Ang mga pinili mo para sa balota ng Nobyembre 3, 2026 na nakaayos bilang gabay, halos sa pagkakasunod na nakalimbag sa balota, para basahin habang bumoboto ka o nagsasagot ng mail ballot. Ginagawa ito sa teleponong ito mula sa mga piniling nakatago rito.",
+  "Tap \"Save as image\" to save the sheet as a picture. On an iPhone, choose \"Save Image\" in the share sheet to put it in your photos.":
+    "I-tap ang “I-save bilang larawan” para i-save ang gabay bilang larawan. Sa iPhone, piliin ang “Save Image” sa share sheet para mailagay ito sa iyong photos.",
+  "Tap \"Save as PDF\" to make a PDF you can print or keep in your files.":
+    "I-tap ang “I-save bilang PDF” para gumawa ng PDF na puwede mong i-print o itago sa iyong files.",
+  "Tap \"Share as text\" to send your picks as a message.":
+    "I-tap ang “Ibahagi bilang teksto” para ipadala ang mga pinili mo bilang mensahe.",
+  "Look for \"write in\" after a name: that person's name is not printed on the ballot, so you write it in.":
+    "Hanapin ang “isulat” pagkatapos ng isang pangalan: hindi nakalimbag sa balota ang pangalan ng taong iyon, kaya isusulat mo ito.",
+  "Skip":
+    "Laktawan",
+  "Rated negatively by a bar association: {n}. They are listed first.":
+    "May negatibong rating mula sa isang bar association: {n}. Sila ang nasa unahan.",
+  "On judge races, judges rated negatively by at least one bar association are listed first, those with the most negative ratings at the top.":
+    "Sa mga halalan ng hukom, nasa unahan ang mga hukom na may negatibong rating mula sa kahit isang bar association, at nasa pinakataas ang may pinakamaraming negatibong rating.",
+  "{name} (rated negatively)":
+    "{name} (negatibong rating)",
+  "Rated negatively by a bar association":
+    "May negatibong rating mula sa isang bar association",
+  "Judges up for retention whom a bar association rated negatively come first, in red, each with your answer; every other judge is listed once below them. A negatively rated judge you picked for a vacancy is marked \"rated negatively\".":
+    "Nasa unahan, kulay pula, ang mga hukom na pagpapasyahan kung mananatili na may negatibong rating mula sa isang bar association, bawat isa kasama ang sagot mo; isang beses lang nakalista sa ibaba ang iba pang hukom. May markang “negatibong rating” ang hukom na may negatibong rating na pinili mo para sa isang bakanteng puwesto.",
+  "Under the judges up for retention, the ones a bar association rated negatively are named in red with your answer for each.":
+    "Sa ilalim ng mga hukom na pagpapasyahan kung mananatili, nakalista nang pula ang mga may negatibong rating mula sa isang bar association, kasama ang sagot mo para sa bawat isa.",
+  "Tap \"My cheat sheet\", at the top or the bottom, to see your picks laid out to vote with, and save them as an image or a PDF or share them as text.":
+    "I-tap ang “Aking gabay sa pagboto”, sa itaas o sa ibaba, para makita ang mga pinili mo na nakaayos para sa pagboto, at i-save bilang larawan o PDF, o ibahagi bilang teksto.",
+  "choices made":
+    "napili na",
+  "Complete":
+    "Kumpleto",
+  // Report dialog and Settings > Send feedback (2026-10-22).
+  'Pick at least one reason.': 'Pumili ng kahit isang dahilan.',
+  'Pick every reason that applies.': 'Piliin ang lahat ng dahilang akma.',
+  'Add a note (optional)': 'Magdagdag ng tala (opsyonal)',
+  'Sign in to send': 'Mag-sign in para ipadala',
+  'Blocking hides everything they post, for you only. They are not told.': 'Itinatago ng pag-block ang lahat ng ipino-post nila, para sa iyo lang. Hindi sila sinasabihan.',
+  'A child’s safety': 'Kaligtasan ng isang bata',
+  'A post or a person in the app': 'Isang post o isang tao sa app',
+  'Something isn’t working': 'May hindi gumagana',
+  'An idea for the app': 'Isang ideya para sa app',
+  'Answers go to {email}.': 'Ipapadala ang mga sagot sa {email}.',
+  'You are signed in.': 'Naka-sign in ka.',
+  'You are signed out. Add an email if you want an answer.': 'Hindi ka naka-sign in. Maglagay ng email kung gusto mo ng sagot.',
+  'Message sent': 'Naipadala ang mensahe',
+  'Thank you. The operators read every message.': 'Salamat. Binabasa ng mga operator ang bawat mensahe.',
+  'Could not send your message': 'Hindi maipadala ang iyong mensahe',
+  'To report a post or comment, tap the flag on it. For anything else, write to the operators here.': 'Para iulat ang isang post o komento, i-tap ang bandila nito. Para sa iba pa, sumulat sa mga operator dito.',
+  'What is this about?': 'Tungkol saan ito?',
+  'Child safety messages reach the operator right away. If a child is in danger now, call 911.': 'Agad na nakararating sa operator ang mga mensahe tungkol sa kaligtasan ng bata. Kung may batang nasa panganib ngayon, tumawag sa 911.',
+  'Your message': 'Ang iyong mensahe',
+  'What happened, and where in the app?': 'Ano ang nangyari, at saan sa app?',
+  'Your email (optional)': 'Ang iyong email (opsyonal)',
+  'Only if you want an answer': 'Kung gusto mo lang ng sagot',
+  'Send': 'Ipadala',
+  '10 character minimum': 'Hindi bababa sa 10 character',
+  'You can send up to 5 messages a day. You can send another {date}.': 'Hanggang 5 mensahe sa isang araw ang maipapadala mo. Makakapagpadala ka ulit sa {date}.',
+  'Send feedback': 'Magpadala ng feedback',
+  'Send feedback or report a problem': 'Magpadala ng feedback o mag-ulat ng problema',
+  'Pick what this is about.': 'Piliin kung tungkol saan ito.',
+  'That email address does not look right.': 'Mukhang mali ang email address na iyan.',
+  'Too many messages today. Try again tomorrow.': 'Masyadong maraming mensahe ngayong araw. Subukan ulit bukas.',
+  'Feedback you send from Settings is visible only to the platform operators, with your account or the email you give, so they can answer.': 'Ang feedback na ipinapadala mo mula sa Settings ay nakikita lang ng mga operator ng platform, kasama ang iyong account o ang email na ibinigay mo, para makasagot sila.',
+  'Reported posts are reviewed every week, and child safety reports right away. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.': 'Sinusuri bawat linggo ang mga iniulat na post, at agad ang mga ulat tungkol sa kaligtasan ng bata. Tinatanggal ang mga post na lumalabag sa mga patakarang ito, at nawawalan ng account ang mabibigat o paulit-ulit na kaso. Itinatago ang account na iniulat ng 5 o higit pang tao hanggang masuri ito.',
+  'Tap the flag icon on a post or comment, pick every reason that applies, and tap "Send report". The same window blocks its author so you stop seeing their content.': 'I-tap ang bandila sa isang post o komento, piliin ang lahat ng dahilang akma, at i-tap ang "Ipadala ang ulat". Sa parehong window, maaari mong i-block ang may-akda para hindi mo na makita ang nilalaman niya.',
+  'Know that reports are reviewed every week, and child safety reports right away. Posts that break the rules come down, and serious or repeated cases lose the account.': 'Tandaan na sinusuri bawat linggo ang mga ulat, at agad ang mga tungkol sa kaligtasan ng bata. Tinatanggal ang mga post na lumalabag sa mga patakaran, at nawawalan ng account ang mabibigat o paulit-ulit na kaso.',
+  'Your settings: language, phone notifications, feedback to the operators, verification and moving, privacy, deleting your account, and the community rules.': 'Ang iyong settings: wika, notification sa telepono, feedback sa mga operator, beripikasyon at paglipat, privacy, pag-delete ng account, at ang mga patakaran ng komunidad.',
+  'Tap "Send feedback or report a problem" to write to the operators without leaving the app, signed in or not. Child safety messages reach them right away.': 'I-tap ang "Magpadala ng feedback o mag-ulat ng problema" para sumulat sa mga operator nang hindi umaalis sa app, naka-sign in man o hindi. Agad na nakararating sa kanila ang mga mensahe tungkol sa kaligtasan ng bata.',
+  'A message to the operators from inside the app, for anything but a single post: a child safety concern, a person in the app, something that isn\'t working, or an idea.': 'Isang mensahe sa mga operator mula sa loob ng app, para sa anumang bagay maliban sa iisang post: alalahanin sa kaligtasan ng bata, isang tao sa app, isang bagay na hindi gumagana, o isang ideya.',
+  'Pick what it is about, write what happened and where, and tap "Send".': 'Piliin kung tungkol saan ito, isulat kung ano ang nangyari at saan, at i-tap ang "Ipadala".',
+  'Pick "A child’s safety" for any concern about a child. Those messages reach the operator right away. If a child is in danger now, call 911.': 'Piliin ang "Kaligtasan ng isang bata" para sa anumang alalahanin tungkol sa isang bata. Agad na nakararating sa operator ang mga mensaheng iyon. Kung may batang nasa panganib ngayon, tumawag sa 911.',
+  'To report one post or comment, tap the flag on it instead.': 'Para iulat ang iisang post o komento, i-tap na lang ang bandila nito.',
+  'Signed out, add an email if you want an answer. Signed in, the answer goes to your account\'s email.': 'Kung hindi naka-sign in, maglagay ng email kung gusto mo ng sagot. Kung naka-sign in, ipapadala ang sagot sa email ng iyong account.',
+  'Send up to 5 messages a day.': 'Magpadala ng hanggang 5 mensahe sa isang araw.',
+  "Leave blank":
+    "Iwanang blangko",
+  "Left blank":
+    "Blangko",
+  "Leave blank: {seat}":
+    "Iwanang blangko: {seat}",
+  "On a judge vacancy, tap \"Leave blank\" if you do not want to vote for that judge. Each vacancy has one candidate, so leaving it blank is the only other choice your ballot gives, and it counts as a choice made.":
+    "Sa bakanteng puwesto ng hukom, i-tap ang “Iwanang blangko” kung ayaw mong iboto ang hukom na iyon. Iisa ang kandidato sa bawat bakante, kaya ang pag-iwan dito na blangko ang tanging ibang pagpipilian sa balota mo, at bilang itong napagpasyahan na.",
+  // Mayor games (2026-11-04)
+  "6 am to 7 pm": "6 am hanggang 7 pm",
+  "Applications for a February mail ballot open November 25, 2026, online or on paper.": "Magbubukas ang mga aplikasyon para sa balota sa koreo ng Pebrero sa Nobyembre 25, 2026, online o sa papel.",
+  "April 6, 2027": "Abril 6, 2027",
+  "Be nice. They collected 12,500 signatures and they have feelings.": "Maging mabait. Nangolekta sila ng 12,500 lagda at may damdamin din sila.",
+  "Blind date": "Blind date",
+  "Candidate for mayor": "Kandidato sa pagka-mayor",
+  "Candidates in the race: {n}.": "Mga kandidato sa labanan: {n}.",
+  "Cash on hand": "Perang hawak",
+  "Cheap date": "Cheap date",
+  "Check your registration, see your sample ballot, and find your polling place.": "Tingnan ang iyong rehistro, ang iyong sample ballot, at hanapin ang iyong lugar ng botohan.",
+  "Checked {date}.": "Tiningnan noong {date}.",
+  "Compare candidates on this page. Each card shows an \"Incumbent\" chip if they hold the seat and a preview of what they are running on.": "Pagkumparahin ang mga kandidato sa pahinang ito. May chip na \"Nanunungkulan\" ang bawat card kung hawak nila ang puwesto, at isang preview ng kanilang plataporma.",
+  "Data checked {date}.": "Tiningnan ang datos noong {date}.",
+  "Election day is {date}.": "Ang araw ng halalan ay {date}.",
+  "Every alderman's seat and every police district council is on the {date} ballot with the mayor's race above.": "Ang bawat puwesto ng alderman at bawat konseho ng distrito ng pulisya ay nasa balota sa {date}, kasama ang labanan sa pagka-mayor sa itaas.",
+  "Everyone running for mayor on February 23, 2027. Four ways to meet them.": "Lahat ng tumatakbo sa pagka-mayor sa Pebrero 23, 2027. Apat na paraan para makilala sila.",
+  "Everyone who filed to run for mayor, in alphabetical order. Tap a name for everything the games know.": "Lahat ng naghain para tumakbo sa pagka-mayor, sa pagkakasunod ng alpabeto. I-tap ang isang pangalan para sa lahat ng alam ng mga laro.",
+  "Everything about {name}": "Lahat tungkol kay {name}",
+  "Everything the mayor games know about one candidate for mayor, with sources: who they are, their full platform, their campaign money as reported to the State Board of Elections, their standing in the latest public poll, what they say they would do in their own words, what they say about money, their pizza position, and the odd fact on the record.": "Lahat ng alam ng mga laro ng mayor tungkol sa isang kandidato sa pagka-mayor, may mga source: sino sila, ang kanilang buong plataporma, ang pera ng kanilang kampanya gaya ng iniulat sa State Board of Elections, ang kanilang puwesto sa pinakabagong pampublikong poll, ang sinasabi nilang gagawin nila sa sarili nilang mga salita, ang sinasabi nila tungkol sa pera, ang kanilang paninindigan sa pizza, at ang kakaibang katotohanang nakatala.",
+  "For the February 23 municipal election. Apply online or on paper; the ballot itself is mailed later.": "Para sa halalang munisipal sa Pebrero 23. Mag-apply online o sa papel; ipapadala sa koreo ang balota mismo sa ibang pagkakataon.",
+  "Fun fact: the lake is right there. Nobody has promised to fix it.": "Fun fact: nandoon lang ang lawa. Wala pang nangangakong aayusin ito.",
+  "Game not found.": "Hindi nahanap ang laro.",
+  "House rule: no Bears stadium talk on a first date.": "Patakaran ng bahay: walang usapan tungkol sa stadium ng Bears sa unang date.",
+  "If nobody wins a majority, the top two meet in a runoff on Tuesday, April 6, 2027.": "Kung walang makakuha ng mayorya, magtatagpo ang dalawang nangunguna sa runoff sa Martes, Abril 6, 2027.",
+  "If they say \"fiscal responsibility\", take a sip of water. Hydrate.": "Kung sabihin nila ang \"fiscal responsibility\", humigop ng tubig. Mag-hydrate.",
+  "If you look up your districts without verifying: the district numbers only, so the ward races can show your police district council first.": "Kung hahanapin mo ang iyong mga distrito nang hindi nagbe-verify: ang mga numero lang ng distrito, para maipakita muna ng mga halalan sa ward ang iyong konseho ng distrito ng pulisya.",
+  "In their words where we have them.": "Sa sarili nilang mga salita kung mayroon kami.",
+  "Jumps to when and where to vote": "Tumatalon sa kung kailan at saan boboto",
+  "Key points listed: {n}.": "Mga pangunahing punto na nakalista: {n}.",
+  "Mail ballot applications open": "Magbubukas ang mga aplikasyon para sa balota sa koreo",
+  "Main points": "Mga pangunahing punto",
+  "Mayor games": "Mga laro ng mayor",
+  "Mayor, city clerk and treasurer, alderman, and police district council. Polls are open 6 am to 7 pm.": "Mayor, klerk at ingat-yaman ng lungsod, alderman, at konseho ng distrito ng pulisya. Bukas ang botohan mula 6 am hanggang 7 pm.",
+  "Met {n} of {total}": "Nakilala: {n} sa {total}",
+  "Mystery candidate": "Misteryosong kandidato",
+  "Next date": "Susunod na date",
+  "Next to the others": "Kumpara sa iba",
+  "No candidates are on record yet. Petitions were filed October 19-26, 2026; the districts fill in here as the Board certifies the ballot.": "Wala pang nakatalang kandidato. Inihain ang mga petisyon noong Oktubre 19-26, 2026; mapupunan dito ang mga distrito habang sinesertipika ng Board ang balota.",
+  "No candidates in the race yet.": "Wala pang kandidato sa labanan.",
+  "No pizza position found on the record. If one of them goes public, tell us and we will rank them.": "Walang nahanap na paninindigan sa pizza sa talaan. Kung may isa sa kanilang magsalita sa publiko, sabihin sa amin at irarangko namin sila.",
+  "No poll has listed this candidate yet.": "Wala pang poll na naglista sa kandidatong ito.",
+  "No spending report found for these campaigns yet. They wait here, which is the cheapest place to stand.": "Wala pang nahanap na ulat ng paggastos para sa mga kampanyang ito. Naghihintay sila rito, ang pinakamurang lugar para tumayo.",
+  "No spending report found for this campaign yet.": "Wala pang nahanap na ulat ng paggastos para sa kampanyang ito.",
+  "Nobody has mentioned the parking meters yet. Give it time.": "Wala pang nagbabanggit ng mga parking meter. Bigyan lang ng panahon.",
+  "Not listed in the poll": "Wala sa listahan ng poll",
+  "Not listed in the poll · {spent} spent": "Wala sa listahan ng poll · {spent} ang ginastos",
+  "Off the ballot": "Wala na sa balota",
+  "On Blind date, read the points, then tap \"Reveal who it is\" to see the name and face, then \"Next date\" for another. Tap \"Skip this one\" to move on without revealing.": "Sa Blind date, basahin ang mga punto, pagkatapos i-tap ang \"Ibunyag kung sino\" para makita ang pangalan at mukha, at saka \"Susunod na date\" para sa iba. I-tap ang \"Laktawan ito\" para magpatuloy nang hindi ibinubunyag.",
+  "On Cheap date and Pizza date, tap any card for everything about that candidate.": "Sa Cheap date at Pizza date, i-tap ang anumang card para sa lahat tungkol sa kandidatong iyon.",
+  "On Speed date, tap \"Next date\" and \"Back\" to move through the field. The clock only counts; it never cuts you off.": "Sa Speed date, i-tap ang \"Susunod na date\" at \"Bumalik\" para dumaan sa lahat ng kandidato. Bumibilang lang ang orasan; hindi ka nito pinuputol kailanman.",
+  "One ballot candidate's card, put together from public sources. It shows what they say they are running on, their background, and their campaign site. These candidates do not have accounts in the app.": "Card ng isang kandidato sa balota, binuo mula sa mga pampublikong source. Ipinapakita nito ang sinasabi nilang plataporma, ang kanilang background, at ang website ng kanilang kampanya. Walang account sa app ang mga kandidatong ito.",
+  "One candidate at a time, the whole platform in a minute.": "Isang kandidato sa bawat pagkakataon, ang buong plataporma sa loob ng isang minuto.",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, with their own words where we have them, and their name and face behind \"Reveal who it is\"; candidates come in random order and this phone remembers who you have met. Speed date: one candidate at a time, in a random order, with the AI summary of their main points and how they compare to the others. Cheap date: everyone with a spending report, ordered by poll support per dollar spent, with what they say about money. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end.": "Isa sa apat na laro ng mayor. Blind date: ang mga pangunahing punto ng isang misteryosong kandidato, sa sarili nilang mga salita kung mayroon kami, at ang kanilang pangalan at mukha sa likod ng \"Ibunyag kung sino\"; random ang pagkakasunod ng mga kandidato at tinatandaan ng teleponong ito kung sino na ang nakilala mo. Speed date: isang kandidato sa bawat pagkakataon, sa random na pagkakasunod, kasama ang buod ng AI ng kanilang mga pangunahing punto at kung paano sila kumpara sa iba. Cheap date: lahat ng may ulat ng paggastos, inayos ayon sa suporta sa poll bawat dolyar na ginastos, kasama ang sinasabi nila tungkol sa pera. Pizza date: lahat ng may paninindigan sa pizza, inayos ayon sa kung sino ang tama (manipis na crust), at ang iba pa sa isang listahan sa dulo.",
+  "One race on the February 23, 2027 ballot: city clerk, city treasurer, or a police district council. It lists every candidate, with the first lines of what each says they are running on, so you can compare them here.": "Isang labanan sa balota sa Pebrero 23, 2027: klerk ng lungsod, ingat-yaman ng lungsod, o isang konseho ng distrito ng pulisya. Nakalista rito ang bawat kandidato, kasama ang mga unang linya ng sinasabi nilang plataporma, para mapagkumpara mo sila rito.",
+  "Only in races where nobody won a majority on February 23. Polls are open 6 am to 7 pm.": "Sa mga labanan lang kung saan walang nakakuha ng mayorya sa Pebrero 23. Bukas ang botohan mula 6 am hanggang 7 pm.",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line.": "Inayos ayon sa suporta sa poll bawat dolyar na ginastos. Pinakamalaki ang gastos para marating ang kinalalagyan mo, pinakahuli ka sa pila.",
+  "Petitions filed": "Inihain ang mga petisyon",
+  "Petitions were filed October 19-26, 2026, and the Board of Elections certifies the ballot by December 17. This page follows the field as it settles.": "Inihain ang mga petisyon noong Oktubre 19-26, 2026, at sesertipikahan ng Board of Elections ang balota bago mag-Disyembre 17. Sinusundan ng pahinang ito ang mga kandidato habang nagiging pinal ang listahan.",
+  "Petitions were filed October 19-26, 2026; the Board of Elections certifies the ballot by December 17": "Inihain ang mga petisyon noong Oktubre 19-26, 2026; sesertipikahan ng Board of Elections ang balota bago mag-Disyembre 17",
+  "Pizza date": "Pizza date",
+  "Poll support: {pct}%.": "Suporta sa poll: {pct}%.",
+  "Polls are open": "Bukas ang botohan",
+  "Put a question to every candidate": "Magtanong sa bawat kandidato",
+  "Raised": "Nalikom",
+  "Ranked by who is right about pizza. No questions.": "Inirangko ayon sa kung sino ang tama tungkol sa pizza. Walang tanong-tanong.",
+  "Ranked by who is right about pizza. Tavern-style thin crust is right. We do not explain ourselves.": "Inirangko ayon sa kung sino ang tama tungkol sa pizza. Ang tavern-style na manipis na crust ang tama. Hindi kami nagpapaliwanag.",
+  "Register online with an Illinois license or state ID, or in person at any early voting site and at your polling place on election day, with two forms of ID (one showing your address).": "Magparehistro online gamit ang lisensya ng Illinois o state ID, o nang personal sa anumang lugar ng maagang pagboto at sa iyong lugar ng botohan sa araw ng halalan, dala ang dalawang uri ng ID (isa na nagpapakita ng iyong address).",
+  "Reminder: the city is the one paying for dinner.": "Paalala: ang lungsod ang magbabayad ng hapunan.",
+  "Reveal who it is": "Ibunyag kung sino",
+  "Runoff election day is": "Ang araw ng runoff na halalan ay",
+  "Skip this one": "Laktawan ito",
+  "Somewhere, a ward meeting is running late. Your date left it early for you.": "Sa kung saan, may pulong sa ward na natatagalan. Maaga itong iniwan ng date mo para sa iyo.",
+  "Speed date": "Speed date",
+  "Spent": "Ginastos",
+  "Spent {spent} ({period}).": "Ginastos: {spent} ({period}).",
+  "Start over": "Magsimulang muli",
+  "Tap \"Blind date\", \"Speed date\", \"Cheap date\", or \"Pizza date\" to play. Every game links to each candidate's page, with sources.": "I-tap ang \"Blind date\", \"Speed date\", \"Cheap date\", o \"Pizza date\" para maglaro. Bawat laro ay may link sa pahina ng bawat kandidato, may mga source.",
+  "Tap \"Everything about\" a candidate for their page, or \"Full platform\" for every policy they have published.": "I-tap ang \"Lahat tungkol kay\" sa isang kandidato para sa kanilang pahina, o \"Buong plataporma\" para sa bawat polisiyang inilathala nila.",
+  "Tap \"Full platform\" to read every policy they have published. On the platform, you can comment on any policy. Candidates without a page in the app link to their own site.": "I-tap ang \"Buong plataporma\" para basahin ang bawat polisiyang inilathala nila. Sa plataporma, puwede kang magkomento sa anumang polisiya. Ang mga kandidatong walang pahina sa app ay may link sa sarili nilang website.",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the mayor games tab.": "I-tap ang \"Magtanong sa bawat kandidato\" para tanungin ang lahat ng kandidato nang sabay-sabay sa tab ng mga laro ng mayor.",
+  "Tap \"Source\" under any quote to read it where it was said.": "I-tap ang \"Source\" sa ilalim ng anumang sipi para basahin ito kung saan ito sinabi.",
+  "Tap City Clerk, City Treasurer, a ward number, or a police district number to see who is running. \"Your ward\" shows your alderman's record next to their challengers.": "I-tap ang Klerk ng Lungsod, Ingat-yaman ng Lungsod, isang numero ng ward, o isang numero ng distrito ng pulisya para makita kung sino ang tumatakbo. Ipinapakita ng \"Iyong ward\" ang rekord ng iyong alderman sa tabi ng kanilang mga kalaban.",
+  "Tap the countdown line to jump to when and where to vote.": "I-tap ang linya ng countdown para tumalon sa kung kailan at saan boboto.",
+  "Tap the share icon at the top to send this page. The link opens on the web for people without the app.": "I-tap ang icon ng pagbabahagi sa itaas para ipadala ang pahinang ito. Bumubukas ang link sa web para sa mga taong walang app.",
+  "Taxes, the budget, and what it costs to live here.": "Mga buwis, ang budget, at ang gastos sa pamumuhay dito.",
+  "The Board has not posted February early voting dates or sites yet. Any Chicago voter can use any early voting site, and same-day registration is available at all of them.": "Hindi pa inilathala ng Board ang mga petsa o lugar ng maagang pagboto para sa Pebrero. Puwedeng gumamit ng anumang lugar ng maagang pagboto ang sinumang botante ng Chicago, at may same-day na pagpaparehistro sa lahat ng mga ito.",
+  "The mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date shows a candidate's ideas before their name. Speed date walks the field one at a time with an AI summary. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the ward races, and the field A to Z.": "Ang mga laro ng mayor: apat na paraan para makilala ang lahat ng tumatakbo sa pagka-mayor ng Chicago sa Pebrero 23, 2027. Ipinapakita ng Blind date ang mga ideya ng kandidato bago ang kanilang pangalan. Dinadaanan ng Speed date ang mga kandidato isa-isa, may buod ng AI. Inirarangko sila ng Cheap date ayon sa suporta sa poll bawat dolyar na ginastos. Inirarangko sila ng Pizza date ayon sa pagiging tama tungkol sa pizza. Sa ibaba ng mga laro, sa pulang banda, ang natitirang bahagi ng balota ng Pebrero: kailan at saan boboto, ang tanong na sinasagot ng bawat kandidato, ang mga halalan sa ward, at ang mga kandidato mula A hanggang Z.",
+  "The pizza is cut in squares. The candidates are not.": "Hinihiwa nang parisukat ang pizza. Ang mga kandidato, hindi.",
+  "Their ideas first. Their name when you say so.": "Mga ideya nila muna. Ang pangalan nila kapag sinabi mo.",
+  "These names are not printed on the ballot. To vote for one, write the name in the blank write-in space for that office and fill in the oval (on a touchscreen, follow the write-in steps on screen). Votes count only for write-ins who filed a declaration; election judges at your polling place have the official list.": "Hindi nakalimbag sa balota ang mga pangalang ito. Para iboto ang isa, isulat ang pangalan sa blangkong write-in na espasyo para sa opisinang iyon at punan ang oval (sa touchscreen, sundin ang mga hakbang sa write-in na nasa screen). Bibilangin lang ang mga boto para sa mga write-in na naghain ng deklarasyon; nasa mga election judge sa iyong lugar ng botohan ang opisyal na listahan.",
+  "They all say they will fix the potholes. Ask how.": "Lahat sila nagsasabing aayusin nila ang mga lubak. Itanong kung paano.",
+  "This date: {clock}": "Ang date na ito: {clock}",
+  "Tuesday, February 23, 2027": "Martes, Pebrero 23, 2027",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first.": "I-type ang address ng iyong tahanan at i-tap ang \"Hanapin ang aking mga distrito\". Kung tumugma ito, babalik ka sa balota na nakalista muna ang iyong konseho ng distrito ng pulisya.",
+  "Under \"Campaign money\", read what the campaign raised, spent, and has on hand, and tap \"Source\" to open the State Board of Elections report.": "Sa ilalim ng \"Pera ng kampanya\", basahin kung ano ang nalikom, ginastos, at hawak ng kampanya, at i-tap ang \"Source\" para buksan ang ulat ng State Board of Elections.",
+  "Under \"Support\", tap the poll's name to open it.": "Sa ilalim ng \"Suporta\", i-tap ang pangalan ng poll para buksan ito.",
+  "Under \"The field, A to Z\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "Sa ilalim ng \"Ang mga kandidato, A hanggang Z\", i-tap ang anumang pangalan para sa lahat ng alam ng mga laro tungkol sa kanila: ang kanilang plataporma, pera ng kampanya, puwesto sa poll, mga sipi, at pizza.",
+  "Use the \"When and where to vote\" links to register, apply for a mail ballot, find early voting sites, or find your polling place. Tap \"More help voting\" for accessible voting, language help, and poll work.": "Gamitin ang mga link sa \"Kailan at saan boboto\" para magparehistro, mag-apply para sa balota sa koreo, hanapin ang mga lugar ng maagang pagboto, o hanapin ang iyong lugar ng botohan. I-tap ang \"Iba pang tulong sa pagboto\" para sa accessible na pagboto, tulong sa wika, at pagtatrabaho sa botohan.",
+  "What they would do as mayor, in their words where we have them.": "Ang gagawin nila bilang mayor, sa sarili nilang mga salita kung mayroon kami.",
+  "Which mayoral candidates you have already met in the games. That list stays on your phone only.": "Aling mga kandidato sa pagka-mayor ang nakilala mo na sa mga laro. Nananatili lang sa iyong telepono ang listahang iyon.",
+  "Who gets the most support for the least money.": "Sino ang may pinakamalaking suporta sa pinakamaliit na pera.",
+  "Withdrew": "Umatras",
+  "Your date has arrived. They brought a budget.": "Dumating na ang date mo. May dala silang budget.",
+  "Your district numbers for races that depend on your street address, not just your ward. On the February 23, 2027 ballot that is your police district council; the other numbers (US House, Illinois Senate and House, county districts, judicial subcircuit, school board) are kept for the next election that uses them.": "Ang iyong mga numero ng distrito para sa mga labanang nakadepende sa address ng iyong kalye, hindi lang sa iyong ward. Sa balota sa Pebrero 23, 2027, iyon ay ang iyong konseho ng distrito ng pulisya; ang ibang mga numero (US House, Senado at House ng Illinois, mga distrito ng county, judicial subcircuit, school board) ay iniingatan para sa susunod na halalang gagamit sa mga ito.",
+  "Your police district council race depends on your address, not just your ward. We send it to the US Census Bureau to place it on the map and keep only your district numbers, never the address.": "Nakadepende ang labanan sa iyong konseho ng distrito ng pulisya sa iyong address, hindi lang sa iyong ward. Ipinapadala namin ito sa US Census Bureau para ilagay sa mapa, at ang iyong mga numero ng distrito lang ang iniingatan namin, hindi kailanman ang address.",
+  "also on the record": "nakatala rin",
+  "campaign money": "pera ng kampanya",
+  "candidates who don't care about pizza": "mga kandidatong walang pakialam sa pizza",
+  "games": "laro",
+  "not found": "hindi nahanap",
+  "on": "sa",
+  "on money": "tungkol sa pera",
+  "pizza": "pizza",
+  "spending not on record": "walang nakatalang paggastos",
+  "support": "suporta",
+  "the ai summary": "ang buod ng ai",
+  "the field, a to z": "ang mga kandidato, a hanggang z",
+  "the mayor games": "ang mga laro ng mayor",
+  "waldgrave.com/directdemocracy": "waldgrave.com/directdemocracy",
+  "what they would do": "ang gagawin nila",
+  "when and where to vote": "kailan at saan boboto",
+  "{n} of {total}": "{n} sa {total}",
+  "{n} people want to be mayor on February 23, 2027. Four ways to meet them.": "{n} katao ang gustong maging mayor sa Pebrero 23, 2027. Apat na paraan para makilala sila.",
+  "{n} points of support per $1 million spent": "{n} puntos ng suporta bawat $1 milyon na ginastos",
+  "{pct}% support · {spent} spent": "{pct}% suporta · {spent} ang ginastos",
+  // Mayor games, round two (2026-11-09)
+  "A \"?\" on every screen says what you can do there.": "May \"?\" sa bawat screen na nagsasabi kung ano ang magagawa mo roon.",
+  "After the reveal, tap \"Next date\" or swipe left for another. Tap the heart to change your mind about a second date.": "Pagkatapos ng pagbubunyag, i-tap ang \"Susunod na date\" o mag-swipe pakaliwa para sa iba. I-tap ang puso para baguhin ang isip mo tungkol sa pangalawang date.",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, four ways.": "Pipili ang Chicago ng mayor sa Pebrero 23, 2027. Kilalanin ang lahat ng tumatakbo, sa apat na paraan.",
+  "Chicago's top concerns, ranked by the people.": "Ang mga pangunahing alalahanin ng Chicago, niraranggo ng mga tao.",
+  "Compare them on a speed date": "Pagkumparahin sila sa isang speed date",
+  "Date {n} of {total}": "Date {n} sa {total}",
+  "Find my police district": "Hanapin ang aking distrito ng pulisya",
+  "Finish": "Tapusin",
+  "Four more races share the {date} ballot with the mayor's: two citywide, one by your ward, and one by your address.": "May apat pang labanan sa balota sa {date} kasama ng sa mayor: dalawa sa buong lungsod, isa ayon sa iyong ward, at isa ayon sa iyong address.",
+  "Full platform": "Buong plataporma",
+  "Full platform on their site": "Buong plataporma sa kanilang website",
+  "Full platform, open to your comments": "Buong plataporma, bukas sa iyong mga komento",
+  "Go again": "Maglaro ulit",
+  "Go on a blind date": "Makipag-blind date",
+  "In a random order, so no one is always listed first. Tap a name for everything the games know.": "Sa random na pagkakasunod, para walang laging nauuna sa listahan. I-tap ang isang pangalan para sa lahat ng alam ng mga laro.",
+  "Judge the ideas first. Find out who it was after.": "Husgahan muna ang mga ideya. Saka mo alamin kung sino iyon.",
+  "Just reveal": "Ibunyag na lang",
+  "Less help voting": "Mas kaunting tulong sa pagboto",
+  "Look around first": "Tumingin-tingin muna",
+  "Look up a different address": "Maghanap ng ibang address",
+  "No ketchup was involved in the making of this date.": "Walang ketchup na ginamit sa paggawa ng date na ito.",
+  "No pizza position found on the record, listed in random order. If one of them goes public, tell us and we will rank them.": "Walang nahanap na paninindigan sa pizza sa talaan, nakalista sa random na pagkakasunod. Kung may isa sa kanilang magsalita sa publiko, sabihin sa amin at irarangko namin sila.",
+  "No second dates this round. Tough crowd.": "Walang pangalawang date sa round na ito. Ang hirap mong pasayahin.",
+  "On Blind date, read the card, then tap \"Second date\" or \"Pass\", or swipe the card right or left. Either one reveals who it was. Tap \"Just reveal\" to see the name without a verdict.": "Sa Blind date, basahin ang card, pagkatapos i-tap ang \"Pangalawang date\" o \"Pass\", o i-swipe ang card pakanan o pakaliwa. Alinman doon ay magbubunyag kung sino iyon. I-tap ang \"Ibunyag na lang\" para makita ang pangalan nang walang hatol.",
+  "On Cheap date, tap a row to open what that candidate says about money. The bar shows their support per dollar next to the best in the field.": "Sa Cheap date, i-tap ang isang hilera para buksan ang sinasabi ng kandidatong iyon tungkol sa pera. Ipinapakita ng bar ang kanilang suporta bawat dolyar katabi ng pinakamataas sa lahat ng kandidato.",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What they would do\" or \"Next to the others\" to turn the card. The clock runs down from a minute and never cuts you off.": "Sa Speed date, i-tap ang \"Susunod na date\" at \"Bumalik\", o mag-swipe, para dumaan sa lahat ng kandidato. I-tap ang \"Ang gagawin nila\" o \"Kumpara sa iba\" para baligtarin ang card. Bumibilang pababa ang orasan mula isang minuto at hindi ka nito pinuputol kailanman.",
+  "On their ideas alone, you would see these again:": "Batay sa mga ideya lang nila, ito ang mga gusto mong makitang muli:",
+  "One minute each. The whole field in a coffee break.": "Tig-iisang minuto. Lahat ng kandidato sa loob ng isang coffee break.",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Candidates come in random order, and this phone remembers who you have met and who got a second date. Speed date: one candidate at a time, in a random order, a minute each, with what they would do on one side of the card and how they compare to the others on the other. Cheap date: everyone with a spending report, ordered by poll support per dollar spent. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "Isa sa apat na laro ng mayor. Blind date: ang mga pangunahing punto ng isang misteryosong kandidato, sa sarili nilang mga salita kung mayroon kami. Sasabihin mo kung gusto mo silang makitang muli, at doon bumabaligtad ang larawan para ipakita kung sino iyon. Random ang pagkakasunod ng mga kandidato, at tinatandaan ng teleponong ito kung sino na ang nakilala mo at kung sino ang nakakuha ng pangalawang date. Speed date: isang kandidato sa bawat pagkakataon, sa random na pagkakasunod, tig-iisang minuto, na nasa isang panig ng card ang gagawin nila at nasa kabilang panig kung paano sila kumpara sa iba. Cheap date: lahat ng may ulat ng paggastos, inayos ayon sa suporta sa poll bawat dolyar na ginastos. Pizza date: lahat ng may paninindigan sa pizza, inayos ayon sa kung sino ang tama (manipis na crust), at ang iba pa sa isang listahan sa dulo, sa random na pagkakasunod.",
+  "Or see it on your sample ballot (Board of Elections)": "O tingnan ito sa iyong sample ballot (Board of Elections)",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line. Tap anyone for what they say about money.": "Inayos ayon sa suporta sa poll bawat dolyar na ginastos. Pinakamalaki ang gastos para marating ang kinalalagyan mo, pinakahuli ka sa pila. I-tap ang sinuman para sa sinasabi nila tungkol sa pera.",
+  "Pass": "Pass",
+  "Picked on a blind date, on their ideas alone. Kept on this phone only.": "Pinili sa isang blind date, batay sa mga ideya lang nila. Sa teleponong ito lang iniingatan.",
+  "Play": "Maglaro",
+  "Second date": "Pangalawang date",
+  "Tap \"Everything about\" a candidate for their page, with their full platform.": "I-tap ang \"Lahat tungkol kay\" sa isang kandidato para sa kanilang pahina, kasama ang kanilang buong plataporma.",
+  "Tap \"Play\" on Blind date, or tap Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "I-tap ang \"Maglaro\" sa Blind date, o i-tap ang Speed date, Cheap date, o Pizza date. Bawat laro ay may link sa pahina ng bawat kandidato, may mga source.",
+  "That was everyone.": "Iyon na ang lahat.",
+  "The address goes to the US Census Bureau to place it on the map. Only the district numbers are kept, never the address.": "Ipinapadala ang address sa US Census Bureau para ilagay ito sa mapa. Ang mga numero lang ng distrito ang iniingatan, hindi kailanman ang address.",
+  "The elections tab, led by the mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Speed date gives each candidate a minute. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "Ang tab ng halalan, na pinangungunahan ng mga laro ng mayor: apat na paraan para makilala ang lahat ng tumatakbo sa pagka-mayor ng Chicago sa Pebrero 23, 2027. Ang Blind date, ang malaking card, ay nagpapakita ng mga ideya ng isang kandidato at nagtatanong kung gusto mo silang makitang muli bago nito sabihin kung sino iyon. Binibigyan ng Speed date ang bawat kandidato ng isang minuto. Inirarangko sila ng Cheap date ayon sa suporta sa poll bawat dolyar na ginastos. Inirarangko sila ng Pizza date ayon sa pagiging tama tungkol sa pizza. Sa ibaba ng mga laro, sa pulang banda, ang natitirang bahagi ng balota ng Pebrero: kailan at saan boboto, ang tanong na sinasagot ng bawat kandidato, ang iba pang labanan, at ang lahat ng tumatakbo sa pagka-mayor sa random na pagkakasunod, para walang laging nauuna sa listahan.",
+  "The marks across the top count the round: red for a second date, gray for the rest you have met, blue for the one on screen. When you have met everyone, you see your second dates and can go again.": "Binibilang ng mga marka sa itaas ang round: pula para sa pangalawang date, abo para sa iba pang nakilala mo na, asul para sa nasa screen. Kapag nakilala mo na ang lahat, makikita mo ang iyong mga pangalawang date at puwede kang maglaro ulit.",
+  "They ordered for the table. It was a plan with five bullet points.": "Sila na ang nag-order para sa buong mesa. Isang plano pala iyon na may limang bullet point.",
+  "This one asked for a table away from the dibs chairs.": "Humiling ang isang ito ng mesang malayo sa mga upuang pang-dibs.",
+  "Three elected seats in each of the 22 police districts. Police districts do not follow ward lines, so yours goes by your address.": "Tatlong halal na puwesto sa bawat isa sa 22 distrito ng pulisya. Hindi sinusunod ng mga distrito ng pulisya ang hangganan ng ward, kaya nakabatay ang sa iyo sa iyong address.",
+  "Time. The next one is waiting.": "Tapos na ang oras. Naghihintay na ang susunod.",
+  "To find your police district, type your home address and tap \"Find my police district\". It works signed in or out, and only the district numbers are kept, never the address. Or tap \"Or see it on your sample ballot (Board of Elections)\".": "Para mahanap ang iyong distrito ng pulisya, i-type ang address ng iyong tahanan at i-tap ang \"Hanapin ang aking distrito ng pulisya\". Gumagana ito naka-sign in ka man o hindi, at ang mga numero lang ng distrito ang iniingatan, hindi kailanman ang address. O i-tap ang \"O tingnan ito sa iyong sample ballot (Board of Elections)\".",
+  "Too many address lookups today. Sign in to look up yours, or try again tomorrow.": "Masyadong maraming paghahanap ng address ngayong araw. Mag-sign in para hanapin ang sa iyo, o subukan ulit bukas.",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first. The police district card on the elections tab does the same lookup in place.": "I-type ang address ng iyong tahanan at i-tap ang \"Hanapin ang aking mga distrito\". Kung tumugma ito, babalik ka sa balota na nakalista muna ang iyong konseho ng distrito ng pulisya. Ginagawa rin ng card ng distrito ng pulisya sa tab ng halalan ang parehong paghahanap, doon mismo.",
+  "Under \"Everyone running for mayor\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "Sa ilalim ng \"Lahat ng tumatakbo sa pagka-mayor\", i-tap ang anumang pangalan para sa lahat ng alam ng mga laro tungkol sa kanila: ang kanilang plataporma, pera ng kampanya, puwesto sa poll, mga sipi, at pizza.",
+  "Under \"The rest of the ballot\", tap City Clerk or City Treasurer, pick your ward to see your alderman's record next to their challengers, or find your police district council.": "Sa ilalim ng \"Ang natitirang bahagi ng balota\", i-tap ang Klerk ng Lungsod o Ingat-yaman ng Lungsod, piliin ang iyong ward para makita ang rekord ng iyong alderman sa tabi ng kanilang mga kalaban, o hanapin ang iyong konseho ng distrito ng pulisya.",
+  "Under \"Your second dates\", tap a name to open the page of a candidate you said you would see again on a blind date. That list is kept on this phone only.": "Sa ilalim ng \"Ang iyong mga pangalawang date\", i-tap ang isang pangalan para buksan ang pahina ng kandidatong sinabi mong gusto mong makitang muli sa isang blind date. Sa teleponong ito lang iniingatan ang listahang iyon.",
+  "Which mayoral candidates you met on a blind date and which you said you would see again. Both lists stay on your phone only.": "Aling mga kandidato sa pagka-mayor ang nakilala mo sa isang blind date at alin ang sinabi mong gusto mong makitang muli. Nananatili lang sa iyong telepono ang dalawang listahan.",
+  "Would you see them again?": "Gusto mo ba silang makitang muli?",
+  "You met the whole field.": "Nakilala mo na ang lahat ng kandidato.",
+  "Your date took the Blue Line here. They have thoughts.": "Sumakay ng Blue Line ang date mo papunta rito. Marami silang gustong sabihin tungkol doon.",
+  "Your ward: your alderman's grade, meetings, and zoning.": "Ang iyong ward: ang grado ng iyong alderman, mga pulong, at zoning.",
+  "also in the app": "nasa app din",
+  "citywide": "buong lungsod",
+  "day until the runoff": "araw bago ang runoff",
+  "days until the runoff": "araw bago ang runoff",
+  "everyone running for mayor": "lahat ng tumatakbo sa pagka-mayor",
+  "the rest of the ballot": "ang natitirang bahagi ng balota",
+  "your police district council": "ang iyong konseho ng distrito ng pulisya",
+  "your second dates": "ang iyong mga pangalawang date",
+  "{n} dates. Now find out whose ideas you like when you cannot see the name.": "{n} date. Ngayon, alamin kung kaninong mga ideya ang gusto mo kapag hindi mo nakikita ang pangalan.",
+  "You passed": "Nag-pass ka",
+  "What they would do": "Ang gagawin nila",
+  // Mayor games, round three (2026-11-09)
+  "A perfect round. You know the field.": "Perpektong round. Kilala mo ang mga kandidato.",
+  "At the end of a round of Pick-up lines, tap anyone who got past you to open their page, or tap \"Play again\".": "Sa dulo ng isang round ng Pick-up lines, i-tap ang sinumang nakalusot sa iyo para buksan ang kanilang pahina, o i-tap ang \"Maglaro ulit\".",
+  "Best streak on this phone: {n}.": "Pinakamahabang sunod-sunod na tama sa teleponong ito: {n}.",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, one game at a time.": "Pipili ang Chicago ng mayor sa Pebrero 23, 2027. Kilalanin ang lahat ng tumatakbo, isang laro sa bawat pagkakataon.",
+  "Everyone running for mayor on February 23, 2027. Meet them one game at a time.": "Lahat ng tumatakbo sa pagka-mayor sa Pebrero 23, 2027. Kilalanin sila, isang laro sa bawat pagkakataon.",
+  "Line {n} of {total}": "Linya {n} sa {total}",
+  "Next line": "Susunod na linya",
+  "No quotes on file yet.": "Wala pang nakatalang sipi.",
+  "No. {name} said it.": "Hindi. Si {name} ang nagsabi nito.",
+  "On Cheap date, tap \"Best bargain\", \"Most spent\", or \"Most support\" to reorder the line. Each row shows what the campaign spent, its support in the poll, and what it spent per point of support.": "Sa Cheap date, i-tap ang \"Pinakasulit\", \"Pinakamalaking gastos\", o \"Pinakamalaking suporta\" para baguhin ang pagkakasunod ng pila. Ipinapakita ng bawat hilera ang ginastos ng kampanya, ang suporta nito sa poll, at ang ginastos nito sa bawat punto ng suporta.",
+  "On Pick-up lines, read the quote and tap the candidate you think said it. You see at once who did, where they said it, and what it was about. Tap \"Next line\" or swipe left to go on. The flame counts your streak, and the best one is kept on this phone.": "Sa Pick-up lines, basahin ang sipi at i-tap ang kandidatong sa tingin mo ay nagsabi nito. Makikita mo agad kung sino ang nagsabi, kung saan nila ito sinabi, at kung tungkol saan ito. I-tap ang \"Susunod na linya\" o mag-swipe pakaliwa para magpatuloy. Binibilang ng apoy ang sunod-sunod mong tama, at iniingatan sa teleponong ito ang pinakamahaba.",
+  "One of the five mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Pick-up lines: a real quote and three candidates, and you tap who said it, ten lines a round, every candidate the answer once before anyone is the answer twice. Speed date: one candidate at a time, in a random order, a minute each. Cheap date: what the field has spent in all, then each campaign's spending, its support in the poll, and its cost per point of support. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "Isa sa limang laro ng mayor. Blind date: ang mga pangunahing punto ng isang misteryosong kandidato, sa sarili nilang mga salita kung mayroon kami. Sasabihin mo kung gusto mo silang makitang muli, at doon bumabaligtad ang larawan para ipakita kung sino iyon. Pick-up lines: isang totoong sipi at tatlong kandidato, at ita-tap mo kung sino ang nagsabi nito, sampung linya sa bawat round, at nagiging sagot nang isang beses ang bawat kandidato bago maging sagot nang dalawang beses ang sinuman. Speed date: isang kandidato sa bawat pagkakataon, sa random na pagkakasunod, tig-iisang minuto. Cheap date: ang kabuuang ginastos ng lahat ng kandidato, pagkatapos ang paggastos ng bawat kampanya, ang suporta nito sa poll, at ang gastos nito sa bawat punto ng suporta. Pizza date: lahat ng may paninindigan sa pizza, inayos ayon sa kung sino ang tama (manipis na crust), at ang iba pa sa isang listahan sa dulo, sa random na pagkakasunod.",
+  "One quote, three faces. Who said it?": "Isang sipi, tatlong mukha. Sino ang nagsabi nito?",
+  "Per point": "Bawat punto",
+  "Pick-up lines": "Pick-up lines",
+  "Play again": "Maglaro ulit",
+  "Poll support": "Suporta sa poll",
+  "Right. {name} said it.": "Tama. Si {name} ang nagsabi nito.",
+  "See my score": "Tingnan ang score ko",
+  "Streak: {n}": "Sunod-sunod na tama: {n}",
+  "Tap \"Play\" on Blind date, or tap Pick-up lines, Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "I-tap ang \"Maglaro\" sa Blind date, o i-tap ang Pick-up lines, Speed date, Cheap date, o Pizza date. Bawat laro ay may link sa pahina ng bawat kandidato, may mga source.",
+  "Tap a row on Cheap date to see what the campaign raised, spent, and has on hand, the State Board of Elections report it comes from, and what the candidate says about money.": "I-tap ang isang hilera sa Cheap date para makita kung ano ang nalikom, ginastos, at hawak ng kampanya, ang ulat ng State Board of Elections na pinagmulan nito, at ang sinasabi ng kandidato tungkol sa pera.",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "Ang tab ng halalan, na pinangungunahan ng mga laro ng mayor: limang paraan para makilala ang lahat ng tumatakbo sa pagka-mayor ng Chicago sa Pebrero 23, 2027. Ang Blind date, ang malaking card, ay nagpapakita ng mga ideya ng isang kandidato at nagtatanong kung gusto mo silang makitang muli bago nito sabihin kung sino iyon. Nagpapakita ang Pick-up lines ng isang totoong sipi at tatlong mukha, at ikaw ang magsasabi kung sino ang nagsabi nito. Binibigyan ng Speed date ang bawat kandidato ng isang minuto. Sinusundan ng Cheap date ang pera: ang ginastos ng bawat kampanya at ang suportang nabili nito. Inirarangko sila ng Pizza date ayon sa pagiging tama tungkol sa pizza. Sa ibaba ng mga laro, sa pulang banda, ang natitirang bahagi ng balota ng Pebrero: kailan at saan boboto, ang tanong na sinasagot ng bawat kandidato, ang iba pang labanan, at ang lahat ng tumatakbo sa pagka-mayor sa random na pagkakasunod, para walang laging nauuna sa listahan.",
+  "These ones got past you. Tap one to get to know them.": "Nakalusot sa iyo ang mga ito. I-tap ang isa para makilala sila.",
+  "Who used this line?": "Sino ang gumamit ng linyang ito?",
+  "You got {n} of {total}.": "Nakuha mo ang {n} sa {total}.",
+  "no points": "walang puntos",
+  "not polled": "hindi kasama sa poll",
+  "spent by the field so far": "ang ginastos ng lahat ng kandidato sa ngayon",
+  "{n} campaigns have filed a spending report.": "{n} kampanya ang naghain ng ulat ng paggastos.",
+  "{n} people want to be mayor on February 23, 2027. Meet them one game at a time.": "{n} katao ang gustong maging mayor sa Pebrero 23, 2027. Kilalanin sila, isang laro sa bawat pagkakataon.",
+  "{pct}% in the poll": "{pct}% sa poll",
+  "Best bargain": "Pinakasulit",
+  "Most spent": "Pinakamalaking gastos",
+  "Most support": "Pinakamalaking suporta",
+  "Ordered by money spent so far, most first.": "Inayos ayon sa perang ginastos sa ngayon, pinakamalaki muna.",
+  "Ordered by support in the poll, most first.": "Inayos ayon sa suporta sa poll, pinakamalaki muna.",
+  // Mayor games, round four (2026-11-09)
+  "Also:": "Gayundin:",
+  "Has taken a side on {n} of the {total} questions that split the field.": "May panig na sa {n} sa {total} tanong na naghahati sa mga kandidato.",
+  "No side found yet on any of the questions that divide the field.": "Wala pang nahanap na panig sa alinman sa mga tanong na naghahati sa mga kandidato.",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What sets them apart\" or \"Where they split\" to turn the card. The clock runs down from a minute and never cuts you off.": "Sa Speed date, i-tap ang \"Susunod na date\" at \"Bumalik\", o mag-swipe, para dumaan sa lahat ng kandidato. I-tap ang \"Ang ikinaiiba nila\" o \"Saan sila nagkakahati\" para baligtarin ang card. Bumibilang pababa ang orasan mula isang minuto at hindi ka nito pinuputol kailanman.",
+  "One candidate for mayor, most important first. Under the name are three numbers: support in the latest public poll, money spent, and dollars spent per point of support. Then what sets this candidate apart from the others, then their side of each question the field splits on, then their own words with sources. What nearly every candidate says is left out on purpose. Campaign money in full, pizza, and sources follow.": "Isang kandidato sa pagka-mayor, pinakamahalaga muna. Sa ilalim ng pangalan ay tatlong numero: suporta sa pinakabagong pampublikong poll, perang ginastos, at dolyar na ginastos sa bawat punto ng suporta. Kasunod ang ikinaiiba ng kandidatong ito sa iba, pagkatapos ang kanilang panig sa bawat tanong na naghahati sa mga kandidato, pagkatapos ang sarili nilang mga salita na may mga source. Sinadyang hindi isama ang sinasabi ng halos lahat ng kandidato. Kasunod ang buong pera ng kampanya, pizza, at mga source.",
+  "Read \"What sets them apart\" for what this candidate proposes that others do not.": "Basahin ang \"Ang ikinaiiba nila\" para sa mga iminumungkahi ng kandidatong ito na hindi iminumungkahi ng iba.",
+  "Said once here, so no candidate's page repeats it.": "Isang beses lang sinabi rito, para hindi na ito ulitin sa pahina ng sinumang kandidato.",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the elections tab.": "I-tap ang \"Magtanong sa bawat kandidato\" para tanungin ang lahat ng kandidato nang sabay-sabay sa tab ng halalan.",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first. Between the games and the ballot, \"Where they split\" lists the questions the candidates give different answers to.": "Ang tab ng halalan, na pinangungunahan ng mga laro ng mayor: limang paraan para makilala ang lahat ng tumatakbo sa pagka-mayor ng Chicago sa Pebrero 23, 2027. Ang Blind date, ang malaking card, ay nagpapakita ng mga ideya ng isang kandidato at nagtatanong kung gusto mo silang makitang muli bago nito sabihin kung sino iyon. Nagpapakita ang Pick-up lines ng isang totoong sipi at tatlong mukha, at ikaw ang magsasabi kung sino ang nagsabi nito. Binibigyan ng Speed date ang bawat kandidato ng isang minuto. Sinusundan ng Cheap date ang pera: ang ginastos ng bawat kampanya at ang suportang nabili nito. Inirarangko sila ng Pizza date ayon sa pagiging tama tungkol sa pizza. Sa ibaba ng mga laro, sa pulang banda, ang natitirang bahagi ng balota ng Pebrero: kailan at saan boboto, ang tanong na sinasagot ng bawat kandidato, ang iba pang labanan, at ang lahat ng tumatakbo sa pagka-mayor sa random na pagkakasunod, para walang laging nauuna sa listahan. Sa pagitan ng mga laro at ng balota, inililista ng \"Saan sila nagkakahati\" ang mga tanong na magkakaiba ang sagot ng mga kandidato.",
+  "The questions that divide the field, and this candidate's side.": "Ang mga tanong na naghahati sa mga kandidato, at ang panig ng kandidatong ito.",
+  "The questions that divide the field, and who stands where. Tap a name for their page.": "Ang mga tanong na naghahati sa mga kandidato, at kung sino ang nasa aling panig. I-tap ang isang pangalan para sa kanilang pahina.",
+  "Under \"Where they split\", read the questions that divide the field and who stands on each side. Tap a name for their page. Tap \"What nearly all of them say\" for the positions that do not tell them apart.": "Sa ilalim ng \"Saan sila nagkakahati\", basahin ang mga tanong na naghahati sa mga kandidato at kung sino ang nasa bawat panig. I-tap ang isang pangalan para sa kanilang pahina. I-tap ang \"Ang sinasabi ng halos lahat sa kanila\" para sa mga paninindigang hindi nagpapakita ng pagkakaiba nila.",
+  "Under \"Where they split\", see this candidate's side of each question and who is on the other sides. Tap a name to open that candidate.": "Sa ilalim ng \"Saan sila nagkakahati\", tingnan ang panig ng kandidatong ito sa bawat tanong at kung sino ang nasa ibang mga panig. I-tap ang isang pangalan para buksan ang kandidatong iyon.",
+  "What nearly all of them say": "Ang sinasabi ng halos lahat sa kanila",
+  "What sets them apart": "Ang ikinaiiba nila",
+  "Where they split": "Saan sila nagkakahati",
+  "Written by AI from the campaign's platform and the candidate's own words, under one set of rules for every candidate. What nearly all of them say is left out.": "Isinulat ng AI mula sa plataporma ng kampanya at sa sariling mga salita ng kandidato, sa ilalim ng iisang hanay ng mga patakaran para sa bawat kandidato. Hindi isinama ang sinasabi ng halos lahat sa kanila.",
+  "Written by AI on {date} from the policies listed below and the candidate's public statements, under one set of rules for every candidate. What nearly all candidates say is left out. It can miss things. The policies are the source.": "Isinulat ng AI noong {date} mula sa mga panukalang nakalista sa ibaba at sa mga pampublikong pahayag ng kandidato, sa ilalim ng iisang hanay ng mga patakaran para sa bawat kandidato. Hindi isinama ang sinasabi ng halos lahat ng kandidato. Maaari itong may makaligtaan. Ang mga panukala ang pinagmulan.",
+  "in their words": "sa sarili nilang mga salita",
+  "what sets them apart": "ang ikinaiiba nila",
+  "where they split": "saan sila nagkakahati",
+
+  // Mayor games, round five (2026-11-09)
+  "former mayor trivia": "trivia tungkol sa mga dating mayor",
+  "Another fact": "Ibang trivia",
+  "only one of them would": "iisa lang sa kanila ang gagawa nito",
+  "Proposals no other candidate makes.": "Mga panukalang walang ibang kandidatong nag-aalok.",
+  "Under \"Former mayor trivia\", read a fact about a past mayor and tap the shuffle button for another. A fact does not come back until you have seen them all. Tap the small arrow under the shuffle button to go back to the fact before.": "Sa ilalim ng \"Trivia tungkol sa mga dating mayor\", magbasa ng isang trivia tungkol sa dating mayor at i-tap ang shuffle button para sa iba. Hindi babalik ang isang trivia hangga't hindi mo pa nakikita ang lahat. I-tap ang maliit na arrow sa ilalim ng shuffle button para bumalik sa nakaraang trivia.",
+  "Under \"Only one of them would\", read what a single candidate proposes that no one else does. Tap a name for their page.": "Sa ilalim ng \"Iisa lang sa kanila ang gagawa nito\", basahin ang panukala ng iisang kandidato na wala sa iba. I-tap ang pangalan para sa kanilang page.",
+  "Previous fact": "Nakaraang trivia",
+  "Source shown with the reveal": "Ipapakita ang pinagmulan kasabay ng pagbubunyag",
+  "Correct": "Tama",
+  "Hedging": "Pasikot-sikot",
+  "Incorrect": "Mali",
+  "No position on record": "Walang nakatalang posisyon",
 };

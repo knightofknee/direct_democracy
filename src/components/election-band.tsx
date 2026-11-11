@@ -7,36 +7,29 @@ import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/lib/i18n';
 
-export type Ballot = 'november' | 'february';
-
 /**
- * One ballot's stretch of the election tab (2026-09-30): a full-width band
- * in that ballot's color, headed by its date, so the November 3 races never
- * blend into the February 23 ones. The jump grid's cells carry the same
- * colors.
+ * The February 23, 2027 ballot's stretch of the mayor games tab
+ * (2026-09-30, one ballot since 2026-11-04): a full-width band in the
+ * ballot's color, headed by its date, so the races read as one ballot
+ * under the games.
  */
 export function ElectionBand({
-  ballot,
   ref,
   children,
 }: {
-  ballot: Ballot;
   /** For jumping to the band. */
   ref?: React.Ref<View>;
   children: React.ReactNode;
 }) {
   const theme = useTheme();
   const t = useT();
-  const november = ballot === 'november';
-  const ink = november ? theme.primary : theme.accent;
+  const ink = theme.accent;
   return (
-    <View
-      ref={ref}
-      style={[styles.band, { backgroundColor: november ? theme.novemberBand : theme.februaryBand }]}>
+    <View ref={ref} style={[styles.band, { backgroundColor: theme.februaryBand }]}>
       <View style={styles.label}>
         <Ionicons name="calendar" size={14} color={ink} />
         <ThemedText type="smallBold" accessibilityRole="header" style={[styles.labelText, { color: ink }]}>
-          {t(november ? 'November 3, 2026 ballot' : 'February 23, 2027 ballot')}
+          {t('February 23, 2027 ballot')}
         </ThemedText>
       </View>
       {children}

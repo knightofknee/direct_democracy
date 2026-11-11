@@ -1,22 +1,32 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Button, Field } from '@/components/ui';
+import { Button, ChoiceRow, Field } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
+import { useKeyboardOverlap, useRevealFocusedField } from '@/hooks/use-keyboard-overlap';
 import { useTheme } from '@/hooks/use-theme';
 import { useT } from '@/lib/i18n';
 import { notify, notifyError } from '@/lib/notify';
-import { blockUser, REPORT_REASONS, reportContent } from '@/services/moderation';
+import {
+  blockUser,
+  REPORT_REASONS,
+  reportContent,
+  type ReportContentType,
+  type ReportReason,
+} from '@/services/moderation';
 
 /**
  * The moderation affordance on user-generated content: a small flag that
- * expands into report reasons and (for others' content) a block action.
- * Blocking hides the author's content on this account; reporting files a
- * write-only report for the operator.
+ * opens the report dialog (2026-10-22, Brian: a report is the only thing
+ * the person is doing, so it gets a modal, not a row of chips that sent on
+ * the first tap). Pick every reason that applies, add a note, then Send.
+ * Blocking the author lives in the same dialog. Reporting files a
+ * write-only report for the operator; blocking hides the author's content
+ * on this account.
  */
 export function ContentActions({
   contentPath,
@@ -26,43 +36,62 @@ export function ContentActions({
   authorName,
 }: {
   contentPath: string;
-  contentType: 'concern' | 'comment' | 'question' | 'response' | 'policy' | 'electionQuestion';
+  contentType: ReportContentType;
   excerpt: string;
   authorUid: string;
   authorName: string;
 }) {
   const theme = useTheme();
+  // Android draws edge to edge, so the keyboard covers the dialog instead of
+  // shrinking it: the dialog pads itself above the keyboard and scrolls the
+  // note into view with Send under it (src/hooks/use-keyboard-overlap.ts).
+  const dialogRef = useRef<View>(null);
+  const keyboard = useKeyboardOverlap(dialogRef);
+  const dialogScrollRef = useRef<ScrollView>(null);
+  const dialogContentRef = useRef<View>(null);
+  useRevealFocusedField(dialogScrollRef, dialogContentRef);
   const router = useRouter();
   const t = useT();
   const { profile } = useAuth();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
-  // "Other" asks what's wrong before it sends: a report that doesn't say
-  // what the problem is gives the review nothing to go on.
-  const [otherNote, setOtherNote] = useState<string | null>(null);
+  // Kept while the dialog is closed, so someone sent to sign in first comes
+  // back to the reasons they picked.
+  const [picked, setPicked] = useState<ReportReason[]>([]);
+  const [note, setNote] = useState('');
 
   if (profile?.uid === authorUid) return null;
 
-  const requireAuth = () => {
-    if (!profile) {
-      router.push('/sign-in');
-      return null;
-    }
-    return profile;
+  // "Something else" says what's wrong before it sends: a report that doesn't
+  // say what the problem is gives the review nothing to go on.
+  const needsNote = picked.includes('other') && note.trim().length < 5;
+  const toggle = (r: ReportReason) =>
+    setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]));
+
+  const close = () => {
+    if (!busy) setOpen(false);
   };
 
-  const report = async (reason: (typeof REPORT_REASONS)[number]['key'], note?: string) => {
-    const me = requireAuth();
-    if (!me) return;
-    if (reason === 'other' && note == null) {
-      setOtherNote('');
-      return;
-    }
+  const signInFirst = () => {
+    setOpen(false);
+    router.push('/sign-in');
+  };
+
+  const send = async () => {
+    if (!profile) return signInFirst();
     setBusy(true);
     try {
-      await reportContent(me, { contentPath, contentType, reason, excerpt, authorUid, note });
+      await reportContent(profile, {
+        contentPath,
+        contentType,
+        reasons: picked,
+        excerpt,
+        authorUid,
+        note,
+      });
       setOpen(false);
-      setOtherNote(null);
+      setPicked([]);
+      setNote('');
       notify(t('Report sent'), t('Thank you - the operators will review it.'));
     } catch (e) {
       notifyError(t('Could not send report'), e);
@@ -72,11 +101,10 @@ export function ContentActions({
   };
 
   const block = async () => {
-    const me = requireAuth();
-    if (!me) return;
+    if (!profile) return signInFirst();
     setBusy(true);
     try {
-      await blockUser(me, authorUid, authorName);
+      await blockUser(profile, authorUid, authorName);
       setOpen(false);
       notify(
         t('Blocked {name}').replace('{name}', authorName),
@@ -89,8 +117,13 @@ export function ContentActions({
     }
   };
 
-  if (!open) {
-    return (
+  const title = t('Report this {type}').replace(
+    '{type}',
+    t(contentType === 'electionQuestion' ? 'question' : contentType)
+  );
+
+  return (
+    <>
       <Pressable
         onPress={() => setOpen(true)}
         hitSlop={15}
@@ -99,78 +132,80 @@ export function ContentActions({
         style={styles.flagButton}>
         <Ionicons name="flag-outline" size={14} color={theme.textSecondary} />
       </Pressable>
-    );
-  }
+      <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
+        {/* Scrolls when large text or the keyboard leaves too little room.
+            The backdrop that closes it sits behind the card, not around
+            it: on the web, a pressable wrapped around the scroll view
+            swallowed the taps on the reasons. */}
+        <View ref={dialogRef} style={[styles.backdrop, { paddingBottom: keyboard }]}>
+          <ScrollView
+            ref={dialogScrollRef}
+            // React Native's type for this prop leaves out the null every ref starts as.
+            innerViewRef={dialogContentRef as React.RefObject<View>}
+            style={{ flex: 1 }}
+            contentContainerStyle={styles.scroll}
+            keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets>
+            <Pressable style={StyleSheet.absoluteFill} onPress={close} accessible={false} />
+            <View style={[styles.card, { backgroundColor: theme.background, borderColor: theme.border }]}>
+              <View style={styles.header}>
+                <ThemedText type="smallBold" accessibilityRole="header" style={{ fontSize: 17, flex: 1 }}>
+                  {title}
+                </ThemedText>
+                <Pressable onPress={close} hitSlop={12} accessibilityRole="button" accessibilityLabel={t('Close')}>
+                  <Ionicons name="close" size={20} color={theme.textSecondary} />
+                </Pressable>
+              </View>
 
-  return (
-    <View style={[styles.sheet, { borderColor: theme.border, backgroundColor: theme.background }]}>
-      <ThemedText type="smallBold" style={{ fontSize: 12 }}>
-        {t('Report this {type}').replace('{type}', t(contentType === 'electionQuestion' ? 'question' : contentType))}
-      </ThemedText>
-      {otherNote != null ? (
-        <View style={{ gap: Spacing.two }}>
-          <Field
-            value={otherNote}
-            onChangeText={setOtherNote}
-            placeholder={t('What’s wrong with it?')}
-            accessibilityLabel={t('What’s wrong with it?')}
-            multiline
-            maxLength={500}
-            autoFocus
-          />
-          <View style={styles.reasonRow}>
-            <Button
-              title={t('Send report')}
-              onPress={() => void report('other', otherNote)}
-              disabled={otherNote.trim().length < 5}
-              loading={busy}
-            />
-            <Button title={t('Back')} variant="ghost" onPress={() => setOtherNote(null)} />
-          </View>
+              <ThemedText type="small" themeColor="textSecondary">
+                {t('Pick every reason that applies.')}
+              </ThemedText>
+              <View style={{ gap: Spacing.one }}>
+                {REPORT_REASONS.map((r) => (
+                  <ChoiceRow
+                    key={r.key}
+                    kind="checkbox"
+                    label={t(r.label)}
+                    checked={picked.includes(r.key)}
+                    onPress={() => toggle(r.key)}
+                    disabled={busy}
+                  />
+                ))}
+              </View>
+
+              <Field
+                value={note}
+                onChangeText={setNote}
+                placeholder={
+                  picked.includes('other') ? t('What’s wrong with it?') : t('Add a note (optional)')
+                }
+                multiline
+                maxLength={500}
+                style={{ minHeight: 72, textAlignVertical: 'top' }}
+              />
+
+              <Button
+                title={profile ? t('Send report') : t('Sign in to send')}
+                onPress={() => void send()}
+                disabled={picked.length === 0 || needsNote}
+                loading={busy}
+              />
+
+              <View style={[styles.divider, { backgroundColor: theme.border }]} />
+              <Button
+                title={t('Block {name}').replace('{name}', authorName)}
+                variant="secondary"
+                disabled={busy}
+                onPress={() => void block()}
+              />
+              <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
+                {t('Blocking hides everything they post, for you only. They are not told.')}
+              </ThemedText>
+            </View>
+          </ScrollView>
         </View>
-      ) : (
-      <View style={styles.reasonRow}>
-        {REPORT_REASONS.map((r) => (
-          <Pressable
-            key={r.key}
-            disabled={busy}
-            hitSlop={7}
-            accessibilityRole="button"
-            onPress={() => report(r.key)}
-            style={[styles.chip, { borderColor: theme.border, backgroundColor: theme.backgroundElement }]}>
-            <ThemedText type="small" style={{ fontSize: 12 }}>
-              {t(r.label)}
-            </ThemedText>
-          </Pressable>
-        ))}
-      </View>
-      )}
-      <View style={styles.reasonRow}>
-        <Pressable
-          disabled={busy}
-          hitSlop={7}
-          accessibilityRole="button"
-          onPress={block}
-          style={[styles.chip, { borderColor: theme.danger, backgroundColor: theme.dangerSoft }]}>
-          <ThemedText type="small" style={{ fontSize: 12, color: theme.danger }}>
-            {t('Block {name}').replace('{name}', authorName)}
-          </ThemedText>
-        </Pressable>
-        <Pressable
-          disabled={busy}
-          accessibilityRole="button"
-          onPress={() => {
-            setOpen(false);
-            setOtherNote(null);
-          }}
-          style={styles.chip}
-          hitSlop={7}>
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12 }}>
-            {t('Cancel')}
-          </ThemedText>
-        </Pressable>
-      </View>
-    </View>
+      </Modal>
+    </>
   );
 }
 
@@ -179,25 +214,30 @@ const styles = StyleSheet.create({
     padding: 2,
     alignSelf: 'flex-start',
   },
-  // Open, the sheet takes its own full-width line in the meta row it sits in
-  // (those rows wrap) instead of shrinking to its contents.
-  sheet: {
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  scroll: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing.four,
+  },
+  card: {
     width: '100%',
-    borderRadius: 12,
+    maxWidth: 420,
+    borderRadius: 16,
     borderWidth: StyleSheet.hairlineWidth,
-    padding: Spacing.three,
+    padding: Spacing.four,
+    gap: Spacing.three,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: Spacing.two,
   },
-  reasonRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    alignItems: 'center',
-  },
-  chip: {
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+  divider: {
+    height: StyleSheet.hairlineWidth,
   },
 });

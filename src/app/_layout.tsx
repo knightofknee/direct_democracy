@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider, usePathname, useRouter, type Href } from 'expo-router';
+import { noteLaunchPath } from '@/lib/launch';
 import { reopenAfterRedraw, takeReopenPath } from '@/lib/locale-remount';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
 import { Dimensions, Pressable, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -9,7 +11,6 @@ import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-rean
 
 import { CelebrationProvider } from '@/components/celebration';
 import { HeaderActions } from '@/components/help-button';
-import { LanguagePrompt } from '@/components/language-prompt';
 import { Welcome } from '@/components/welcome';
 import { UpdateModal } from '@/components/update-modal';
 import { Colors } from '@/constants/theme';
@@ -94,12 +95,16 @@ export default function RootLayout() {
     // screen; expo-router does not provide one itself.
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={navTheme}>
+        {/* The clock and icons in the status bar match the app's theme. iOS
+            does this on its own; Android left them white, which vanished on
+            the light theme's white background (found on the Android
+            emulator, 2026-11-11). */}
+        <StatusBar style={dark ? 'light' : 'dark'} />
         <LocaleProvider>
         <AuthProvider>
           <SplashGate />
           <CelebrationProvider>
             <LocaleKeyedStack />
-            <LanguagePrompt />
             <Welcome />
             <UpdateModal />
           </CelebrationProvider>
@@ -128,6 +133,9 @@ function PushBridge() {
 function LocaleKeyedStack() {
   const { locale } = useLocale();
   const pathname = usePathname();
+  // Where the app was opened, once: a plain launch goes on to the
+  // elections tab (see launch.ts).
+  noteLaunchPath(pathname);
   const [fontScale, setFontScale] = useState(() => Dimensions.get('window').fontScale);
   const here = useRef(pathname);
   const drawnAt = useRef(fontScale);
@@ -176,12 +184,6 @@ function RootStack() {
         <Stack.Screen name="officials" options={{ title: t('Officials') }} />
         <Stack.Screen name="candidate/[id]/index" options={{ title: t('Candidate') }} />
         <Stack.Screen name="candidate/[id]/[policyId]" options={{ title: t('Policy') }} />
-        <Stack.Screen name="election-question/[id]" options={{ title: t('Election AMA') }} />
-        <Stack.Screen name="school-board/[race]" options={{ title: t('School board') }} />
-        <Stack.Screen name="school-board-candidate/[id]" options={{ title: t('Candidate') }} />
-        <Stack.Screen name="election-race/[race]" options={{ title: t('On your ballot') }} />
-        <Stack.Screen name="election-candidate/[id]" options={{ title: t('Candidate') }} />
-        <Stack.Screen name="ward-race/[ward]" options={{ title: t('Ward race') }} />
         <Stack.Screen name="sign-in" options={{ title: t('Sign in'), ...MODAL }} />
         <Stack.Screen name="new-concern" options={{ title: t('Raise a concern'), ...MODAL }} />
         <Stack.Screen name="new-poll" options={{ title: t('New poll'), ...MODAL }} />
@@ -189,13 +191,13 @@ function RootStack() {
         <Stack.Screen name="verify" options={{ title: t('Verify identity'), ...MODAL }} />
         <Stack.Screen name="set-ward" options={{ title: t('Set your home ward'), ...MODAL }} />
         <Stack.Screen name="my-districts" options={{ title: t('Your districts'), ...MODAL }} />
+        <Stack.Screen name="feedback" options={{ title: t('Send feedback'), ...MODAL }} />
         <Stack.Screen name="my-activity" options={{ title: t('My activity') }} />
         <Stack.Screen name="privacy" options={{ title: t('Privacy & data') }} />
         <Stack.Screen name="rules" options={{ title: t('Community rules') }} />
         <Stack.Screen name="settings" options={{ title: t('Settings') }} />
         <Stack.Screen name="notifications" options={{ title: t('Notifications') }} />
         <Stack.Screen name="news-sources" options={{ title: t('News sources') }} />
-        <Stack.Screen name="my-ballot" options={{ title: t('My ballot') }} />
         <Stack.Screen
           name="help"
           options={{ title: t('Help'), presentation: 'modal', headerRight: () => <ModalClose /> }}

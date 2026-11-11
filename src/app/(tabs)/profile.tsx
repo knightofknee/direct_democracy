@@ -19,7 +19,6 @@ import { useLiveDoc } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
 import { isAdminUser } from '@/lib/admin';
 import { db } from '@/lib/firebase';
-import { plural } from '@/lib/format';
 import { randomDisplayName } from '@/lib/names';
 import { confirmDestructive, notify, notifyError, errorMessage } from '@/lib/notify';
 import type { Candidate, Official } from '@/lib/types';
@@ -39,7 +38,7 @@ export default function ProfileScreen() {
   const [savingName, setSavingName] = useState(false);
 
   // Politicians see their own public card - the same row voters get on the
-  // ward and election tabs - so they know how they're being presented.
+  // ward and elections tabs - so they know how they're being presented.
   const { data: officialCard } = useLiveDoc<Official>(
     () => (profile?.role === 'official' ? doc(db, 'officials', profile.uid) : null),
     [profile?.role, profile?.uid]

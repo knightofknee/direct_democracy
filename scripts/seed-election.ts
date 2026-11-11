@@ -1,17 +1,21 @@
 /**
  * Seeds the electionCandidates and electionRaceNotes collections - the
- * read-only voter directory for the November 3, 2026 general election and
- * the February 23, 2027 municipal election - from scripts/data/*.json.
- * Candidate cards are compiled from public sources (each entry carries its
- * sourceUrls); they are not accounts. Same contract as seed-school-board.
+ * read-only voter directory for the February 23, 2027 municipal election
+ * (clerk, treasurer, aldermen, police district councils; the mayoral field
+ * is seed-mayor-games) - from scripts/data/municipal-2027.json. Candidate
+ * cards are compiled from public sources (each entry carries its
+ * sourceUrls); they are not accounts.
  *
  * Full sync per election, re-runnable: every entry in a file is upserted
  * under a stable `${election}--${slug}` id, and any existing doc for that
  * election whose id is no longer in the file is deleted (candidates do drop
  * off the ballot). Update the JSON, run again. Files:
  *
- *   scripts/data/general-2026.json     election "2026-general"
  *   scripts/data/municipal-2027.json   election "2027-municipal"
+ *
+ * Elections that are over (RETIRED_ELECTIONS) have their cards, race
+ * notes, and the 2026 school board directory deleted on every run, so a
+ * past ballot never lingers in production.
  *
  * Against production (default) it needs Google credentials:
  *   gcloud auth application-default login
@@ -52,9 +56,6 @@ interface Entry {
   priorCareer: string | null;
   runningOnEs?: string | null;
   priorCareerEs?: string | null;
-  seat?: string | null;
-  court?: string | null;
-  ratings?: { source: string; rating: string; url?: string | null }[];
   sourceUrls: string[];
 }
 
@@ -74,37 +75,20 @@ interface ElectionFile {
 // Race ids per election. Fixed ids plus numbered families (district races,
 // subcircuits, police district councils); mirror of src/constants/elections.ts.
 const VALID_RACES: Record<string, (race: string) => boolean> = {
-  '2026-general': (race) =>
-    new Set([
-      'us-senate',
-      'governor',
-      'attorney-general',
-      'secretary-of-state',
-      'comptroller',
-      'treasurer',
-      'cook-board-president',
-      'cook-assessor',
-      'cook-treasurer',
-      'cook-sheriff',
-      'cook-clerk',
-      'mwrd',
-      'mwrd-2yr',
-      'judicial-retention',
-      'judicial-appellate',
-      'judicial-circuit',
-    ]).has(race) ||
-    /^(us-house|il-senate|il-house|cook-commissioner|cook-board-of-review|judicial-subcircuit)-\d+$/.test(
-      race
-    ),
   '2027-municipal': (race) =>
     race === 'clerk' || race === 'city-treasurer' || /^ward-([1-9]|[1-4]\d|50)$/.test(race) || /^pdc-\d+$/.test(race),
 };
 
+/**
+ * Ballots that have been voted on. Their directories are deleted on every
+ * run (the November 3, 2026 general election and its school board races
+ * left the app on 2026-11-04).
+ */
+const RETIRED_ELECTIONS = ['2026-general'];
+
 /** Races seeded before ids carried the race; their doc ids must not change. */
 const ORIGINAL_RACES = new Set([
-  'us-senate', 'governor', 'attorney-general', 'secretary-of-state', 'comptroller', 'treasurer',
-  'cook-board-president', 'cook-assessor', 'cook-treasurer', 'cook-sheriff', 'cook-clerk', 'mwrd',
-  'mwrd-2yr', 'clerk',
+  'clerk',
   // The February City Treasurer race, renamed from 'treasurer' on 2026-10-09
   // (that id is the November state race); its card ids stay as they were.
   'city-treasurer',
@@ -129,16 +113,12 @@ function validate(file: ElectionFile): void {
   }
   const seen = new Set<string>();
   for (const e of file.candidates) {
-    // Judicial retention lists can repeat a surname across courts; the race
-    // is part of the id so the same person in two races stays distinct.
+    // The race is part of the id so the same person in two races stays
+    // distinct.
     const id = `${e.race}--${slug(e.name)}`;
     if (seen.has(id)) problems.push(`duplicate slug: ${id}`);
     seen.add(id);
     if (!validRace(e.race)) problems.push(`${e.name}: bad race "${e.race}"`);
-    for (const r of e.ratings ?? []) {
-      if (!r.source?.trim() || !r.rating?.trim()) problems.push(`${e.name}: rating needs source and rating`);
-      if (r.url != null && !/^https:\/\//.test(r.url)) problems.push(`${e.name}: rating url must be https`);
-    }
     if (!e.runningOn?.trim()) problems.push(`${e.name}: empty runningOn`);
     if (e.website != null && !/^https:\/\//.test(e.website))
       problems.push(`${e.name}: website must be https`);
@@ -208,13 +188,6 @@ async function seedElection(file: ElectionFile): Promise<void> {
       priorCareer: e.priorCareer?.trim() || null,
       runningOnEs: e.runningOnEs?.trim() || null,
       priorCareerEs: e.priorCareerEs?.trim() || null,
-      seat: e.seat?.trim() || null,
-      court: e.court?.trim() || null,
-      ratings: (e.ratings ?? []).map((r) => ({
-        source: r.source.trim(),
-        rating: r.rating.trim(),
-        url: r.url ?? null,
-      })),
       sourceUrls: e.sourceUrls,
     },
   }));
@@ -255,8 +228,36 @@ async function seedElection(file: ElectionFile): Promise<void> {
   for (const [race, n] of [...byRace.entries()].sort()) console.log(`  ${race}: ${n}`);
 }
 
+/** Delete every card and note of a ballot that has been voted on. */
+async function retireElection(election: string): Promise<void> {
+  let removed = 0;
+  for (const coll of ['electionCandidates', 'electionRaceNotes']) {
+    const snap = await db.collection(coll).where('election', '==', election).get();
+    for (let i = 0; i < snap.docs.length; i += 400) {
+      const batch = db.batch();
+      for (const d of snap.docs.slice(i, i + 400)) batch.delete(d.ref);
+      await batch.commit();
+    }
+    removed += snap.size;
+  }
+  if (removed) console.log(`- retired ${election}: ${removed} docs deleted`);
+}
+
+/** The 2026 school board directory: a separate collection, same fate. */
+async function retireSchoolBoard(): Promise<void> {
+  const snap = await db.collection('schoolBoardCandidates').get();
+  for (let i = 0; i < snap.docs.length; i += 400) {
+    const batch = db.batch();
+    for (const d of snap.docs.slice(i, i + 400)) batch.delete(d.ref);
+    await batch.commit();
+  }
+  if (snap.size) console.log(`- retired schoolBoardCandidates: ${snap.size} docs deleted`);
+}
+
 async function main() {
-  for (const name of ['general-2026.json', 'municipal-2027.json']) {
+  for (const election of RETIRED_ELECTIONS) await retireElection(election);
+  await retireSchoolBoard();
+  for (const name of ['municipal-2027.json']) {
     const file: ElectionFile = JSON.parse(readFileSync(join(__dirname, 'data', name), 'utf8'));
     await seedElection(file);
   }

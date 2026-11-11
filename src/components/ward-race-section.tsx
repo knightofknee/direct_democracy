@@ -7,21 +7,29 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { DistrictCells } from '@/components/district-cells';
 import { ThemedText } from '@/components/themed-text';
-import { Card, SectionHeader } from '@/components/ui';
-import { ordinal, wardLabel } from '@/constants/chicago';
+import { Button, Card, Field, SectionHeader } from '@/components/ui';
+import { wardLabel } from '@/constants/chicago';
 import {
   MUNICIPAL_2027_CITYWIDE,
   MUNICIPAL_2027_FILING,
   MUNICIPAL_ELECTION,
   MUNICIPAL_ELECTION_DATE,
   POLICE_DISTRICTS,
+  VOTER_LOOKUP_URL,
 } from '@/constants/elections';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useLiveQuery } from '@/hooks/use-firestore';
 import { useTheme } from '@/hooks/use-theme';
-import { useMyDistricts } from '@/lib/districts';
+import {
+  findMyDistricts,
+  rememberDeviceDistricts,
+  useMyDistricts,
+  type FindDistrictsResult,
+} from '@/lib/districts';
 import { db } from '@/lib/firebase';
+import { notify, notifyError } from '@/lib/notify';
+import { openLink } from '@/lib/open-link';
 import type { ElectionCandidateCard } from '@/lib/types';
 import { usePlural, useT } from '@/lib/i18n';
 
@@ -30,16 +38,18 @@ import { usePlural, useT } from '@/lib/i18n';
 const LAST_WARD_KEY = 'wardRace.lastWard';
 
 /**
- * The February 2027 municipal races beyond mayor: every ward's aldermanic
- * seat plus the two other citywide offices. Each ward race pairs the
- * incumbent's report card with their declared challengers - your ward
- * leads if we know it, the grid covers the rest of the city.
+ * Everything on the February 23, 2027 ballot besides the mayor (renamed
+ * from "ward races" 2026-11-09, Brian: the section held two citywide
+ * offices, a ward picker, and police districts that do not follow wards,
+ * under a title that named one of the three). Three groups, each headed by
+ * what decides whether a race is yours: citywide (everyone), your alderman
+ * (your ward), your police district council (your address, found right
+ * here or on the Board's sample ballot).
  */
 export function WardRaceSection() {
   const router = useRouter();
   const theme = useTheme();
   const t = useT();
-  const mine = useMyDistricts();
   const pluralT = usePlural();
   const { profile } = useAuth();
 
@@ -72,20 +82,18 @@ export function WardRaceSection() {
     router.push(`/ward-race/${ward}`);
   };
 
-  // Districts with anyone on record; the grid stays hidden until there is one.
-  const pdcDeclared = POLICE_DISTRICTS.filter((d) => countByRace.has(`pdc-${d}`));
-
-  // A verified ward wins; otherwise the ward they last picked stands in.
+  // A home ward wins; otherwise the ward they last picked stands in.
   const myWard = verifiedWard ?? lastWard;
   const myWardTitle = verifiedWard != null ? t('Your ward') : t('Your last pick');
 
   return (
     <View style={{ gap: Spacing.three }}>
       <SectionHeader
-        title={t('ward races - february 2027')}
-        subtitle={t(`Every alderman's seat and every police district council is on the ${MUNICIPAL_ELECTION_DATE} ballot with the mayor's race above. ${MUNICIPAL_2027_FILING}; candidates appear here as they declare.`)}
+        title={t('the rest of the ballot')}
+        subtitle={`${t("Four more races share the {date} ballot with the mayor's: two citywide, one by your ward, and one by your address.").replace('{date}', t(MUNICIPAL_ELECTION_DATE))} ${t(MUNICIPAL_2027_FILING)}.`}
       />
 
+      <GroupLabel text={t('citywide')} />
       {MUNICIPAL_2027_CITYWIDE.map((race) => (
         <Card key={race.id} onPress={() => router.push(`/election-race/${race.id}`)}>
           <View style={styles.row}>
@@ -105,6 +113,7 @@ export function WardRaceSection() {
         </Card>
       ))}
 
+      <GroupLabel text={t('your alderman')} />
       {myWard != null && (
         <Card onPress={() => openWard(myWard)}>
           <View style={styles.row}>
@@ -159,30 +168,153 @@ export function WardRaceSection() {
         </ThemedText>
       </Card>
 
-      <Card>
-        <ThemedText type="smallBold" style={{ fontSize: 13 }}>
-          {t('Police district councils')}
-        </ThemedText>
-        <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, lineHeight: 17 }}>
-          {t('Three elected seats in each of the 22 police districts, on the same February ballot. Police districts do not follow ward lines; your sample ballot names yours.')}
-        </ThemedText>
-        {pdcDeclared.length === 0 ? (
-          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 13, lineHeight: 19 }}>
-            {t('No candidates are on record yet. Candidates file October 19-26, 2026; the districts fill in here as they declare.')}
-          </ThemedText>
-        ) : (
-        <DistrictCells
-          all={POLICE_DISTRICTS}
-          mine={mine.of('police')}
-          exact={mine.exact}
-          onOpen={(d) => router.push(`/election-race/pdc-${d}`)}
-          cellLabel={(d) => t('Police District {n} council race').replace('{n}', String(d))}
-          highlighted={(d) => countByRace.has(`pdc-${d}`)}
-          cellStyle={{ width: '8.5%', flexGrow: 1 }}
-        />
-        )}
-      </Card>
+      <GroupLabel text={t('your police district council')} />
+      <PoliceDistricts has={(d) => countByRace.has(`pdc-${d}`)} />
     </View>
+  );
+}
+
+/** What decides whether the races under it are yours. */
+function GroupLabel({ text }: { text: string }) {
+  return (
+    <ThemedText
+      type="smallBold"
+      themeColor="textSecondary"
+      accessibilityRole="header"
+      style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginTop: Spacing.one }}>
+      {text}
+    </ThemedText>
+  );
+}
+
+/**
+ * The police district councils, with the two ways to learn which one is
+ * yours (2026-11-09, Brian: the card said "your sample ballot names yours"
+ * and offered neither a lookup nor the ballot). An address typed here finds
+ * the district in one step, signed in or not: signed in, the numbers are
+ * kept on the account like any district lookup; signed out, the server
+ * keeps nothing and they stay on this phone. The Board's own lookup, which
+ * shows the sample ballot, is linked beside it.
+ */
+function PoliceDistricts({ has }: { has: (district: number) => boolean }) {
+  const router = useRouter();
+  const theme = useTheme();
+  const t = useT();
+  const { profile } = useAuth();
+  const mine = useMyDistricts();
+  const [address, setAddress] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [again, setAgain] = useState(false);
+  const [miss, setMiss] = useState<Exclude<FindDistrictsResult, { result: 'ok' }> | null>(null);
+
+  const find = async () => {
+    if (busy || address.trim().length < 5) return;
+    setBusy(true);
+    setMiss(null);
+    try {
+      const r = await findMyDistricts(address.trim());
+      if (r.result === 'ok') {
+        // Signed in, the account now carries them; signed out, this phone does.
+        if (!profile) rememberDeviceDistricts({ ...r.districts, wardId: r.wardId });
+        setAddress('');
+        setAgain(false);
+        return;
+      }
+      setMiss(r);
+    } catch (e) {
+      if ((e as { code?: string }).code === 'functions/resource-exhausted') {
+        notify(
+          t('Could not look up that address'),
+          t(
+            profile
+              ? 'You can look up 5 addresses a day. Try again tomorrow.'
+              : 'Too many address lookups today. Sign in to look up yours, or try again tomorrow.'
+          )
+        );
+        return;
+      }
+      notifyError(t('Could not look up that address'), e);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const showField = !mine.exact || again;
+
+  return (
+    <Card>
+      <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 13, lineHeight: 19 }}>
+        {t('Three elected seats in each of the 22 police districts. Police districts do not follow ward lines, so yours goes by your address.')}
+      </ThemedText>
+
+      {showField ? (
+        <>
+          <Field
+            value={address}
+            onChangeText={(v) => {
+              setAddress(v);
+              setMiss(null);
+            }}
+            placeholder={t('1234 N Clark St')}
+            accessibilityLabel={t('Your home address')}
+            autoComplete="street-address"
+            textContentType="fullStreetAddress"
+            autoCapitalize="words"
+            returnKeyType="search"
+            onSubmitEditing={() => void find()}
+            maxLength={200}
+          />
+          {miss && (
+            <ThemedText type="small" style={{ color: theme.danger }}>
+              {miss.result === 'notFound'
+                ? t('We couldn’t find that address. Check the street number and name.')
+                : miss.result === 'outside'
+                  ? t('That address is outside Chicago.')
+                  : t(
+                      miss.verified
+                        ? 'That address is in the {ward}, and your verified ward is the {home}. If you moved, verify your new address in Settings.'
+                        : 'That address is in the {ward}, and your home ward is the {home}. Change your home ward first, then look up the address.'
+                    )
+                      .replace('{ward}', wardLabel(miss.wardId))
+                      .replace('{home}', wardLabel(profile?.wardId))}
+            </ThemedText>
+          )}
+          <Button
+            title={t('Find my police district')}
+            icon={<Ionicons name="search" size={15} color="#FFFFFF" />}
+            onPress={() => void find()}
+            loading={busy}
+            disabled={address.trim().length < 5}
+          />
+          <ThemedText type="small" themeColor="textSecondary" style={{ fontSize: 12, lineHeight: 17 }}>
+            {t('The address goes to the US Census Bureau to place it on the map. Only the district numbers are kept, never the address.')}
+          </ThemedText>
+        </>
+      ) : null}
+
+      <DistrictCells
+        all={POLICE_DISTRICTS}
+        mine={mine.of('police')}
+        exact={mine.exact}
+        onOpen={(d) => router.push(`/election-race/pdc-${d}`)}
+        cellLabel={(d) => t('Police District {n} council race').replace('{n}', String(d))}
+        highlighted={has}
+        cellStyle={{ width: '8.5%', flexGrow: 1 }}
+      />
+
+      {mine.exact && !again && (
+        <Pressable onPress={() => setAgain(true)} hitSlop={8} accessibilityRole="button">
+          <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
+            {t('Look up a different address')}
+          </ThemedText>
+        </Pressable>
+      )}
+      <Pressable onPress={() => void openLink(VOTER_LOOKUP_URL)} hitSlop={8} accessibilityRole="link">
+        <ThemedText type="smallBold" style={{ color: theme.primary, fontSize: 13 }}>
+          {t('Or see it on your sample ballot (Board of Elections)')}
+        </ThemedText>
+      </Pressable>
+    </Card>
   );
 }
 

@@ -1,4 +1,10 @@
 /**
+ * RETIRED 2026-11-04 (kept for reference, not run): the mayor games tab
+ * (scripts/data/mayor-games.json, seed-mayor-games) now carries every
+ * filed candidate, so nothing lists this directory card any more. The
+ * candidates/other-declared-candidates doc still exists in production and
+ * is harmless; re-running this script would only refresh it.
+ *
  * Seeds the "All other declared candidates" directory entry on the election
  * tab: a candidate-shaped card whose "policies" are profiles of the declared
  * 2027 mayoral candidates who have published no platform to import. Same
@@ -30,7 +36,7 @@ const CARD = {
   websiteUrl: null,
   sourceUrl: null,
   platformNote:
-    'These candidates have declared for mayor but published no platform anywhere on their campaign sites, so there is nothing to import and nothing to debate yet. Each entry is what is publicly known, with links. Anyone here who publishes a real platform gets a full candidate page like the rest. Brandon Johnson has not announced a campaign; Maria Pappas has not formally entered.',
+    'These candidates have declared for mayor but published no platform the app can import, so there is nothing to debate here yet. Each entry is what is publicly known, with links. Anyone here who publishes a real platform gets a full candidate page like the rest.',
   platformNoteTone: 'warning',
 };
 
@@ -68,6 +74,64 @@ const ENTRIES: Entry[] = [
       'Her three campaign themes, affordability, safety, and fiscal responsibility, appear only as homepage messaging; the site has no platform page, and its issues and platform links redirect back to the homepage.',
     ].join('\n\n'),
     links: [{ label: 'lisaneeforchicago.com', url: 'https://www.lisaneeforchicago.com/' }],
+  },
+  {
+    slug: 'brandon-johnson',
+    title: 'Brandon Johnson',
+    body: [
+      'Mayor since May 2023, seeking a second term. Filed nominating petitions on Oct. 23, 2026. When filing, he said a second term would keep investing in young people and public schools, driving violence down, expanding mental and behavioral health care, and building more affordable homes.',
+      'His campaign site names four themes, safe neighborhoods, strong schools, an affordable Chicago, and thriving communities, and each links to a page of first-term actions; the site has no platform page.',
+    ].join('\n\n'),
+    links: [
+      { label: 'brandonforchicago.com', url: 'https://www.brandonforchicago.com/' },
+      { label: 'First-term record', url: 'https://www.brandonforchicago.com/record' },
+      {
+        label: 'WTTW: Johnson files for reelection',
+        url: 'https://news.wttw.com/2026/10/23/johnson-makes-bid-chicago-mayor-official-filing-thousands-signatures',
+      },
+    ],
+  },
+  {
+    slug: 'maria-pappas',
+    title: 'Maria Pappas',
+    body: [
+      'Cook County Treasurer since 1998 and a Cook County Board commissioner from 1990 to 1998. Filed nominating petitions on Oct. 26, 2026, and told Block Club she will formally announce after the Nov. 3 election.',
+      'She has no campaign website. The one policy subject in her early remarks about running was property taxes, citing her office\'s finding that residential bills are rising fastest on the South and West Sides.',
+    ].join('\n\n'),
+    links: [
+      {
+        label: 'Sun-Times: Pappas files on the last day',
+        url: 'https://chicago.suntimes.com/elections/2026/10/26/chicago-mayoral-race-last-day-of-filing-mendoza-pappas-2027-election',
+      },
+      { label: 'Block Club: who is running', url: 'https://blockclubchicago.org/2026/10/26/who-is-running-for-chicago-mayor/' },
+    ],
+  },
+  {
+    slug: 'john-kitover',
+    title: 'John Kitover',
+    body: [
+      'Businessman and U.S. Army veteran who calls himself a Republican-Libertarian. Filed nominating petitions on Oct. 26, 2026.',
+      'His site lists six issues: ending the pension crisis, cutting property taxes, public safety, lower utility taxes, fiscal accountability, and individual liberty, with plans that include a constitutional pension amendment, a property tax levy freeze, and zero-based budgeting. The site is built in a way the app cannot import, so read it there.',
+    ].join('\n\n'),
+    links: [
+      { label: 'johnkitover45.com', url: 'https://johnkitover45.com/' },
+      { label: 'mayorkitover.com', url: 'https://mayorkitover.com/' },
+    ],
+  },
+  {
+    slug: 'jesse-maronto',
+    title: 'Jessica "Jesse" Maronto',
+    body: [
+      'CDOT traffic signal repairman (IBEW Local 9) with an accounting degree and an MBA. Filed nominating petitions on Oct. 26, 2026, and said that day her signatures fell short of the 12,500 needed; she is on the Board of Elections list as of Oct. 30.',
+      'Her site says the campaign is no longer actively campaigning and invites voters to write her name in. Her "CONE" platform (Chicagoans, Operations, Neighborhoods, Economy) is described in news coverage but not published on her site.',
+    ].join('\n\n'),
+    links: [
+      { label: 'marontoforchicago.com', url: 'https://marontoforchicago.com/' },
+      {
+        label: 'Southwest News-Herald: the CONE platform',
+        url: 'https://southwestregionalpublishing.com/2026/10/05/traffic-signal-repairman-mba-holder-jesse-maronto-builds-chicago-mayoral-bid-around-cone-platform/',
+      },
+    ],
   },
 ];
 

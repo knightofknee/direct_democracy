@@ -28,7 +28,7 @@ export default function RulesScreen() {
         <Rule text={t('Nothing sexual involving minors. We report it to the authorities.')} />
       </Card>
       <ThemedText type="small" themeColor="textSecondary">
-        {t('Reported posts are reviewed every week. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.')}
+        {t('Reported posts are reviewed every week, and child safety reports right away. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.')}
       </ThemedText>
     </Screen>
   );

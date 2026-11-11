@@ -5,6 +5,30 @@ the public's trust, so it gets treated like infrastructure: every aggregate
 number a voter sees must be tamper-resistant, every identity claim must be
 honest, and every failure must be visible.
 
+## Update - 2026-10-22: report dialog and in-app feedback
+
+- **Reports:** the flag opens a dialog where the reporter picks any number
+  of reasons and sends once. The doc carries `reasons` (a list, 1 to 5 of
+  the five known reasons, rules-checked) beside `reason`, which must be one
+  of them (the app sends the most serious). Older binaries send `reason`
+  alone, still allowed. A report naming child safety notifies the operator
+  at once (`notifyOperator`, type `childSafety`), and that type reaches the
+  operator's phone with no push switch; everything else waits for the
+  weekly review as before.
+- **Feedback (`sendFeedback` callable):** Settings > Send feedback or
+  report a problem, for Google Play's child safety rule (a way to raise a
+  concern without leaving the app). It is the one write path open to
+  people who are signed out. App Check applies; the topic must be one of
+  five, the message 10 to 2,000 characters, an optional typed email at most
+  200 and shaped like an address (signed in, the account's email is used
+  instead). Limits: 5 a day per account (`users/{uid}/rateLimits/feedback`)
+  and 30 a day for all signed-out senders together (`feedbackLimits/signedOut`,
+  no client access), so a script can fill the operator's inbox for a day at
+  worst and never touches anyone else. Messages land in `feedback`
+  (admin read, admin may only flip `status` to open / handled; no client
+  writes). A child safety message alerts the operator at once like a report.
+  Nothing a sender types is ever shown to another user.
+
 ## Update - 2026-10-09: anonymous screen counts
 
 - **What is sent:** `src/lib/usage.ts` counts screen views per route
@@ -475,7 +499,7 @@ honest, and every failure must be visible.
   approvals, exactly as before. Re-enable the clause once 1.0.8 is the
   installed base. The graded constituent slice was always verified-only.
 - **Headshots on election cards** (same day): `photoUrl` on
-  electionCandidates and schoolBoardCandidates is an external https link
+  electionCandidates (and, since 2026-11-04, on the mayor games doc) is an external https link
   rendered by the client and never stored, the same posture as officials'
   portraits; the seed validates https. Hosts are Wikimedia Commons, official
   office sites, campaign sites, and Ballotpedia; a dead link degrades to an
@@ -485,10 +509,22 @@ honest, and every failure must be visible.
   validated in rules alongside bio/photoUrl. onQuestionUpvoteWrite sends at
   most one notification per question per threshold value (deduped by
   notification id), only while the question is unanswered.
-- **Election directories** (`electionCandidates`, `electionRaceNotes`):
-  public read, client writes denied; seeded only via Admin SDK
-  (scripts/seed-election.ts) from sourced JSON, same contract as
-  schoolBoardCandidates. `config/app` (update nudge) likewise
+- **Election directories** (`electionCandidates`, `electionRaceNotes`) and
+  the mayor games doc (`mayorGames/2027`, 2026-11-04): public read, client
+  writes denied; seeded only via Admin SDK (scripts/seed-election.ts,
+  scripts/seed-mayor-games.ts) from sourced JSON. The November 2026
+  directories and `schoolBoardCandidates` were deleted on 2026-11-04. The
+  games keep two things on the device, the slugs met on a blind date and
+  the verdict given on each (AsyncStorage), and send nothing.
+- **Signed-out address lookups** (2026-11-09): `findMyDistricts` accepts
+  callers who are not signed in (App Check still enforced) so the police
+  district finder works for everyone. For them it geocodes, answers, and
+  stores nothing; the phone keeps the district numbers. All signed-out
+  callers share one cap of 1,000 lookups a day (`lookupLimits/signedOut`,
+  server-written); past it the call is refused until the window moves.
+  Accepted limitation: a script with a valid App Check token could use up
+  the day's signed-out lookups, which only sends people to sign in or to
+  the Board's own lookup. `config/app` (update nudge) likewise
   world-readable, admin-write-only, and holds only the released version
   string and public store links.
 

@@ -38,27 +38,24 @@ import { getFirestore } from 'firebase-admin/firestore';
 
 import { ordinal, TEST_WARD } from '@/constants/chicago';
 import {
-  GENERAL_ELECTION,
-  GENERAL_ELECTION_DATE,
-  generalRaceLabel,
   isKnownRace,
-  JUDICIAL_2026,
   MUNICIPAL_2027_FILING,
   MUNICIPAL_ELECTION,
   MUNICIPAL_ELECTION_DATE,
   municipalRaceLabel,
   raceInfo,
-  WRITE_IN_2026,
+  WRITE_IN,
 } from '@/constants/elections';
-import { SCHOOL_BOARD_ELECTION_DATE, SCHOOL_BOARD_RACES } from '@/constants/school-board';
-import type {
-  Candidate,
-  ElectionCandidateCard,
-  ElectionRaceNote,
-  Official,
-  Policy,
-  SchoolBoardCandidate,
-} from '@/lib/types';
+import {
+  inTheRace,
+  money,
+  shuffledBy,
+  splitText,
+  supportPerMillion,
+  type MayorCandidate,
+  type MayorGamesDoc,
+} from '@/lib/mayor-games-data';
+import type { Candidate, ElectionCandidateCard, ElectionRaceNote, Official, Policy } from '@/lib/types';
 
 const PROJECT_ID = 'direct-democracy-e338a';
 const SITE = 'https://www.waldgrave.com';
@@ -70,8 +67,7 @@ const APP_NAME = 'direct democracy';
 const OWNED = [
   'election-candidate',
   'election-race',
-  'school-board',
-  'school-board-candidate',
+  'mayor',
   'candidate',
   'official',
   'ward-race',
@@ -169,36 +165,22 @@ function wardOrdinal(n: number): string {
   return `${ordinal(n)} Ward`;
 }
 
-/**
- * A race's label by its election, as the candidate screen labels it. (Each
- * race id names one race; until 2026-10-09 'treasurer' named both the state
- * and the city treasurer, and the check below still guards against a repeat.)
- */
-function raceLabel(election: string, race: string): string {
-  return election === GENERAL_ELECTION ? generalRaceLabel(race) : municipalRaceLabel(race);
+/** A race's label, as the candidate screen labels it. */
+function raceLabel(race: string): string {
+  return municipalRaceLabel(race);
 }
 
 /** What a candidate runs for, readable after "candidate for". */
-function raceTitle(election: string, race: string): string {
+function raceTitle(race: string): string {
   const ward = race.match(/^ward-(\d+)$/);
   if (ward) return `${wardOrdinal(Number(ward[1]))} alderman`;
-  return raceLabel(election, race);
-}
-
-function electionDate(election: string): string {
-  return election === GENERAL_ELECTION ? GENERAL_ELECTION_DATE : MUNICIPAL_ELECTION_DATE;
+  return raceLabel(race);
 }
 
 /** The page a race lives on: ward races have their own screen. */
 function raceRoute(race: string): string {
   const ward = race.match(/^ward-(\d+)$/);
   return ward ? `ward-race/${Number(ward[1])}` : `election-race/${race}`;
-}
-
-function schoolBoardLabel(race: string): string {
-  return race === 'president'
-    ? 'Chicago Board of Education President'
-    : `Chicago Board of Education, ${SCHOOL_BOARD_RACES.find((r) => r.id === race)?.label ?? `District ${race}`}`;
 }
 
 /** Ballot names first, the incumbent first among them, then alphabetical (the race screen's order). */
@@ -210,15 +192,13 @@ function ballotOrder<T extends { name: string; incumbent: boolean; writeIn?: boo
   );
 }
 
-function chips(c: { party?: string | null; incumbent: boolean; writeIn?: boolean; ctuEndorsed?: boolean }): string {
-  return [c.party, c.incumbent && 'Incumbent', c.writeIn && 'Write-in', c.ctuEndorsed && 'CTU endorsed']
-    .filter(Boolean)
-    .join(', ');
+function chips(c: { party?: string | null; incumbent: boolean; writeIn?: boolean }): string {
+  return [c.party, c.incumbent && 'Incumbent', c.writeIn && 'Write-in'].filter(Boolean).join(', ');
 }
 
 /** The same facts as a sentence, for a card's own page. */
 function chipSentence(c: Parameters<typeof chips>[0]): string {
-  return [c.party && `Party: ${c.party}.`, c.incumbent && 'Incumbent.', c.writeIn && 'Declared write-in.', c.ctuEndorsed && 'Endorsed by the Chicago Teachers Union.']
+  return [c.party && `Party: ${c.party}.`, c.incumbent && 'Incumbent.', c.writeIn && 'Declared write-in.']
     .filter(Boolean)
     .join(' ');
 }
@@ -228,34 +208,25 @@ function sources(urls: string[] | undefined): string {
   return `<p>Compiled from public sources:</p>\n${list(urls.map((u) => outLink(u, host(u))))}`;
 }
 
-const electionTabLink = `<p>${link('election', 'Every race on the Chicago ballot')}</p>`;
+const electionTabLink = `<p>${link('election', 'The mayor games: every candidate for mayor of Chicago, and every race on the February 23, 2027 ballot')}</p>`;
 
 // ---------------------------------------------------------------------------
 // Pages
 
 function electionCandidatePage(c: ElectionCandidateCard, raceHasPage: boolean): Page {
-  const retention = c.race === 'judicial-retention';
-  const what = raceTitle(c.election, c.race);
-  const title = retention
-    ? `${c.name}, judge up for retention`
-    : `${c.name}, ${c.writeIn ? 'write-in candidate' : 'candidate'} for ${what}`;
-  const date = electionDate(c.election);
+  const what = raceTitle(c.race);
+  const title = `${c.name}, ${c.writeIn ? 'write-in candidate' : 'candidate'} for ${what}`;
   const chipLine = chipSentence(c);
-  const ratings = (c.ratings ?? []).map((r) =>
-    r.url ? `${esc(r.source)}: ${outLink(r.url, r.rating)}` : `${esc(r.source)}: ${esc(r.rating)}`
-  );
   const body = [
     `<h1>${esc(c.name)}</h1>`,
-    para(`${retention ? 'Judge up for retention' : what}, on the Chicago ballot ${date}.${chipLine ? ` ${chipLine}` : ''}`),
-    c.writeIn ? para(WRITE_IN_2026.explainer) : '',
-    c.seat || c.court ? para([c.seat, c.court].filter(Boolean).join(', ')) : '',
+    para(`${what}, on the Chicago ballot ${MUNICIPAL_ELECTION_DATE}.${chipLine ? ` ${chipLine}` : ''}`),
+    c.writeIn ? para(WRITE_IN.explainer) : '',
     c.website ? `<p>${outLink(c.website, `Campaign site (${host(c.website)})`)}</p>` : '',
-    ratings.length ? `<h2>Ratings</h2>\n${list(ratings)}` : '',
-    `<h2>${retention ? 'Record' : 'Running on'}</h2>`,
+    '<h2>Running on</h2>',
     para(c.runningOn),
     c.priorCareer ? `<h2>Background</h2>\n${para(c.priorCareer)}` : '',
     sources(c.sourceUrls),
-    raceHasPage ? `<p>${link(raceRoute(c.race), `Everyone in this race: ${raceLabel(c.election, c.race)}`)}</p>` : '',
+    raceHasPage ? `<p>${link(raceRoute(c.race), `Everyone in this race: ${raceLabel(c.race)}`)}</p>` : '',
     electionTabLink,
   ];
   return {
@@ -272,33 +243,28 @@ function candidateItem(c: { id: string; name: string; runningOn: string } & Para
   return `${link(route, c.name)}${chipLine ? ` (${esc(chipLine)})` : ''}: ${esc(cut(c.runningOn, 220))}`;
 }
 
-function electionRacePage(race: string, election: string, cards: ElectionCandidateCard[], note: ElectionRaceNote | null): Page {
+function electionRacePage(race: string, cards: ElectionCandidateCard[], note: ElectionRaceNote | null): Page {
   const info = raceInfo(race);
-  const retention = race === 'judicial-retention';
-  const sorted = [...cards].sort(retention ? (a, b) => a.name.localeCompare(b.name) : ballotOrder);
+  const sorted = [...cards].sort(ballotOrder);
   const printed = sorted.filter((c) => !c.writeIn);
   const writeIns = sorted.filter((c) => c.writeIn);
-  const date = electionDate(election);
   const item = (c: ElectionCandidateCard) => candidateItem(c, `election-candidate/${c.id}`);
   const body = [
     `<h1>${esc(info.label)}</h1>`,
     para(info.detail),
-    para(`On the Chicago ballot ${date}.`),
-    race.startsWith('judicial-')
-      ? `<p>${esc(JUDICIAL_2026.detail)} ${outLink(JUDICIAL_2026.guideUrl, JUDICIAL_2026.guideLabel)}, ${outLink(JUDICIAL_2026.cbaUrl, JUDICIAL_2026.cbaLabel)}.</p>`
-      : '',
+    para(`On the Chicago ballot ${MUNICIPAL_ELECTION_DATE}.`),
     note ? para(note.note) : '',
-    `<h2>${retention ? 'Judges' : 'On the ballot'}</h2>`,
+    '<h2>On the ballot</h2>',
     printed.length ? list(printed.map(item)) : para('No candidates are listed yet.'),
-    writeIns.length ? `<h2>Write-in candidates</h2>\n${para(WRITE_IN_2026.explainer)}\n${list(writeIns.map(item))}` : '',
+    writeIns.length ? `<h2>Write-in candidates</h2>\n${para(WRITE_IN.explainer)}\n${list(writeIns.map(item))}` : '',
     electionTabLink,
   ];
   const names = printed.map((c) => c.name).join(', ');
   return {
     route: `election-race/${race}`,
-    title: `${info.label}, ${date} ballot`,
+    title: `${info.label}, ${MUNICIPAL_ELECTION_DATE} ballot`,
     description: cut(
-      `${info.label} on the Chicago ballot ${date}. ${info.detail}${names ? ` ${retention ? 'Judges' : 'Candidates'}: ${names}.` : ''}`,
+      `${info.label} on the Chicago ballot ${MUNICIPAL_ELECTION_DATE}. ${info.detail}${names ? ` Candidates: ${names}.` : ''}`,
       155
     ),
     ogType: 'website',
@@ -342,54 +308,89 @@ function wardRacePage(ward: number, alderman: Official | null, cards: ElectionCa
   };
 }
 
-function schoolBoardRacePage(race: string, cards: SchoolBoardCandidate[]): Page {
-  const info = SCHOOL_BOARD_RACES.find((r) => r.id === race)!;
-  const sorted = [...cards].sort(ballotOrder);
-  const printed = sorted.filter((c) => !c.writeIn);
-  const writeIns = sorted.filter((c) => c.writeIn);
-  const item = (c: SchoolBoardCandidate) => candidateItem(c, `school-board-candidate/${c.id}`);
-  const label = schoolBoardLabel(race);
-  const body = [
-    `<h1>${esc(label)}</h1>`,
-    para(`${info.detail}. On the Chicago ballot ${SCHOOL_BOARD_ELECTION_DATE}. School board districts do not follow ward lines.`),
-    '<h2>On the ballot</h2>',
-    printed.length ? list(printed.map(item)) : para('No candidates are listed yet.'),
-    writeIns.length ? `<h2>Write-in candidates</h2>\n${para(WRITE_IN_2026.explainer)}\n${list(writeIns.map(item))}` : '',
-    electionTabLink,
-  ];
-  const names = printed.map((c) => c.name).join(', ');
-  return {
-    route: `school-board/${race}`,
-    title: `${label}, ${SCHOOL_BOARD_ELECTION_DATE} ballot`,
-    description: cut(
-      `${label}, on the Chicago ballot ${SCHOOL_BOARD_ELECTION_DATE}. ${info.detail}.${names ? ` Candidates: ${names}.` : ''}`,
-      155
-    ),
-    ogType: 'website',
-    body: body.filter(Boolean).join('\n'),
-  };
+/** A seed from a string, for a page's own fixed shuffle. */
+function hashSeed(text: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193);
+  return h >>> 0;
 }
 
-function schoolBoardCandidatePage(c: SchoolBoardCandidate): Page {
-  const label = schoolBoardLabel(c.race);
-  const title = `${c.name}, ${c.writeIn ? 'write-in candidate' : 'candidate'} for ${label}`;
-  const chipLine = chipSentence(c);
+/**
+ * A candidate for mayor as the mayor games know them: who they are, where
+ * the full platform is, the campaign's money, their poll standing, what
+ * they say they would do (quotes with sources), what they say about money,
+ * and their pizza position.
+ */
+function mayorGamePage(c: MayorCandidate, platformCandidate: Candidate | null, doc: MayorGamesDoc): Page {
+  const fin = c.finance;
+  const per = supportPerMillion(c);
+  const platformLink = platformCandidate
+    ? link(`candidate/${platformCandidate.uid}`, 'Full platform, open to comments')
+    : c.platformUrl
+      ? outLink(c.platformUrl, `Full platform (${host(c.platformUrl)})`)
+      : '';
+  const point = (p: MayorCandidate['points'][number]) =>
+    `${esc(p.text)}${p.quote ? ` <q>${esc(p.quote.text)}</q> (${outLink(p.quote.url, p.quote.source)})` : ''}`;
+  const quote = (q: MayorCandidate['money']['quotes'][number]) => `<q>${esc(q.text)}</q> (${outLink(q.url, q.source)})`;
+  const pizza =
+    c.pizza.verdict === 'thin'
+      ? 'Correct.'
+      : c.pizza.verdict === 'both'
+        ? 'Hedging.'
+        : c.pizza.verdict === 'deep'
+          ? 'Incorrect.'
+          : 'No position on record.';
   const body = [
     `<h1>${esc(c.name)}</h1>`,
-    para(`${label}, on the Chicago ballot ${SCHOOL_BOARD_ELECTION_DATE}.${chipLine ? ` ${chipLine}` : ''}`),
-    c.writeIn ? para(WRITE_IN_2026.explainer) : '',
-    c.website ? `<p>${outLink(c.website, `Campaign site (${host(c.website)})`)}</p>` : '',
-    '<h2>Running on</h2>',
-    para(c.runningOn),
-    c.priorCareer ? `<h2>Background</h2>\n${para(c.priorCareer)}` : '',
+    para(`${c.title}. Candidate for mayor of Chicago, on the ballot ${MUNICIPAL_ELECTION_DATE}.`),
+    para(c.bio),
+    platformLink ? `<p>${platformLink}</p>` : '',
+    c.website ? `<p>${outLink(c.website, `Campaign website (${host(c.website)})`)}</p>` : '',
+    '<h2>What sets them apart</h2>',
+    paras(c.summary),
+    splitText(doc, c.slug, 'en') ? `<h2>Where they split from the field</h2>\n${paras(splitText(doc, c.slug, 'en'))}` : '',
+    '<h2>In their words</h2>',
+    list(c.points.map(point)),
+    '<h2>Campaign money</h2>',
+    fin
+      ? list([
+          fin.committee ? `Committee: ${esc(fin.committee)}` : '',
+          `Raised: ${fin.raised != null ? money(fin.raised) : 'not found'}`,
+          `Spent: ${fin.spent != null ? money(fin.spent) : 'not found'}`,
+          `Cash on hand: ${fin.cashOnHand != null ? money(fin.cashOnHand) : 'not found'}`,
+          `${esc(fin.period)}.${fin.note ? ` ${esc(fin.note)}` : ''} ${outLink(fin.url, 'Source')}`,
+        ].filter(Boolean))
+      : para('No spending report found for this campaign yet.'),
+    para(doc.financeNote),
+    '<h2>Support</h2>',
+    c.support
+      ? para(
+          `${c.support.pct != null ? `${c.support.pct}% of likely voters` : 'Not listed'} in the ${c.support.poll}.${
+            per != null ? ` ${per.toFixed(per >= 10 ? 0 : 1)} points of support per $1 million spent.` : ''
+          }`
+        )
+      : para('No poll has listed this candidate yet.'),
+    '<h2>On money</h2>',
+    para(c.money.summary),
+    c.money.quotes.length ? list(c.money.quotes.map(quote)) : '',
+    '<h2>Pizza</h2>',
+    para(`${pizza}${c.pizza.preference ? ` ${c.pizza.preference}` : ''}`),
+    c.pizza.quote ? `<p>${quote(c.pizza.quote)}</p>` : '',
+    c.fun.length ? `<h2>Also on the record</h2>\n${list(c.fun.map((f) => `${esc(f.text)} (${outLink(f.url, host(f.url))})`))}` : '',
     sources(c.sourceUrls),
-    `<p>${link(`school-board/${c.race}`, `Everyone in this race: ${label}`)}</p>`,
+    `<h2>The other candidates</h2>\n${list(
+      // A different order on every candidate's page, fixed by the page:
+      // nobody is listed first everywhere.
+      shuffledBy(inTheRace(doc.candidates), hashSeed(c.slug))
+        .filter((o) => o.slug !== c.slug)
+        .map((o) => link(`mayor/${o.slug}`, o.name))
+    )}`,
     electionTabLink,
   ];
   return {
-    route: `school-board-candidate/${c.id}`,
-    title,
-    description: cut(`${title}. ${c.runningOn}`, 155),
+    route: `mayor/${c.slug}`,
+    title: `${c.name}, candidate for mayor of Chicago, 2027`,
+    description: cut(`${c.name}, ${c.title}, running for mayor of Chicago, ${MUNICIPAL_ELECTION_DATE}. ${c.summary}`, 155),
     ogType: 'profile',
     body: body.filter(Boolean).join('\n'),
   };
@@ -563,17 +564,17 @@ async function main() {
   }
 
   const db = getFirestore(initializeApp({ credential: applicationDefault(), projectId: PROJECT_ID }));
-  const [electionSnap, notesSnap, schoolSnap, candidateSnap, officialSnap] = await Promise.all([
+  const [electionSnap, notesSnap, gamesSnap, candidateSnap, officialSnap] = await Promise.all([
     db.collection('electionCandidates').get(),
     db.collection('electionRaceNotes').get(),
-    db.collection('schoolBoardCandidates').get(),
+    db.doc('mayorGames/2027').get(),
     db.collection('candidates').get(),
     db.collection('officials').get(),
   ]);
 
   const electionCards = electionSnap.docs.map((d) => ({ ...(d.data() as ElectionCandidateCard), id: d.id }));
   const notes = new Map(notesSnap.docs.map((d) => [d.id, { ...(d.data() as ElectionRaceNote), id: d.id }]));
-  const schoolCards = schoolSnap.docs.map((d) => ({ ...(d.data() as SchoolBoardCandidate), id: d.id }));
+  const games = (gamesSnap.data() as MayorGamesDoc | undefined) ?? null;
   const candidates = candidateSnap.docs
     .map((d) => ({ ...(d.data() as Candidate), uid: d.id }))
     .sort((a, b) => Number(!!a.directory) - Number(!!b.directory) || a.name.localeCompare(b.name));
@@ -586,7 +587,7 @@ async function main() {
 
   const empty = [
     ['electionCandidates', electionCards.length],
-    ['schoolBoardCandidates', schoolCards.length],
+    ['mayorGames/2027', games ? inTheRace(games.candidates).length : 0],
     ['candidates', candidates.length],
     ['officials (wards 1-50)', aldermen.length],
   ].filter(([, n]) => n === 0);
@@ -624,19 +625,14 @@ async function main() {
   }
   const racePages = new Set<string>();
   for (const [key, cards] of [...byRace].sort(([a], [b]) => a.localeCompare(b))) {
-    const { election, race } = cards[0];
+    const { race } = cards[0];
     if (/^ward-\d+$/.test(race)) continue;
     if (!isKnownRace(race)) {
       console.warn(`build-seo-pages: no race page for unknown race ${key}`);
       continue;
     }
-    if (raceInfo(race).election !== election) {
-      // The app's /election-race/<id> resolves this id to the other ballot's race.
-      console.warn(`build-seo-pages: no race page for ${key}: /election-race/${race} opens the ${raceInfo(race).election} race`);
-      continue;
-    }
     racePages.add(key);
-    add('election races', electionRacePage(race, election, cards, notes.get(key) ?? null));
+    add('election races', electionRacePage(race, cards, notes.get(key) ?? null));
   }
   for (const c of [...electionCards].sort((a, b) => a.id.localeCompare(b.id))) {
     const ward = c.race.match(/^ward-(\d+)$/);
@@ -657,14 +653,10 @@ async function main() {
     );
   }
 
-  for (const r of SCHOOL_BOARD_RACES) {
-    add('school board races', schoolBoardRacePage(r.id, schoolCards.filter((c) => c.race === r.id)));
-  }
-  for (const c of [...schoolCards].sort((a, b) => a.id.localeCompare(b.id))) {
-    if (!SCHOOL_BOARD_RACES.some((r) => r.id === c.race)) {
-      console.warn(`build-seo-pages: ${c.id} has unknown school board race ${c.race}`);
+  if (games) {
+    for (const c of inTheRace(games.candidates)) {
+      add('mayor games', mayorGamePage(c, candidates.find((p) => p.uid === c.candidateUid) ?? null, games));
     }
-    add('school board candidates', schoolBoardCandidatePage(c));
   }
 
   candidates.forEach((c, i) => {

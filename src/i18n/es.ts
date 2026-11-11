@@ -9,12 +9,12 @@ export const ES: Record<string, string> = {
   'big board': 'tablero',
   home: 'inicio',
   wards: 'distritos',
-  election: 'elecciones',
+  elections: 'elecciones',
   notifications: 'avisos',
   profile: 'perfil',
   command: 'mando',
 
-  // Election tab header
+  // Elections tab header
   'Your next two ballots: who is running, what they say, and when and where to vote.':
     'Tus próximas dos boletas: quién se postula, qué dicen, y cuándo y dónde votar.',
   'nov 3 ballot': 'boleta del 3 nov',
@@ -1251,7 +1251,7 @@ export const ES: Record<string, string> = {
     'Tus distritos',
   'Districts found':
     'Distritos encontrados',
-  'The election tab now shows your races first.':
+  'The elections tab now shows your races first.':
     'La pestaña de elecciones ahora muestra primero tus carreras.',
   'Could not look up that address':
     'No se pudo buscar esa dirección',
@@ -1301,7 +1301,7 @@ export const ES: Record<string, string> = {
     'Distritos que tocan tu distrito municipal',
   'If you verify: a yes/no verified flag, your ward and district numbers, and a unique identifier used to block duplicate accounts. Nothing else, and it is deleted with your account.':
     'Si te verificas: un indicador sí/no de verificación, tu distrito municipal y los números de tus distritos, y un identificador único que bloquea cuentas duplicadas. Nada más, y se elimina con tu cuenta.',
-  'If you look up your districts without verifying: the district numbers only, so the election tab can show your races first.':
+  'If you look up your districts without verifying: the district numbers only, so the elections tab can show your races first.':
     'Si buscas tus distritos sin verificarte: solo los números de los distritos, para que la pestaña de elecciones muestre primero tus carreras.',
   'If you turn on phone notifications: each phone’s notification address and the language it shows them in. Signing out removes that phone.':
     'Si activas las notificaciones en el teléfono: la dirección de notificaciones de cada teléfono y el idioma en que las muestra. Al cerrar sesión se quita ese teléfono.',
@@ -1373,7 +1373,6 @@ export const ES: Record<string, string> = {
   'Type a street address.': 'Escribe una dirección con calle y número.',
   'The address lookup is not answering right now. Try again in a few minutes.':
     'La búsqueda de direcciones no responde en este momento. Inténtalo de nuevo en unos minutos.',
-  'Write at least 10 characters.': 'Escribe al menos 5 caracteres.',
   'That’s longer than this box allows.': 'Es más largo de lo que permite este campo.',
   'You have looked up 5 addresses today. Try again tomorrow.':
     'Hoy ya buscaste 5 direcciones. Inténtalo de nuevo mañana.',
@@ -1391,8 +1390,6 @@ export const ES: Record<string, string> = {
     'No te hagas pasar por otra persona, tampoco por funcionarios.',
   'Nothing sexual involving minors. We report it to the authorities.':
     'Nada sexual que involucre a menores. Lo denunciamos a las autoridades.',
-  'Reported posts are reviewed every week. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.':
-    'Las publicaciones reportadas se revisan cada semana. Las que rompen estas normas se retiran, y en los casos graves o repetidos se pierde la cuenta. Una cuenta reportada por 5 o más personas queda oculta hasta que se revise.',
   'From {residents} · {questions}': 'Según {residents} · {questions}',
   'Your ward’s site, from {date}': 'El sitio de tu distrito, desde el {date}',
   'Election officials there speak your language.':
@@ -1458,8 +1455,8 @@ export const ES: Record<string, string> = {
     'Se recomienda aprobar',
   'Your ward’s site, open starting {date}':
     'El sitio de tu distrito, abierto a partir del {date}',
-  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site.':
-    'en el centro a partir del 1 de octubre (137 S. State St. y 69 W. Washington St., 6.º piso), y en los 50 distritos a partir del 19 de octubre; cualquier votante de Chicago puede usar cualquier sitio.',
+  'downtown starting October 1 (137 S. State St. and 69 W. Washington St., 6th floor), and in all 50 wards starting October 19; any Chicago voter can use any site, and the two downtown sites stay open until 7 pm on weekdays October 26 to November 2.':
+    'en el centro a partir del 1 de octubre (137 S. State St. y 69 W. Washington St., 6.º piso), y en los 50 distritos a partir del 19 de octubre; cualquier votante de Chicago puede usar cualquier sitio, y los dos sitios del centro abren hasta las 7 pm entre semana del 26 de octubre al 2 de noviembre.',
   'November 3, 2026 ballot':
     'Boleta del 3 de noviembre de 2026',
   'February 23, 2027 ballot':
@@ -1565,7 +1562,7 @@ export const ES: Record<string, string> = {
     'Todo lo que has publicado, lo más reciente primero: las preocupaciones que planteaste y las preguntas que les hiciste a los oficiales.',
   'Fill in a "Title" of at least 3 characters, an optional "Section", and "The policy", which can be up to 20,000 characters.':
     'Llena un “Título” de al menos 3 caracteres, una “Sección” opcional y “La propuesta”, que puede tener hasta 20,000 caracteres.',
-  'Find your school board district with "Find my races" on the election tab. School board districts do not follow ward lines.':
+  'Find your school board district with "Find my races" on the elections tab. School board districts do not follow ward lines.':
     'Encuentra tu distrito del consejo escolar con “Buscar mis contiendas” en la pestaña de elecciones. Los distritos del consejo escolar no siguen los límites de los distritos de concejales.',
   'For multiple choice or approval, list 2 to 12 options under "Options (one per line)".':
     'Para opción múltiple o aprobación, escribe de 2 a 12 opciones en “Opciones (una por línea)”.',
@@ -1603,8 +1600,6 @@ export const ES: Record<string, string> = {
     'Una cuenta reportada por 5 o más personas distintas queda oculta hasta que se revisa.',
   'Know that an address outside Chicago changes nothing. A new ward replaces your old one, and you can move once every 3 months.':
     'Una dirección fuera de Chicago no cambia nada. Un distrito nuevo reemplaza al anterior, y puedes mudarte una vez cada 3 meses.',
-  'Know that reports are reviewed every week. Posts that break the rules come down, and serious or repeated cases lose the account.':
-    'Los reportes se revisan cada semana. Las publicaciones que rompen las normas se eliminan, y en casos graves o repetidos se pierde la cuenta.',
   'Know that saving a policy imported from your campaign site takes it over. It becomes yours to manage here, its comments stay, and the site stops updating it.':
     'Guardar una propuesta importada de tu sitio de campaña la hace tuya. Pasas a administrarla aquí, sus comentarios se quedan y el sitio deja de actualizarla.',
   'Know that the app keeps only a verified yes or no, your ward and district numbers, and an identifier that stops one ID from verifying twice.':
@@ -1929,8 +1924,6 @@ export const ES: Record<string, string> = {
     'Toca la flecha y el número en la pregunta de otra persona para apoyarla (“yo también quiero que la respondan”). Toca otra vez para dejar de apoyarla. Las preguntas que apoya más gente cuentan más en la calificación de respuestas.',
   'Tap the arrow and count to join the question ("I want this answered too"), and tap again to leave. You cannot join a question you asked.':
     'Toca la flecha y el número para apoyar la pregunta (“yo también quiero que la respondan”), y toca otra vez para dejar de apoyarla. No puedes apoyar una pregunta que hiciste tú.',
-  'Tap the flag icon on a post or comment to report it, or to block its author so you stop seeing their content.':
-    'Toca el ícono de bandera en una publicación o comentario para reportarlo, o para bloquear a su autor y dejar de ver su contenido.',
   'Tap the flag icon to report the concern or block its author. Tap the share icon to send a web link that anyone can open.':
     'Toca el ícono de bandera para reportar la preocupación o bloquear a su autor. Toca el ícono de compartir para enviar un enlace web que cualquiera puede abrir.',
   'Tap the flag icon to report the policy or a comment, or to block its author. Tap the share icon to send a web link.':
@@ -1979,7 +1972,7 @@ export const ES: Record<string, string> = {
     'Escribe tu “Correo electrónico” y tu “Contraseña”, y luego toca “Entrar”. Una contraseña nueva necesita al menos 6 caracteres. Toca “Mostrar” para ver lo que escribiste.',
   'Type your answer under a question and tap "Post answer". Voters see every candidate\'s answer side by side. You can revise it later with "Update answer", but it cannot be taken down.':
     'Escribe tu respuesta bajo una pregunta y toca “Publicar respuesta”. Los votantes ven la respuesta de cada candidato lado a lado. Puedes corregirla después con “Actualizar respuesta”, pero no se puede retirar.',
-  'Type your home address and tap "Find my districts". If it matches, you go back to the election tab with your own races listed first.':
+  'Type your home address and tap "Find my districts". If it matches, you go back to the elections tab with your own races listed first.':
     'Escribe tu domicilio y toca “Buscar mis distritos”. Si coincide, vuelves a la pestaña de elecciones con tus contiendas primero.',
   'Under "Audience", choose your ward\'s residents or "Citywide (everyone)". Officials without a ward can only post citywide.':
     'En “Audiencia”, elige a los residentes de tu distrito o “Toda la ciudad (todos)”. Los oficiales sin distrito solo pueden publicar para toda la ciudad.',
@@ -2069,8 +2062,6 @@ export const ES: Record<string, string> = {
     'Tus contiendas aparecen primero, según tu dirección en el {ward}.',
   'Your record: concerns {concerns}, comments {comments}, votes {votes}, judgments {judgments}.':
     'Tu historial: preocupaciones {concerns}, comentarios {comments}, votos {votes}, veredictos {judgments}.',
-  'Your settings: language, phone notifications, verification and moving, privacy, deleting your account, and the community rules.':
-    'Tus ajustes: idioma, notificaciones en el teléfono, verificación y mudanza, privacidad, eliminar tu cuenta y las normas de la comunidad.',
   'Your vote: {n}.':
     'Tu voto: {n}.',
   'Your work as a candidate: "ask every candidate" questions you haven\'t answered, the latest comments on your policies, your public card, and your platform.':
@@ -2325,8 +2316,6 @@ export const ES: Record<string, string> = {
     "Sin decidir",
   "Yes: {yes}. No: {no}. Not decided: {open}.":
     "Sí: {yes}. No: {no}. Sin decidir: {open}.",
-  "Share my picks":
-    "Compartir mis elecciones",
   "Clear my picks":
     "Borrar mis elecciones",
   "Clear my picks?":
@@ -2347,10 +2336,6 @@ export const ES: Record<string, string> = {
     "¿Mantener a este juez?",
   "My ballot":
     "Mi boleta",
-  "{n} made so far. Your picks stay on this phone.":
-    "{n} hasta ahora. Tus elecciones se quedan en este teléfono.",
-  "Pick a candidate in each race and take the list with you to vote.":
-    "Elige un candidato en cada contienda y lleva la lista contigo a votar.",
   "Not now":
     "Ahora no",
   "Turn on":
@@ -2375,8 +2360,6 @@ export const ES: Record<string, string> = {
     "Toca “Mi boleta” para ver cada elección de tu boleta del 3 de noviembre y lo que ya elegiste. Tus elecciones se quedan en este teléfono.",
   "On a November 3 race, tap \"Pick\" on a candidate to add them to My ballot, and tap \"Your pick\" to take it back. On judges up for retention, tap \"Yes\" or \"No\" under \"Keep this judge?\". Your picks stay on this phone.":
     "En una contienda del 3 de noviembre, toca “Elegir” en un candidato para agregarlo a Mi boleta, y toca “Tu elección” para quitarlo. En los jueces que buscan retención, toca “Sí” o “No” bajo “¿Mantener a este juez?”. Tus elecciones se quedan en este teléfono.",
-  "Tap \"My ballot\" at the top to see all your picks.":
-    "Toca “Mi boleta” arriba para ver todas tus elecciones.",
   "Tap \"Pick\" on a nominee to add them to My ballot, and tap \"Your pick\" to take it back. Your picks stay on this phone.":
     "Toca “Elegir” en un candidato para agregarlo a Mi boleta, y toca “Tu elección” para quitarlo. Tus elecciones se quedan en este teléfono.",
   "Every choice on your November 3, 2026 ballot, in about the order the ballot prints them, with the pick you made in each. Your picks are kept on this phone only. They are never sent to the app's servers, and nobody else can see them.":
@@ -2387,8 +2370,6 @@ export const ES: Record<string, string> = {
     "Toca “Sí” o “No” en la pregunta consultiva.",
   "Tap \"Find my races\" to add your address, so your congressional, state legislative, county board, and school board races are listed.":
     "Toca “Buscar mis contiendas” para agregar tu dirección y que aparezcan tus contiendas para el Congreso, la legislatura estatal, la junta del condado y el consejo escolar.",
-  "Tap \"Share my picks\" to send your list as a message or save it. Names to write in are marked \"write in\".":
-    "Toca “Compartir mis elecciones” para enviar tu lista como mensaje o guardarla. Los nombres que debes escribir a mano llevan la marca “escribir el nombre”.",
   "Tap \"Clear my picks\" and confirm to remove every pick from this phone.":
     "Toca “Borrar mis elecciones” y confirma para quitar todas las elecciones de este teléfono.",
   "Tap \"Share the app\" to send a friend a short message with the link to download it. You can edit the message before it goes.":
@@ -2454,4 +2435,385 @@ export const ES: Record<string, string> = {
     "Llame a la oficina del distrito: {phone}",
   "Under \"Ward meetings\", \"Time not found in the newsletter\" lists meetings the ward office's newsletter announces without a time. Tap \"Call the ward office\" to ask when they meet.":
     "En \"Reuniones del distrito\", \"Hora no encontrada en el boletín\" muestra las reuniones que el boletín de la oficina del distrito anuncia sin hora. Toque \"Llame a la oficina del distrito\" para preguntar cuándo se reúnen.",
+  "{n} of {total} chosen":
+    "{n} de {total} elegidas",
+  "Next: {race}":
+    "Siguiente: {race}",
+  "Done":
+    "Listo",
+  "Next to decide: {race}":
+    "Por decidir: {race}",
+  "My cheat sheet":
+    "Mi guía para votar",
+  "Made with direct democracy":
+    "Hecho con direct democracy",
+  "Could not make the image":
+    "No se pudo crear la imagen",
+  "Could not make the PDF":
+    "No se pudo crear el PDF",
+  "Save as image":
+    "Guardar como imagen",
+  "Save as PDF":
+    "Guardar como PDF",
+  "Share as text":
+    "Compartir como texto",
+  "Tap \"My ballot\" at the top to see all your picks. The number on it counts the choices you have made out of all the choices on your ballot.":
+    "Toca “Mi boleta” arriba para ver todas tus elecciones. El número cuenta las elecciones que ya hiciste del total de tu boleta.",
+  "After you pick, tap \"Next\" at the bottom to go to the next race on your ballot, in ballot order, or tap \"Skip\" to go on without picking. On your last race \"Next\" says \"Done\" and takes you back to My ballot. Picking needs your districts first: tap \"Find my races\".":
+    "Después de elegir, toca “Siguiente” abajo para ir a la siguiente contienda de tu boleta, en el orden de la boleta, o toca “Saltar” para seguir sin elegir. En tu última contienda, “Siguiente” dice “Listo” y te lleva de vuelta a Mi boleta. Para elegir necesitas primero tus distritos: toca “Buscar mis contiendas”.",
+  "Tap \"Next to decide\" to open the first race you have not picked in. From there, \"Next\" at the bottom of each race takes you down the ballot.":
+    "Toca “Por decidir” para abrir la primera contienda en la que no has elegido. Desde ahí, “Siguiente” abajo de cada contienda te lleva por toda la boleta.",
+  "Your picks for the November 3, 2026 ballot laid out as a cheat sheet, in about the order the ballot prints them, to read while you vote or fill in a mail ballot. It is made on this phone from the picks kept on it.":
+    "Tus elecciones para la boleta del 3 de noviembre de 2026 en forma de guía, más o menos en el orden en que la boleta las imprime, para leerla mientras votas o llenas una boleta por correo. Se hace en este teléfono con las elecciones guardadas en él.",
+  "Tap \"Save as image\" to save the sheet as a picture. On an iPhone, choose \"Save Image\" in the share sheet to put it in your photos.":
+    "Toca “Guardar como imagen” para guardar la guía como foto. En un iPhone, elige “Guardar imagen” en el menú de compartir para ponerla en tus fotos.",
+  "Tap \"Save as PDF\" to make a PDF you can print or keep in your files.":
+    "Toca “Guardar como PDF” para crear un PDF que puedes imprimir o guardar en tus archivos.",
+  "Tap \"Share as text\" to send your picks as a message.":
+    "Toca “Compartir como texto” para enviar tus elecciones como mensaje.",
+  "Look for \"write in\" after a name: that person's name is not printed on the ballot, so you write it in.":
+    "Busca “escribir el nombre” después de un nombre: ese nombre no está impreso en la boleta, así que lo escribes tú.",
+  "Skip":
+    "Saltar",
+  "Rated negatively by a bar association: {n}. They are listed first.":
+    "Con calificación negativa de un colegio de abogados: {n}. Aparecen primero.",
+  "On judge races, judges rated negatively by at least one bar association are listed first, those with the most negative ratings at the top.":
+    "En las contiendas de jueces, los jueces con calificación negativa de al menos un colegio de abogados aparecen primero, empezando por los que tienen más calificaciones negativas.",
+  "{name} (rated negatively)":
+    "{name} (calificación negativa)",
+  "Rated negatively by a bar association":
+    "Con calificación negativa de un colegio de abogados",
+  "Judges up for retention whom a bar association rated negatively come first, in red, each with your answer; every other judge is listed once below them. A negatively rated judge you picked for a vacancy is marked \"rated negatively\".":
+    "Los jueces sujetos a retención con calificación negativa de un colegio de abogados aparecen primero, en rojo, cada uno con tu respuesta; los demás jueces aparecen una sola vez debajo. Un juez con calificación negativa que elegiste para una vacante lleva la marca “calificación negativa”.",
+  "Under the judges up for retention, the ones a bar association rated negatively are named in red with your answer for each.":
+    "En los jueces sujetos a retención, los que tienen calificación negativa de un colegio de abogados aparecen en rojo con tu respuesta para cada uno.",
+  "Tap \"My cheat sheet\", at the top or the bottom, to see your picks laid out to vote with, and save them as an image or a PDF or share them as text.":
+    "Toca “Mi guía para votar”, arriba o abajo, para ver tus elecciones listas para votar, y guárdalas como imagen o PDF, o compártelas como texto.",
+  "choices made":
+    "elecciones hechas",
+  "Complete":
+    "Completa",
+  // Report dialog and Settings > Send feedback (2026-10-22).
+  'Pick at least one reason.': 'Elige al menos un motivo.',
+  'Pick every reason that applies.': 'Marca todos los motivos que correspondan.',
+  'Add a note (optional)': 'Agrega una nota (opcional)',
+  'Sign in to send': 'Inicia sesión para enviar',
+  'Blocking hides everything they post, for you only. They are not told.': 'Bloquear oculta todo lo que publique, solo para ti. No se le avisa.',
+  'A child’s safety': 'La seguridad de un niño',
+  'A post or a person in the app': 'Una publicación o una persona en la app',
+  'Something isn’t working': 'Algo no funciona',
+  'An idea for the app': 'Una idea para la app',
+  'Answers go to {email}.': 'Las respuestas llegarán a {email}.',
+  'You are signed in.': 'Iniciaste sesión.',
+  'You are signed out. Add an email if you want an answer.': 'No iniciaste sesión. Agrega un correo si quieres una respuesta.',
+  'Message sent': 'Mensaje enviado',
+  'Thank you. The operators read every message.': 'Gracias. Los operadores leen cada mensaje.',
+  'Could not send your message': 'No se pudo enviar tu mensaje',
+  'To report a post or comment, tap the flag on it. For anything else, write to the operators here.': 'Para reportar una publicación o un comentario, toca la bandera que tiene. Para todo lo demás, escribe aquí a los operadores.',
+  'What is this about?': '¿De qué se trata?',
+  'Child safety messages reach the operator right away. If a child is in danger now, call 911.': 'Los mensajes sobre seguridad infantil llegan al operador de inmediato. Si un niño está en peligro ahora, llama al 911.',
+  'Your message': 'Tu mensaje',
+  'What happened, and where in the app?': '¿Qué pasó y en qué parte de la app?',
+  'Your email (optional)': 'Tu correo (opcional)',
+  'Only if you want an answer': 'Solo si quieres una respuesta',
+  'Send': 'Enviar',
+  '10 character minimum': '10 caracteres como mínimo',
+  'You can send up to 5 messages a day. You can send another {date}.': 'Puedes enviar hasta 5 mensajes al día. Puedes enviar otro el {date}.',
+  'Send feedback': 'Enviar comentarios',
+  'Send feedback or report a problem': 'Enviar comentarios o reportar un problema',
+  'Pick what this is about.': 'Elige de qué se trata.',
+  'That email address does not look right.': 'Ese correo no parece correcto.',
+  'Too many messages today. Try again tomorrow.': 'Demasiados mensajes hoy. Inténtalo de nuevo mañana.',
+  'Feedback you send from Settings is visible only to the platform operators, with your account or the email you give, so they can answer.': 'Los comentarios que envías desde Configuración solo los ven los operadores de la plataforma, con tu cuenta o el correo que des, para que puedan responder.',
+  'Reported posts are reviewed every week, and child safety reports right away. Posts that break these rules come down, and serious or repeated cases lose the account. An account reported by 5 or more people is hidden until it is reviewed.': 'Las publicaciones reportadas se revisan cada semana, y los reportes de seguridad infantil de inmediato. Las publicaciones que rompen estas reglas se quitan, y los casos graves o repetidos pierden la cuenta. Una cuenta reportada por 5 o más personas queda oculta hasta que se revise.',
+  'Tap the flag icon on a post or comment, pick every reason that applies, and tap "Send report". The same window blocks its author so you stop seeing their content.': 'Toca la bandera de una publicación o un comentario, marca todos los motivos que correspondan y toca "Enviar reporte". En la misma ventana puedes bloquear a su autor para dejar de ver lo que publica.',
+  'Know that reports are reviewed every week, and child safety reports right away. Posts that break the rules come down, and serious or repeated cases lose the account.': 'Ten en cuenta que los reportes se revisan cada semana, y los de seguridad infantil de inmediato. Las publicaciones que rompen las reglas se quitan, y los casos graves o repetidos pierden la cuenta.',
+  'Your settings: language, phone notifications, feedback to the operators, verification and moving, privacy, deleting your account, and the community rules.': 'Tu configuración: idioma, notificaciones del teléfono, comentarios a los operadores, verificación y mudanza, privacidad, eliminar tu cuenta y las reglas de la comunidad.',
+  'Tap "Send feedback or report a problem" to write to the operators without leaving the app, signed in or not. Child safety messages reach them right away.': 'Toca "Enviar comentarios o reportar un problema" para escribir a los operadores sin salir de la app, con o sin sesión iniciada. Los mensajes sobre seguridad infantil les llegan de inmediato.',
+  'A message to the operators from inside the app, for anything but a single post: a child safety concern, a person in the app, something that isn\'t working, or an idea.': 'Un mensaje a los operadores desde la app, para todo lo que no sea una sola publicación: una preocupación por la seguridad de un niño, una persona en la app, algo que no funciona o una idea.',
+  'Pick what it is about, write what happened and where, and tap "Send".': 'Elige de qué se trata, escribe qué pasó y dónde, y toca "Enviar".',
+  'Pick "A child’s safety" for any concern about a child. Those messages reach the operator right away. If a child is in danger now, call 911.': 'Elige "La seguridad de un niño" para cualquier preocupación sobre un niño. Esos mensajes llegan al operador de inmediato. Si un niño está en peligro ahora, llama al 911.',
+  'To report one post or comment, tap the flag on it instead.': 'Para reportar una sola publicación o comentario, toca su bandera.',
+  'Signed out, add an email if you want an answer. Signed in, the answer goes to your account\'s email.': 'Sin sesión iniciada, agrega un correo si quieres una respuesta. Con sesión iniciada, la respuesta llega al correo de tu cuenta.',
+  'Send up to 5 messages a day.': 'Envía hasta 5 mensajes al día.',
+  "Leave blank":
+    "Dejar en blanco",
+  "Left blank":
+    "En blanco",
+  "Leave blank: {seat}":
+    "Dejar en blanco: {seat}",
+  "On a judge vacancy, tap \"Leave blank\" if you do not want to vote for that judge. Each vacancy has one candidate, so leaving it blank is the only other choice your ballot gives, and it counts as a choice made.":
+    "En una vacante judicial, toca “Dejar en blanco” si no quieres votar por ese juez. Cada vacante tiene un solo candidato, así que dejarla en blanco es la única otra opción que da tu boleta, y cuenta como una decisión tomada.",
+
+  // Mayor games (2026-11-04)
+  "6 am to 7 pm": "de 6 am a 7 pm",
+  "Applications for a February mail ballot open November 25, 2026, online or on paper.": "Las solicitudes de boleta por correo para febrero abren el 25 de noviembre de 2026, en línea o en papel.",
+  "April 6, 2027": "6 de abril de 2027",
+  "Be nice. They collected 12,500 signatures and they have feelings.": "Sé amable. Juntaron 12,500 firmas y tienen sentimientos.",
+  "Blind date": "Cita a ciegas",
+  "Candidate for mayor": "Candidato a la alcaldía",
+  "Candidates in the race: {n}.": "Candidatos en la contienda: {n}.",
+  "Cash on hand": "Efectivo disponible",
+  "Cheap date": "Cita barata",
+  "Check your registration, see your sample ballot, and find your polling place.": "Revisa tu registro, mira tu boleta de muestra y encuentra tu lugar de votación.",
+  "Checked {date}.": "Revisado el {date}.",
+  "Compare candidates on this page. Each card shows an \"Incumbent\" chip if they hold the seat and a preview of what they are running on.": "Compara a los candidatos en esta página. Cada tarjeta muestra una etiqueta de \"Titular\" si ocupan el puesto y un adelanto de su propuesta.",
+  "Data checked {date}.": "Datos revisados el {date}.",
+  "Election day is {date}.": "El día de la elección es el {date}.",
+  "Every alderman's seat and every police district council is on the {date} ballot with the mayor's race above.": "Cada puesto de concejal y cada consejo de distrito policial está en la boleta del {date}, junto con la contienda por la alcaldía de arriba.",
+  "Everyone running for mayor on February 23, 2027. Four ways to meet them.": "Todos los que se postulan a la alcaldía el 23 de febrero de 2027. Cuatro formas de conocerlos.",
+  "Everyone who filed to run for mayor, in alphabetical order. Tap a name for everything the games know.": "Todos los que presentaron su candidatura a la alcaldía, en orden alfabético. Toca un nombre para ver todo lo que saben los juegos.",
+  "Everything about {name}": "Todo sobre {name}",
+  "Everything the mayor games know about one candidate for mayor, with sources: who they are, their full platform, their campaign money as reported to the State Board of Elections, their standing in the latest public poll, what they say they would do in their own words, what they say about money, their pizza position, and the odd fact on the record.": "Todo lo que los juegos del alcalde saben de un candidato a la alcaldía, con fuentes: quién es, su plataforma completa, el dinero de su campaña según lo reportado a la Junta Electoral del Estado, su lugar en la encuesta pública más reciente, lo que dice que haría en sus propias palabras, lo que dice sobre el dinero, su postura sobre la pizza y algún dato curioso en el registro.",
+  "For the February 23 municipal election. Apply online or on paper; the ballot itself is mailed later.": "Para la elección municipal del 23 de febrero. Solicítala en línea o en papel; la boleta se envía por correo más adelante.",
+  "Fun fact: the lake is right there. Nobody has promised to fix it.": "Dato curioso: el lago está ahí mismo. Nadie ha prometido arreglarlo.",
+  "Game not found.": "Juego no encontrado.",
+  "House rule: no Bears stadium talk on a first date.": "Regla de la casa: nada de hablar del estadio de los Bears en la primera cita.",
+  "If nobody wins a majority, the top two meet in a runoff on Tuesday, April 6, 2027.": "Si nadie gana la mayoría, los dos primeros se enfrentan en una segunda vuelta el martes 6 de abril de 2027.",
+  "If they say \"fiscal responsibility\", take a sip of water. Hydrate.": "Si dicen \"responsabilidad fiscal\", toma un sorbo de agua. Hidrátate.",
+  "If you look up your districts without verifying: the district numbers only, so the ward races can show your police district council first.": "Si buscas tus distritos sin verificarte: solo los números de distrito, para que las contiendas de distrito muestren primero tu consejo de distrito policial.",
+  "In their words where we have them.": "En sus palabras, cuando las tenemos.",
+  "Jumps to when and where to vote": "Salta a cuándo y dónde votar",
+  "Key points listed: {n}.": "Puntos clave listados: {n}.",
+  "Mail ballot applications open": "Abren las solicitudes de boleta por correo",
+  "Main points": "Puntos principales",
+  "Mayor games": "Juegos del alcalde",
+  "Mayor, city clerk and treasurer, alderman, and police district council. Polls are open 6 am to 7 pm.": "Alcaldía, secretaría y tesorería de la ciudad, concejal y consejo de distrito policial. Las urnas abren de 6 am a 7 pm.",
+  "Met {n} of {total}": "Conociste a {n} de {total}",
+  "Mystery candidate": "Candidato misterioso",
+  "Next date": "Siguiente cita",
+  "Next to the others": "Frente a los demás",
+  "No candidates are on record yet. Petitions were filed October 19-26, 2026; the districts fill in here as the Board certifies the ballot.": "Todavía no hay candidatos en el registro. Las peticiones se presentaron del 19 al 26 de octubre de 2026; los distritos se llenan aquí conforme la Junta certifica la boleta.",
+  "No candidates in the race yet.": "Todavía no hay candidatos en la contienda.",
+  "No pizza position found on the record. If one of them goes public, tell us and we will rank them.": "No se encontró ninguna postura sobre la pizza en el registro. Si alguno la hace pública, avísanos y lo clasificaremos.",
+  "No poll has listed this candidate yet.": "Ninguna encuesta ha incluido a este candidato todavía.",
+  "No spending report found for these campaigns yet. They wait here, which is the cheapest place to stand.": "Todavía no se encontró ningún informe de gastos de estas campañas. Esperan aquí, que es el lugar más barato para estar.",
+  "No spending report found for this campaign yet.": "Todavía no se encontró ningún informe de gastos de esta campaña.",
+  "Nobody has mentioned the parking meters yet. Give it time.": "Nadie ha mencionado los parquímetros todavía. Dale tiempo.",
+  "Not listed in the poll": "No incluido en la encuesta",
+  "Not listed in the poll · {spent} spent": "No incluido en la encuesta · {spent} gastados",
+  "Off the ballot": "Fuera de la boleta",
+  "On Blind date, read the points, then tap \"Reveal who it is\" to see the name and face, then \"Next date\" for another. Tap \"Skip this one\" to move on without revealing.": "En Cita a ciegas, lee los puntos, luego toca \"Revelar quién es\" para ver el nombre y la cara, y después \"Siguiente cita\" para otra. Toca \"Saltar esta\" para pasar sin revelar.",
+  "On Cheap date and Pizza date, tap any card for everything about that candidate.": "En Cita barata y Cita de pizza, toca cualquier tarjeta para ver todo sobre ese candidato.",
+  "On Speed date, tap \"Next date\" and \"Back\" to move through the field. The clock only counts; it never cuts you off.": "En Cita rápida, toca \"Siguiente cita\" y \"Atrás\" para recorrer el campo. El reloj solo cuenta; nunca te corta.",
+  "One ballot candidate's card, put together from public sources. It shows what they say they are running on, their background, and their campaign site. These candidates do not have accounts in the app.": "La tarjeta de un candidato de la boleta, armada con fuentes públicas. Muestra su propuesta, su trayectoria y su sitio de campaña. Estos candidatos no tienen cuenta en la app.",
+  "One candidate at a time, the whole platform in a minute.": "Un candidato a la vez, toda la plataforma en un minuto.",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, with their own words where we have them, and their name and face behind \"Reveal who it is\"; candidates come in random order and this phone remembers who you have met. Speed date: one candidate at a time, in a random order, with the AI summary of their main points and how they compare to the others. Cheap date: everyone with a spending report, ordered by poll support per dollar spent, with what they say about money. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end.": "Uno de los cuatro juegos del alcalde. Cita a ciegas: los puntos clave de un candidato misterioso, en sus propias palabras cuando las tenemos, con su nombre y su cara detrás de \"Revelar quién es\"; los candidatos salen en orden aleatorio y este teléfono recuerda a quién ya conociste. Cita rápida: un candidato a la vez, en orden aleatorio, con el resumen de IA de sus puntos principales y cómo se compara con los demás. Cita barata: todos los que tienen informe de gastos, ordenados por apoyo en encuestas por dólar gastado, con lo que dicen sobre el dinero. Cita de pizza: todos los que tienen una postura sobre la pizza, ordenados por quién tiene razón (masa delgada), y el resto en una lista al final.",
+  "One race on the February 23, 2027 ballot: city clerk, city treasurer, or a police district council. It lists every candidate, with the first lines of what each says they are running on, so you can compare them here.": "Una contienda de la boleta del 23 de febrero de 2027: secretaría de la ciudad, tesorería de la ciudad o un consejo de distrito policial. Lista a cada candidato, con las primeras líneas de su propuesta, para que los compares aquí.",
+  "Only in races where nobody won a majority on February 23. Polls are open 6 am to 7 pm.": "Solo en las contiendas donde nadie ganó la mayoría el 23 de febrero. Las urnas abren de 6 am a 7 pm.",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line.": "Ordenados por apoyo en encuestas por dólar gastado. Si gastas más para llegar a donde estás, te formas al final.",
+  "Petitions filed": "Peticiones presentadas",
+  "Petitions were filed October 19-26, 2026, and the Board of Elections certifies the ballot by December 17. This page follows the field as it settles.": "Las peticiones se presentaron del 19 al 26 de octubre de 2026, y la Junta Electoral certifica la boleta a más tardar el 17 de diciembre. Esta página sigue al campo conforme se define.",
+  "Petitions were filed October 19-26, 2026; the Board of Elections certifies the ballot by December 17": "Las peticiones se presentaron del 19 al 26 de octubre de 2026; la Junta Electoral certifica la boleta a más tardar el 17 de diciembre",
+  "Pizza date": "Cita de pizza",
+  "Poll support: {pct}%.": "Apoyo en la encuesta: {pct}%.",
+  "Polls are open": "Las urnas abren",
+  "Put a question to every candidate": "Hazle una pregunta a todos los candidatos",
+  "Raised": "Recaudado",
+  "Ranked by who is right about pizza. No questions.": "Ordenados por quién tiene razón sobre la pizza. Sin preguntas.",
+  "Ranked by who is right about pizza. Tavern-style thin crust is right. We do not explain ourselves.": "Ordenados por quién tiene razón sobre la pizza. La masa delgada estilo taberna es la correcta. No damos explicaciones.",
+  "Register online with an Illinois license or state ID, or in person at any early voting site and at your polling place on election day, with two forms of ID (one showing your address).": "Regístrate en línea con una licencia o identificación estatal de Illinois, o en persona en cualquier sitio de votación anticipada y en tu lugar de votación el día de la elección, con dos formas de identificación (una con tu dirección).",
+  "Reminder: the city is the one paying for dinner.": "Recordatorio: la ciudad es la que paga la cena.",
+  "Reveal who it is": "Revelar quién es",
+  "Runoff election day is": "El día de la segunda vuelta es",
+  "Skip this one": "Saltar esta",
+  "Somewhere, a ward meeting is running late. Your date left it early for you.": "En algún lugar, una reunión de distrito se está alargando. Tu cita se salió temprano por ti.",
+  "Speed date": "Cita rápida",
+  "Spent": "Gastado",
+  "Spent {spent} ({period}).": "Gastó {spent} ({period}).",
+  "Start over": "Empezar de nuevo",
+  "Tap \"Blind date\", \"Speed date\", \"Cheap date\", or \"Pizza date\" to play. Every game links to each candidate's page, with sources.": "Toca \"Cita a ciegas\", \"Cita rápida\", \"Cita barata\" o \"Cita de pizza\" para jugar. Cada juego lleva a la página de cada candidato, con fuentes.",
+  "Tap \"Everything about\" a candidate for their page, or \"Full platform\" for every policy they have published.": "Toca \"Todo sobre\" un candidato para ver su página, o \"Plataforma completa\" para cada política que ha publicado.",
+  "Tap \"Full platform\" to read every policy they have published. On the platform, you can comment on any policy. Candidates without a page in the app link to their own site.": "Toca \"Plataforma completa\" para leer cada política que ha publicado. En la plataforma puedes comentar cualquier política. Los candidatos sin página en la app enlazan a su propio sitio.",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the mayor games tab.": "Toca \"Hazle una pregunta a todos los candidatos\" para preguntarle a todo el campo a la vez en la pestaña de los juegos del alcalde.",
+  "Tap \"Source\" under any quote to read it where it was said.": "Toca \"Fuente\" debajo de cualquier cita para leerla donde se dijo.",
+  "Tap City Clerk, City Treasurer, a ward number, or a police district number to see who is running. \"Your ward\" shows your alderman's record next to their challengers.": "Toca Secretaría de la Ciudad, Tesorería de la Ciudad, un número de distrito o un número de distrito policial para ver quién se postula. \"Tu distrito\" muestra el historial de tu concejal junto a sus retadores.",
+  "Tap the countdown line to jump to when and where to vote.": "Toca la línea de la cuenta regresiva para saltar a cuándo y dónde votar.",
+  "Tap the share icon at the top to send this page. The link opens on the web for people without the app.": "Toca el ícono de compartir arriba para enviar esta página. El enlace abre en la web para quienes no tienen la app.",
+  "Taxes, the budget, and what it costs to live here.": "Los impuestos, el presupuesto y lo que cuesta vivir aquí.",
+  "The Board has not posted February early voting dates or sites yet. Any Chicago voter can use any early voting site, and same-day registration is available at all of them.": "La Junta todavía no ha publicado las fechas ni los sitios de votación anticipada de febrero. Cualquier votante de Chicago puede usar cualquier sitio de votación anticipada, y el registro el mismo día está disponible en todos.",
+  "The mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date shows a candidate's ideas before their name. Speed date walks the field one at a time with an AI summary. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the ward races, and the field A to Z.": "Los juegos del alcalde: cuatro formas de conocer a todos los que se postulan a la alcaldía de Chicago el 23 de febrero de 2027. Cita a ciegas muestra las ideas de un candidato antes que su nombre. Cita rápida recorre el campo de uno en uno con un resumen de IA. Cita barata los ordena por apoyo en encuestas por dólar gastado. Cita de pizza los ordena por tener razón sobre la pizza. Debajo de los juegos, en la franja roja, está el resto de la boleta de febrero: cuándo y dónde votar, la pregunta que todos los candidatos responden, las contiendas de distrito y el campo de la A a la Z.",
+  "The pizza is cut in squares. The candidates are not.": "La pizza se corta en cuadritos. Los candidatos no.",
+  "Their ideas first. Their name when you say so.": "Primero sus ideas. Su nombre cuando tú digas.",
+  "These names are not printed on the ballot. To vote for one, write the name in the blank write-in space for that office and fill in the oval (on a touchscreen, follow the write-in steps on screen). Votes count only for write-ins who filed a declaration; election judges at your polling place have the official list.": "Estos nombres no aparecen impresos en la boleta. Para votar por uno, escribe el nombre en el espacio en blanco para candidaturas por escrito de ese cargo y rellena el óvalo (en una pantalla táctil, sigue los pasos para candidaturas por escrito). Solo cuentan los votos por candidatos por escrito que presentaron una declaración; los jueces electorales de tu lugar de votación tienen la lista oficial.",
+  "They all say they will fix the potholes. Ask how.": "Todos dicen que van a arreglar los baches. Pregunta cómo.",
+  "This date: {clock}": "Esta cita: {clock}",
+  "Tuesday, February 23, 2027": "martes 23 de febrero de 2027",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first.": "Escribe la dirección de tu casa y toca \"Encontrar mis distritos\". Si coincide, vuelves a la boleta con tu consejo de distrito policial listado primero.",
+  "Under \"Campaign money\", read what the campaign raised, spent, and has on hand, and tap \"Source\" to open the State Board of Elections report.": "En \"Dinero de campaña\", lee lo que la campaña recaudó, gastó y tiene disponible, y toca \"Fuente\" para abrir el informe de la Junta Electoral del Estado.",
+  "Under \"Support\", tap the poll's name to open it.": "En \"Apoyo\", toca el nombre de la encuesta para abrirla.",
+  "Under \"The field, A to Z\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "En \"El campo, de la A a la Z\", toca cualquier nombre para ver todo lo que los juegos saben de esa persona: su plataforma, el dinero de campaña, su lugar en la encuesta, citas y pizza.",
+  "Use the \"When and where to vote\" links to register, apply for a mail ballot, find early voting sites, or find your polling place. Tap \"More help voting\" for accessible voting, language help, and poll work.": "Usa los enlaces de \"Cuándo y dónde votar\" para registrarte, solicitar una boleta por correo, encontrar sitios de votación anticipada o encontrar tu lugar de votación. Toca \"Más ayuda para votar\" para votación accesible, ayuda en tu idioma y trabajo en las urnas.",
+  "What they would do as mayor, in their words where we have them.": "Lo que haría como alcalde, en sus palabras cuando las tenemos.",
+  "Which mayoral candidates you have already met in the games. That list stays on your phone only.": "A qué candidatos a la alcaldía ya conociste en los juegos. Esa lista se queda solo en tu teléfono.",
+  "Who gets the most support for the least money.": "Quién consigue más apoyo con menos dinero.",
+  "Withdrew": "Se retiró",
+  "Your date has arrived. They brought a budget.": "Tu cita llegó. Trajo un presupuesto.",
+  "Your district numbers for races that depend on your street address, not just your ward. On the February 23, 2027 ballot that is your police district council; the other numbers (US House, Illinois Senate and House, county districts, judicial subcircuit, school board) are kept for the next election that uses them.": "Tus números de distrito para las contiendas que dependen de la dirección de tu calle, no solo de tu distrito. En la boleta del 23 de febrero de 2027 eso es tu consejo de distrito policial; los demás números (Cámara de EE. UU., Senado y Cámara de Illinois, distritos del condado, subcircuito judicial, consejo escolar) se guardan para la próxima elección que los use.",
+  "Your police district council race depends on your address, not just your ward. We send it to the US Census Bureau to place it on the map and keep only your district numbers, never the address.": "Tu contienda de consejo de distrito policial depende de tu dirección, no solo de tu distrito. La enviamos a la Oficina del Censo de EE. UU. para ubicarla en el mapa y guardamos solo tus números de distrito, nunca la dirección.",
+  "also on the record": "también en el registro",
+  "campaign money": "dinero de campaña",
+  "candidates who don't care about pizza": "candidatos a los que no les importa la pizza",
+  "games": "juegos",
+  "not found": "no encontrado",
+  "on": "el",
+  "on money": "sobre el dinero",
+  "pizza": "pizza",
+  "spending not on record": "gastos sin registro",
+  "support": "apoyo",
+  "the ai summary": "el resumen de ia",
+  "the field, a to z": "el campo, de la a a la z",
+  "the mayor games": "los juegos del alcalde",
+  "waldgrave.com/directdemocracy": "waldgrave.com/directdemocracy",
+  "what they would do": "lo que haría",
+  "when and where to vote": "cuándo y dónde votar",
+  "{n} of {total}": "{n} de {total}",
+  "{n} people want to be mayor on February 23, 2027. Four ways to meet them.": "{n} personas quieren ser alcalde el 23 de febrero de 2027. Cuatro formas de conocerlas.",
+  "{n} points of support per $1 million spent": "{n} puntos de apoyo por cada $1 millón gastado",
+  "{pct}% support · {spent} spent": "{pct}% de apoyo · {spent} gastados",
+
+  // Mayor games, round two (2026-11-09)
+  "A \"?\" on every screen says what you can do there.": "Un \"?\" en cada pantalla dice qué puedes hacer ahí.",
+  "After the reveal, tap \"Next date\" or swipe left for another. Tap the heart to change your mind about a second date.": "Después de la revelación, toca \"Siguiente cita\" o desliza a la izquierda para otra. Toca el corazón para cambiar de opinión sobre una segunda cita.",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, four ways.": "Chicago elige alcalde el 23 de febrero de 2027. Conoce a todos los que se postulan, de cuatro formas.",
+  "Chicago's top concerns, ranked by the people.": "Las principales preocupaciones de Chicago, ordenadas por la gente.",
+  "Compare them on a speed date": "Compáralos en una cita rápida",
+  "Date {n} of {total}": "Cita {n} de {total}",
+  "Find my police district": "Buscar mi distrito policial",
+  "Finish": "Terminar",
+  "Four more races share the {date} ballot with the mayor's: two citywide, one by your ward, and one by your address.": "Cuatro contiendas más comparten la boleta del {date} con la de la alcaldía: dos de toda la ciudad, una según tu distrito y una según tu dirección.",
+  "Full platform": "Plataforma completa",
+  "Full platform on their site": "Plataforma completa en su sitio",
+  "Full platform, open to your comments": "Plataforma completa, abierta a tus comentarios",
+  "Go again": "Otra ronda",
+  "Go on a blind date": "Ir a una cita a ciegas",
+  "In a random order, so no one is always listed first. Tap a name for everything the games know.": "En orden aleatorio, para que nadie aparezca siempre primero. Toca un nombre para ver todo lo que saben los juegos.",
+  "Judge the ideas first. Find out who it was after.": "Primero juzga las ideas. Después descubre quién era.",
+  "Just reveal": "Solo revelar",
+  "Less help voting": "Menos ayuda para votar",
+  "Look around first": "Primero echar un vistazo",
+  "Look up a different address": "Buscar otra dirección",
+  "No ketchup was involved in the making of this date.": "No se usó cátsup en la preparación de esta cita.",
+  "No pizza position found on the record, listed in random order. If one of them goes public, tell us and we will rank them.": "No se encontró ninguna postura sobre la pizza en el registro; aparecen en orden aleatorio. Si alguno la hace pública, avísanos y lo clasificaremos.",
+  "No second dates this round. Tough crowd.": "Ninguna segunda cita en esta ronda. Público difícil.",
+  "On Blind date, read the card, then tap \"Second date\" or \"Pass\", or swipe the card right or left. Either one reveals who it was. Tap \"Just reveal\" to see the name without a verdict.": "En Cita a ciegas, lee la tarjeta y luego toca \"Segunda cita\" o \"Paso\", o desliza la tarjeta a la derecha o a la izquierda. Cualquiera de las dos revela quién era. Toca \"Solo revelar\" para ver el nombre sin dar un veredicto.",
+  "On Cheap date, tap a row to open what that candidate says about money. The bar shows their support per dollar next to the best in the field.": "En Cita barata, toca una fila para abrir lo que ese candidato dice sobre el dinero. La barra muestra su apoyo por dólar frente al mejor del campo.",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What they would do\" or \"Next to the others\" to turn the card. The clock runs down from a minute and never cuts you off.": "En Cita rápida, toca \"Siguiente cita\" y \"Volver\", o desliza, para recorrer el campo. Toca \"Lo que haría\" o \"Frente a los demás\" para voltear la tarjeta. El reloj baja desde un minuto y nunca te corta.",
+  "On their ideas alone, you would see these again:": "Solo por sus ideas, volverías a ver a estos:",
+  "One minute each. The whole field in a coffee break.": "Un minuto cada uno. Todo el campo en lo que dura un café.",
+  "One of the four mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Candidates come in random order, and this phone remembers who you have met and who got a second date. Speed date: one candidate at a time, in a random order, a minute each, with what they would do on one side of the card and how they compare to the others on the other. Cheap date: everyone with a spending report, ordered by poll support per dollar spent. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "Uno de los cuatro juegos del alcalde. Cita a ciegas: los puntos clave de un candidato misterioso, en sus propias palabras cuando las tenemos. Dices si lo volverías a ver, y eso voltea el retrato para mostrar quién era. Los candidatos salen en orden aleatorio, y este teléfono recuerda a quién ya conociste y quién obtuvo una segunda cita. Cita rápida: un candidato a la vez, en orden aleatorio, un minuto cada uno, con lo que haría de un lado de la tarjeta y cómo se compara con los demás del otro. Cita barata: todos los que tienen informe de gastos, ordenados por apoyo en encuestas por dólar gastado. Cita de pizza: todos los que tienen una postura sobre la pizza, ordenados por quién tiene razón (masa delgada), y el resto en una lista al final, en orden aleatorio.",
+  "Or see it on your sample ballot (Board of Elections)": "O míralo en tu boleta de muestra (Junta Electoral)",
+  "Ordered by poll support per dollar spent. Spend the most to get where you are, stand last in line. Tap anyone for what they say about money.": "Ordenados por apoyo en encuestas por dólar gastado. Si gastas más para llegar a donde estás, te formas al final. Toca a cualquiera para ver lo que dice sobre el dinero.",
+  "Pass": "Paso",
+  "Picked on a blind date, on their ideas alone. Kept on this phone only.": "Elegidos en una cita a ciegas, solo por sus ideas. Se guardan solo en este teléfono.",
+  "Play": "Jugar",
+  "Second date": "Segunda cita",
+  "Tap \"Everything about\" a candidate for their page, with their full platform.": "Toca \"Todo sobre\" un candidato para ver su página, con su plataforma completa.",
+  "Tap \"Play\" on Blind date, or tap Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "Toca \"Jugar\" en Cita a ciegas, o toca Cita rápida, Cita barata o Cita de pizza. Cada juego lleva a la página de cada candidato, con fuentes.",
+  "That was everyone.": "Esos fueron todos.",
+  "The address goes to the US Census Bureau to place it on the map. Only the district numbers are kept, never the address.": "La dirección se envía a la Oficina del Censo de EE. UU. para ubicarla en el mapa. Solo se guardan los números de distrito, nunca la dirección.",
+  "The elections tab, led by the mayor games: four ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Speed date gives each candidate a minute. Cheap date ranks them by poll support per dollar spent. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "La pestaña de elecciones, encabezada por los juegos del alcalde: cuatro formas de conocer a todos los que se postulan a la alcaldía de Chicago el 23 de febrero de 2027. Cita a ciegas, la tarjeta grande, muestra las ideas de un candidato y pregunta si lo volverías a ver antes de decirte quién era. Cita rápida le da un minuto a cada candidato. Cita barata los ordena por apoyo en encuestas por dólar gastado. Cita de pizza los ordena por tener razón sobre la pizza. Debajo de los juegos, en la franja roja, está el resto de la boleta de febrero: cuándo y dónde votar, la pregunta que todos los candidatos responden, las demás contiendas y todos los que se postulan a la alcaldía en orden aleatorio, para que nadie aparezca siempre primero.",
+  "The marks across the top count the round: red for a second date, gray for the rest you have met, blue for the one on screen. When you have met everyone, you see your second dates and can go again.": "Las marcas de arriba cuentan la ronda: rojo para una segunda cita, gris para los demás que ya conociste, azul para el que está en pantalla. Cuando ya conociste a todos, ves tus segundas citas y puedes jugar otra ronda.",
+  "They ordered for the table. It was a plan with five bullet points.": "Pidió para toda la mesa. Era un plan con cinco puntos.",
+  "This one asked for a table away from the dibs chairs.": "Esta cita pidió una mesa lejos de las sillas que apartan estacionamiento.",
+  "Three elected seats in each of the 22 police districts. Police districts do not follow ward lines, so yours goes by your address.": "Tres puestos electos en cada uno de los 22 distritos policiales. Los distritos policiales no siguen los límites de los distritos municipales, así que el tuyo depende de tu dirección.",
+  "Time. The next one is waiting.": "Tiempo. La siguiente cita está esperando.",
+  "To find your police district, type your home address and tap \"Find my police district\". It works signed in or out, and only the district numbers are kept, never the address. Or tap \"Or see it on your sample ballot (Board of Elections)\".": "Para encontrar tu distrito policial, escribe la dirección de tu casa y toca \"Buscar mi distrito policial\". Funciona con o sin iniciar sesión, y solo se guardan los números de distrito, nunca la dirección. O toca \"O míralo en tu boleta de muestra (Junta Electoral)\".",
+  "Too many address lookups today. Sign in to look up yours, or try again tomorrow.": "Demasiadas búsquedas de direcciones hoy. Inicia sesión para buscar la tuya, o inténtalo de nuevo mañana.",
+  "Type your home address and tap \"Find my districts\". If it matches, you go back to the ballot with your police district council listed first. The police district card on the elections tab does the same lookup in place.": "Escribe la dirección de tu casa y toca \"Buscar mis distritos\". Si coincide, vuelves a la boleta con tu consejo de distrito policial listado primero. La tarjeta de distritos policiales en la pestaña de elecciones hace la misma búsqueda ahí mismo.",
+  "Under \"Everyone running for mayor\", tap any name for everything the games know about them: their platform, campaign money, poll standing, quotes, and pizza.": "En \"Todos los que se postulan a la alcaldía\", toca cualquier nombre para ver todo lo que los juegos saben de esa persona: su plataforma, el dinero de campaña, su lugar en la encuesta, citas textuales y pizza.",
+  "Under \"The rest of the ballot\", tap City Clerk or City Treasurer, pick your ward to see your alderman's record next to their challengers, or find your police district council.": "En \"El resto de la boleta\", toca Secretaría de la Ciudad o Tesorería de la Ciudad, elige tu distrito para ver el historial de tu concejal junto a sus retadores, o busca tu consejo de distrito policial.",
+  "Under \"Your second dates\", tap a name to open the page of a candidate you said you would see again on a blind date. That list is kept on this phone only.": "En \"Tus segundas citas\", toca un nombre para abrir la página de un candidato al que dijiste que volverías a ver en una cita a ciegas. Esa lista se guarda solo en este teléfono.",
+  "Which mayoral candidates you met on a blind date and which you said you would see again. Both lists stay on your phone only.": "A qué candidatos a la alcaldía conociste en una cita a ciegas y a cuáles dijiste que volverías a ver. Ambas listas se quedan solo en tu teléfono.",
+  "Would you see them again?": "¿Volverías a ver a esta persona?",
+  "You met the whole field.": "Ya conociste a todo el campo.",
+  "Your date took the Blue Line here. They have thoughts.": "Tu cita llegó en la Línea Azul. Tiene opiniones.",
+  "Your ward: your alderman's grade, meetings, and zoning.": "Tu distrito: la calificación de tu concejal, reuniones y zonificación.",
+  "also in the app": "también en la app",
+  "citywide": "toda la ciudad",
+  "day until the runoff": "día para la segunda vuelta",
+  "days until the runoff": "días para la segunda vuelta",
+  "everyone running for mayor": "todos los que se postulan a la alcaldía",
+  "the rest of the ballot": "el resto de la boleta",
+  "your police district council": "tu consejo de distrito policial",
+  "your second dates": "tus segundas citas",
+  "{n} dates. Now find out whose ideas you like when you cannot see the name.": "{n} citas. Ahora descubre qué ideas te gustan cuando no puedes ver el nombre.",
+  "You passed": "Pasaste",
+  "What they would do": "Lo que haría",
+
+  // Mayor games, round three (2026-11-09)
+  "A perfect round. You know the field.": "Una ronda perfecta. Conoces al campo.",
+  "At the end of a round of Pick-up lines, tap anyone who got past you to open their page, or tap \"Play again\".": "Al final de una ronda de Frases para ligar, toca a cualquiera que se te haya escapado para abrir su página, o toca \"Jugar otra vez\".",
+  "Best streak on this phone: {n}.": "Mejor racha en este teléfono: {n}.",
+  "Chicago picks a mayor on February 23, 2027. Meet everyone running, one game at a time.": "Chicago elige alcalde el 23 de febrero de 2027. Conoce a todos los que se postulan, un juego a la vez.",
+  "Everyone running for mayor on February 23, 2027. Meet them one game at a time.": "Todos los que se postulan a la alcaldía el 23 de febrero de 2027. Conócelos un juego a la vez.",
+  "Line {n} of {total}": "Frase {n} de {total}",
+  "Next line": "Siguiente frase",
+  "No quotes on file yet.": "Todavía no hay citas en el registro.",
+  "No. {name} said it.": "No. Lo dijo {name}.",
+  "On Cheap date, tap \"Best bargain\", \"Most spent\", or \"Most support\" to reorder the line. Each row shows what the campaign spent, its support in the poll, and what it spent per point of support.": "En Cita barata, toca \"Mejor ganga\", \"Más gasto\" o \"Más apoyo\" para reordenar la fila. Cada renglón muestra lo que gastó la campaña, su apoyo en la encuesta y lo que gastó por punto de apoyo.",
+  "On Pick-up lines, read the quote and tap the candidate you think said it. You see at once who did, where they said it, and what it was about. Tap \"Next line\" or swipe left to go on. The flame counts your streak, and the best one is kept on this phone.": "En Frases para ligar, lee la cita y toca al candidato que crees que la dijo. Ves al instante quién fue, dónde la dijo y de qué se trataba. Toca \"Siguiente frase\" o desliza a la izquierda para seguir. La llama cuenta tu racha, y la mejor se guarda en este teléfono.",
+  "One of the five mayor games. Blind date: a mystery candidate's key points, in their own words where we have them. You say whether you would see them again, and that turns the portrait over to show who it was. Pick-up lines: a real quote and three candidates, and you tap who said it, ten lines a round, every candidate the answer once before anyone is the answer twice. Speed date: one candidate at a time, in a random order, a minute each. Cheap date: what the field has spent in all, then each campaign's spending, its support in the poll, and its cost per point of support. Pizza date: everyone with a pizza position, ordered by who is right (thin crust), and the rest in a list at the end, in random order.": "Uno de los cinco juegos del alcalde. Cita a ciegas: los puntos clave de un candidato misterioso, en sus propias palabras cuando las tenemos. Dices si lo volverías a ver, y eso voltea el retrato para mostrar quién era. Frases para ligar: una cita real y tres candidatos, y tocas quién la dijo; diez frases por ronda, y cada candidato es la respuesta una vez antes de que alguien lo sea dos veces. Cita rápida: un candidato a la vez, en orden aleatorio, un minuto cada uno. Cita barata: lo que el campo ha gastado en total, y luego el gasto de cada campaña, su apoyo en la encuesta y su costo por punto de apoyo. Cita de pizza: todos los que tienen una postura sobre la pizza, ordenados por quién tiene razón (masa delgada), y el resto en una lista al final, en orden aleatorio.",
+  "One quote, three faces. Who said it?": "Una cita, tres caras. ¿Quién la dijo?",
+  "Per point": "Por punto",
+  "Pick-up lines": "Frases para ligar",
+  "Play again": "Jugar otra vez",
+  "Poll support": "Apoyo en la encuesta",
+  "Right. {name} said it.": "Correcto. Lo dijo {name}.",
+  "See my score": "Ver mi puntaje",
+  "Streak: {n}": "Racha: {n}",
+  "Tap \"Play\" on Blind date, or tap Pick-up lines, Speed date, Cheap date, or Pizza date. Every game links to each candidate's page, with sources.": "Toca \"Jugar\" en Cita a ciegas, o toca Frases para ligar, Cita rápida, Cita barata o Cita de pizza. Cada juego lleva a la página de cada candidato, con fuentes.",
+  "Tap a row on Cheap date to see what the campaign raised, spent, and has on hand, the State Board of Elections report it comes from, and what the candidate says about money.": "Toca un renglón en Cita barata para ver lo que la campaña recaudó, gastó y tiene disponible, el informe de la Junta Electoral del Estado del que sale, y lo que el candidato dice sobre el dinero.",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first.": "La pestaña de elecciones, encabezada por los juegos del alcalde: cinco formas de conocer a todos los que se postulan a la alcaldía de Chicago el 23 de febrero de 2027. Cita a ciegas, la tarjeta grande, muestra las ideas de un candidato y pregunta si lo volverías a ver antes de decirte quién era. Frases para ligar muestra una cita real y tres caras, y tú dices quién la dijo. Cita rápida le da un minuto a cada candidato. Cita barata sigue el dinero: lo que gastó cada campaña y el apoyo que eso compró. Cita de pizza los ordena por tener razón sobre la pizza. Debajo de los juegos, en la franja roja, está el resto de la boleta de febrero: cuándo y dónde votar, la pregunta que todos los candidatos responden, las demás contiendas y todos los que se postulan a la alcaldía en orden aleatorio, para que nadie aparezca siempre primero.",
+  "These ones got past you. Tap one to get to know them.": "Estos se te escaparon. Toca uno para conocerlo.",
+  "Who used this line?": "¿Quién usó esta frase?",
+  "You got {n} of {total}.": "Acertaste {n} de {total}.",
+  "no points": "sin puntos",
+  "not polled": "sin encuesta",
+  "spent by the field so far": "gastado por el campo hasta ahora",
+  "{n} campaigns have filed a spending report.": "{n} campañas han presentado un informe de gastos.",
+  "{n} people want to be mayor on February 23, 2027. Meet them one game at a time.": "{n} personas quieren ser alcalde el 23 de febrero de 2027. Conócelas un juego a la vez.",
+  "{pct}% in the poll": "{pct}% en la encuesta",
+  "Best bargain": "Mejor ganga",
+  "Most spent": "Más gasto",
+  "Most support": "Más apoyo",
+  "Ordered by money spent so far, most first.": "Ordenados por dinero gastado hasta ahora, de más a menos.",
+  "Ordered by support in the poll, most first.": "Ordenados por apoyo en la encuesta, de más a menos.",
+
+  // Mayor games, round four (2026-11-09)
+  "Also:": "También:",
+  "Has taken a side on {n} of the {total} questions that split the field.": "Ha tomado partido en {n} de las {total} preguntas que dividen al campo.",
+  "No side found yet on any of the questions that divide the field.": "Todavía no se encontró una postura en ninguna de las preguntas que dividen al campo.",
+  "On Speed date, tap \"Next date\" and \"Back\", or swipe, to move through the field. Tap \"What sets them apart\" or \"Where they split\" to turn the card. The clock runs down from a minute and never cuts you off.": "En Cita rápida, toca \"Siguiente cita\" y \"Volver\", o desliza, para recorrer el campo. Toca \"Lo que lo distingue\" o \"Dónde se dividen\" para voltear la tarjeta. El reloj baja desde un minuto y nunca te corta.",
+  "One candidate for mayor, most important first. Under the name are three numbers: support in the latest public poll, money spent, and dollars spent per point of support. Then what sets this candidate apart from the others, then their side of each question the field splits on, then their own words with sources. What nearly every candidate says is left out on purpose. Campaign money in full, pizza, and sources follow.": "Un candidato a la alcaldía, con lo más importante primero. Bajo el nombre hay tres números: apoyo en la encuesta pública más reciente, dinero gastado y dólares gastados por punto de apoyo. Después, lo que distingue a este candidato de los demás, luego su postura en cada pregunta en la que el campo se divide, y luego sus propias palabras con fuentes. Lo que dicen casi todos los candidatos se deja fuera a propósito. Siguen el dinero de campaña completo, la pizza y las fuentes.",
+  "Read \"What sets them apart\" for what this candidate proposes that others do not.": "Lee \"Lo que lo distingue\" para ver lo que este candidato propone y los demás no.",
+  "Said once here, so no candidate's page repeats it.": "Se dice una vez aquí, para que ninguna página de candidato lo repita.",
+  "Tap \"Put a question to every candidate\" to ask the whole field at once on the elections tab.": "Toca \"Hazle una pregunta a todos los candidatos\" para preguntarle a todo el campo a la vez en la pestaña de elecciones.",
+  "The elections tab, led by the mayor games: five ways to meet everyone running for mayor of Chicago on February 23, 2027. Blind date, the big card, shows a candidate's ideas and asks whether you would see them again before it tells you who it was. Pick-up lines shows a real quote and three faces, and you say who said it. Speed date gives each candidate a minute. Cheap date follows the money: what each campaign spent and the support that bought. Pizza date ranks them by being right about pizza. Below the games, in the red band, is the rest of the February ballot: when and where to vote, the question every candidate answers, the other races, and everyone running for mayor in a random order, so no one is always listed first. Between the games and the ballot, \"Where they split\" lists the questions the candidates give different answers to.": "La pestaña de elecciones, encabezada por los juegos del alcalde: cinco formas de conocer a todos los que se postulan a la alcaldía de Chicago el 23 de febrero de 2027. Cita a ciegas, la tarjeta grande, muestra las ideas de un candidato y pregunta si lo volverías a ver antes de decirte quién era. Frases para ligar muestra una cita real y tres caras, y tú dices quién la dijo. Cita rápida le da un minuto a cada candidato. Cita barata sigue el dinero: lo que gastó cada campaña y el apoyo que eso compró. Cita de pizza los ordena por tener razón sobre la pizza. Debajo de los juegos, en la franja roja, está el resto de la boleta de febrero: cuándo y dónde votar, la pregunta que todos los candidatos responden, las demás contiendas y todos los que se postulan a la alcaldía en orden aleatorio, para que nadie aparezca siempre primero. Entre los juegos y la boleta, \"Dónde se dividen\" enumera las preguntas a las que los candidatos dan respuestas distintas.",
+  "The questions that divide the field, and this candidate's side.": "Las preguntas que dividen al campo, y la postura de este candidato.",
+  "The questions that divide the field, and who stands where. Tap a name for their page.": "Las preguntas que dividen al campo, y quién está de cada lado. Toca un nombre para ver su página.",
+  "Under \"Where they split\", read the questions that divide the field and who stands on each side. Tap a name for their page. Tap \"What nearly all of them say\" for the positions that do not tell them apart.": "En \"Dónde se dividen\", lee las preguntas que dividen al campo y quién está de cada lado. Toca un nombre para ver su página. Toca \"Lo que dicen casi todos\" para ver las posturas que no los distinguen.",
+  "Under \"Where they split\", see this candidate's side of each question and who is on the other sides. Tap a name to open that candidate.": "En \"Dónde se dividen\", mira la postura de este candidato en cada pregunta y quién está de los otros lados. Toca un nombre para abrir a ese candidato.",
+  "What nearly all of them say": "Lo que dicen casi todos",
+  "What sets them apart": "Lo que lo distingue",
+  "Where they split": "Dónde se dividen",
+  "Written by AI from the campaign's platform and the candidate's own words, under one set of rules for every candidate. What nearly all of them say is left out.": "Escrito por IA a partir de la plataforma de la campaña y las propias palabras del candidato, con las mismas reglas para cada candidato. Lo que dicen casi todos se deja fuera.",
+  "Written by AI on {date} from the policies listed below and the candidate's public statements, under one set of rules for every candidate. What nearly all candidates say is left out. It can miss things. The policies are the source.": "Escrito por IA el {date} a partir de las políticas listadas abajo y las declaraciones públicas del candidato, con las mismas reglas para cada candidato. Lo que dicen casi todos los candidatos se deja fuera. Puede omitir cosas. Las políticas son la fuente.",
+  "in their words": "en sus palabras",
+  "what sets them apart": "lo que lo distingue",
+  "where they split": "dónde se dividen",
+
+  // Mayor games, round five (2026-11-09)
+  "former mayor trivia": "trivia de exalcaldes",
+  "Another fact": "Otro dato",
+  "only one of them would": "solo uno lo haría",
+  "Proposals no other candidate makes.": "Propuestas que ningún otro candidato hace.",
+  "Under \"Former mayor trivia\", read a fact about a past mayor and tap the shuffle button for another. A fact does not come back until you have seen them all. Tap the small arrow under the shuffle button to go back to the fact before.": "En \"Trivia de exalcaldes\", lee un dato sobre un alcalde anterior y toca el botón de mezclar para ver otro. Un dato no vuelve hasta que los hayas visto todos. Toca la flecha pequeña debajo del botón de mezclar para volver al dato anterior.",
+  "Under \"Only one of them would\", read what a single candidate proposes that no one else does. Tap a name for their page.": "En \"Solo uno lo haría\", lee lo que propone un solo candidato y nadie más. Toca un nombre para ver su página.",
+  "Previous fact": "Dato anterior",
+  "Source shown with the reveal": "La fuente se muestra con la revelación",
+  "Correct": "Correcto",
+  "Hedging": "Con rodeos",
+  "Incorrect": "Incorrecto",
+  "No position on record": "Sin postura registrada",
 };

@@ -260,7 +260,9 @@ function parseWpSections(html) {
         for (const item of items) {
             const title = stripTags(item.split('</h3>')[0]).slice(0, 140);
             const bodyHtml = item.slice(item.indexOf('</h3>') + 5);
-            const body = blockText(bodyHtml);
+            // The last policy runs into the page's section links ("Finances •
+            // Public Safety • Confidence"), which are navigation, not policy.
+            const body = blockText(bodyHtml).replace(/\n+[^\n.]{1,40}(?: [\u2022|] [^\n.]{1,40})+$/, '');
             if (title && body) {
                 policies.push({ section, title, body, links: collectLinks(bodyHtml) });
             }
@@ -388,6 +390,28 @@ function parseWpPostOutline(html) {
     }
     return policies.length >= 2 ? policies : [];
 }
+// ── Format 9: issue previews (quinlanforchicago.com) ─────────────────────
+// A site-builder issues grid: each issue is a block with a
+// data-field="title" heading and a data-field="shortDescription" div that
+// holds the whole written position. Matched on those data-field names, never
+// the generated css-* class hashes.
+function parseIssuePreviews(html) {
+    const policies = [];
+    for (const m of html.matchAll(/<div[^>]*\bdata-field="title"[^>]*>([\s\S]*?)<\/h\d>/g)) {
+        const title = stripTags(m[1]).slice(0, 140);
+        const rest = m.index + m[0].length;
+        const next = html.indexOf('data-field="title"', rest);
+        const descAt = html.indexOf('data-field="shortDescription"', rest);
+        if (descAt < 0 || (next >= 0 && descAt > next))
+            continue;
+        const bodyHtml = divBlock(html, html.lastIndexOf('<div', descAt)) ?? '';
+        const body = blockText(bodyHtml);
+        if (title && body) {
+            policies.push({ section: '', title, body, links: collectLinks(bodyHtml) });
+        }
+    }
+    return policies.length >= 2 ? policies : [];
+}
 // ── Dispatch ─────────────────────────────────────────────────────────────
 const FORMATS = [
     parseGroupedLists,
@@ -398,6 +422,7 @@ const FORMATS = [
     parseGoogleSites,
     parseDetailsAccordions,
     parseWpPostOutline,
+    parseIssuePreviews,
 ];
 /**
  * Parse a platform page. Returns every policy in page order; throws when the
@@ -520,6 +545,45 @@ async function pillarManifest(baseUrl, fetchHtml) {
 }
 const HUBS = [hubPillarPages, hubSquarespaceButtons, hubRunIssues];
 /**
+ * Section pages one level below the source page (susanamendoza.com since
+ * 2026-10-26): /priorities/ shows one overview per section and links
+ * /priorities/finances/ and the rest, where the section's policies live.
+ * Unlike the hubs above, each child is a whole platform page of its own.
+ */
+function childSectionPages(html, baseUrl) {
+    const base = new URL(baseUrl);
+    const basePath = base.pathname.endsWith('/') ? base.pathname : `${base.pathname}/`;
+    const links = [];
+    const seen = new Set();
+    for (const m of html.matchAll(/<a[^>]*href="([^"#?]+)"[^>]*>([\s\S]*?)<\/a>/g)) {
+        let url;
+        try {
+            url = new URL(m[1], baseUrl);
+        }
+        catch {
+            continue;
+        }
+        if (url.host !== base.host || !url.pathname.startsWith(basePath))
+            continue;
+        const child = url.pathname.slice(basePath.length).replace(/\/$/, '');
+        const title = stripTags(m[2]).slice(0, 140);
+        if (!/^[a-z0-9-]+$/.test(child) || seen.has(child) || !title)
+            continue;
+        seen.add(child);
+        links.push({ title, url: url.toString() });
+    }
+    return links;
+}
+/** Policies from one whole page, or none: the single-page formats, unthrown. */
+function rawFromPage(html) {
+    for (const parse of FORMATS) {
+        const raw = parse(html);
+        if (raw.length > 0)
+            return raw;
+    }
+    return [];
+}
+/**
  * Parse a platform from its source URL, following hub pages to their
  * subpages when the layout calls for it. This is the entry point for the
  * nightly sync and the operator script; parsePlatformHtml remains the
@@ -550,6 +614,22 @@ async function parsePlatformUrl(sourceUrl, fetchHtml) {
         // Every subpage failing means the hub match was wrong or the site is
         // down - fall through rather than wrongly archiving the platform.
         if (raw.length > 0)
+            return finalize(raw);
+    }
+    // Section pages win only when they hold more than the page itself (the
+    // overview's blurbs); otherwise they are just links on a full platform.
+    const sections = childSectionPages(html, sourceUrl);
+    if (sections.length >= 2) {
+        const raw = [];
+        for (const link of sections) {
+            try {
+                raw.push(...rawFromPage(await fetchHtml(link.url)));
+            }
+            catch (e) {
+                console.warn(`Section page ${link.url} failed:`, e);
+            }
+        }
+        if (raw.length > rawFromPage(html).length)
             return finalize(raw);
     }
     return parsePlatformHtml(html);

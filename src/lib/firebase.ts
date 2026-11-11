@@ -107,14 +107,19 @@ if (!usingEmulators && Platform.OS !== 'web') {
     // that's allowlisted once in Firebase console -> App Check -> Manage
     // debug tokens. No log fishing.
     const debugToken = process.env.EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN;
+    // A local release build for an emulator or simulator (2026-11-11) can't
+    // attest either: Play Integrity refuses emulators. Building with
+    // EXPO_PUBLIC_APPCHECK_TEST_BUILD=1 set in the shell (never in a file,
+    // never on EAS) gives it the debug token too. Store builds leave it unset.
+    const useDebug = __DEV__ || process.env.EXPO_PUBLIC_APPCHECK_TEST_BUILD === '1';
     const provider = new rnfbAppCheck.ReactNativeFirebaseAppCheckProvider();
     provider.configure({
       apple: {
-        provider: __DEV__ ? 'debug' : 'appAttestWithDeviceCheckFallback',
+        provider: useDebug ? 'debug' : 'appAttestWithDeviceCheckFallback',
         ...(debugToken ? { debugToken } : {}),
       },
       android: {
-        provider: __DEV__ ? 'debug' : 'playIntegrity',
+        provider: useDebug ? 'debug' : 'playIntegrity',
         ...(debugToken ? { debugToken } : {}),
       },
     });

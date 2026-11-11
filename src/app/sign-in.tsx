@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AccessibilityInfo,
   ActivityIndicator,
@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useKeyboardOverlap, useRevealFocusedField } from '@/hooks/use-keyboard-overlap';
 import { useTheme } from '@/hooks/use-theme';
 import { auth } from '@/lib/firebase';
 import { useT } from '@/lib/i18n';
@@ -54,13 +55,14 @@ export default function SignInScreen() {
   }, [error, t]);
 
   const done = () => {
-    // Always land on the big board, wherever sign-in was opened from.
+    // Always land on the elections tab (the mayor games, the app's front
+    // door since 2026-11-09), wherever sign-in was opened from.
     // Dismiss the modal first - a bare replace() from inside a native modal
     // can pop to whatever screen sat under it instead of the target. The
     // keyboard goes first so its inset lets go of the board underneath.
     Keyboard.dismiss();
     if (router.canDismiss()) router.dismiss();
-    router.replace('/');
+    router.replace('/election');
   };
 
   // Already signed in with nothing in flight (a restored session, or a
@@ -145,13 +147,24 @@ export default function SignInScreen() {
     }
   };
 
+  // Android draws edge to edge, so the keyboard covers the page instead of
+  // shrinking it: the page pads itself above the keyboard and the fields
+  // scroll into view (src/hooks/use-keyboard-overlap.ts).
+  const rootRef = useRef<View>(null);
+  const keyboard = useKeyboardOverlap(rootRef);
+  const scrollRef = useRef<ScrollView>(null);
+  const contentRef = useRef<View>(null);
+  useRevealFocusedField(scrollRef, contentRef, rootRef);
   return (
-    <View style={[styles.root, { backgroundColor: theme.background }]}>
+    <View ref={rootRef} style={[styles.root, { backgroundColor: theme.background, paddingBottom: keyboard }]}>
       {/* Decorative soft circles in the flag's sky blue */}
       <View style={[styles.blobA, { backgroundColor: theme.backgroundSelected }]} />
       <View style={[styles.blobB, { backgroundColor: theme.primarySoft }]} />
 
       <ScrollView
+        ref={scrollRef}
+        // React Native's type for this prop leaves out the null every ref starts as.
+        innerViewRef={contentRef as React.RefObject<View>}
         style={{ flex: 1 }}
         contentContainerStyle={[
           styles.scroll,
